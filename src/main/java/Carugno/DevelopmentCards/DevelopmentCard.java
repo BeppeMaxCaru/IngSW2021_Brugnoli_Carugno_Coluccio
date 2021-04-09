@@ -1,5 +1,7 @@
 package Carugno.DevelopmentCards;
 
+import Brugnoli.Playerboard;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +85,25 @@ public class DevelopmentCard {
      * @return
      */
     public boolean checkResources(Playerboard playerboard) {
-        //Confronta le risorse disponibili
+        //Get resources in chest e warehouse
+        Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
+        Map<String, Integer> chestResources = playerboard.getChest().getChestResources();
+
+        //Sum the two maps to get the total player resources
+        Map<String, Integer> playerResources = new HashMap<>(warehouseResources);
+        for (Map.Entry<String, Integer> entry : chestResources.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            playerResources.merge(key, value, (v1, v2) -> v1 + v2);
+        }
+
+        //Check if one map is contained into the other one
+        for (Map.Entry<String, Integer> entry : this.cost.entrySet()) {
+            String key = entry.getKey();
+        }
+
+
+
     }
 
     /**
