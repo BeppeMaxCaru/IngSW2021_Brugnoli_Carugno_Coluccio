@@ -2,6 +2,7 @@ package Carugno.MVC;
 
 import Carugno.ActionCounters.ActionCountersDeck;
 import Carugno.DevelopmentCards.DevelopmentCardsDeck;
+import Brugnoli.Player;
 
 public class GameModel {
 
@@ -12,6 +13,7 @@ public class GameModel {
     private MarbleMarket marbleMarket;
     private boolean BlackCrossPawn;
 
-
-
+    public Player[] getPlayers() {
+        return players;
+    }
 }

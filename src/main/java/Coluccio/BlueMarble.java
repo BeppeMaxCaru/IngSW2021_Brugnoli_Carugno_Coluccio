@@ -1,12 +1,14 @@
 package Coluccio;
 
+import Brugnoli.Player;
 import Brugnoli.WareHouse;
+import Carugno.MVC.GameModel;
 
 import java.util.Map;
 
 public class BlueMarble extends Marble{
 
-    public void drawMarble(WareHouse wareHouse) {
+    public void drawMarble(WareHouse wareHouse, GameModel gameModel, Player player) {
         /**
          * Override of the Marble method drawMarble
          */
@@ -75,8 +77,19 @@ public class BlueMarble extends Marble{
         {
             /**
              * If the resource has to be discarded, other players obtain 1 faithPoint
+             * pn contains the playerNumber of the player that discards the marble
              */
-            //Aggiungo faithPoints agli altri giocatori
+            int pn = player.getPlayerNumber();
+
+            for(Player players : gameModel.getPlayers())
+            {
+                /**
+                 * for-each player in the game
+                 * If he isn't the one who discards the marble, he obtains 1 faithPoint
+                 */
+                if(pn!= players.getPlayerNumber())
+                    players.getPlayerboard().getFaithPath().moveCross(1);
+            }
         }
     }
 }
