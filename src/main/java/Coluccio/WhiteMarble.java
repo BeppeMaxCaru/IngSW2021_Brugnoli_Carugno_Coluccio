@@ -1,6 +1,7 @@
 package Coluccio;
 
 import Brugnoli.Playerboard;
+import Carugno.LeaderCards.LaederCardsTypes.WhiteMarbleResourceLeaderCard;
 import Carugno.LeaderCards.LeaderCard;
 import Carugno.LeaderCards.LeaderCardDeck;
 
@@ -14,16 +15,16 @@ public class WhiteMarble extends Marble {
         /**
          * Check leaderCardDeck of the player
          */
-        for(LeaderCard leaderCard: leaderCardDeck){
-            if((leaderCard.isPlayed())&&(/*leaderCard.LeaderCardsType==WhiteMarbleLeaderCards*/))
+        for(LeaderCard leaderCard: leaderCardDeck.getLeaderCardsDeck()){
+            if((leaderCard.isPlayed())&&(leaderCard instanceof WhiteMarbleResourceLeaderCard))
             {
                 /**
                  * If a whiteMarble leaderCard is activated, it is activated its effect
                  */
-                leaderCard.activateAbility(Playerboard playerboard);
+                leaderCard.activateAbility(playerboard);
             }
             /**
-             * If a whiteMarble leaderCard is not activated, white marbles has no effects
+             * If a whiteMarble leaderCard is not activated, white marble has no effects
              */
         }
     }

@@ -1,6 +1,9 @@
 package Coluccio;
 
 import java.util.Scanner;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Market is composed by the grid of 12 marbles (3r x 4c) and the 13th excess marble
@@ -39,9 +42,11 @@ public class Market {
         marbleArray[12] = new VioletMarble();
 
         /**
-         * Instructions for mixing the array
+         * Instructions for mixing the array of marbles, converting it into a list
          */
-        //Shuffle marbleArray
+        List<Marble> marbleList = Arrays.asList(marbleArray);
+        Collections.shuffle(marbleList);
+        marbleList.toArray(marbleArray);
 
         /**
          * I assign to the market arrangement all the marble array positions
