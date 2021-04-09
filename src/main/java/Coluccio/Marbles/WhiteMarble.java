@@ -1,9 +1,10 @@
-package Coluccio;
+package Coluccio.Marbles;
 
 import Brugnoli.Playerboard;
 import Carugno.LeaderCards.LaederCardsTypes.WhiteMarbleResourceLeaderCard;
 import Carugno.LeaderCards.LeaderCard;
 import Carugno.LeaderCards.LeaderCardDeck;
+import Coluccio.Marble;
 
 public class WhiteMarble extends Marble {
 

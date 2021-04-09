@@ -1,5 +1,7 @@
 package Coluccio;
 
+import Coluccio.Marbles.*;
+
 import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,7 +23,7 @@ public class Market {
         Marble[] marbleArray;
 
         marbleArray = new Marble[row*column+1];
-        marketArrangement = new Marble[row][column];
+        this.marketArrangement = new Marble[row][column];
 
         /**
          * I create an array that contains all the marbles, for mixing randomly the arrangement of the market
@@ -56,14 +58,14 @@ public class Market {
         {
             for(int j=0; j<column; j++)
             {
-                marketArrangement[i][j] = marbleArray[n];
+                this.marketArrangement[i][j] = marbleArray[n];
                 n++;
             }
         }
         /**
          * The 13th marble of the array becomes the excess marble
          */
-        excessMarble=marbleArray[n+1];
+        this.excessMarble=marbleArray[n+1];
 
     }
 
@@ -71,7 +73,7 @@ public class Market {
      * Method that returns the arrangement of the market grid
      */
     public Marble[][] getMarketArrangement() {
-        return marketArrangement;
+        return this.marketArrangement;
     }
 
     /**
@@ -82,7 +84,7 @@ public class Market {
         int i=0;
         int rc;//Row/Column choice
         Marble temp;//Temporary marble to save the previous excess marble
-        temp=excessMarble;
+        temp=this.excessMarble;
 
         Scanner keyboard = new Scanner(System.in);
 
@@ -104,22 +106,22 @@ public class Market {
              * I save the excess marble on a temporary position
              * It is activated the effect of the first marble of the row, that becomes the excess marble
              */
-            marketArrangement[x][i].drawMarble();
-            excessMarble=marketArrangement[x][i];
+            this.marketArrangement[x][i].drawMarble();
+            this.excessMarble=this.marketArrangement[x][i];
             for(i=0; i<column-1; i++)
             {
                 /**
                  * It is activated the effect of every marble of the row
                  * Every marble slides to an upper position of the market grid
                  */
-                marketArrangement[x][i].drawMarble();
-                marketArrangement[x][i]=marketArrangement[x][i+1];
+                this.marketArrangement[x][i].drawMarble();
+                this.marketArrangement[x][i]=this.marketArrangement[x][i+1];
             }
             /**
              * The previous excess Marble is inserted into the lower position of the market row
              */
             i++;
-            marketArrangement[x][i]=temp;
+            this.marketArrangement[x][i]=temp;
         }
 
         /**
@@ -131,22 +133,22 @@ public class Market {
              * I save the excess marble on a temporary position
              * It is activated the effect of the first marble of the column, that becomes the excess marble
              */
-            marketArrangement[i][x].drawMarble();
-            excessMarble=marketArrangement[i][x];
+            this.marketArrangement[i][x].drawMarble();
+            this.excessMarble=this.marketArrangement[i][x];
             for(i=0; i<row-1; i++)
             {
                 /**
                  * It is activated the effect of every marble of the column
                  * Every marble slides to an upper position of the market grid
                  */
-                marketArrangement[i][x].drawMarble();
-                marketArrangement[i][x]=marketArrangement[i+1][x];
+                this.marketArrangement[i][x].drawMarble();
+                this.marketArrangement[i][x]=this.marketArrangement[i+1][x];
             }
             /**
              * The previous excess Marble is inserted into the lower position of the market column
              */
             i++;
-            marketArrangement[i][x]=temp;
+            this.marketArrangement[i][x]=temp;
         }
     }
 
@@ -154,6 +156,6 @@ public class Market {
      * Method the returns the excess marble of the market
      */
     public Marble getExcessMarble() {
-        return excessMarble;
+        return this.excessMarble;
     }
 }

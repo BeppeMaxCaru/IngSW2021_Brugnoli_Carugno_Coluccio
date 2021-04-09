@@ -1,8 +1,9 @@
-package Coluccio;
+package Coluccio.Marbles;
 
 import Brugnoli.FaithPath;
+import Coluccio.Marble;
 
-public class RedMarble extends Marble{
+public class RedMarble extends Marble {
     /**
      * Override of the Marble method drawMarble
      */
