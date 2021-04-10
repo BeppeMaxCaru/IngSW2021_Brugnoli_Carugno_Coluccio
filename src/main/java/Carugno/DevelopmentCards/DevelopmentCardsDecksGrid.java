@@ -2,18 +2,23 @@ package Carugno.DevelopmentCards;
 
 import Brugnoli.Playerboard;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class DevelopmentCardsDecksGrid {
 
     private final DevelopmentCard[][][] developmentCardsDecksGrid;
+    private Map<String, Integer> developmentCardsColours;
+    private Collection<Integer> developmentCardsLevels;
+
+    private Scanner consoleInput = new Scanner(System.in);
+    //private String colour;
+    //private int level;
 
     public DevelopmentCardsDecksGrid() {
         //costruisco tutta la griglia
         this.developmentCardsDecksGrid = new DevelopmentCard[3][4][4];
 
+        this.developmentCardsColours = new HashMap<>();
         //Level 1 GREEN
         this.developmentCardsDecksGrid[2][0][0] = new DevelopmentCard("GREEN",1,
                 0,0,0,2,
@@ -280,21 +285,53 @@ public class DevelopmentCardsDecksGrid {
 
         //Shuffle the grid
         for (int i=0;i<3;i++) {
+            //Mi basta i+1 (siccome parto da 0) dato che il livello massimo è 3
+            //mentre i colori possono essere potenzialmente infiniti
+            this.developmentCardsLevels.add(i+1);
             for (int j=0;j<4;j++) {
                 List<DevelopmentCard> developmentCardsList = Arrays.asList(developmentCardsDecksGrid[i][j]);
                 Collections.shuffle(developmentCardsList);
                 developmentCardsList.toArray(developmentCardsDecksGrid[i][j]);
+                //Mette i colori nella lista di colori delle carte
+                this.developmentCardsColours.put(this.developmentCardsDecksGrid[i][j][0].getColour(), j);
             }
         }
     }
 
     public void buyDevelopmentCard(Playerboard playerboard) {
+        //Print the available cards
+        for (int i=0;i<3;i++) {
+            for (int j=0;j<4;j++) {
+                this.developmentCardsDecksGrid[i][j][0].printDevelopmentCard();
+            }
+        }
+
         //Ask colour x
         //Ask level y
         //ciclo while che continua a chiedere se non valida
-        developmentCardsDecksGrid[x][y][0].checkResources(Playerboard playerboard) {
-
+        System.out.println("Available development cards colours: " + this.developmentCardsColours);
+        System.out.println("Choose development cards colour: ");
+        String colour = this.consoleInput.nextLine();
+        while (!this.developmentCardsColours.containsKey(colour)) {
+            System.out.println("Card of this colour doesn't exist -> choose another colour: ");
+            colour = this.consoleInput.nextLine();
         }
+        System.out.println("Available development cards levels: " + this.developmentCardsLevels);
+        System.out.println("Choose development card level: ");
+        int level = this.consoleInput.nextInt();
+        //check if the input card exists otherwise choose again
+        while (!this.developmentCardsLevels.contains(level)) {
+            System.out.println("Card of this level doesn't exist -> choose another level: ");
+            level = this.consoleInput.nextInt();
+        }
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Mega ciclo while di controllo va qua dentro
+        //Map<String, Integer> developmentCardCost = this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].getDevelopmentCardCost();
+        //while (this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].checkResourcesAvailability(Playerboard playerboard)) {
+            //While buy == false keep asking -> if true card has been bought
+            //Make the player choose the deck where to put the card
+        //}
     }
 
 }
