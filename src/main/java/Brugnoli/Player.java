@@ -1,12 +1,18 @@
 package Brugnoli;
 
-public class Player {
-    private final String nickname;
-    private final int playerNumber;
-    private Playerboard playerboard;
-    private LeaderCardsDeck playerLeaderCards;
+import Carugno.DevelopmentCards.DevelopmentCardsDeck;
+import Carugno.LeaderCards.LeaderCardDeck;
+import Carugno.MVC.GameModel;
+import java.util.Scanner;
+import java.util.Random;
 
-    public Player(String nickname, int playerNumber, Playerboard playerboard, LeaderCardsDeck playerLeaderCards) {
+public class Player {
+    private String nickname;
+    private int playerNumber;
+    private Playerboard playerboard;
+    private LeaderCardDeck playerLeaderCards;
+
+    public Player(String nickname, int playerNumber, Playerboard playerboard, LeaderCardDeck playerLeaderCards) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
         this.playerboard = playerboard;
@@ -14,22 +20,39 @@ public class Player {
     }
 
     public String getNickname() {
-        return nickname;
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("Player nickname:");
+        nickname = in.nextLine();
+
+        return this.nickname;
     }
 
     public int getPlayerNumber() {
-        return playerNumber;
+        Random rand = new Random();
+        int upperbound = 3;
+
+        playerNumber = rand.nextInt(upperbound);
+
+        // Non so come controllare se due player hanno lo stesso numero di player
+
+        return this.playerNumber;
     }
 
     public Playerboard getPlayerboard() {
-        return playerboard;
+
+        // Array di playerboard?? Se no come faccio il controllo se due player hanno la stessa playerboard
+
+        return this.playerboard;
     }
 
-    public LeaderCardsDeck getPlayerLeaderCards() {
-        return playerLeaderCards;
+    public LeaderCardDeck getPlayerLeaderCards() {
+
+
+        return this.playerLeaderCards;
     }
 
-    public void setPlayerLeaderCardsDeck(LeaderCardsDeck playerLeaderCards) {
+    public void setPlayerLeaderCardsDeck(LeaderCardDeck playerLeaderCards) {
 
     }
 
@@ -45,7 +68,7 @@ public class Player {
 
     }
 
-    public DevelopmentCardDeck buyDevelopmentCard(GameModel game) {
+    public DevelopmentCardsDeck buyDevelopmentCard(GameModel game) {
 
     }
 

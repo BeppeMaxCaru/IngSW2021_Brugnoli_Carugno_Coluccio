@@ -45,7 +45,7 @@ public class FaithPath {
         return this.crossPosition;
     }
 
-    public void moveCross(int redCrossPosition) {
+    public void moveCross(int CrossPosition) {
 
     }
 
