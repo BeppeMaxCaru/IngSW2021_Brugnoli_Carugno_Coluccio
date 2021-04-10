@@ -12,7 +12,7 @@ public class WareHouse {
     }
 
     public Map <String, Integer> getWarehouseResources() {
-        return warehouseResources;
+        return this.warehouseResources;
     }
 
     public void setWarehouseResources(Map <String, Integer> warehouseResources) {

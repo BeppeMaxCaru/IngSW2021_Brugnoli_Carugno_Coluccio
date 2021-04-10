@@ -46,7 +46,7 @@ public class Playerboard {
     }
 
     public WareHouse getWareHouse() {
-        return wareHouse;
+        return this.wareHouse;
     }
 
     public void setWareHouse(WareHouse wareHouse) {

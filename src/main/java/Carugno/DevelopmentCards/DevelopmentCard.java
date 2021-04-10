@@ -84,6 +84,8 @@ public class DevelopmentCard {
      * @param playerboard
      * @return
      */
+    //Posso fare controllo direttamente nel metodo senza checkRequisite
+    //se si può compra altrimenti niente
     public boolean checkResources(Playerboard playerboard) {
         //Get resources in chest e warehouse
         Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
@@ -98,19 +100,56 @@ public class DevelopmentCard {
         }
 
         //Check if one map is contained into the other one
+        //to see if player has enough resources
         for (Map.Entry<String, Integer> entry : this.cost.entrySet()) {
             String key = entry.getKey();
+            Integer value = entry.getValue();
+            //if (this.cost.entrySet().contains(key)) {
+            //    if (value<this.cost.get)
+            //}
+            int resourceOfPlayer = playerResources.getOrDefault(key,0);
+            if (resourceOfPlayer == 0 || resourceOfPlayer<value) {
+                //Non si può comprare
+                //Println("Risorse non sufficienti");
+                //break;
+                return false;
+            }
         }
 
-
+        return true;
 
     }
 
     /**
      * This method remove the resources needed to buy the card from the player
      */
-    public void buy() {
+    public void buy(Playerboard playerboard) {
         //Forse si possono unire checkResources e buy effettuando il controllo nello stesso metodo
-    }
+        Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
+        Map<String, Integer> chestResources = playerboard.getChest().getChestResources();
 
+        for (Map.Entry<String, Integer> warehouseResourceAvailability : warehouseResources.entrySet()) {
+            String warehouseResourceAvailabilityKey = warehouseResourceAvailability.getKey();
+            Integer warehouseResourceAvailabilityValue = warehouseResourceAvailability.getValue();
+            //controlla se vado sotto zero in warehouse allora devo togliere da chest
+            warehouseResourceAvailabilityValue = warehouseResourceAvailabilityValue - this.cost.get(warehouseResourceAvailabilityKey);
+            if (warehouseResourceAvailabilityValue<0) {
+                Integer toReduceFromChest = Math.abs(warehouseResourceAvailabilityValue);
+                warehouseResources.put(warehouseResourceAvailabilityKey, 0);
+                chestResources.put(warehouseResourceAvailabilityKey, toReduceFromChest);
+
+            } else {
+                //Fa overwrite con nuovo valore
+                warehouseResources.put(warehouseResourceAvailabilityKey, warehouseResourceAvailabilityValue);
+            }
+        }
+
+        playerboard.getWareHouse().setWarehouseResources(warehouseResources);
+        playerboard.getChest().setChestResources(chestResources);
+
+        int v = playerboard.getVictoryPoints();
+        v = v + this.victoryPoints;
+        playerboard.setVictoryPoints(v);
+
+    }
 }

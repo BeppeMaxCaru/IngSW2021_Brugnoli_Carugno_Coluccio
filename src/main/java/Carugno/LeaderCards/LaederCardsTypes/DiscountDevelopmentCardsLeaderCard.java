@@ -24,4 +24,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         this.discount.put(resource, 1);
     }
 
+
+
 }

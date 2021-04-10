@@ -19,6 +19,8 @@ public class LeaderCard {
         return victoryPoints;
     }
 
+    //Serve per giocare la carta
+    //NB giocare la carta e attivarla sono due azioni diverse!!!!!!!!!!!!!!
     public boolean checkRequisites(Playerboard playerboard) {
         if () {
 
@@ -31,8 +33,8 @@ public class LeaderCard {
 
     }
 
-    public void discard() {
-
+    public void discard(Playerboard playerboard) {
+        playerboard.getFaithPath().moveCross(1);
     }
 
 
