@@ -1,6 +1,7 @@
 package Carugno.LeaderCards.LaederCardsTypes;
 
-import Carugno.DevelopmentCards.DevelopmentCardWithErrors;
+import Brugnoli.Playerboard;
+import Carugno.DevelopmentCards.DevelopmentCard;
 import Carugno.LeaderCards.LeaderCard;
 
 import java.util.HashMap;
@@ -8,15 +9,15 @@ import java.util.Map;
 
 public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
-    private final DevelopmentCardWithErrors[] requisite;
+    private final DevelopmentCard[] requisite;
     private final Map<String, Integer> discount;
 
-    public DiscountDevelopmentCardsLeaderCard(DevelopmentCardWithErrors firstRequiredDevelopmentCard,
-                                              DevelopmentCardWithErrors secondRequiredDevelopmentCard,
+    public DiscountDevelopmentCardsLeaderCard(DevelopmentCard firstRequiredDevelopmentCard,
+                                              DevelopmentCard secondRequiredDevelopmentCard,
                                               String resource) {
         super(2);
 
-        this.requisite = new DevelopmentCardWithErrors[2];
+        this.requisite = new DevelopmentCard[2];
         this.requisite[0] = firstRequiredDevelopmentCard; //Oppure costruisco le carte direttamente
         this.requisite[1] = secondRequiredDevelopmentCard; //qui dentro con loro costruttore
 
@@ -24,6 +25,11 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         this.discount.put(resource, 1);
     }
 
-
-
+    @Override
+    public boolean checkRequisites(Playerboard playerboard) {
+        for (DevelopmentCard developmentCards : this.requisite) {
+            //
+        }
+        return false;
+    }
 }

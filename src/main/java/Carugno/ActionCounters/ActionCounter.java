@@ -1,6 +1,7 @@
 package Carugno.ActionCounters;
 
-import Carugno.DevelopmentCards.DevelopmentCardsDeck;
+import Brugnoli.Playerboard;
+import Carugno.DevelopmentCards.DevelopmentCardsDecksGrid;
 
 public class ActionCounter {
 

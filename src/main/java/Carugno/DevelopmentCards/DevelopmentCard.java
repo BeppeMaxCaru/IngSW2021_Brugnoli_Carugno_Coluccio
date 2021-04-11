@@ -1,5 +1,6 @@
 package Carugno.DevelopmentCards;
 
+import Brugnoli.Player;
 import Brugnoli.Playerboard;
 import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 
@@ -47,6 +48,10 @@ public class DevelopmentCard {
         return this.colour;
     }
 
+    public int getDevelopmentCardLevel() {
+        return this.level;
+    }
+
     public Map<String, Integer> getDevelopmentCardCost() {
         return this.cost;
     }
@@ -71,20 +76,40 @@ public class DevelopmentCard {
             int resourceOfPlayer = allPlayerResources.getOrDefault(key,0);
             if (resourceOfPlayer == 0 || resourceOfPlayer<value) {
                 //Non si può comprare/scambiare
-                System.out.println("Not enough resources");
+                System.out.println("Not enough resources to buy this card");
+                System.out.println("");
                 return false;
             }
         }
         return true;
     }
 
-    public boolean buyDevelopmentCard(Playerboard playerboard) {
+    public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard) {
+        Map<Integer, DevelopmentCard> playerDevelopmentCards = playerboard.getPlayerDevelopmentCards();
+        for (Integer key : playerDevelopmentCards.keySet()) {
+            if ((playerDevelopmentCards.get(key).getDevelopmentCardColour().equals(this.colour)
+                    && playerDevelopmentCards.get(key).getDevelopmentCardLevel()==this.level-1) ||
+                    playerDevelopmentCards.get(key).equals(null)) {
+                return true;
+            }
+        }
+        System.out.println("Card not compatible with playerboard cards");
+        System.out.println("");
+        return false;
+    }
+
+    //Metodo che toglie le risorse al player se l'acquisto va a buon fine
+    //Check sono già stati fatti tutti da playerboard e carddecksgrid
+    //faccio avvenire il pagamento direttamente nella playerboard
+    /*public void payDevelopmentCard(Playerboard playerboard) {
 
         if (!checkResourcesAvailability(playerboard, this.cost)) {
             System.out.println("Not enough resources to buy card");
-            return false;
-        } else {
+            System.out.println("");
+
+        } else if (checkResourcesAvailability(playerboard, this.cost)) {
             Map<String, Integer> reourcesToPay = new HashMap<>();
+            playerboard.placeNewDevelopmentCard(this);
             while (!reourcesToPay.equals(this.cost)) {
                 //Metodo da aggiungere in playerboard che conitnua a fare pescare il giocatore
                 //da dove vuole finchè non raggiunge le risorse richieste dallo scambio
@@ -99,8 +124,7 @@ public class DevelopmentCard {
             //la nuova carta acquistata è compatibile con quella nuova appena acquistata
             //Playerboard.getDevelopmentCards.putOnTop(this)
         }
-        return true;
-    }
+    }*/
 
     public boolean activateProduction(Playerboard playerboard) {
 
