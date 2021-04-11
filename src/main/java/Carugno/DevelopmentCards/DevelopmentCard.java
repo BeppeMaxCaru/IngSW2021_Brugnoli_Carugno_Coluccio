@@ -1,15 +1,11 @@
 package Carugno.DevelopmentCards;
 
 import Brugnoli.Playerboard;
+import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-/**
- * This class represents a single development card that can be personalized through the constructor
- */
 public class DevelopmentCard {
 
     private String colour;
@@ -17,16 +13,14 @@ public class DevelopmentCard {
     private Map<String, Integer> cost;
     private Map<String, Integer> input;
     private Map<String, Integer> output;
+    private int faithPoints;
     private int victoryPoints;
 
-    /**
-     * This constructor builds the personalized development card
-     */
     public DevelopmentCard(String colour, int level,
                            int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
                            int coinsInput, int stonesInput, int servantsInput, int shieldsInput,
                            int coinsOutput, int stonesOutput, int servantsOutput, int shieldsOutput,
-                           int faithOutput,
+                           int faithPoints,
                            int victoryPoints) {
 
         this.cost = new HashMap<String, Integer>();
@@ -49,107 +43,102 @@ public class DevelopmentCard {
 
     }
 
-    public void setDevelopmentCard (int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
-                                    int coinsOutput, int stonesOutput, int servantsOutput, int shieldsOutput,
-                                    int faithOutput,
-                                    int victoryPoints) {
-
-        this.cost = new HashMap<String, Integer>();
-        this.cost.put("COINS", coinsCost);
-        this.cost.put("STONES", stonesCost);
-        this.cost.put("SERVANTS", servantsCost);
-        this.cost.put("SHIELDS", shieldsCost);
-
-        this.input = new HashMap<String, Integer>();
-        this.input.put("COINS", coinsInput);
-        this.input.put("STONES", stonesInput);
-        this.input.put("SERVANTS", servantsInput);
-        this.input.put("SHIELDS", shieldsInput);
-
-        this.output = new HashMap<String, Integer>();
-        this.output.put("COINS", coinsOutput);
-        this.output.put("STONES", stonesOutput);
-        this.output.put("SERVANTS", servantsOutput);
-        this.output.put("SHIELDS", shieldsOutput);
-
+    public String getDevelopmentCardColour() {
+        return this.colour;
     }
 
-    public int getVictoryPoints() {
-        return this.victoryPoints;
+    public Map<String, Integer> getDevelopmentCardCost() {
+        return this.cost;
     }
 
-    /**
-     * This method checks if the player has enough resources in both his warehouse and chest
-     * to cover the cost of the card and buy it
-     * @param playerboard
-     * @return
-     */
-    //Posso fare controllo direttamente nel metodo senza checkRequisite
-    //se si può compra altrimenti niente
-    public boolean checkResources(Playerboard playerboard) {
-        //Get resources in chest e warehouse
+    public Map<String, Integer> getDevelopmentCardInput() {
+        return this.input;
+    }
+
+    public boolean checkResourcesAvailability(Playerboard playerboard, Map<String, Integer> requirements) {
+
         Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
         Map<String, Integer> chestResources = playerboard.getChest().getChestResources();
-
         //Sum the two maps to get the total player resources
-        Map<String, Integer> playerResources = new HashMap<>(warehouseResources);
-        for (Map.Entry<String, Integer> entry : chestResources.entrySet()) {
-            String key = entry.getKey();
-            Integer value = entry.getValue();
-            playerResources.merge(key, value, (v1, v2) -> v1 + v2);
-        }
+        Map<String, Integer> allPlayerResources = new HashMap<>(warehouseResources);
+        chestResources.forEach((key, value) -> allPlayerResources.merge(key, value, (v1, v2) -> v1+v2));
 
         //Check if one map is contained into the other one
         //to see if player has enough resources
-        for (Map.Entry<String, Integer> entry : this.cost.entrySet()) {
+        for (Map.Entry<String, Integer> entry : requirements.entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
-            //if (this.cost.entrySet().contains(key)) {
-            //    if (value<this.cost.get)
-            //}
-            int resourceOfPlayer = playerResources.getOrDefault(key,0);
+            int resourceOfPlayer = allPlayerResources.getOrDefault(key,0);
             if (resourceOfPlayer == 0 || resourceOfPlayer<value) {
-                //Non si può comprare
-                //Println("Risorse non sufficienti");
-                //break;
+                //Non si può comprare/scambiare
+                System.out.println("Not enough resources");
                 return false;
             }
         }
-
         return true;
-
     }
 
-    /**
-     * This method remove the resources needed to buy the card from the player
-     */
-    public void buy(Playerboard playerboard) {
-        //Forse si possono unire checkResources e buy effettuando il controllo nello stesso metodo
-        Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
-        Map<String, Integer> chestResources = playerboard.getChest().getChestResources();
+    public boolean buyDevelopmentCard(Playerboard playerboard) {
 
-        for (Map.Entry<String, Integer> warehouseResourceAvailability : warehouseResources.entrySet()) {
-            String warehouseResourceAvailabilityKey = warehouseResourceAvailability.getKey();
-            Integer warehouseResourceAvailabilityValue = warehouseResourceAvailability.getValue();
-            //controlla se vado sotto zero in warehouse allora devo togliere da chest
-            warehouseResourceAvailabilityValue = warehouseResourceAvailabilityValue - this.cost.get(warehouseResourceAvailabilityKey);
-            if (warehouseResourceAvailabilityValue<0) {
-                Integer toReduceFromChest = Math.abs(warehouseResourceAvailabilityValue);
-                warehouseResources.put(warehouseResourceAvailabilityKey, 0);
-                chestResources.put(warehouseResourceAvailabilityKey, toReduceFromChest);
-
-            } else {
-                //Fa overwrite con nuovo valore
-                warehouseResources.put(warehouseResourceAvailabilityKey, warehouseResourceAvailabilityValue);
+        if (!checkResourcesAvailability(playerboard, this.cost)) {
+            System.out.println("Not enough resources to buy card");
+            return false;
+        } else {
+            Map<String, Integer> reourcesToPay = new HashMap<>();
+            while (!reourcesToPay.equals(this.cost)) {
+                //Metodo da aggiungere in playerboard che conitnua a fare pescare il giocatore
+                //da dove vuole finchè non raggiunge le risorse richieste dallo scambio
+                //playerboard.pickResource()
             }
+            //Qui non serve aggiornare la chest come dopo la produzione
+            //ma, una volta tolte le risorse da chest e warehouse si dà
+            //la carta da mettere su una delle 3 pile della playerboard
+            //e le risorse collezionate si "buttano"
+            //Metodo da aggiungere con cui posizionare la carta
+            //E si controlla nel metodo che la carta su cui viene posizionata
+            //la nuova carta acquistata è compatibile con quella nuova appena acquistata
+            //Playerboard.getDevelopmentCards.putOnTop(this)
         }
-
-        playerboard.getWareHouse().setWarehouseResources(warehouseResources);
-        playerboard.getChest().setChestResources(chestResources);
-
-        int v = playerboard.getVictoryPoints();
-        v = v + this.victoryPoints;
-        playerboard.setVictoryPoints(v);
-
+        return true;
     }
+
+    public boolean activateProduction(Playerboard playerboard) {
+
+        if (!checkResourcesAvailability(playerboard, this.input)) {
+            System.out.println("Not enough resources to activate production");
+            return false;
+        } else {
+            Map<String, Integer> resourcesToTrade = new HashMap<>();
+            while (!resourcesToTrade.equals(this.input)) {
+                //Metodo da aggiungere in playerboard che conitnua a fare pescare il giocatore
+                //da dove vuole finchè non raggiunge le risorse richieste dallo scambio
+                //playerboard.pickResource()
+            }
+            //Controllare siccome delicatissimo!!!!!!!
+            //Per essere corretto le risorse di pickResource vanno tolte
+            //completamente dalla playerboard siccome questa lambda function
+            //somma le risorse ottenute dalla produzione a quelle presenti in chest
+            //da cui bisogna aver tolto quelle prese per lo scambio
+            //chestResourcesNow = chestResourcesBefore - resourcesPickedFromChest + output
+            playerboard.getFaithPath().moveCross(this.faithPoints);
+            Map<String, Integer> resourcesAfterProduction = playerboard.getChest().getChestResources();
+            this.output.forEach((key, value) -> resourcesAfterProduction.merge(key, value, Integer::sum));
+            playerboard.getChest().setChestResources(resourcesAfterProduction);
+        }
+        return true;
+    }
+
+    public void printDevelopmentCard() {
+        //Bisogna allineare
+        System.out.println("     ");
+        System.out.println("     Colour: " + this.colour);
+        System.out.println("     Level:  " + this.colour);
+        System.out.println("     Cost:              " + this.cost);
+        System.out.println("     Production input:  " + this.input);
+        System.out.println("     Production output: " + this.output);
+        System.out.println("     Faith points:      " + this.faithPoints);
+        System.out.println("     Victory points:    " + this.victoryPoints);
+        System.out.println("     ");
+    }
+
 }

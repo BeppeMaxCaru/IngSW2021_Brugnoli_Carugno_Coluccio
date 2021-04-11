@@ -1,18 +1,25 @@
 package Carugno.LeaderCards.LaederCardsTypes;
 
-import Carugno.DevelopmentCards.DevelopmentCard;
+import Brugnoli.Playerboard;
+import Carugno.DevelopmentCards.DevelopmentCardWithErrors;
 import Carugno.LeaderCards.LeaderCard;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
-    private final DevelopmentCard requisite;
+    private final DevelopmentCardWithErrors requisite;
     private final Map<String, Integer> input;
     private final Map<String, Integer> output;
 
-    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite,
+    Scanner consoleInput = new Scanner(System.in);
+    String resource1 = consoleInput.nextLine();
+    String resource2 = consoleInput.nextLine();
+
+
+    public ExtraProductionPowerLeaderCard(DevelopmentCardWithErrors requisite,
                                           String resourceInput) {
         super(4);
 
@@ -30,4 +37,24 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
     }
 
+    @Override
+    public void activateAbility(Playerboard playerboard) {
+        System.out.println("Choose first resource to trade: ");
+        resource1 = consoleInput.nextLine();
+        while (!(playerboard.getWareHouse().getWarehouseResources().containsKey(resource1) ||
+                (playerboard.getChest().getChestResources().containsKey(resource1)))) {
+            System.out.println("Resource missing -> choose another first resource to trade: ");
+            resource1 = consoleInput.nextLine();
+        }
+        System.out.println("Choose place from where to pick resource: ");
+
+        System.out.println("Choose second resource to trade: ");
+        resource2 = consoleInput.nextLine();
+        while (!((playerboard.getWareHouse().getWarehouseResources().containsKey(resource2)) ||
+                playerboard.getChest().getChestResources().containsKey(resource2))) {
+            System.out.println(("Resource missing -> choose another second resource to trade: "));
+            resource2 = consoleInput.nextLine();
+        }
+
+    }
 }
