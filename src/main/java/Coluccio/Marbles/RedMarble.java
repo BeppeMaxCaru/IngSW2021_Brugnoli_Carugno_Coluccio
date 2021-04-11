@@ -1,17 +1,24 @@
 package Coluccio.Marbles;
 
 import Brugnoli.FaithPath;
+import Brugnoli.Player;
+import Carugno.MVC.GameModel;
 import Coluccio.Marble;
 
+/**
+ * RedMarble produces faithPoints
+ */
 public class RedMarble extends Marble {
+
     /**
      * Override of the Marble method drawMarble
      */
-    public void drawMarble(FaithPath faithPath)
+    @Override
+    public void drawMarble(GameModel gameModel, Player player)
     {
         /**
         * The only effect of the red marble is to increase the faithPath position of one step
         */
-        faithPath.moveCross(1);
+        player.getPlayerboard().getFaithPath().moveCross(1);
     }
 }

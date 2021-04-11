@@ -9,7 +9,6 @@ public class Chest {
 
     public Chest() {
         chestResources = new HashMap<>();
-        chestResources = new HashMap<>();
         chestResources.put("COINS", 0);
         chestResources.put("SHIELDS", 0);
         chestResources.put("SERVANTS", 0);
