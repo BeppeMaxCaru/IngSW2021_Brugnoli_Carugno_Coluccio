@@ -22,8 +22,8 @@ public class LeaderCard {
     //Serve per giocare la carta
     //NB giocare la carta e attivarla sono due azioni diverse!!!!!!!!!!!!!!
     public boolean checkRequisites(Playerboard playerboard) {
-        if () {
-
+        if (true) {
+            return true;
         } else {
             return false;
         }

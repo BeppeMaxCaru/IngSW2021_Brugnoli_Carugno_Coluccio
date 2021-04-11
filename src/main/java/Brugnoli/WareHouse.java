@@ -20,7 +20,7 @@ public class WareHouse {
     }
 
     public void setWarehouseResources(Map <String, Integer> warehouseResources) {
-
+        this.warehouseResources = warehouseResources;
     }
 
     public void checkConstraints(Map <String, Integer> warehouseResources) {

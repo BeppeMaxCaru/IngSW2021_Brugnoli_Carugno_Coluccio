@@ -1,7 +1,7 @@
 package Carugno.LeaderCards.LaederCardsTypes;
 
 import Brugnoli.Playerboard;
-import Carugno.DevelopmentCards.DevelopmentCard;
+import Carugno.DevelopmentCards.DevelopmentCardWithErrors;
 import Carugno.LeaderCards.LeaderCard;
 
 import java.util.HashMap;
@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
-    private final DevelopmentCard requisite;
+    private final DevelopmentCardWithErrors requisite;
     private final Map<String, Integer> input;
     private final Map<String, Integer> output;
 
@@ -19,7 +19,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
     String resource2 = consoleInput.nextLine();
 
 
-    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite,
+    public ExtraProductionPowerLeaderCard(DevelopmentCardWithErrors requisite,
                                           String resourceInput) {
         super(4);
 

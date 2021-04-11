@@ -19,6 +19,7 @@ public class DevelopmentCardsDecksGrid {
         this.developmentCardsDecksGrid = new DevelopmentCard[3][4][4];
 
         this.developmentCardsColours = new HashMap<>();
+        this.developmentCardsLevels = new HashSet<>();
         //Level 1 GREEN
         this.developmentCardsDecksGrid[2][0][0] = new DevelopmentCard("GREEN",1,
                 0,0,0,2,
@@ -293,12 +294,14 @@ public class DevelopmentCardsDecksGrid {
                 Collections.shuffle(developmentCardsList);
                 developmentCardsList.toArray(developmentCardsDecksGrid[i][j]);
                 //Mette i colori nella lista di colori delle carte
-                this.developmentCardsColours.put(this.developmentCardsDecksGrid[i][j][0].getColour(), j);
+                this.developmentCardsColours.put(this.developmentCardsDecksGrid[i][j][0].getDevelopmentCardColour(), j);
             }
         }
     }
 
-    public void buyDevelopmentCard(Playerboard playerboard) {
+    //rendo tipo di ritorno boolean che mi dice se acquisto è stato fatto o no
+    //e continuo a chiamare metodo buy in un while loop del player finchè un acquisto non viene effettuato
+    public boolean buyDevelopmentCard(Playerboard playerboard) {
         //Print the available cards
         for (int i=0;i<3;i++) {
             for (int j=0;j<4;j++) {
@@ -327,7 +330,12 @@ public class DevelopmentCardsDecksGrid {
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Mega ciclo while di controllo va qua dentro
-        //Map<String, Integer> developmentCardCost = this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].getDevelopmentCardCost();
+        Map<String, Integer> developmentCardCost = this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].getDevelopmentCardCost();
+        if (this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
+            this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].buyDevelopmentCard(playerboard);
+            return true;
+        }
+        return false;
         //while (this.developmentCardsDecksGrid[level][this.developmentCardsColours.get(colour)][0].checkResourcesAvailability(Playerboard playerboard)) {
             //While buy == false keep asking -> if true card has been bought
             //Make the player choose the deck where to put the card
