@@ -4,6 +4,7 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.WhiteMarble;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,21 +39,19 @@ public class Player {
 
         playerNumber = rand.nextInt(upperbound);
 
-        // Non so come controllare se due player hanno lo stesso numero di player
+        // Non so come controllare se due player hanno lo stesso numero di player.
 
         return this.playerNumber;
     }
 
     public Playerboard getPlayerboard() {
 
-        // Array di playerboard?? Se no come faccio il controllo se due player hanno la stessa playerboard
+        // Array di playerboard o nuovo attributo playerboardNumber?? Se no come faccio il controllo se due player hanno la stessa playerboard
 
         return this.playerboard;
     }
 
     public LeaderCardDeck getPlayerLeaderCards() {
-
-
         return this.playerLeaderCards;
     }
 
@@ -104,7 +103,7 @@ public class Player {
 
     public int getAction( ) {
         int actionNum = -1;
-        Scanner in = new Scanner();
+        Scanner in = new Scanner(System.in);
 
         while(actionNum < 0 || actionNum > 2) {
             System.out.println("What action do you want to do? Choose one of them:");
@@ -118,7 +117,49 @@ public class Player {
     }
 
     public void pickLineFromMarket(GameModel gameModel) {
+        Scanner in = new Scanner(System.in);
+        int rowColumnChoice = -1;
+        int columnNum = -1;
+        int rowNum = -1;
+        int resourcesNumWarehouse;
+        String marbleWarehouse;
 
+        // Scelta colonna/riga.
+        while(rowColumnChoice != 0 && rowColumnChoice != 1) {
+            System.out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
+            System.out.println(gameModel.getMarket());
+            rowColumnChoice = in.nextInt();
+        }
+
+        // Scelta numero di colonna/riga e mette risorse nel warehouse.
+        if(rowColumnChoice == 0) {
+            while(columnNum < 0 || columnNum > 3) {
+                System.out.println("Choose the column's number you want to get the resources from:");
+                System.out.println(gameModel.getMarket());
+                columnNum = in.nextInt();
+            }
+            for(int i = 0; i < 4; i++) {
+                marbleWarehouse = gameModel.getMarket().getMarketArrangement()[i][columnNum].toString();
+                // Come gestisco il caso della biglia bianca??
+                resourcesNumWarehouse = getPlayerboard().getWareHouse().getWarehouseResources().get(marbleWarehouse);
+                getPlayerboard().getWareHouse().getWarehouseResources().put(marbleWarehouse, resourcesNumWarehouse + 1);
+            }
+        }
+        else {
+            while(rowNum < 0 || rowNum > 2) {
+                System.out.println("Choose the row's number you want to get the resources from:");
+                System.out.println(gameModel.getMarket());
+                rowNum = in.nextInt();
+            }
+            for(int i = 0; i < 3; i++) {
+                marbleWarehouse = gameModel.getMarket().getMarketArrangement()[rowNum][i].toString();
+                // Come gestisco il caso della biglia bianca??
+                resourcesNumWarehouse = getPlayerboard().getWareHouse().getWarehouseResources().get(marbleWarehouse);
+                getPlayerboard().getWareHouse().getWarehouseResources().put(marbleWarehouse, resourcesNumWarehouse + 1);
+            }
+        }
+
+        // Devo gestire la biglia nello scivolo??
     }
 
     public boolean buyDevelopmentCard(GameModel gameModel) {
@@ -133,7 +174,7 @@ public class Player {
         Scanner in = new Scanner(System.in);
         int leaderActionNum = -1;
 
-        while(leaderActionNum != 0 || leaderActionNum != 1) {
+        while(leaderActionNum != 0 && leaderActionNum != 1) {
             System.out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
             leaderActionNum = in.nextInt();
         }
@@ -147,7 +188,7 @@ public class Player {
 
     public void discardLeaderCard(LeaderCardDeck playerLeaderCards, Playerboard playerboard) {
         Scanner in = new Scanner(System.in);
-        int numLeaderCard;
+        int numLeaderCard = -1;
 
         //Scelta della carta leader da scartare
         while(numLeaderCard < 0 || numLeaderCard > playerLeaderCards.getLeaderCardsDeck().length) {

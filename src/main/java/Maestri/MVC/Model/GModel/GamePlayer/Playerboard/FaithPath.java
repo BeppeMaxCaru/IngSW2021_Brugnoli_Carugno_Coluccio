@@ -46,27 +46,28 @@ public class FaithPath {
     }
 
     public void moveCross(int CrossPosition) {
-
-
+        //Come faccio ad incrementare la crossPosition?
     }
 
     public boolean checkPopeSpace(Cell[] faithPath, int crossPosition) {
-
+        if(faithPath[crossPosition].isPopeSpace()) {
+            // Serve questa classe?
+        }
     }
 
     public boolean checkVictoryPoints(Cell[] faithPath, int crossPosition) {
-
+        // Serve questa classe?
     }
 
     public int getVictoryPoints(Cell[] faithPath, int crossPosition) {
+        if(faithPath[crossPosition].getVictoryPoints() != 0) {
+            // Devo risalire ai victory Points del playerboard, come faccio??
+        }
 
     }
 
     public boolean checkRelationWithVatican(Cell[] faithPath, int crossPosition) {
+        // Bisogna passargli la crossPosition del giocatore che ha fatto scattare il rapporto con il vaticano, come si fa??
 
     }
-
-
-
-
 }

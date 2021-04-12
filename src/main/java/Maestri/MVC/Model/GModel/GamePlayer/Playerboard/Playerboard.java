@@ -106,8 +106,7 @@ public class Playerboard {
         return faithPath;
     }
 
-    public int getVictoryPoints(){
-
+    public int getVictoryPoints() {
         return this.victoryPoints;
     }
 
