@@ -104,9 +104,21 @@ public class Player {
 
     public int getAction( ) {
 
+        int actionNum = -1;
+        Scanner in = new Scanner();
+
+        while(actionNum < 0 || actionNum > 2) {
+            System.out.println("What action do you want to do? Choose one of them:");
+            System.out.println("Write 0 if you want to take resources from the market.");
+            System.out.println("Write 1 if you want to buy a development card.");
+            System.out.println("Write 2 if you want to activate the production.");
+            actionNum = in.nextInt();
+        }
+
+        return actionNum;
     }
 
-    public void pickLineFromMarket(GameModel game) {
+    public void pickLineFromMarket(GameModel gameModel) {
 
     }
 
@@ -119,6 +131,12 @@ public class Player {
     }
 
     public int getLeaderAction( ) {
+        Scanner in = new Scanner();
+        int leaderAction
+
+        while()
+        System.out.println("Do you want to do an Action Leader?: Write 1 if you want or 0 if you don't want:");
+
         return 0;
     }
 

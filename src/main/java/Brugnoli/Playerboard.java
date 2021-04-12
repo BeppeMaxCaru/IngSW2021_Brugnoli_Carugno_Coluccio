@@ -2,9 +2,7 @@ package Brugnoli;
 
 import Carugno.DevelopmentCards.DevelopmentCard;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Playerboard {
@@ -122,85 +120,59 @@ public class Playerboard {
         int resourceInputNum = -1;
         int resourceOutputNum = -1;
         int numResources;
-        String resourceInput;
-        String resourceOutput;
-        Scanner in = new Scanner(System.in);
         int i = 2;
+        List<String> availableResourceWarehouse = null;
+        List<String> availableResourceChest = null;
+        Scanner in = new Scanner(System.in);
+
+        // Available resources from warehouse
+        for (String key : wareHouse.getWarehouseResources().keySet()) {
+            numResources = wareHouse.getWarehouseResources().get(key);
+            if(numResources != 0) {
+                availableResourceWarehouse = new ArrayList<>();
+                availableResourceWarehouse.add(key);
+            }
+        }
+
+        // Available resources from chest
+        for (String key : chest.getChestResources().keySet()) {
+            numResources = chest.getChestResources().get(key);
+            if(numResources != 0) {
+                availableResourceChest = new ArrayList<>();
+                availableResourceChest.add(key);
+            }
+        }
 
         // two input
         while(i > 0) {
+            resourceInputNum = -1;
             while(fromWhat != 0 && fromWhat != 1) {
                 System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
                 fromWhat = in.nextInt();
             }
-            if(fromWhat == 0) {
-                while(resourceInputNum < 0 || resourceInputNum > 3) {
-                    System.out.println("Choose a resource from warehouse: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+            if(fromWhat == 0 && availableResourceWarehouse != null) {
+                while(resourceInputNum < 0 || resourceInputNum > availableResourceWarehouse.size() - 1) {
+                    System.out.println("Choose a resource from warehouse:");
+                    for(int j = 0; j < availableResourceWarehouse.size(); j++) {
+                        System.out.println("Write" + j + "for" + availableResourceWarehouse.get(j));
+                    }
                     resourceInputNum = in.nextInt();
                 }
-                if(resourceInputNum == 0)
-                    resourceInput = "COINS";
-                else if(resourceInputNum == 1)
-                    resourceInput = "SHIELDS";
-                else if(resourceInputNum == 2)
-                    resourceInput = "SERVANTS";
-                else
-                    resourceInput = "STONES";
-                numResources = 0;
-                while(numResources == 0) {
-                    numResources = wareHouse.getWarehouseResources().get(resourceInput);
-                    if(numResources == 0) {
-                        resourceInputNum = -1;
-                        while(resourceInputNum < 0 || resourceInputNum > 3) {
-                            System.out.println("Choose another resource from warehouse, that one you chose was over: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
-                            resourceInputNum = in.nextInt();
-                        }
-                        if(resourceInputNum == 0)
-                            resourceInput = "COINS";
-                        else if(resourceInputNum == 1)
-                            resourceInput = "SHIELDS";
-                        else if(resourceInputNum == 2)
-                            resourceInput = "SERVANTS";
-                        else
-                            resourceInput = "STONES";
-                    }
-                }
-                wareHouse.getWarehouseResources().put(resourceInput, numResources - 1);
+
+                numResources = wareHouse.getWarehouseResources().get(availableResourceWarehouse.get(resourceInputNum));
+                wareHouse.getWarehouseResources().put(availableResourceWarehouse.get(resourceInputNum), numResources - 1);
                 i--;
             }
-            else {
-                while(resourceInputNum < 0 || resourceInputNum > 3) {
-                    System.out.println("Choose a resource from chest: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+            else if(availableResourceChest != null) {
+                while(resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
+                    System.out.println("Choose a resource from chest:");
+                    for(int j = 0; j < availableResourceChest.size(); j++) {
+                        System.out.println("Write" + j + "for" + availableResourceChest.get(j));
+                    }
                     resourceInputNum = in.nextInt();
                 }
-                if(resourceInputNum == 0)
-                    resourceInput = "COINS";
-                else if(resourceInputNum == 1)
-                    resourceInput = "SHIELDS";
-                else if(resourceInputNum == 2)
-                    resourceInput = "SERVANTS";
-                else
-                    resourceInput = "STONES";
-                numResources = 0;
-                while(numResources == 0) {
-                    numResources = chest.getChestResources().get(resourceInput);
-                    if(numResources == 0) {
-                        resourceInputNum = -1;
-                        while(resourceInputNum < 0 || resourceInputNum > 3) {
-                            System.out.println("Choose another resource from chest, that one you chose was over: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
-                            resourceInputNum = in.nextInt();
-                        }
-                        if(resourceInputNum == 0)
-                            resourceInput = "COINS";
-                        else if(resourceInputNum == 1)
-                            resourceInput = "SHIELDS";
-                        else if(resourceInputNum == 2)
-                            resourceInput = "SERVANTS";
-                        else
-                            resourceInput = "STONES";
-                    }
-                }
-                chest.getChestResources().put(resourceInput, numResources - 1);
+                numResources = chest.getChestResources().get(availableResourceChest.get(resourceInputNum));
+                chest.getChestResources().put(availableResourceChest.get(resourceInputNum), numResources - 1);
                 i--;
             }
         }
@@ -210,15 +182,15 @@ public class Playerboard {
             System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
             resourceOutputNum = in.nextInt();
         }
-        if(resourceOutputNum == 0)
-            resourceOutput = "COINS";
-        else if(resourceOutputNum == 1)
-            resourceOutput = "SHIELDS";
-        else if(resourceOutputNum == 2)
-            resourceOutput = "SERVANTS";
-        else
-            resourceOutput = "STONES";
-        numResources = chest.getChestResources().get(resourceOutput);
-        chest.getChestResources().put(resourceOutput, numResources + 1);
+
+        i = 0;
+        for (String key : chest.getChestResources().keySet()) {
+            if(i == resourceOutputNum) {
+                numResources = chest.getChestResources().get(key);
+                chest.getChestResources().put(key, numResources + 1);
+                break;
+            }
+            i++;
+        }
     }
 }
