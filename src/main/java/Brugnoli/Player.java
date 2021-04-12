@@ -1,6 +1,7 @@
 package Brugnoli;
 
 import Carugno.DevelopmentCards.DevelopmentCard;
+import Carugno.LeaderCards.LeaderCard;
 import Carugno.LeaderCards.LeaderCardDeck;
 import Carugno.MVC.GameModel;
 
@@ -103,7 +104,6 @@ public class Player {
     }
 
     public int getAction( ) {
-
         int actionNum = -1;
         Scanner in = new Scanner();
 
@@ -131,13 +131,15 @@ public class Player {
     }
 
     public int getLeaderAction( ) {
-        Scanner in = new Scanner();
-        int leaderAction
+        Scanner in = new Scanner(System.in);
+        int leaderActionNum = -1;
 
-        while()
-        System.out.println("Do you want to do an Action Leader?: Write 1 if you want or 0 if you don't want:");
+        while(leaderActionNum != 0 || leaderActionNum != 1) {
+            System.out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
+            leaderActionNum = in.nextInt();
+        }
 
-        return 0;
+        return leaderActionNum;
     }
 
     public void playLeaderCard(LeaderCardDeck playerLeaderCards) {
@@ -145,6 +147,24 @@ public class Player {
     }
 
     public void discardLeaderCard(LeaderCardDeck playerLeaderCards, Playerboard playerboard) {
+        Scanner in = new Scanner(System.in);
+        int numLeaderCard;
+
+        //Scelta della carta leader da scartare
+        while(numLeaderCard < 0 || numLeaderCard > playerLeaderCards.getLeaderCardsDeck().length) {
+            System.out.println("What leader card do you want to discard?:");
+            for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
+                System.out.println("Write" + i + "for this:" + playerLeaderCards.getLeaderCardsDeck()[i]);
+            }
+            numLeaderCard = in.nextInt();
+        }
+
+        //Rimozione carta leader dal deck
+        for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
+            /// ????
+        }
+
+        LeaderCard.discard(); /// ??
 
     }
 
