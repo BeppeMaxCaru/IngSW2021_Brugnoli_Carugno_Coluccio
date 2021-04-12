@@ -47,6 +47,7 @@ public class FaithPath {
 
     public void moveCross(int CrossPosition) {
 
+
     }
 
     public boolean checkPopeSpace(Cell[] faithPath, int crossPosition) {

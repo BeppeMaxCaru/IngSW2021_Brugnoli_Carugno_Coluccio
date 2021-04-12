@@ -1,17 +1,12 @@
 package Brugnoli;
 
-import Carugno.DevelopmentCards.DevelopmentCard;
-import Carugno.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Carugno.DevelopmentCards.DevelopmentCardsDeck;
 import Carugno.LeaderCards.LeaderCardDeck;
 import Carugno.MVC.GameModel;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Random;
 
 public class Player {
-
     private String nickname;
     private int playerNumber;
     private Playerboard playerboard;
@@ -22,13 +17,12 @@ public class Player {
         this.playerNumber = playerNumber;
         this.playerboard = playerboard;
         this.playerLeaderCards = playerLeaderCards;
-
     }
 
     public String getNickname() {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Player nickname: ");
+        System.out.println("Player nickname:");
         nickname = in.nextLine();
 
         return this.nickname;
@@ -41,7 +35,6 @@ public class Player {
         playerNumber = rand.nextInt(upperbound);
 
         // Non so come controllare se due player hanno lo stesso numero di player
-        //Assegnagli la prima posizione vuota ottenuta scorrendo il vettore dei player del game model
 
         return this.playerNumber;
     }
@@ -49,7 +42,6 @@ public class Player {
     public Playerboard getPlayerboard() {
 
         // Array di playerboard?? Se no come faccio il controllo se due player hanno la stessa playerboard
-        //Dal player vai a prendere ciascuna loro playerboard quindi non è un problema
 
         return this.playerboard;
     }
@@ -70,22 +62,13 @@ public class Player {
 
     public int getAction( ) {
 
-        System.out.println("Choose turn action: ");
-
-
     }
 
     public void pickLineFromMarket(GameModel game) {
 
     }
 
-    public boolean buyDevelopmentCard(GameModel gameModel) {
-        DevelopmentCardsDecksGrid developmentCardsDecksGrid = gameModel.getDevelopmentCardsDecksGrid();
-        developmentCardsDecksGrid.printDevelopmentCardsDecks();
-        System.out.println("Choose available card colour: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
-        Scanner playerInput = new Scanner(System.in);
-
-        return gameModel.getDevelopmentCardsDecksGrid().buyDevelopmentCard(this.playerboard);
+    public DevelopmentCardsDeck buyDevelopmentCard(GameModel game) {
 
     }
 

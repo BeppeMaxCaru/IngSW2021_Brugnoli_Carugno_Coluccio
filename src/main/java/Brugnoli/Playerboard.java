@@ -110,6 +110,7 @@ public class Playerboard {
 
     public int getVictoryPoints(){
 
+        return this.victoryPoints;
     }
 
     public void setVictoryPoints(int victoryPoints) {
