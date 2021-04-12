@@ -11,25 +11,21 @@ import Maestri.MVC.Model.GModel.GameModel;
 public class WhiteMarble extends Marble {
 
     /**
-     * Override of the Marble method drawMarble
+     * This method checks if the WhiteMarbleLeaderCard is activated.
+     * If LeaderCard is activated by the player, the method activates card effect
+     * If LeaderCard isn't activated, WhiteMarbles do nothing
      */
     @Override
     public void drawMarble(GameModel gameModel, Player player) {
 
-        /**
-         * Check leaderCardDeck of the player
-         */
+        //Check leaderCardDeck of the player
         for(LeaderCard leaderCard: player.getPlayerLeaderCards().getLeaderCardsDeck()){
             if((leaderCard.isPlayed())&&(leaderCard instanceof WhiteMarbleResourceLeaderCard))
             {
-                /**
-                 * If a whiteMarble leaderCard is activated, it is activated its effect
-                 */
+                //If a whiteMarble leaderCard is activated, it is activated its effect
                 leaderCard.activateAbility(player.getPlayerboard());
             }
-            /**
-             * If a whiteMarble leaderCard is not activated, white marble has no effects
-             */
+            //If a whiteMarble leaderCard is not activated, white marble has no effects
         }
     }
 }

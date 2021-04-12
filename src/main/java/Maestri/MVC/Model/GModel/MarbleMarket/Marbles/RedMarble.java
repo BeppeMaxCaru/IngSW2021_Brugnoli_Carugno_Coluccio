@@ -9,14 +9,11 @@ import Maestri.MVC.Model.GModel.GameModel;
 public class RedMarble extends Marble {
 
     /**
-     * Override of the Marble method drawMarble
+     * The only effect of the red marble is to increase the faithPath position of one step
      */
     @Override
     public void drawMarble(GameModel gameModel, Player player)
     {
-        /**
-        * The only effect of the red marble is to increase the faithPath position of one step
-        */
         player.getPlayerboard().getFaithPath().moveCross(1);
     }
 }

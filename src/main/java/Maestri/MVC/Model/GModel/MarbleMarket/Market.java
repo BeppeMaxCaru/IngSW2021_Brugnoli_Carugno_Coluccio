@@ -2,7 +2,6 @@ package Maestri.MVC.Model.GModel.MarbleMarket;
 
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
-import java.util.Scanner;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -12,22 +11,30 @@ import java.util.List;
  */
 public class Market {
 
+    /**
+     * The marketArrangement stores the grid composed by 12 Marbles
+     */
     private Marble[][] marketArrangement;
+    /**
+     * The excessMarble stores the 13th marble
+     */
     private Marble excessMarble;
 
     final int row=3;
     final int column=4;
 
+    /**
+     * Constructor of class Market
+     */
     public Market(){
 
         Marble[] marbleArray;
-
         marbleArray = new Marble[row*column+1];
         this.marketArrangement = new Marble[row][column];
 
         /*
-         * I create an array that contains all the marbles, for mixing randomly the arrangement of the market
-         * There are 4 white m., 1 red m., 2 yellow m., 2 blue m., 2 grey m. and 2 violet m.
+        I create an array that contains all the marbles, for mixing randomly the arrangement of the market
+        There are 4 white m., 1 red m., 2 yellow m., 2 blue m., 2 grey m. and 2 violet m.
          */
         marbleArray[0] = new WhiteMarble();
         marbleArray[1] = new WhiteMarble();
@@ -43,16 +50,12 @@ public class Market {
         marbleArray[11] = new VioletMarble();
         marbleArray[12] = new VioletMarble();
 
-        /*
-         * Instructions for mixing the array of marbles, converting it into a list
-         */
+        //Instructions for mixing the array of marbles, converting it into a list
         List<Marble> marbleList = Arrays.asList(marbleArray);
         Collections.shuffle(marbleList);
         marbleList.toArray(marbleArray);
 
-        /*
-         * I assign to the market arrangement all the marble array positions
-         */
+        //I assign to the market arrangement all the marble array positions
         int n=0;
         for(int i=0; i<row; i++)
         {
@@ -62,107 +65,53 @@ public class Market {
                 n++;
             }
         }
-        /*
-         * The 13th marble of the array becomes the excess marble
-         */
+        //The 13th marble of the array becomes the excess marble
         this.excessMarble=marbleArray[n+1];
 
     }
 
     /**
-     * Method that returns the arrangement of the market grid
+     * Method that updates the market arrangement if the player chooses to pick a row from the Market
      */
-    public Marble[][] getMarketArrangement() {
-        return this.marketArrangement;
-    }
-
-    /**
-     * Method that updates the market arrangement managing the user's choice of resources
-     */
-    public void setMarketArrangement(Marble[][] marketArrangement, Marble excessMarble){
-        int x;//To choose index
+    public void updateRow(int x){
         int i=0;
-        int rc;//Row/Column choice
         Marble temp;//Temporary marble to save the previous excess marble
         temp=this.excessMarble;
 
-        Scanner keyboard = new Scanner(System.in);
-
-        /*
-         * The program asks to the user to choose the row/column of resources to collect
-         */
-        do
-        {
-            System.out.println("Digit 0 for the row, 1 for the column");
-            //Scegli riga/colonna
-            rc = keyboard.nextInt();
-        }while((rc!=0)&&(rc!=1));
-
-        do{
-            System.out.println("Digit row/column index");
-            //Scegli indice x
-            x = keyboard.nextInt();
-        }while((x<0)||((rc==0)&&(x>3))||((rc==1)&&(x>4)));
-
-        /*
-         * If the users select to pick a row
-         */
-        if(rc==0)//Scelta riga x
-        {
-            /*
-             * I save the excess marble on a temporary position
-             * It is activated the effect of the first marble of the row, that becomes the excess marble
-             */
+        //I save the excess marble on a temporary position. It is activated the effect of the first marble of the row, that becomes the excess marble
             this.marketArrangement[x][i].drawMarble();
             this.excessMarble=this.marketArrangement[x][i];
             for(i=0; i<column-1; i++)
             {
-                /*
-                 * It is activated the effect of every marble of the row
-                 * Every marble slides to an upper position of the market grid
-                 */
+                //It is activated the effect of every marble of the row. Every marble slides to an upper position of the market grid
                 this.marketArrangement[x][i].drawMarble();
                 this.marketArrangement[x][i]=this.marketArrangement[x][i+1];
             }
-            /*
-             * The previous excess Marble is inserted into the lower position of the market row
-             */
+            //The previous excess Marble is inserted into the lower position of the market row
             i++;
             this.marketArrangement[x][i]=temp;
         }
 
-        /*
-         * If the users select to pick a column
-         */
-        if(rc==1)
+    /**
+     * Method that updates the market arrangement if the player chooses to pick a row from the Market
+     */
+    public void updateColumn(int x){
+        int i=0;
+        Marble temp;//Temporary marble to save the previous excess marble
+        temp=this.excessMarble;
+
+        //I save the excess marble on a temporary position. It is activated the effect of the first marble of the column, that becomes the excess marble
+        this.marketArrangement[i][x].drawMarble();
+        this.excessMarble=this.marketArrangement[i][x];
+        for(i=0; i<row-1; i++)
         {
-            /*
-             * I save the excess marble on a temporary position
-             * It is activated the effect of the first marble of the column, that becomes the excess marble
-             */
+            //It is activated the effect of every marble of the column. Every marble slides to an upper position of the market grid
             this.marketArrangement[i][x].drawMarble();
-            this.excessMarble=this.marketArrangement[i][x];
-            for(i=0; i<row-1; i++)
-            {
-                /*
-                 * It is activated the effect of every marble of the column
-                 * Every marble slides to an upper position of the market grid
-                 */
-                this.marketArrangement[i][x].drawMarble();
-                this.marketArrangement[i][x]=this.marketArrangement[i+1][x];
-            }
-            /*
-             * The previous excess Marble is inserted into the lower position of the market column
-             */
-            i++;
-            this.marketArrangement[i][x]=temp;
+            this.marketArrangement[i][x]=this.marketArrangement[i+1][x];
         }
+        //The previous excess Marble is inserted into the lower position of the market column
+        i++;
+        this.marketArrangement[i][x]=temp;
     }
 
-    /**
-     * Method the returns the excess marble of the market
-     */
-    public Marble getExcessMarble() {
-        return this.excessMarble;
-    }
 }

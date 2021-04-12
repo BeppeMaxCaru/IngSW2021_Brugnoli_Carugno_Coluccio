@@ -11,6 +11,9 @@ import java.util.Map;
  */
 public class YellowMarble extends Marble {
 
+    /**
+     *After checking the warehouse capacity, this method adds COINS to warehouse or discards the marble and add faithPoints to other players
+     */
     @Override
     public void drawMarble(GameModel gameModel, Player player) {
 

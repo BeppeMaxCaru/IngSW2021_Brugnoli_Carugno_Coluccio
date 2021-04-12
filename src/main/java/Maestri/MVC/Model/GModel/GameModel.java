@@ -57,7 +57,4 @@ public class GameModel {
         this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
-    public DevelopmentCardsDecksGrid getDevelopmentCardsDecksGrid() {
-        return this.developmentCardsDecksGrid;
-    }
 }

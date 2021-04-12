@@ -121,8 +121,6 @@ public class Player {
         int rowColumnChoice = -1;
         int columnNum = -1;
         int rowNum = -1;
-        int resourcesNumWarehouse;
-        String marbleWarehouse;
 
         // Scelta colonna/riga.
         while(rowColumnChoice != 0 && rowColumnChoice != 1) {
@@ -137,12 +135,7 @@ public class Player {
                 System.out.println("Choose the column's number you want to get the resources from:");
                 System.out.println(gameModel.getMarket());
                 columnNum = in.nextInt();
-            }
-            for(int i = 0; i < 4; i++) {
-                marbleWarehouse = gameModel.getMarket().getMarketArrangement()[i][columnNum].toString();
-                // Come gestisco il caso della biglia bianca??
-                resourcesNumWarehouse = getPlayerboard().getWareHouse().getWarehouseResources().get(marbleWarehouse);
-                getPlayerboard().getWareHouse().getWarehouseResources().put(marbleWarehouse, resourcesNumWarehouse + 1);
+                gameModel.getMarket().updateColumn(columnNum);
             }
         }
         else {
@@ -150,16 +143,10 @@ public class Player {
                 System.out.println("Choose the row's number you want to get the resources from:");
                 System.out.println(gameModel.getMarket());
                 rowNum = in.nextInt();
-            }
-            for(int i = 0; i < 3; i++) {
-                marbleWarehouse = gameModel.getMarket().getMarketArrangement()[rowNum][i].toString();
-                // Come gestisco il caso della biglia bianca??
-                resourcesNumWarehouse = getPlayerboard().getWareHouse().getWarehouseResources().get(marbleWarehouse);
-                getPlayerboard().getWareHouse().getWarehouseResources().put(marbleWarehouse, resourcesNumWarehouse + 1);
+                gameModel.getMarket().updateRow(rowNum);
             }
         }
 
-        // Devo gestire la biglia nello scivolo??
     }
 
     public boolean buyDevelopmentCard(GameModel gameModel) {
