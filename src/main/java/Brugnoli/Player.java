@@ -119,7 +119,7 @@ public class Player {
     }
 
     public int getLeaderAction( ) {
-
+        return 0;
     }
 
     public void playLeaderCard(LeaderCardDeck playerLeaderCards) {
@@ -131,7 +131,7 @@ public class Player {
     }
 
     public boolean checkWinConditions(Playerboard playerboard) {
-
+        return false;
     }
 
 }
