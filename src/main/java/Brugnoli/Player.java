@@ -1,6 +1,6 @@
 package Brugnoli;
 
-import Carugno.DevelopmentCards.DevelopmentCardsDeck;
+import Carugno.DevelopmentCards.DevelopmentCard;
 import Carugno.LeaderCards.LeaderCardDeck;
 import Carugno.MVC.GameModel;
 
@@ -110,8 +110,8 @@ public class Player {
 
     }
 
-    public DevelopmentCardsDeck buyDevelopmentCard(GameModel game) {
-
+    public boolean buyDevelopmentCard(GameModel gameModel) {
+        return gameModel.getDevelopmentCardsDecksGrid().buyDevelopmentCard(this.playerboard);
     }
 
     public void activateProduction(Playerboard playerboard) {
