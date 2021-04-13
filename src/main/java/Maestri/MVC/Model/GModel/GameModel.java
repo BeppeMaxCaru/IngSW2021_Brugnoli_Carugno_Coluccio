@@ -7,6 +7,10 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class GameModel {
 
     private Player[] players;
@@ -60,6 +64,20 @@ public class GameModel {
     public void pickResourcesFromMarket(){
         int index=0;
         this.players[index].pickLineFromMarket(this.market, this.players);
+    }
+
+    public void setPlayersNumber() {
+        List<Integer> numbers = new ArrayList<>(getPlayers().length);
+        int j = 0;
+
+        for (int i = 0; i < 10; i++)
+            numbers.add(i);
+        Collections.shuffle(numbers);
+
+        for(int i: numbers) {
+           getPlayers()[j].setPlayerNumber(i);
+           j++;
+        }
     }
 
 }

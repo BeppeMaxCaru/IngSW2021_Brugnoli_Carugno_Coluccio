@@ -25,6 +25,8 @@ public class Player {
         this.playerLeaderCards = playerLeaderCards;
     }
 
+    /** This method asks the player's nickname. */
+
     public String getNickname() {
         Scanner in = new Scanner(System.in);
 
@@ -35,20 +37,14 @@ public class Player {
     }
 
     public Integer getPlayerNumber() {
-        Random rand = new Random();
-        int upperbound = 3;
-
-        playerNumber = rand.nextInt(upperbound);
-
-        // Non so come controllare se due player hanno lo stesso numero di player.
-
         return this.playerNumber;
     }
 
+    public void setPlayerNumber(Integer i) {
+        playerNumber = i;
+    }
+
     public Playerboard getPlayerboard() {
-
-        // Array di playerboard o nuovo attributo playerboardNumber?? Se no come faccio il controllo se due player hanno la stessa playerboard
-
         return this.playerboard;
     }
 
@@ -59,6 +55,8 @@ public class Player {
     public void setPlayerLeaderCardsDeck(LeaderCardDeck playerLeaderCards) {
 
     }
+
+    /** This method sets the player's initial resources due to his playerNumber. */
 
     public void setStartingPlayerBoard(Integer playerNumber) {
         Map<Integer, Integer[]> startingResources =  new HashMap<>();
@@ -102,6 +100,8 @@ public class Player {
         }
     }
 
+    /** This method asks the player what action he wants to do. */
+
     public int getAction( ) {
         int actionNum = -1;
         Scanner in = new Scanner(System.in);
@@ -117,7 +117,9 @@ public class Player {
         return actionNum;
     }
 
-    public void pickLineFromMarket(Market market, Player[] players) {
+    /** This method allows the player to pick a line from the market, after choosing the first action. */
+
+    public void pickLineFromMarket(Market market, Player player[]) {
         Scanner in = new Scanner(System.in);
         int rowColumnChoice = -1;
         int columnNum = -1;
@@ -136,7 +138,7 @@ public class Player {
                 System.out.println("Choose the column's number you want to get the resources from:");
                 System.out.println(market);
                 columnNum = in.nextInt();
-                market.updateColumn(columnNum, players, this.playerNumber);
+                market.updateColumn(columnNum, player, playerNumber);
             }
         }
         else {
@@ -144,11 +146,13 @@ public class Player {
                 System.out.println("Choose the row's number you want to get the resources from:");
                 System.out.println(market);
                 rowNum = in.nextInt();
-                market.updateRow(rowNum, players, this.playerNumber);
+                market.updateRow(rowNum, player, playerNumber);
             }
         }
 
     }
+
+    /** This method asks the player what development cards he wants to buy. */
 
     public boolean buyDevelopmentCard(GameModel gameModel) {
         return gameModel.getDevelopmentCardsDecksGrid().buyDevelopmentCard(this.playerboard);
@@ -157,6 +161,8 @@ public class Player {
     public void activateProduction(Playerboard playerboard) {
 
     }
+
+    /** This method asks the player if he wants to do a leader action. */
 
     public int getLeaderAction( ) {
         Scanner in = new Scanner(System.in);
@@ -174,7 +180,9 @@ public class Player {
 
     }
 
-    public void discardLeaderCard(LeaderCardDeck playerLeaderCards, Playerboard playerboard) {
+    /** This method allows the player to discard a leader card. */
+
+    public void discardLeaderCard(LeaderCardDeck playerLeaderCards, GameModel gameModel) {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
 
@@ -188,16 +196,6 @@ public class Player {
         }
 
         //Rimozione carta leader dal deck
-        for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
-            /// ????
-        }
-
-        // LeaderCard.discard(); /// ??
-
+        gameModel.getLeaderCardDeck().getLeaderCardsDeck()[numLeaderCard].discard(playerboard);
     }
-
-    public boolean checkWinConditions(Playerboard playerboard) {
-        return false;
-    }
-
 }

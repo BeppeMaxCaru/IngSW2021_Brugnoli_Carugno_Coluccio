@@ -45,25 +45,23 @@ public class FaithPath {
         return this.crossPosition;
     }
 
-    public void moveCross(int CrossPosition) {
-        //Come faccio ad incrementare la crossPosition?
+    /** This method moves the red cross on the faith path. */
+
+    public void moveCross(int i) {
+        crossPosition = crossPosition + i;
     }
 
-    public boolean checkPopeSpace(Cell[] faithPath, int crossPosition) {
-        if(faithPath[crossPosition].isPopeSpace()) {
-            // Serve questa classe?
-        }
+    public void generalCheckOnFaithPath(Playerboard playerboard) {
+        if(faithPath[crossPosition].getVictoryPoints() != 0)
+            getVictoryPoints(crossPosition, playerboard);
+        if(faithPath[crossPosition].isPopeSpace())
+            // metodo model
     }
 
-    public boolean checkVictoryPoints(Cell[] faithPath, int crossPosition) {
-        // Serve questa classe?
-    }
+    /** This method adds victory points, from the faith path's cell, to the total count on the playerboard. */
 
-    public int getVictoryPoints(Cell[] faithPath, int crossPosition) {
-        if(faithPath[crossPosition].getVictoryPoints() != 0) {
-            // Devo risalire ai victory Points del playerboard, come faccio??
-        }
-
+    public void getVictoryPoints(int crossPosition, Playerboard playerboard) {
+        playerboard.setVictoryPoints(faithPath[crossPosition].getVictoryPoints());
     }
 
     public boolean checkRelationWithVatican(Cell[] faithPath, int crossPosition) {

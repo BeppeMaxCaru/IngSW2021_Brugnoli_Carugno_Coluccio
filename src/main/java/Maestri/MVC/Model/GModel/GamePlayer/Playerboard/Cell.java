@@ -27,10 +27,6 @@ public class Cell {
         return vaticanSection;
     }
 
-    public void setVaticanSection(boolean vaticanSection){
-
-    }
-
     public int getVaticanSectionVictoryPoints() {
         return vaticanSectionVictoryPoints;
     }

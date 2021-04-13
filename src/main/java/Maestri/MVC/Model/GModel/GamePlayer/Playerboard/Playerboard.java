@@ -110,8 +110,8 @@ public class Playerboard {
         return this.victoryPoints;
     }
 
-    public void setVictoryPoints(int victoryPoints) {
-
+    public void setVictoryPoints(int i) {
+        victoryPoints = victoryPoints + i;
     }
 
     public void activateBasicProductionPower(WareHouse wareHouse, Chest chest) {
