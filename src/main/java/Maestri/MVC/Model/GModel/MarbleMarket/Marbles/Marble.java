@@ -13,6 +13,6 @@ public class Marble {
      * This method add resources to players' boards.
      * It is defined in each of its subclasses
      */
-    public void drawMarble(GameModel gameModel, int playerNumber){
+    public void drawMarble(Player[] players, int playerNumber){
     }
 }

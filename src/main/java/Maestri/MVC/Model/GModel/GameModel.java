@@ -57,4 +57,9 @@ public class GameModel {
         this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
+    public void pickResourcesFromMarket(){
+        int index=0;
+        this.players[index].pickLineFromMarket(this.market, this.players);
+    }
+
 }

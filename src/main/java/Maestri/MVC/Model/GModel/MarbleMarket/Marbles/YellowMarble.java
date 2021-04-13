@@ -15,16 +15,16 @@ public class YellowMarble extends Marble {
      *After checking the warehouse capacity, this method adds COINS to warehouse or discards the marble and add faithPoints to other players
      */
     @Override
-    public void drawMarble(GameModel gameModel, int playerNumber) {
+    public void drawMarble(Player[] players, int playerNumber) {
 
-        Map<String, Integer> whResources=gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse().getWarehouseResources();
+        Map<String, Integer> whResources=players[playerNumber].getPlayerboard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("COINS");
         /*
          * Saving cardinality of COINS in a temporary integer
          */
 
         boolean discard;
-        discard=WareHouse.checkConstraints(gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse(), "COINS");
+        discard=WareHouse.checkConstraints(players[playerNumber].getPlayerboard().getWareHouse(), "COINS");
         /*
          * Calling the Warehouse method for checking the warehouse capacity
          */
@@ -36,19 +36,19 @@ public class YellowMarble extends Marble {
              */
             numOfResources++;
             whResources.put("COINS", numOfResources);
-            gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse().setWarehouseResources(whResources);
+            players[playerNumber].getPlayerboard().getWareHouse().setWarehouseResources(whResources);
         }
         else
         {
             //If the resource has to be discarded, other players obtain 1 faithPoint
-            for(Player players : gameModel.getPlayers())
+            for(Player p : players)
             {
                 /*
                  * for-each player in the game
                  * If he isn't the one who discards the marble, he obtains 1 faithPoint
                  */
-                if(playerNumber!= players.getPlayerNumber())
-                    players.getPlayerboard().getFaithPath().moveCross(1);
+                if(playerNumber!= p.getPlayerNumber())
+                    p.getPlayerboard().getFaithPath().moveCross(1);
             }
         }
     }

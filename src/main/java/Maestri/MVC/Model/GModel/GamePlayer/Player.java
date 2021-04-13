@@ -5,6 +5,7 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.WhiteMarble;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -116,7 +117,7 @@ public class Player {
         return actionNum;
     }
 
-    public void pickLineFromMarket(GameModel gameModel) {
+    public void pickLineFromMarket(Market market, Player[] players) {
         Scanner in = new Scanner(System.in);
         int rowColumnChoice = -1;
         int columnNum = -1;
@@ -125,7 +126,7 @@ public class Player {
         // Scelta colonna/riga.
         while(rowColumnChoice != 0 && rowColumnChoice != 1) {
             System.out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
-            System.out.println(gameModel.getMarket());
+            System.out.println(market);
             rowColumnChoice = in.nextInt();
         }
 
@@ -133,17 +134,17 @@ public class Player {
         if(rowColumnChoice == 0) {
             while(columnNum < 0 || columnNum > 3) {
                 System.out.println("Choose the column's number you want to get the resources from:");
-                System.out.println(gameModel.getMarket());
+                System.out.println(market);
                 columnNum = in.nextInt();
-                gameModel.getMarket().updateColumn(columnNum, gameModel, this.playerNumber);
+                market.updateColumn(columnNum, players, this.playerNumber);
             }
         }
         else {
             while(rowNum < 0 || rowNum > 2) {
                 System.out.println("Choose the row's number you want to get the resources from:");
-                System.out.println(gameModel.getMarket());
+                System.out.println(market);
                 rowNum = in.nextInt();
-                gameModel.getMarket().updateRow(rowNum, gameModel, this.playerNumber);
+                market.updateRow(rowNum, players, this.playerNumber);
             }
         }
 
