@@ -1,7 +1,6 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GameModel;
 
 /**
  * RedMarble produces faithPoints

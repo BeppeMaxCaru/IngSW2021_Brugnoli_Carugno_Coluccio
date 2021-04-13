@@ -1,7 +1,6 @@
 package Maestri.MVC.Model.GModel.ActionCounters;
 
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersTypes.*;
-import Maestri.MVC.Model.GameModel.ActionCounters.ActionCountersTypes.*;
 
 import java.util.Arrays;
 import java.util.Collections;

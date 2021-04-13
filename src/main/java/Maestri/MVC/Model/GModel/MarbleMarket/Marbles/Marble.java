@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
-import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
 /**

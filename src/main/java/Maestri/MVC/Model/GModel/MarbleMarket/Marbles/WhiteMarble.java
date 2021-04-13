@@ -3,7 +3,6 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.WhiteMarbleResourceLeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GameModel;
 
 /**
  * White marbles has no effects until the related LeaderCard is activated
