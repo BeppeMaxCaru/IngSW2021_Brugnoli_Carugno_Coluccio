@@ -135,7 +135,7 @@ public class Player {
                 System.out.println("Choose the column's number you want to get the resources from:");
                 System.out.println(gameModel.getMarket());
                 columnNum = in.nextInt();
-                gameModel.getMarket().updateColumn(columnNum);
+                gameModel.getMarket().updateColumn(columnNum, gameModel, this.playerNumber);
             }
         }
         else {
@@ -143,7 +143,7 @@ public class Player {
                 System.out.println("Choose the row's number you want to get the resources from:");
                 System.out.println(gameModel.getMarket());
                 rowNum = in.nextInt();
-                gameModel.getMarket().updateRow(rowNum);
+                gameModel.getMarket().updateRow(rowNum, gameModel, this.playerNumber);
             }
         }
 
@@ -191,7 +191,7 @@ public class Player {
             /// ????
         }
 
-        LeaderCard.discard(); /// ??
+        // LeaderCard.discard(); /// ??
 
     }
 

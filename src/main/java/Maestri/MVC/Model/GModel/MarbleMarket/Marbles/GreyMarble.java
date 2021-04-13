@@ -15,16 +15,16 @@ public class GreyMarble extends Marble {
      *After checking the warehouse capacity, this method adds STONES to warehouse or discards the marble and add faithPoints to other players
      */
     @Override
-    public void drawMarble(GameModel gameModel, Player player) {
+    public void drawMarble(GameModel gameModel, int playerNumber) {
 
-        Map<String, Integer> whResources=player.getPlayerboard().getWareHouse().getWarehouseResources();
+        Map<String, Integer> whResources=gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("STONES");
         /*
          * Saving cardinality of STONES in a temporary integer
          */
 
         boolean discard;
-        discard=WareHouse.checkConstraints(player.getPlayerboard().getWareHouse(), "STONES");
+        discard=WareHouse.checkConstraints(gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse(), "STONES");
         /*
          * Calling the Warehouse method for checking the warehouse capacity
          */
@@ -35,23 +35,18 @@ public class GreyMarble extends Marble {
              */
             numOfResources++;
             whResources.put("STONES", numOfResources);
-            player.getPlayerboard().getWareHouse().setWarehouseResources(whResources);
+            gameModel.getPlayers()[playerNumber].getPlayerboard().getWareHouse().setWarehouseResources(whResources);
         }
         else
         {
-            /*
-             * If the resource has to be discarded, other players obtain 1 faithPoint
-             * pn contains the playerNumber of the player that discards the marble
-             */
-            int pn = player.getPlayerNumber();
-
+            //If the resource has to be discarded, other players obtain 1 faithPoint
             for(Player players : gameModel.getPlayers())
             {
                 /*
                  * for-each player in the game
                  * If he isn't the one who discards the marble, he obtains 1 faithPoint
                  */
-                if(pn!= players.getPlayerNumber())
+                if(playerNumber!= players.getPlayerNumber())
                     players.getPlayerboard().getFaithPath().moveCross(1);
             }
         }

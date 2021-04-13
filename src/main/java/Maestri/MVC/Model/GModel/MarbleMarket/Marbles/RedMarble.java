@@ -12,8 +12,8 @@ public class RedMarble extends Marble {
      * The only effect of the red marble is to increase the faithPath position of one step
      */
     @Override
-    public void drawMarble(GameModel gameModel, Player player)
+    public void drawMarble(GameModel gameModel, int playerNumber)
     {
-        player.getPlayerboard().getFaithPath().moveCross(1);
+        gameModel.getPlayers()[playerNumber].getPlayerboard().getFaithPath().moveCross(1);
     }
 }

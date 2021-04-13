@@ -16,14 +16,14 @@ public class WhiteMarble extends Marble {
      * If LeaderCard isn't activated, WhiteMarbles do nothing
      */
     @Override
-    public void drawMarble(GameModel gameModel, Player player) {
+    public void drawMarble(GameModel gameModel, int playerNumber) {
 
         //Check leaderCardDeck of the player
-        for(LeaderCard leaderCard: player.getPlayerLeaderCards().getLeaderCardsDeck()){
-            if((leaderCard.isPlayed())&&(leaderCard instanceof WhiteMarbleResourceLeaderCard))
+        for(LeaderCard leaderCard: gameModel.getPlayers()[playerNumber].getPlayerLeaderCards().getLeaderCardsDeck()){
+            if((leaderCard instanceof WhiteMarbleResourceLeaderCard)&&(leaderCard.isPlayed()))
             {
                 //If a whiteMarble leaderCard is activated, it is activated its effect
-                leaderCard.activateAbility(player.getPlayerboard());
+                leaderCard.activateAbility(gameModel.getPlayers()[playerNumber].getPlayerboard());
             }
             //If a whiteMarble leaderCard is not activated, white marble has no effects
         }
