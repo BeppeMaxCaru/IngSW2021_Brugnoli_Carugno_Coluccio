@@ -10,7 +10,8 @@ import java.util.Map;
 public class WhiteMarbleResourceLeaderCard extends LeaderCard {
 
     private final DevelopmentCard[] requisite;
-    private final Map<String, Integer> whiteMarbleResource;
+    private final String whiteMarbleResource;
+    //private final Map<String, Integer> whiteMarbleResource;
 
     public WhiteMarbleResourceLeaderCard(DevelopmentCard firstRequiredDevelopmentCard,
                                          DevelopmentCard secondRequiredDevelopmentCard,
@@ -22,12 +23,23 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
         this.requisite[1] = firstRequiredDevelopmentCard;
         this.requisite[2] = secondRequiredDevelopmentCard;
 
-        this.whiteMarbleResource = new HashMap<>();
-        this.whiteMarbleResource.put(resourceFromWhiteMarble, 1);
+        this.whiteMarbleResource = resourceFromWhiteMarble;
+
+        //this.whiteMarbleResource = new HashMap<>();
+        //this.whiteMarbleResource.put(resourceFromWhiteMarble, 1);
     }
 
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-         return true;
+        int firstCardRequisiteNumber = 0;
+        int secondCardRequisiteNumber = 0;
+        for (DevelopmentCard DevelopmentCard : this.requisite) {
+            if (!playerboard.getPlayerboardDevelopmentCards().values().contains(this.requisite)) return false;
+            if (playerboard.getPlayerboardDevelopmentCards().values().containsAll(this.requisite))
+
+        }
+
+
+        return true;
     }
 }

@@ -11,6 +11,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     private final DevelopmentCard[] requisite;
     private final Map<String, Integer> discount;
+    //private final int leaderCardType;
 
     public DiscountDevelopmentCardsLeaderCard(DevelopmentCard firstRequiredDevelopmentCard,
                                               DevelopmentCard secondRequiredDevelopmentCard,
@@ -25,11 +26,15 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         this.discount.put(resource, 1);
     }
 
+    //Controllo carta sviluppo Discount
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        for (DevelopmentCard developmentCards : this.requisite) {
-            //
+        for (DevelopmentCard developmentCard : this.requisite) {
+            if (!playerboard.getPlayerboardDevelopmentCards().values().contains(developmentCard)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
+
 }

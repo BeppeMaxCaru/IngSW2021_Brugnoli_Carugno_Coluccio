@@ -15,6 +15,11 @@ public class DevelopmentCard {
     private int faithPoints;
     private int victoryPoints;
 
+    public DevelopmentCard(String colour, int level) {
+        this.colour = colour;
+        this.level = level;
+    }
+
     public DevelopmentCard(String colour, int level,
                            int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
                            int coinsInput, int stonesInput, int servantsInput, int shieldsInput,

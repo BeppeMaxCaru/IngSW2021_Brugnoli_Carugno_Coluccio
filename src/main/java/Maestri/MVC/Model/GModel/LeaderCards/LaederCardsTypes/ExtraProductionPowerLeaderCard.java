@@ -55,6 +55,17 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
             System.out.println(("Resource missing -> choose another second resource to trade: "));
             resource2 = consoleInput.nextLine();
         }
+    }
 
+    //Controllo ExtraProd
+    @Override
+    public boolean checkRequisites(Playerboard playerboard) {
+        if (playerboard.getPlayerboardDevelopmentCards().values().contains(this.requisite)) {
+            DevelopmentCard playerCardToCheck = playerboard.getPlayerboardDevelopmentCards().get(this.requisite);
+            if (playerCardToCheck.getDevelopmentCardLevel()==2) {
+                return true;
+            }
+        }
+        return false;
     }
 }

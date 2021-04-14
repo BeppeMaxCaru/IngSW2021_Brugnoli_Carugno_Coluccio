@@ -1,6 +1,7 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 
 import java.util.*;
 
@@ -89,6 +90,10 @@ public class Playerboard {
             }
         }
         return false;
+    }
+
+    public Map<Integer, DevelopmentCard> getPlayerboardDevelopmentCards() {
+        return this.playerboardDevelopmentCards;
     }
 
     public Chest getChest() {

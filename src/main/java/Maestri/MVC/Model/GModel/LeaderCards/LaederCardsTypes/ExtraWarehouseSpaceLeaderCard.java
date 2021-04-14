@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
 
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
@@ -23,6 +24,6 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
 
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-
+        for (DevelopmentCard developmentCard : )
     }
 }
