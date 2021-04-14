@@ -1,67 +1,93 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
 
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
     private final DevelopmentCard requisite;
-    private final Map<String, Integer> input;
-    private final Map<String, Integer> output;
-
-    Scanner consoleInput = new Scanner(System.in);
-    String resource1 = consoleInput.nextLine();
-    String resource2 = consoleInput.nextLine();
-
+    private final String input;
 
     public ExtraProductionPowerLeaderCard(DevelopmentCard requisite,
                                           String resourceInput) {
         super(4);
-
         this.requisite = requisite;
-
-        this.input = new HashMap<>();
-        this.input.put(resourceInput, 1);
-
-        this.output = new HashMap<>();
-        this.output.put("FAITHPOINTS", 1);
-
-        //chiedi all'utente che risorsa vuole
-        //bisogna mettere cotrollo sulla risorsa richiesta
-        //si può utilizzare risorse del marcato?
+        this.input=resourceInput;
 
     }
 
     @Override
-    public void activateAbility(Playerboard playerboard) {
-        System.out.println("Choose first resource to trade: ");
-        resource1 = consoleInput.nextLine();
-        while (!(playerboard.getWareHouse().getWarehouseResources().containsKey(resource1) ||
-                (playerboard.getChest().getChestResources().containsKey(resource1)))) {
-            System.out.println("Resource missing -> choose another first resource to trade: ");
-            resource1 = consoleInput.nextLine();
-        }
-        System.out.println("Choose place from where to pick resource: ");
+    public void activateAbility(Player player) {
 
-        System.out.println("Choose second resource to trade: ");
-        resource2 = consoleInput.nextLine();
-        while (!((playerboard.getWareHouse().getWarehouseResources().containsKey(resource2)) ||
-                playerboard.getChest().getChestResources().containsKey(resource2))) {
-            System.out.println(("Resource missing -> choose another second resource to trade: "));
-            resource2 = consoleInput.nextLine();
+        int numWarehouseResources;
+        int numChestResources;
+        int fromWhat = -1;
+        int resourceOutputNum = -1;
+        int numResources;
+        int i = 1;
+
+        Scanner in = new Scanner(System.in);
+
+        // Available resources from warehouse
+        numWarehouseResources = player.getPlayerboard().getWareHouse().getWarehouseResources().get(this.input);
+
+        // Available resources from chest
+        numChestResources = player.getPlayerboard().getChest().getChestResources().get(this.input);
+
+        // one input
+        while(i > 0) {
+            if((numChestResources>0)&&(numWarehouseResources>0))
+            {
+                while(fromWhat != 0 && fromWhat != 1) {
+                    System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
+                    fromWhat = in.nextInt();
+                }
+            }
+            else if (numChestResources==0)
+                fromWhat=0;
+            else
+                fromWhat=1;
+
+            if(fromWhat == 0 ) {
+                    numResources = player.getPlayerboard().getWareHouse().getWarehouseResources().get(input);
+                    player.getPlayerboard().getWareHouse().getWarehouseResources().put(input, numResources - 1);
+            }
+            else{
+                numResources = player.getPlayerboard().getChest().getChestResources().get(input);
+                player.getPlayerboard().getChest().getChestResources().put(input, numResources - 1);
+            }
+            i--;
         }
+
+        // output
+        while(resourceOutputNum < 0 || resourceOutputNum > 3) {
+            System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+            resourceOutputNum = in.nextInt();
+        }
+
+        i = 0;
+        for (String key : player.getPlayerboard().getChest().getChestResources().keySet()) {
+            if(i == resourceOutputNum) {
+                numResources = player.getPlayerboard().getChest().getChestResources().get(key);
+                player.getPlayerboard().getChest().getChestResources().put(key, numResources + 1);
+                break;
+            }
+            i++;
+        }
+
+        player.getPlayerboard().getFaithPath().moveCross(1);
+
     }
 
     //Controllo ExtraProd
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        if (playerboard.getPlayerboardDevelopmentCards().values().contains(this.requisite)) {
-            if (playerboard.getPlayerboardDevelopmentCards().get(this.requisite).getDevelopmentCardLevel()==2) return true;
+        if (playerboard.getPlayerboardDevelopmentCards().containsValue(this.requisite)) {
+            return playerboard.getPlayerboardDevelopmentCards().get(this.requisite).getDevelopmentCardLevel() == 2;
         }
         return false;
     }

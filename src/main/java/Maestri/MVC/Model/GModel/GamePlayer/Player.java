@@ -117,7 +117,7 @@ public class Player {
 
     /** This method allows the player to pick a line from the market, after choosing the first action. */
 
-    public void pickLineFromMarket(Market market, Player player[]) {
+    public void pickLineFromMarket(Market market, Player[] players) {
         Scanner in = new Scanner(System.in);
         int rowColumnChoice = -1;
         int columnNum = -1;
@@ -136,7 +136,7 @@ public class Player {
                 System.out.println("Choose the column's number you want to get the resources from:");
                 System.out.println(market);
                 columnNum = in.nextInt();
-                market.updateColumn(columnNum, player, playerNumber);
+                market.updateColumn(columnNum, players, playerNumber);
             }
         }
         else {
@@ -144,7 +144,7 @@ public class Player {
                 System.out.println("Choose the row's number you want to get the resources from:");
                 System.out.println(market);
                 rowNum = in.nextInt();
-                market.updateRow(rowNum, player, playerNumber);
+                market.updateRow(rowNum, players, playerNumber);
             }
         }
 
@@ -251,13 +251,25 @@ public class Player {
         return leaderActionNum;
     }
 
-    public void playLeaderCard(LeaderCardDeck playerLeaderCards) {
+    public void playLeaderCard(Market market) {
+        Scanner in = new Scanner(System.in);
+        int numLeaderCard=-1;
 
+        //Scelta della carta leader da scartare
+        while((numLeaderCard<0) || (numLeaderCard > playerLeaderCards.getLeaderCardsDeck().length)){
+            System.out.println("What leader card do you want to play?:");
+            for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
+                System.out.println("Write" + i + "for this:" + playerLeaderCards.getLeaderCardsDeck()[i]);
+            }
+            numLeaderCard = in.nextInt();
+            if(this.playerLeaderCards.getLeaderCardsDeck()[numLeaderCard].checkRequisites(this.playerboard))
+                this.playerLeaderCards.getLeaderCardsDeck()[numLeaderCard].activateAbility(this);
+        }
     }
 
     /** This method allows the player to discard a leader card. */
 
-    public void discardLeaderCard(LeaderCardDeck playerLeaderCards, GameModel gameModel) {
+    public void discardLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
 
@@ -271,6 +283,6 @@ public class Player {
         }
 
         //Rimozione carta leader dal deck
-        gameModel.getLeaderCardDeck().getLeaderCardsDeck()[numLeaderCard].discard(playerboard);
+        this.getPlayerLeaderCards().getLeaderCardsDeck()[playerNumber].discard(this.playerboard);
     }
 }

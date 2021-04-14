@@ -37,8 +37,6 @@ public class GameModel {
         return this.players;
     }
 
-    public void pickResourcesFromMarket()
-
     public DevelopmentCardsDecksGrid getDevelopmentCardsDecksGrid() {
         return this.developmentCardsDecksGrid;
     }

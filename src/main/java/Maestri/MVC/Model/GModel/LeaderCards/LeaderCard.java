@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel.LeaderCards;
 
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.util.HashMap;
@@ -34,14 +35,11 @@ public class LeaderCard {
         }
     }
 
-    public void activateAbility(Playerboard playerboard) {
-
+    public void activateAbility(Player player) {
     }
 
     public void discard(Playerboard playerboard) {
         playerboard.getFaithPath().moveCross(1);
     }
-
-
 
 }

@@ -30,8 +30,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     //Controllo carta sviluppo Discount
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        if (!playerboard.getPlayerboardDevelopmentCards().values().containsAll(Arrays.asList(this.requisite))) return false;
-        return true;
+        return playerboard.getPlayerboardDevelopmentCards().values().containsAll(Arrays.asList(this.requisite));
     }
 
 }
