@@ -3,10 +3,15 @@ package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class FaithPath {
 
     private final Cell[] faithPath;
     private int crossPosition;
+    public Map<Integer, Integer> discardVaticanCard;
 
     public FaithPath() {
 
@@ -38,6 +43,11 @@ public class FaithPath {
         this.faithPath[24] = new Cell(20, true, true, 4);
 
         this.crossPosition = 0;
+
+        discardVaticanCard = new HashMap<>();
+        discardVaticanCard.put(2, 2);
+        discardVaticanCard.put(3, 3);
+        discardVaticanCard.put(4, 4);
     }
 
     public Cell[] getFaithPath() {
@@ -66,11 +76,14 @@ public class FaithPath {
     public void getVictoryPoints(int crossPosition, Playerboard playerboard) {
         playerboard.setVictoryPoints(faithPath[crossPosition].getVictoryPoints());
     }
-    /** This method checks on the faith path if the player has the possibility to turn the card, after a relation in Vatican. */
+    /** This method checks on the faith path if the player has the possibility to turn the card (or remove), after a relation in Vatican. */
 
     public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
-        if(crossPosition > crossPositionPlayerX || faithPath[crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
-           playerboard.setVictoryPoints(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints());
-        // devo eliminare la tessera, come??
+        if(discardVaticanCard.get(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints()) != 0) {
+            if (crossPosition > crossPositionPlayerX || faithPath[crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
+                playerboard.setVictoryPoints(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints());
+            else
+                discardVaticanCard.put(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints(), 0);
+        }
     }
 }
