@@ -4,6 +4,7 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,11 +30,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     //Controllo carta sviluppo Discount
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        for (DevelopmentCard developmentCard : this.requisite) {
-            if (!playerboard.getPlayerboardDevelopmentCards().values().contains(developmentCard)) {
-                return false;
-            }
-        }
+        if (!playerboard.getPlayerboardDevelopmentCards().values().containsAll(Arrays.asList(this.requisite))) return false;
         return true;
     }
 

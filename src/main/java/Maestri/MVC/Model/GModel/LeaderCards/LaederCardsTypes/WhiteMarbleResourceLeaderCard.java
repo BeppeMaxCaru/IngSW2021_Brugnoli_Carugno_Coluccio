@@ -4,12 +4,13 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class WhiteMarbleResourceLeaderCard extends LeaderCard {
 
-    private final DevelopmentCard[] requisite;
+    private DevelopmentCard[] requisite;
     private final String whiteMarbleResource;
     //private final Map<String, Integer> whiteMarbleResource;
 
@@ -31,15 +32,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
 
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        int firstCardRequisiteNumber = 0;
-        int secondCardRequisiteNumber = 0;
-        for (DevelopmentCard DevelopmentCard : this.requisite) {
-            if (!playerboard.getPlayerboardDevelopmentCards().values().contains(this.requisite)) return false;
-            if (playerboard.getPlayerboardDevelopmentCards().values().containsAll(this.requisite))
-
-        }
-
-
+        if (!playerboard.getPlayerboardDevelopmentCards().values().containsAll(Arrays.asList(this.requisite))) return false;
         return true;
     }
 }

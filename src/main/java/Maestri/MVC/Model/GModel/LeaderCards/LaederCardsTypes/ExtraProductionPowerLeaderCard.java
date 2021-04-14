@@ -61,10 +61,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         if (playerboard.getPlayerboardDevelopmentCards().values().contains(this.requisite)) {
-            DevelopmentCard playerCardToCheck = playerboard.getPlayerboardDevelopmentCards().get(this.requisite);
-            if (playerCardToCheck.getDevelopmentCardLevel()==2) {
-                return true;
-            }
+            if (playerboard.getPlayerboardDevelopmentCards().get(this.requisite).getDevelopmentCardLevel()==2) return true;
         }
         return false;
     }

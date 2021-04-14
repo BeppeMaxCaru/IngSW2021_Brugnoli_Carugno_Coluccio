@@ -24,6 +24,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
 
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
+
         for (DevelopmentCard developmentCard : )
     }
 }
