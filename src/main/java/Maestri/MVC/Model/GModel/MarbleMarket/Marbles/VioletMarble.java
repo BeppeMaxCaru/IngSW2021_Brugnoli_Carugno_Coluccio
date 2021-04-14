@@ -2,7 +2,6 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.WareHouse;
-import Maestri.MVC.Model.GModel.GameModel;
 
 import java.util.Map;
 
@@ -19,21 +18,14 @@ public class VioletMarble extends Marble {
 
         Map<String, Integer> whResources=players[playerNumber].getPlayerboard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("SERVANTS");
-        /*
-         * Saving cardinality of SERVANTS in a temporary integer
-         */
-
         boolean discard;
+
         discard=WareHouse.checkConstraints(players[playerNumber].getPlayerboard().getWareHouse(), "SERVANTS");
-        /*
-         * Calling the Warehouse method for checking the warehouse capacity
-         */
+        //Calling the Warehouse method for checking the warehouse capacity
 
         if(!discard)
         {
-            /*
-             * If the resource hasn't to be discarded it is increased in warehouse
-             */
+            //If the resource hasn't to be discarded it is increased in warehouse
             numOfResources++;
             whResources.put("SERVANTS", numOfResources);
             players[playerNumber].getPlayerboard().getWareHouse().setWarehouseResources(whResources);
@@ -44,8 +36,8 @@ public class VioletMarble extends Marble {
             for(Player p : players)
             {
                 /*
-                 * for-each player in the game
-                 * If he isn't the one who discards the marble, he obtains 1 faithPoint
+                 for-each player in the game
+                 If he isn't the one who discards the marble, he obtains 1 faithPoint
                  */
                 if(playerNumber!= p.getPlayerNumber())
                     p.getPlayerboard().getFaithPath().moveCross(1);
