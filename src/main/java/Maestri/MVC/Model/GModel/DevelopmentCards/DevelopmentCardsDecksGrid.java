@@ -329,7 +329,14 @@ public class DevelopmentCardsDecksGrid {
     }
 
     public void removeDevelopmentCard(int column) {
-        //this.developmentCardsDecks[2][column]
+        int removedCards = 0;
+        for (int i=2;i>0;i--) {
+            List<DevelopmentCard> deckToReduce = Arrays.asList(this.developmentCardsDecks[i][column]);
+            if (removedCards==2) return;
+            if (deckToReduce.remove(0)!=null) removedCards = removedCards+1;
+            if (deckToReduce.remove(0)!=null) removedCards = removedCards+1;
+            this.developmentCardsDecks[i][column] = deckToReduce.toArray(this.developmentCardsDecks[i][column]);
+        }
     }
 
 }

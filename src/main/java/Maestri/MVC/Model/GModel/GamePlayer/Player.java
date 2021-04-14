@@ -15,13 +15,13 @@ public class Player {
     private String nickname;
     private Integer playerNumber;
     private Playerboard playerboard;
-    private LeaderCardDeck playerLeaderCards;
+    private LeaderCard[] playerLeaderCards;
 
-    public Player(String nickname, Integer playerNumber, Playerboard playerboard, LeaderCardDeck playerLeaderCards) {
+    public Player(String nickname, Integer playerNumber, Playerboard playerboard) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
         this.playerboard = playerboard;
-        this.playerLeaderCards = playerLeaderCards;
+        this.playerLeaderCards = new LeaderCard[4];
     }
 
     /** This method asks the player's nickname. */
@@ -47,11 +47,12 @@ public class Player {
         return this.playerboard;
     }
 
-    public LeaderCardDeck getPlayerLeaderCards() {
+    public LeaderCard[] getPlayerLeaderCards() {
         return this.playerLeaderCards;
     }
 
-    public void setPlayerLeaderCardsDeck(LeaderCardDeck playerLeaderCards) {
+    public void setPlayerLeaderCards(int index, LeaderCard leaderCard) {
+        this.playerLeaderCards[index] = leaderCard;
     }
 
     /** This method sets the player's initial resources due to his playerNumber. */
@@ -256,14 +257,14 @@ public class Player {
         int numLeaderCard=-1;
 
         //Scelta della carta leader da scartare
-        while((numLeaderCard<0) || (numLeaderCard > playerLeaderCards.getLeaderCardsDeck().length)){
+        while((numLeaderCard<0) || (numLeaderCard > this.playerLeaderCards.length)){
             System.out.println("What leader card do you want to play?:");
-            for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
-                System.out.println("Write" + i + "for this:" + playerLeaderCards.getLeaderCardsDeck()[i]);
+            for (int i = 0; i < this.playerLeaderCards.length; i++) {
+                System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
             }
             numLeaderCard = in.nextInt();
-            if(this.playerLeaderCards.getLeaderCardsDeck()[numLeaderCard].checkRequisites(this.playerboard))
-                this.playerLeaderCards.getLeaderCardsDeck()[numLeaderCard].activateAbility(this);
+            if(this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerboard))
+                this.playerLeaderCards[numLeaderCard].activateAbility(this);
         }
     }
 
@@ -274,15 +275,18 @@ public class Player {
         int numLeaderCard = -1;
 
         //Scelta della carta leader da scartare
-        while(numLeaderCard < 0 || numLeaderCard > playerLeaderCards.getLeaderCardsDeck().length) {
+        while(numLeaderCard < 0 || numLeaderCard > this.playerLeaderCards.length) {
             System.out.println("What leader card do you want to discard?:");
-            for (int i = 0; i < playerLeaderCards.getLeaderCardsDeck().length; i++) {
-                System.out.println("Write" + i + "for this:" + playerLeaderCards.getLeaderCardsDeck()[i]);
+            for (int i = 0; i < this.playerLeaderCards.length; i++) {
+                System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
             }
             numLeaderCard = in.nextInt();
         }
 
         //Rimozione carta leader dal deck
-        this.getPlayerLeaderCards().getLeaderCardsDeck()[playerNumber].discard(this.playerboard);
+        this.playerLeaderCards[numLeaderCard].discard(this.playerboard);
+        List<LeaderCard> updatedPlayerLeaderCardList = Arrays.asList(this.playerLeaderCards);
+        updatedPlayerLeaderCardList.remove(numLeaderCard);
+        this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
     }
 }

@@ -16,7 +16,7 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 2,4);
 
-        assertEquals(card, testDevelopmentCard);
+        assertEquals(card.getDevelopmentCardLevel(), testDevelopmentCard.getDevelopmentCardLevel());
 
 
     }

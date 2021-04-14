@@ -6,6 +6,9 @@ import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.ExtraProductionPowe
 import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.WhiteMarbleResourceLeaderCard;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class LeaderCardDeck {
     private LeaderCard[] leaderCardsDeck;
 
@@ -59,8 +62,12 @@ public class LeaderCardDeck {
 
     }
 
-    public LeaderCard[] getLeaderCardsDeck(){
-        return this.leaderCardsDeck;
+    public LeaderCard drawOneLeaderCard(){
+        LeaderCard leaderCardDrawn = this.leaderCardsDeck[0];
+        List<LeaderCard> leaderCardList = Arrays.asList(this.leaderCardsDeck);
+        leaderCardList.remove(0);
+        this.leaderCardsDeck = leaderCardList.toArray(this.leaderCardsDeck);
+        return leaderCardDrawn;
     }
 }
 

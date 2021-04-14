@@ -14,27 +14,43 @@ import java.util.List;
 
 public class GameModel {
 
+    int numberOfPlayers;
     private Player[] players;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private LeaderCardDeck leaderCardDeck;
-    private ActionCountersDeck actionCountersDeck;
     private Market market;
-    private boolean BlackCrossPawn;
+    private ActionCountersDeck actionCountersDeck;
+    private boolean BlackCrossPawn = false;
 
     //Who chooses tha action????? from the controller!
     //private Map<Integer, String> playerActions
 
-    public GameModel(Player[] players, DevelopmentCardsDecksGrid developmentCardsDecksGrid, LeaderCardDeck leaderCardDeck, ActionCountersDeck actionCountersDeck, Market market, boolean blackCrossPawn) {
-        this.players = players;
-        this.developmentCardsDecksGrid = developmentCardsDecksGrid;
-        this.leaderCardDeck = leaderCardDeck;
-        this.actionCountersDeck = actionCountersDeck;
-        this.market = market;
-        BlackCrossPawn = blackCrossPawn;
+    public GameModel(int numberOfPlayers) {
+        this.players = new Player[numberOfPlayers];
+        for (int i=0;i<numberOfPlayers;i++) {
+            //this.players[i] = new Player();
+            //setStartingPlayerResources();
+        }
+        this.setStartingLeaderCards();
+        this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
+        this.leaderCardDeck = new LeaderCardDeck();
+        this.market = new Market();
+        if (numberOfPlayers==1) {
+            this.actionCountersDeck = new ActionCountersDeck();
+            this.BlackCrossPawn = true;
+        }
     }
 
     public Player[] getPlayers() {
         return this.players;
+    }
+
+    public void setStartingLeaderCards() {
+        for (int i=0;i<4;i++) {
+            for (int j=0;j<this.numberOfPlayers;j++) {
+                this.players[j].setPlayerLeaderCards(i, this.leaderCardDeck.drawOneLeaderCard());
+            }
+        }
     }
 
     public DevelopmentCardsDecksGrid getDevelopmentCardsDecksGrid() {
