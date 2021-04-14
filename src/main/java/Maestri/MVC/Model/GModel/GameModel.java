@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel;
 
+import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Cell;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
@@ -80,6 +81,13 @@ public class GameModel {
            getPlayers()[j].setPlayerNumber(i);
            j++;
         }
+    }
+
+    public void relationWithVatican(Integer playerNumber, int crossPosition) {
+        for(int i = 0; i < players.length; i++) {
+            getPlayers()[i].getPlayerboard().getFaithPath().checkRelationWithVatican(crossPosition, getPlayers()[i].getPlayerboard());
+        }
+
     }
 
 }

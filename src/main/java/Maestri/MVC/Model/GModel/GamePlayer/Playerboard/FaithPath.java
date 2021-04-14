@@ -1,11 +1,14 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
+import Maestri.MVC.Model.GModel.GameModel;
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
+
 public class FaithPath {
 
     private final Cell[] faithPath;
     private int crossPosition;
 
-    public FaithPath(Cell[] faithPath) {
+    public FaithPath() {
 
         this.faithPath = new Cell[25];
         this.faithPath[0] = new Cell(0,false, false,0);
@@ -51,11 +54,11 @@ public class FaithPath {
         crossPosition = crossPosition + i;
     }
 
-    public void generalCheckOnFaithPath(Playerboard playerboard) {
+    public void generalCheckOnFaithPath(Playerboard playerboard, GameModel gameModel, Player player) {
         if(faithPath[crossPosition].getVictoryPoints() != 0)
             getVictoryPoints(crossPosition, playerboard);
         if(faithPath[crossPosition].isPopeSpace())
-            // metodo model
+            gameModel.relationWithVatican(player.getPlayerNumber(), crossPosition);
     }
 
     /** This method adds victory points, from the faith path's cell, to the total count on the playerboard. */
@@ -63,9 +66,11 @@ public class FaithPath {
     public void getVictoryPoints(int crossPosition, Playerboard playerboard) {
         playerboard.setVictoryPoints(faithPath[crossPosition].getVictoryPoints());
     }
+    /** This method checks on the faith path if the player has the possibility to turn the card, after a relation in Vatican. */
 
-    public boolean checkRelationWithVatican(Cell[] faithPath, int crossPosition) {
-        // Bisogna passargli la crossPosition del giocatore che ha fatto scattare il rapporto con il vaticano, come si fa??
-
+    public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
+        if(crossPosition > crossPositionPlayerX || faithPath[crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
+           playerboard.setVictoryPoints(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints());
+        // devo eliminare la tessera, come??
     }
 }

@@ -53,7 +53,6 @@ public class Player {
     }
 
     public void setPlayerLeaderCardsDeck(LeaderCardDeck playerLeaderCards) {
-
     }
 
     /** This method sets the player's initial resources due to his playerNumber. */
