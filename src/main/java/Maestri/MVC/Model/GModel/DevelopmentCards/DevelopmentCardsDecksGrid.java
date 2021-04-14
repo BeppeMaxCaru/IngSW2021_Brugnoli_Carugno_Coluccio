@@ -307,6 +307,10 @@ public class DevelopmentCardsDecksGrid {
         return this.developmentCardsColours;
     }
 
+    public Collection<Integer> getDevelopmentCardsLevels() {
+        return this.developmentCardsLevels;
+    }
+
     public void printDevelopmentCardsDecks() {
         for (int i=0;i<3;i++) {
             for (int j=0;j<4;j++) {
@@ -333,7 +337,7 @@ public class DevelopmentCardsDecksGrid {
 
     //rendo tipo di ritorno boolean che mi dice se acquisto è stato fatto o no
     //e continuo a chiamare metodo buy in un while loop del player finchè un acquisto non viene effettuato
-    public boolean buyDevelopmentCard(Playerboard playerboard) {
+    /*public boolean buyDevelopmentCard(Playerboard playerboard) {
         //Print the available cards
         //Si può togliere e fare come metodo a parte
         for (int i=0;i<3;i++) {
@@ -345,81 +349,6 @@ public class DevelopmentCardsDecksGrid {
         //Ask colour x
         //Ask level y
         //ciclo while che continua a chiedere se non valida
-        System.out.println("Available development cards colours: " + this.developmentCardsColours);
-        System.out.println("Choose development card colour: ");
-        String colour = this.consoleInput.nextLine();
-        System.out.println("");
-        while (!this.developmentCardsColours.containsKey(colour)) {
-            System.out.println("Card of this colour doesn't exist!");
-            System.out.println("Choose a valid development card colour: ");
-            colour = this.consoleInput.nextLine();
-            System.out.println("");
-        }
-        System.out.println("Available development cards levels: " + this.developmentCardsLevels);
-        System.out.println("Choose development card level: ");
-        int level = this.consoleInput.nextInt();
-        System.out.println("");
-        //check if the input card exists otherwise choose again
-        while (!this.developmentCardsLevels.contains(level)) {
-            System.out.println("Card of this level doesn't exist!");
-            System.out.println("Choose a valid development card level: ");
-            level = this.consoleInput.nextInt();
-            System.out.println("");
-        }
-        int column = this.developmentCardsColours.get(colour);
-        //Check if selected pile is empty
-        while (this.developmentCardsDecks[level][column].length==0) {
-            System.out.println("Empty development cards pile!");
-            System.out.println("Choose new pile");
-            System.out.println("");
-            System.out.println("Available development cards colours: " + this.developmentCardsColours);
-            System.out.println("Choose development card colour: ");
-            colour = this.consoleInput.nextLine();
-            System.out.println("");
-            while (!this.developmentCardsColours.containsKey(colour)) {
-                System.out.println("Card of this colour doesn't exist!");
-                System.out.println("Choose a valid development card colour: ");
-                colour = this.consoleInput.nextLine();
-                System.out.println("");
-            }
-            System.out.println("Available development cards levels: " + this.developmentCardsLevels);
-            System.out.println("Choose development card level: ");
-            level = this.consoleInput.nextInt();
-            System.out.println("");
-            //check if the input card exists otherwise choose again
-            while (!this.developmentCardsLevels.contains(level)) {
-                System.out.println("Card of this level doesn't exist!");
-                System.out.println("Choose a valid development card level: ");
-                level = this.consoleInput.nextInt();
-                System.out.println("");
-            }
-            column = this.developmentCardsColours.get(colour);
-        }
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //Mega ciclo while di controllo va qua dentro
-        Map<String, Integer> developmentCardCost = this.developmentCardsDecks[level][column][0].getDevelopmentCardCost();
-
-        if (this.developmentCardsDecks[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
-            if (this.developmentCardsDecks[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
-                playerboard.placeNewDevelopmentCard(this.developmentCardsDecks[level][column][0]);
-                //aggiungere remove per togliere la carta
-                List<DevelopmentCard> reducedDeck = Arrays.asList(this.developmentCardsDecks[level][column]);
-                reducedDeck.remove(0);
-                this.developmentCardsDecks[level][column] = reducedDeck.toArray(this.developmentCardsDecks[level][column]);
-                //Bisogna togliere qui le risorse al player
-                //!!!!!!!!!!!!!!!!!!!!!!!!
-                //payDevelopmentCard
-                //!!!!!!!!!!!!!!!!!!!!!!
-                return true;
-            } else if (!this.developmentCardsDecks[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
-                return false;
-            }
-        } else if (!this.developmentCardsDecks[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
-            return false;
-        }
-        return false;
-        //If buy isn't possible action is denied and player has to choose new action and start all over
-    }
+        */
 
 }

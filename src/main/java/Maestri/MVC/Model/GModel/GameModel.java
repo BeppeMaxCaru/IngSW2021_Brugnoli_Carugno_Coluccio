@@ -59,9 +59,10 @@ public class GameModel {
         return this.BlackCrossPawn;
     }
 
-    public void buyDevelopmentCardAction(Player player) {
-        Playerboard playerboardToModify = player.getPlayerboard();
-        this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
+    public void buyDevelopmentCardAction() {
+        int index = 0;
+        this.players[index].buyDevelopmentCard(this.developmentCardsDecksGrid);
+        //this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
     public void pickResourcesFromMarket(){

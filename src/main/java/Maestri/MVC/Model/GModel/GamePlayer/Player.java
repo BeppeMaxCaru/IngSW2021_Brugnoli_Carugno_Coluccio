@@ -1,5 +1,7 @@
 package Maestri.MVC.Model.GModel.GamePlayer;
 
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.GameModel;
@@ -7,10 +9,7 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.WhiteMarble;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Random;
+import java.util.*;
 
 public class Player {
     private String nickname;
@@ -153,8 +152,85 @@ public class Player {
 
     /** This method asks the player what development cards he wants to buy. */
 
-    public boolean buyDevelopmentCard(GameModel gameModel) {
-        return gameModel.getDevelopmentCardsDecksGrid().buyDevelopmentCard(this.playerboard);
+    public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
+
+        Scanner consoleInput = new Scanner(System.in);
+
+        System.out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
+        System.out.println("Choose development card colour: ");
+        String colour = consoleInput.nextLine();
+        System.out.println("");
+        while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
+            System.out.println("Card of this colour doesn't exist!");
+            System.out.println("Choose a valid development card colour: ");
+            colour = consoleInput.nextLine();
+            System.out.println("");
+        }
+        System.out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
+        System.out.println("Choose development card level: ");
+        int level = consoleInput.nextInt();
+        System.out.println("");
+        //check if the input card exists otherwise choose again
+        while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
+            System.out.println("Card of this level doesn't exist!");
+            System.out.println("Choose a valid development card level: ");
+            level = consoleInput.nextInt();
+            System.out.println("");
+        }
+        int column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
+        //Check if selected pile is empty
+        while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column].length==0) {
+            System.out.println("Empty development cards pile!");
+            System.out.println("Choose new pile");
+            System.out.println("");
+            System.out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
+            System.out.println("Choose development card colour: ");
+            colour = consoleInput.nextLine();
+            System.out.println("");
+            while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
+                System.out.println("Card of this colour doesn't exist!");
+                System.out.println("Choose a valid development card colour: ");
+                colour = consoleInput.nextLine();
+                System.out.println("");
+            }
+            System.out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
+            System.out.println("Choose development card level: ");
+            level = consoleInput.nextInt();
+            System.out.println("");
+            //check if the input card exists otherwise choose again
+            while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
+                System.out.println("Card of this level doesn't exist!");
+                System.out.println("Choose a valid development card level: ");
+                level = consoleInput.nextInt();
+                System.out.println("");
+            }
+            column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
+        }
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Mega ciclo while di controllo va qua dentro
+        Map<String, Integer> developmentCardCost = developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost();
+
+        if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
+            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
+                playerboard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
+                //aggiungere remove per togliere la carta
+                List<DevelopmentCard> reducedDeck = Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+                reducedDeck.remove(0);
+                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+                //Bisogna togliere qui le risorse al player
+                //!!!!!!!!!!!!!!!!!!!!!!!!
+                //payDevelopmentCard
+                //!!!!!!!!!!!!!!!!!!!!!!
+                return true;
+            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
+                return false;
+            }
+        } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
+            return false;
+        }
+        return false;
+        //If buy isn't possible action is denied and player has to choose new action and start all over
     }
 
     public void activateProduction(Playerboard playerboard) {
