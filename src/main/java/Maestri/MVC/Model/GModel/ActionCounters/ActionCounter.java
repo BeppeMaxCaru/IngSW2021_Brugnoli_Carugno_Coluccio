@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel.ActionCounters;
 
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 
@@ -28,6 +29,11 @@ public class ActionCounter {
     public void activate(ActionCounter[] actionCountersDeck, Playerboard playerboard,
                          DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
 
+    }
+
+    public void discardDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, String colour) {
+
+        //developmentCardsDecksGrid.getDevelopmentCardsDecks()[2][developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour)][0];
     }
 
 }

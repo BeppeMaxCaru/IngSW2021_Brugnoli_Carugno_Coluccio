@@ -328,27 +328,8 @@ public class DevelopmentCardsDecksGrid {
         return false;
     }
 
-    //Helpful to simplify
-    //public void chooseValidCardToBuy(int x, int y) {
-        //Ask colour x
-        //Ask level y
-        //ciclo while che continua a chiedere se non valida
-    //}
-
-    //rendo tipo di ritorno boolean che mi dice se acquisto è stato fatto o no
-    //e continuo a chiamare metodo buy in un while loop del player finchè un acquisto non viene effettuato
-    /*public boolean buyDevelopmentCard(Playerboard playerboard) {
-        //Print the available cards
-        //Si può togliere e fare come metodo a parte
-        for (int i=0;i<3;i++) {
-            for (int j=0;j<4;j++) {
-                this.developmentCardsDecks[i][j][0].printDevelopmentCard();
-            }
-        }
-
-        //Ask colour x
-        //Ask level y
-        //ciclo while che continua a chiedere se non valida
-        */
+    public void removeDevelopmentCard(int column) {
+        //this.developmentCardsDecks[2][column]
+    }
 
 }

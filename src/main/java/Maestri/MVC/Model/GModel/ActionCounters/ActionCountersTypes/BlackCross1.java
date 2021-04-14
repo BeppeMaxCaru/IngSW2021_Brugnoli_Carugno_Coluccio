@@ -14,6 +14,7 @@ public class BlackCross1 extends ActionCounter {
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
         //modifica la playerboard spostando la croce nera
         actionCountersDeck.shuffle();
+        playerboard.getFaithPath().moveCross(1);
 
     }
 

@@ -8,8 +8,8 @@ public class YellowBannerCounter extends ActionCounter {
         super(value);
     }
 
-    @Override
     public void activate() {
-        super.activate();
+
+        //super.activate();
     }
 }
