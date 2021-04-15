@@ -88,14 +88,25 @@ public class DevelopmentCard {
     }
 
     public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard) {
-        Map<Integer, DevelopmentCard> playerDevelopmentCards = playerboard.getPlayerDevelopmentCards();
-        for (Integer key : playerDevelopmentCards.keySet()) {
-            if ((playerDevelopmentCards.get(key).getDevelopmentCardColour().equals(this.colour)
-                    && playerDevelopmentCards.get(key).getDevelopmentCardLevel()==this.level-1) ||
-                    playerDevelopmentCards.get(key).equals(null)) {
-                return true;
+        DevelopmentCard[][] playerDevelopmentCards = playerboard.getPlayerboardDevelopmentCards();
+        if(this.getDevelopmentCardLevel()==1)
+        {
+            for(int i=0; i<3; i++)
+            {
+                if(playerDevelopmentCards[this.getDevelopmentCardLevel()-1][i]==null)
+                    return true;
             }
         }
+        else
+        {
+            for(int i=0; i<3; i++)
+            {
+                if((playerDevelopmentCards[this.getDevelopmentCardLevel()-2][i]!=null)&&
+                        (playerDevelopmentCards[this.getDevelopmentCardLevel()-1][i]==null))
+                    return true;
+            }
+        }
+
         System.out.println("Card not compatible with playerboard cards");
         System.out.println("");
         return false;
