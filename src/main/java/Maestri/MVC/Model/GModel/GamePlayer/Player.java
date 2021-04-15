@@ -237,7 +237,67 @@ public class Player {
         //If buy isn't possible action is denied and player has to choose new action and start all over
     }
 
-    public void activateProduction(Playerboard playerboard) {
+    public void activateProduction(DevelopmentCard devCard) {
+        int i, j;
+        int numResource;
+        int activateProduction = -1;
+        Scanner in = new Scanner(System.in);
+        Map<String, Integer> inputResources = new HashMap<>();
+        inputResources.put("COINS", 0);
+        inputResources.put("SHIELDS", 0);
+        inputResources.put("SERVANTS", 0);
+        inputResources.put("STONES", 0);
+        // Red Cross???
+        Map<String, Integer> outputResources = new HashMap<>();
+        outputResources.put("COINS", 0);
+        outputResources.put("SHIELDS", 0);
+        outputResources.put("SERVANTS", 0);
+        outputResources.put("STONES", 0);
+
+        for(j = 0; j < 3; j++) {
+            for (i = 0; getPlayerboard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
+            while(activateProduction != 0 && activateProduction != 1) {
+                System.out.println("This is the resources you have to pay: " + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                System.out.println("For this:" + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                System.out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
+                activateProduction = in.nextInt();
+            }
+            if(activateProduction == 1) {
+                for(String key: getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
+                    numResource = inputResources.get(key);
+                    inputResources.put(key, numResource + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
+                }
+                for(String key: getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
+                    numResource = outputResources.get(key);
+                    outputResources.put(key, numResource + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
+                }
+            }
+        }
+
+        activateProduction = -1;
+        while(activateProduction != 0 && activateProduction != 1) {
+            System.out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
+            activateProduction = in.nextInt();
+        }
+        if(activateProduction == 1) {
+            i = 0;
+            for(String s : getPlayerboard().activateBasicProductionPower()) {
+                if(i == 2) {
+                    numResource = outputResources.get(s);
+                    outputResources.put(s, numResource + 1);
+                }
+                else {
+                    numResource = inputResources.get(s);
+                    inputResources.put(s, numResource + 1);
+                }
+                i++;
+            }
+        }
+
+        if(devCard.checkResourcesAvailability(playerboard, inputResources)) {
+            // Devo finire
+        }
+
     }
 
     /** This method asks the player if he wants to do a leader action. */

@@ -88,19 +88,57 @@ public class Playerboard {
         victoryPoints = victoryPoints + i;
     }
 
-    public void pickResource() {
+    /** This method picks resources from warehouse/chest to pay the player's development cards. */
+
+    public void pickResourceToPayDevCard(String resource) {
         int fromWhat = -1;
-        int resourceInputNum = -1;
         int numResources;
-        int i = 2;
+        Scanner in = new Scanner(System.in);
+
+        while(fromWhat != 0 && fromWhat != 1) {
+            System.out.println("Do you want to pick the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
+            fromWhat = in.nextInt();
+        }
+
+        if(fromWhat == 0) {
+            numResources = wareHouse.getWarehouseResources().get(resource);
+            if(numResources != 0)
+                wareHouse.getWarehouseResources().put(resource, numResources - 1);
+            else {
+                System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
+                numResources = chest.getChestResources().get(resource);
+                chest.getChestResources().put(resource, numResources - 1);
+            }
+        }
+        else {
+            numResources = chest.getChestResources().get(resource);
+            if(numResources != 0)
+                chest.getChestResources().put(resource, numResources - 1);
+            else {
+                System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
+                numResources = wareHouse.getWarehouseResources().get(resource);
+                wareHouse.getWarehouseResources().put(resource, numResources - 1);
+            }
+        }
+    }
+
+    /** This method activates the basic production power of the playerboard. */
+
+    public List<String> activateBasicProductionPower() {
+        int resourceOutputNum = -1;
+        int numResources;
+        int i;
+        int resourceInputNum = -1;
+        int fromWhat = -1;
         List<String> availableResourceWarehouse = null;
         List<String> availableResourceChest = null;
+        List<String> resourceChoice = null;
         Scanner in = new Scanner(System.in);
 
         // Available resources from warehouse
         for (String key : wareHouse.getWarehouseResources().keySet()) {
             numResources = wareHouse.getWarehouseResources().get(key);
-            if(numResources != 0) {
+            if (numResources != 0) {
                 availableResourceWarehouse = new ArrayList<>();
                 availableResourceWarehouse.add(key);
             }
@@ -109,67 +147,57 @@ public class Playerboard {
         // Available resources from chest
         for (String key : chest.getChestResources().keySet()) {
             numResources = chest.getChestResources().get(key);
-            if(numResources != 0) {
+            if (numResources != 0) {
                 availableResourceChest = new ArrayList<>();
                 availableResourceChest.add(key);
             }
         }
 
-        while(fromWhat != 0 && fromWhat != 1) {
-            System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-            fromWhat = in.nextInt();
-        }
-        if(fromWhat == 0 && availableResourceWarehouse != null) {
-            while(resourceInputNum < 0 || resourceInputNum > availableResourceWarehouse.size() - 1) {
-                System.out.println("Choose a resource from warehouse:");
-                for(int j = 0; j < availableResourceWarehouse.size(); j++) {
-                    System.out.println("Write" + j + "for" + availableResourceWarehouse.get(j));
-                }
-                resourceInputNum = in.nextInt();
-            }
-
-            numResources = wareHouse.getWarehouseResources().get(availableResourceWarehouse.get(resourceInputNum));
-            wareHouse.getWarehouseResources().put(availableResourceWarehouse.get(resourceInputNum), numResources - 1);
-        }
-        else if(availableResourceChest != null) {
-            while(resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
-                System.out.println("Choose a resource from chest:");
-                for(int j = 0; j < availableResourceChest.size(); j++) {
-                    System.out.println("Write" + j + "for" + availableResourceChest.get(j));
-                }
-                resourceInputNum = in.nextInt();
-            }
-            numResources = chest.getChestResources().get(availableResourceChest.get(resourceInputNum));
-            chest.getChestResources().put(availableResourceChest.get(resourceInputNum), numResources - 1);
-        }
-    }
-
-    public void activateBasicProductionPower(WareHouse wareHouse, Chest chest) {
-        int resourceOutputNum = -1;
-        int numResources;
-        int i = 0;
-        Scanner in = new Scanner(System.in);
-
-
         // two input
-        //??
-        for(int j = 0; j < 2; j++) {
-            pickResource();
+        for (i = 0; i < 2; i++) {
+            while (fromWhat != 0 && fromWhat != 1) {
+                System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
+                fromWhat = in.nextInt();
+            }
+            if (fromWhat == 0 && availableResourceWarehouse != null) {
+                while (resourceInputNum < 0 || resourceInputNum > availableResourceWarehouse.size() - 1) {
+                    System.out.println("Choose a resource from warehouse:");
+                    for (int j = 0; j < availableResourceWarehouse.size(); j++) {
+                        System.out.println("Write" + j + "for" + availableResourceWarehouse.get(j));
+                    }
+                    resourceInputNum = in.nextInt();
+                }
+                resourceChoice = new ArrayList<>();
+                resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
+            } else if (availableResourceChest != null) {
+                while (resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
+                    System.out.println("Choose a resource from chest:");
+                    for (int j = 0; j < availableResourceChest.size(); j++) {
+                        System.out.println("Write" + j + "for" + availableResourceChest.get(j));
+                    }
+                    resourceInputNum = in.nextInt();
+                }
+                resourceChoice = new ArrayList<>();
+                resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
+            }
         }
 
         // output
-        while(resourceOutputNum < 0 || resourceOutputNum > 3) {
+        while (resourceOutputNum < 0 || resourceOutputNum > 3) {
             System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
             resourceOutputNum = in.nextInt();
         }
 
+        i = 0;
         for (String key : chest.getChestResources().keySet()) {
-            if(i == resourceOutputNum) {
-                numResources = chest.getChestResources().get(key);
-                chest.getChestResources().put(key, numResources + 1);
+            if (i == resourceOutputNum) {
+                resourceChoice = new ArrayList<>();
+                resourceChoice.add(key);
                 break;
             }
             i++;
         }
+
+        return resourceChoice;
     }
 }
