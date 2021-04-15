@@ -16,21 +16,20 @@ public class LeaderCardDeck {
     public LeaderCardDeck(){
         this.leaderCardsDeck = new LeaderCard[16];
 
-        this.leaderCardsDeck[0] = new DiscountDevelopmentCardsLeaderCard(
-                new DevelopmentCard("YELLOW",1),
-                new DevelopmentCard("GREEN",1),
+        this.leaderCardsDeck[0] = new DiscountDevelopmentCardsLeaderCard("YELLOW",
+                "GREEN",
                 "SERVANTS");
         this.leaderCardsDeck[1] = new DiscountDevelopmentCardsLeaderCard(
-                new DevelopmentCard("BLUE",1),
-                new DevelopmentCard("PURPLE",1),
+                "BLUE",
+                "PURPLE",
                 "SHIELDS");
         this.leaderCardsDeck[2] = new DiscountDevelopmentCardsLeaderCard(
-                new DevelopmentCard("GREEN",1),
-                new DevelopmentCard("BLUE",1),
+                "GREEN",
+                "BLUE",
                 "STONES");
         this.leaderCardsDeck[3] = new DiscountDevelopmentCardsLeaderCard(
-                new DevelopmentCard("YELLOW",1),
-                new DevelopmentCard("PURPLE",1),
+                "YELLOW",
+                "PURPLE",
                 "COINS");
 
         this.leaderCardsDeck[4] = new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW",2),
@@ -47,19 +46,18 @@ public class LeaderCardDeck {
         this.leaderCardsDeck[10] = new ExtraWarehouseSpaceLeaderCard("SERVANTS","SHIELDS");
         this.leaderCardsDeck[11] = new ExtraWarehouseSpaceLeaderCard("SHIELDS","COINS");
 
-        this.leaderCardsDeck[12] = new WhiteMarbleResourceLeaderCard(new DevelopmentCard("YELLOW",1),
-                new DevelopmentCard("BLUE",1),
+        this.leaderCardsDeck[12] = new WhiteMarbleResourceLeaderCard("YELLOW",
+                "BLUE",
                 "SERVANTS");
-        this.leaderCardsDeck[13] = new WhiteMarbleResourceLeaderCard(new DevelopmentCard("GREEN",1),
-                new DevelopmentCard("PURPLE",1),
+        this.leaderCardsDeck[13] = new WhiteMarbleResourceLeaderCard("GREEN",
+                "PURPLE",
                 "SHIELDS");
-        this.leaderCardsDeck[14] = new WhiteMarbleResourceLeaderCard(new DevelopmentCard("BLUE",1),
-                new DevelopmentCard("YELLOW",1),
+        this.leaderCardsDeck[14] = new WhiteMarbleResourceLeaderCard("BLUE",
+                "YELLOW",
                 "STONES");
-        this.leaderCardsDeck[15] = new WhiteMarbleResourceLeaderCard(new DevelopmentCard("PURPLE",1),
-                new DevelopmentCard("GREEN",1),
+        this.leaderCardsDeck[15] = new WhiteMarbleResourceLeaderCard("PURPLE",
+                "GREEN",
                 "COINS");
-
     }
 
     public LeaderCard drawOneLeaderCard(){

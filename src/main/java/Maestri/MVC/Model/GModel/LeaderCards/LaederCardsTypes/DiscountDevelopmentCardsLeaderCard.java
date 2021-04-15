@@ -4,33 +4,43 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
-    private final DevelopmentCard[] requisite;
-    private final Map<String, Integer> discount;
+    private final String[] requisite;
+    private final String discount;
     //private final int leaderCardType;
 
-    public DiscountDevelopmentCardsLeaderCard(DevelopmentCard firstRequiredDevelopmentCard,
-                                              DevelopmentCard secondRequiredDevelopmentCard,
+    public DiscountDevelopmentCardsLeaderCard(String firstRequiredDevelopmentCard,
+                                              String secondRequiredDevelopmentCard,
                                               String resource) {
         super(2);
 
-        this.requisite = new DevelopmentCard[2];
-        this.requisite[0] = firstRequiredDevelopmentCard; //Oppure costruisco le carte direttamente
-        this.requisite[1] = secondRequiredDevelopmentCard; //qui dentro con loro costruttore
+        this.requisite = new String[2];
+        this.requisite[0] = firstRequiredDevelopmentCard;
+        this.requisite[1] = secondRequiredDevelopmentCard;
 
-        this.discount = new HashMap<>();
-        this.discount.put(resource, 1);
+        this.discount = resource;
     }
 
     //Controllo carta sviluppo Discount
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        return playerboard.getPlayerboardDevelopmentCards().values().containsAll(Arrays.asList(this.requisite));
+        boolean check=false;
+        for(String card : this.requisite)
+        {
+            check=false;
+            for(int i=0; i<3; i++)
+            {
+                for(int k=0; k<3; k++)
+                {
+                    if(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(card))
+                        check=true;
+                }
+            }
+            if(!check)
+                return false;
+        }
+        return check;
     }
 
 }

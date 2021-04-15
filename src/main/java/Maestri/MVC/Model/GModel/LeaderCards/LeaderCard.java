@@ -25,14 +25,8 @@ public class LeaderCard {
         return victoryPoints;
     }
 
-    //Serve per giocare la carta
-    //NB giocare la carta e attivarla sono due azioni diverse!!!!!!!!!!!!!!
     public boolean checkRequisites(Playerboard playerboard) {
-        if (true) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     public void activateAbility(Player player) {

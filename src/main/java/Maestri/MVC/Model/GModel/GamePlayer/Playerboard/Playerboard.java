@@ -10,7 +10,7 @@ public class Playerboard {
 
     private int developmentCardsBought;
     //private DevelopmentCard[] playerboardDevelopmentCards;
-    private Map<Integer, DevelopmentCard> playerboardDevelopmentCards;
+    private DevelopmentCard[][] playerboardDevelopmentCards;
     //Mappa da aggiungere con tutti i depositi disponibili
     //private Map<Integer, Deposits> availablePlayerboardDeposits;
     private Chest chest;
@@ -19,14 +19,11 @@ public class Playerboard {
     private int victoryPoints;
 
     //Update Giuseppe: synchronizing DevelopmentCards in playerboard
-    public Playerboard(DevelopmentCard[] playerDevelopmentCards, Chest chest, WareHouse wareHouse, FaithPath faithPath, int victoryPoints) {
+    public Playerboard(DevelopmentCard[] playerboardDevelopmentCard, Chest chest, WareHouse wareHouse, FaithPath faithPath, int victoryPoints) {
         this.developmentCardsBought = 0;
         //this.playerboardDevelopmentCards = playerDevelopmentCards;
 
-        this.playerboardDevelopmentCards = new HashMap<>();
-        this.playerboardDevelopmentCards.put(1,null);
-        this.playerboardDevelopmentCards.put(2,null);
-        this.playerboardDevelopmentCards.put(3,null);
+        this.playerboardDevelopmentCards = new DevelopmentCard[3][3];
 
         this.chest = chest;
         this.wareHouse = wareHouse;
@@ -38,7 +35,7 @@ public class Playerboard {
         return this.developmentCardsBought;
     }
 
-    public Map<Integer, DevelopmentCard> getPlayerDevelopmentCards() {
+    public DevelopmentCard[][] getPlayerboardDevelopmentCards() {
         return this.playerboardDevelopmentCards;
     }
 
@@ -51,53 +48,21 @@ public class Playerboard {
 
     }
 
-    public boolean placeNewDevelopmentCard(DevelopmentCard developmentCard) {
-        System.out.println(this.playerboardDevelopmentCards);
+    public void placeNewDevelopmentCard(DevelopmentCard developmentCard) {
         System.out.println("Choose space number where to place new development card: ");
         Scanner playerInput = new Scanner(System.in);
         System.out.println("");
         int spaceChoosenFromPlayer = playerInput.nextInt();
-        while (!this.playerboardDevelopmentCards.containsKey(spaceChoosenFromPlayer)) {
+        while (spaceChoosenFromPlayer<0||spaceChoosenFromPlayer>2) {
             System.out.println("Space not existing!");
             System.out.println("Choose valid space number where to place new development card: ");
             spaceChoosenFromPlayer = playerInput.nextInt();
             System.out.println("");
         }
-        //Caso in cui spazio vuoto e caso in cui spazio con carta già presente
-        if (this.playerboardDevelopmentCards.get(spaceChoosenFromPlayer).equals(null)) {
-            this.playerboardDevelopmentCards.put(spaceChoosenFromPlayer, developmentCard);
-            return true;
-        } else if (!this.playerboardDevelopmentCards.get(spaceChoosenFromPlayer).equals(null)) {
-            DevelopmentCard developmentCardAlreadyInSpace = this.playerboardDevelopmentCards.get(spaceChoosenFromPlayer);
-            //Caso in cui può piazzarla
-            if (developmentCard.getDevelopmentCardColour().equals(developmentCardAlreadyInSpace.getDevelopmentCardColour())) {
-
-                if (developmentCard.getDevelopmentCardLevel()==(developmentCardAlreadyInSpace.getDevelopmentCardLevel()+1)) {
-                    this.playerboardDevelopmentCards.put(spaceChoosenFromPlayer, developmentCard);
-                    this.developmentCardsBought = this.developmentCardsBought + 1;
-                    System.out.println("New development card available!");
-                    System.out.println("");
-                    return true;
-                } else if (developmentCard.getDevelopmentCardLevel()!=(developmentCardAlreadyInSpace.getDevelopmentCardLevel()+1)) {
-                    System.out.println("Existing card not compatible!");
-                    System.out.println("");
-                    return false;
-                }
-
-            } else if (!(developmentCard.getDevelopmentCardColour().equals(developmentCardAlreadyInSpace.getDevelopmentCardColour()))) {
-                System.out.println("Existing card not compatible!");
-                System.out.println("");
-                return false;
-                //spaceChoosenFromPlayer = playerInput.nextInt();
-                //rifaccio il controllo dell'inserimento con while in sopraclasse!!!!!
-                //Da mettere in player
-            }
+        if(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(this)){
+            this.getPlayerboardDevelopmentCards()[developmentCard.getDevelopmentCardLevel()][spaceChoosenFromPlayer]=developmentCard;
         }
-        return false;
-    }
 
-    public Map<Integer, DevelopmentCard> getPlayerboardDevelopmentCards() {
-        return this.playerboardDevelopmentCards;
     }
 
     public Chest getChest() {

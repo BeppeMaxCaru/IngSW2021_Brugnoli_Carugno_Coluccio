@@ -12,11 +12,10 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
     private final DevelopmentCard requisite;
     private final String input;
 
-    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite,
-                                          String resourceInput) {
+    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput) {
         super(4);
-        this.requisite = requisite;
-        this.input=resourceInput;
+        this.requisite = requisite;//Colore e livello della carta richiesta per l'attivazione
+        this.input=resourceInput;//Risorsa in input da scambiare con faithPoint e risorsa a scelta
 
     }
 
@@ -86,9 +85,12 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
     //Controllo ExtraProd
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        if (playerboard.getPlayerboardDevelopmentCards().containsValue(this.requisite)) {
-            return playerboard.getPlayerboardDevelopmentCards().get(this.requisite).getDevelopmentCardLevel() == 2;
+        boolean check=false;
+        for(int i=0; i<3; i++)
+        {
+            if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour()))
+                check=true;
         }
-        return false;
+        return check;
     }
 }
