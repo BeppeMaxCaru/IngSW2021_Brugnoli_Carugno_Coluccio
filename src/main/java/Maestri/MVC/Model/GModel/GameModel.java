@@ -110,21 +110,27 @@ public class GameModel {
             if(getPlayers()[i].getPlayerboard().getFaithPath().getCrossPosition() == 24 || getPlayers()[i].getPlayerboard().getDevelopmentCardsBought() == 7) {
                 {
                     // Tutti i giocatori fino al giocatore a destra del primo giocatore giocano il loro ultimo turno.
+                    checkWinner();
                 }
-                checkWinner();
             }
         }
     }
 
-    public Player[] checkWinner() {
-        int maxVictoryPoints;
-        int playerWithMaxVictoryPoints;
+    public int checkWinner() {
+        int maxVictoryPoints = 0;
+        int playerWithMaxVictoryPoints = 0;
 
         for(int i = 0; i < players.length; i++) {
-
+            if(maxVictoryPoints < getPlayers()[i].sumAllVictoryPoints()) {
+                maxVictoryPoints = getPlayers()[i].sumAllVictoryPoints();
+                playerWithMaxVictoryPoints = i;
+            }
+            else if(maxVictoryPoints == getPlayers()[i].sumAllVictoryPoints()) {
+                // Confronto tra riserve
+            }
         }
 
-        return Player[];
+        return playerWithMaxVictoryPoints;
     }
 
 }

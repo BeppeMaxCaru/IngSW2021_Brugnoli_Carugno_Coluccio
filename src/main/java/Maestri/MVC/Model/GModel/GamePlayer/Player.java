@@ -291,6 +291,26 @@ public class Player {
     }
 
     public int sumAllVictoryPoints() {
+        int victoryPoints = 0;
+        int numResources = 0;
 
+        // Punti dal tracciato fede
+        victoryPoints = victoryPoints + getPlayerboard().getVictoryPoints(); // Punti dalle tessere.
+        victoryPoints = victoryPoints + getPlayerboard().getFaithPath().getVictoryPoints(); // Punti dalla posizione della croce.
+
+        // Punti dalle carte sviluppo.
+
+        // Punti dalle carte leader.
+
+        //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
+        for(String key: getPlayerboard().getWareHouse().getWarehouseResources().keySet())
+            numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get(key);
+        for(String key: getPlayerboard().getChest().getChestResources().keySet())
+            numResources = numResources + getPlayerboard().getChest().getChestResources().get(key);
+        // ExtraWarehouse ??
+
+        victoryPoints = victoryPoints + numResources / 5;
+
+        return victoryPoints;
     }
 }

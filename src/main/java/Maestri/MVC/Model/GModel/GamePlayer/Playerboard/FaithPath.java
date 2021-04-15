@@ -64,11 +64,12 @@ public class FaithPath {
         crossPosition = crossPosition + i;
     }
 
-    /** This method adds victory points, from the faith path's cell, to the total count on the playerboard. */
+    /** This method return, at the end of the play, the number of victory points due to the position of the cross. */
 
-    public void getVictoryPoints(int crossPosition, Playerboard playerboard) {
-        playerboard.setVictoryPoints(faithPath[crossPosition].getVictoryPoints());
+    public int getVictoryPoints() {
+        return faithPath[crossPosition].getVictoryPoints();
     }
+
     /** This method checks on the faith path if the player has the possibility to turn the card (or remove), after a relation in Vatican. */
 
     public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
