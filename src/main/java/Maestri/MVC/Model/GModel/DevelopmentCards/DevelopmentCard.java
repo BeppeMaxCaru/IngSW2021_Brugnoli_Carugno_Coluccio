@@ -87,8 +87,9 @@ public class DevelopmentCard {
         return true;
     }
 
+    //Simo
     public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard) {
-        Map<Integer, DevelopmentCard> playerDevelopmentCards = playerboard.getPlayerDevelopmentCards();
+        Map<Integer, DevelopmentCard> playerDevelopmentCards = playerboard.getPlayerboardDevelopmentCards();
         for (Integer key : playerDevelopmentCards.keySet()) {
             if ((playerDevelopmentCards.get(key).getDevelopmentCardColour().equals(this.colour)
                     && playerDevelopmentCards.get(key).getDevelopmentCardLevel()==this.level-1) ||

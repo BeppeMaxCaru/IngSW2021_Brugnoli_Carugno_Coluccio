@@ -152,6 +152,7 @@ public class Playerboard {
 
 
         // two input
+        //??
         for(int j = 0; j < 2; j++) {
             pickResource();
         }
