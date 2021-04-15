@@ -289,4 +289,8 @@ public class Player {
         updatedPlayerLeaderCardList.remove(numLeaderCard);
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
     }
+
+    public int sumAllVictoryPoints() {
+
+    }
 }
