@@ -115,7 +115,7 @@ public class DevelopmentCard {
     //Metodo che toglie le risorse al player se l'acquisto va a buon fine
     //Check sono già stati fatti tutti da playerboard e carddecksgrid
     //faccio avvenire il pagamento direttamente nella playerboard
-    /*public void payDevelopmentCard(Playerboard playerboard) {
+    public void payDevelopmentCard(Playerboard playerboard) {
 
         if (!checkResourcesAvailability(playerboard, this.cost)) {
             System.out.println("Not enough resources to buy card");
@@ -138,7 +138,7 @@ public class DevelopmentCard {
             //la nuova carta acquistata è compatibile con quella nuova appena acquistata
             //Playerboard.getDevelopmentCards.putOnTop(this)
         }
-    }*/
+    }
 
     public boolean activateProduction(Playerboard playerboard) {
 
