@@ -214,6 +214,7 @@ public class Player {
                 developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerboard);
 
                 playerboard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
+                playerboard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
                 //aggiungere remove per togliere la carta
                 List<DevelopmentCard> reducedDeck = Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
                 reducedDeck.remove(0);
@@ -332,7 +333,7 @@ public class Player {
         Scanner in = new Scanner(System.in);
         int numLeaderCard=-1;
 
-        //Scelta della carta leader da scartare
+        //Scelta della carta leader da giocare
         while((numLeaderCard<0) || (numLeaderCard > this.playerLeaderCards.length)){
             System.out.println("What leader card do you want to play?:");
             for (int i = 0; i < this.playerLeaderCards.length; i++) {
@@ -341,6 +342,7 @@ public class Player {
             numLeaderCard = in.nextInt();
             if(this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerboard))
                 this.playerLeaderCards[numLeaderCard].activateAbility(this);
+                this.playerboard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
         }
     }
 

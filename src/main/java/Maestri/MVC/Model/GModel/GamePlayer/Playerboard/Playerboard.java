@@ -51,14 +51,14 @@ public class Playerboard {
         return this.playerboardDevelopmentCards;
     }
 
-    public void payNewDevelopmentCard(DevelopmentCard developmentCard) {
+    /*public void payNewDevelopmentCard(DevelopmentCard developmentCard) {
         Map<String, Integer> resourcesToPay = new HashMap<>();
         while(!resourcesToPay.equals(developmentCard.getDevelopmentCardCost())) {
             //Metodo che fa prendere risorse da tutti gli slot disponibili
             //this.pickResources();
         }
 
-    }
+    }*/
 
     public void placeNewDevelopmentCard(DevelopmentCard developmentCard) {
         System.out.println("Choose space number where to place new development card: ");
@@ -96,7 +96,7 @@ public class Playerboard {
         return this.victoryPoints;
     }
 
-    public void setVictoryPoints(int i) {
+    public void sumVictoryPoints(int i) {
         victoryPoints = victoryPoints + i;
     }
 
