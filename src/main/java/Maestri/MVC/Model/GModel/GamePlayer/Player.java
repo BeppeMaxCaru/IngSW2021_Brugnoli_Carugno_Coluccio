@@ -372,13 +372,11 @@ public class Player {
         int victoryPoints = 0;
         int numResources = 0;
 
-        // Punti dal tracciato fede
-        victoryPoints = victoryPoints + getPlayerboard().getVictoryPoints(); // Punti dalle tessere.
-        victoryPoints = victoryPoints + getPlayerboard().getFaithPath().getVictoryPoints(); // Punti dalla posizione della croce.
+        // Punti delle tessere del tracciato fede, carte sviluppo e carte leader.
+        victoryPoints = victoryPoints + getPlayerboard().getVictoryPoints();
 
-        // Punti dalle carte sviluppo.
-
-        // Punti dalle carte leader.
+        // Punti dalla posizione della croce.
+        victoryPoints = victoryPoints + getPlayerboard().getFaithPath().getVictoryPoints();
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
         numResources = numResources + numResourcesReserve();
