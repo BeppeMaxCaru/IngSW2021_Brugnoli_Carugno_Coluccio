@@ -207,7 +207,25 @@ public class Player {
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         //Mega ciclo while di controllo va qua dentro
+
         Map<String, Integer> developmentCardCost = developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost();
+        Integer resourceCost;
+        int input=-1;
+        Scanner discountChoice = new Scanner(System.in);
+        for(String res : this.playerboard.getDevelopmentCardDiscount())
+        {
+            resourceCost=developmentCardCost.get(res);
+            if(resourceCost!=0)
+            {
+                while(input<0||input>1)
+                {
+                    System.out.println("Do you want to pay the reduced price for this resource? Insert 0 for no, 1 for yes");
+                    input=discountChoice.nextInt();
+                }
+                if(input==1)
+                    developmentCardCost.put(res, resourceCost-1);
+            }
+        }
 
         if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
             if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {

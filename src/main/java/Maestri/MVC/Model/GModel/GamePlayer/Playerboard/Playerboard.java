@@ -17,7 +17,8 @@ public class Playerboard {
     private WareHouse wareHouse;
     private FaithPath faithPath;
     private int victoryPoints;
-    private Marble[] resourceMarbles;
+    private final Marble[] resourceMarbles = new Marble[2];
+    private final String[] developmentCardDiscount =new String[2];
 
     private String[] leaderCardsDiscounts = new String[2];
     private String[] whiteMarblePossibleResources = new String[2];
@@ -33,7 +34,6 @@ public class Playerboard {
         this.wareHouse = wareHouse;
         this.faithPath = faithPath;
         this.victoryPoints = victoryPoints;
-        this.resourceMarbles = new Marble[2];
     }
 
     /**
@@ -41,6 +41,10 @@ public class Playerboard {
      */
     public Marble[] getResourceMarbles(){
         return this.resourceMarbles;
+    }
+
+    public String[] getDevelopmentCardDiscount() {
+        return this.developmentCardDiscount;
     }
 
     public int getDevelopmentCardsBought() {

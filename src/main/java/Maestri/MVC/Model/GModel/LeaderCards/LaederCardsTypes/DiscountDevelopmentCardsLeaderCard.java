@@ -3,13 +3,11 @@ package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
 public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     private final String[] requisite;
     private final String discount;
-    //private final int leaderCardType;
 
     public DiscountDevelopmentCardsLeaderCard(String firstRequiredDevelopmentCard,
                                               String secondRequiredDevelopmentCard,
@@ -23,7 +21,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         this.discount = resource;
     }
 
-    //Controllo carta sviluppo Discount
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;
@@ -46,7 +43,10 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     @Override
     public void activateAbility(Player player) {
-        //player.getPlayerboard().;
+        int i=0;
+        while(player.getPlayerboard().getDevelopmentCardDiscount()[i]!=null)
+            i++;
+        player.getPlayerboard().getDevelopmentCardDiscount()[i]=this.discount;
         this.setPlayed(true);
     }
 }
