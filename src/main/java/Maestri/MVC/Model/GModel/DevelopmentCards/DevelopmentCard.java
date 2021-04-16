@@ -137,7 +137,8 @@ public class DevelopmentCard {
                 playerboard.pickResourceToPay(key);
             }
         }
-        //playerboard.pickResourceToPay(this.input);
+
+        playerboard.getFaithPath().moveCross(this.faithPoints);
 
         //unisco output a chest!
         playerboard.getFaithPath().moveCross(this.faithPoints);
