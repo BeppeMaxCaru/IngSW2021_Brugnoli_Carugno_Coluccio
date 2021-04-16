@@ -6,7 +6,7 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
 /**
- * This LeaderCards allow players to collect resources instead of WhiteMarbles
+ * These LeaderCards allow players to collect resources instead of WhiteMarbles
  */
 public class WhiteMarbleResourceLeaderCard extends LeaderCard {
 

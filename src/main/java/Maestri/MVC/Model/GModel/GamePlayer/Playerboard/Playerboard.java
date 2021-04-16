@@ -134,7 +134,10 @@ public class Playerboard {
 
     public void pickResource(String resource) {
         int fromWhat = -1;
-        int numResources;
+        int fromWhichWarehouse = -1;
+        Integer whRes=wareHouse.getWarehouseResources().get(resource);
+        Integer esRes=wareHouse.getWarehouseResources().get("extra"+resource);
+        Integer numResources;
         Scanner in = new Scanner(System.in);
 
         while(fromWhat != 0 && fromWhat != 1) {
@@ -143,9 +146,27 @@ public class Playerboard {
         }
 
         if(fromWhat == 0) {
-            numResources = wareHouse.getWarehouseResources().get(resource);
+            numResources = 0;
+            numResources=numResources+whRes+esRes;
             if(numResources != 0)
-                wareHouse.getWarehouseResources().put(resource, numResources - 1);
+            {
+                if((whRes!=0)&& (esRes==0))
+                    wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                else if ((whRes==0)&& (esRes!=0))
+                    wareHouse.getWarehouseResources().put("extra"+resource, esRes - 1);
+                else
+                {
+                    while((fromWhichWarehouse<0)||(fromWhichWarehouse>1))
+                    {
+                        System.out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
+                        fromWhichWarehouse = in.nextInt();
+                        if (fromWhichWarehouse==0)
+                            wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                        else
+                            wareHouse.getWarehouseResources().put("extra"+resource, esRes - 1);
+                    }
+                }
+            }
             else {
                 System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
                 numResources = chest.getChestResources().get(resource);

@@ -7,15 +7,29 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
 import java.util.*;
 
+/**
+ * These LeaderCards give an extra Production Power to the player
+ * He spends a specific resource and he obtains a faithPoint and a Resource to be chosen
+ */
 public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
+    /**
+     * DevelopmentCard required for the activation
+     */
     private final DevelopmentCard requisite;
+
+    /**
+     * Resource to be spent
+     */
     private final String input;
 
+    /**
+     * Constructor associates inputs by LeaderCardDeck to attributes of the class
+     */
     public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput) {
         super(4);
-        this.requisite = requisite;//Colore e livello della carta richiesta per l'attivazione
-        this.input=resourceInput;//Risorsa in input da scambiare con faithPoint e risorsa a scelta
+        this.requisite = requisite;
+        this.input=resourceInput;
 
     }
 
@@ -31,13 +45,9 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
         Scanner in = new Scanner(System.in);
 
-        // Available resources from warehouse
         numWarehouseResources = player.getPlayerboard().getWareHouse().getWarehouseResources().get(this.input);
-
-        // Available resources from chest
         numChestResources = player.getPlayerboard().getChest().getChestResources().get(this.input);
 
-        // one input
         while(i > 0) {
             if((numChestResources>0)&&(numWarehouseResources>0))
             {
@@ -62,7 +72,6 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
             i--;
         }
 
-        // output
         while(resourceOutputNum < 0 || resourceOutputNum > 3) {
             System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
             resourceOutputNum = in.nextInt();
@@ -83,7 +92,6 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
         this.setPlayed(true);
     }
 
-    //Controllo ExtraProd
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;
