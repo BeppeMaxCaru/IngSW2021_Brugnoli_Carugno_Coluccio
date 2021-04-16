@@ -80,6 +80,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
         player.getPlayerboard().getFaithPath().moveCross(1);
 
+        this.setPlayed(true);
     }
 
     //Controllo ExtraProd

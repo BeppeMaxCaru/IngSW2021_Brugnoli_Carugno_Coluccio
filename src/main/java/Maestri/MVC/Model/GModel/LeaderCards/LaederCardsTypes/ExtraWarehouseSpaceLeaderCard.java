@@ -27,5 +27,6 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
     @Override
     public void activateAbility(Player player) {
         player.getPlayerboard().getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
+        this.setPlayed(true);
     }
 }

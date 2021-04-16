@@ -329,7 +329,7 @@ public class Player {
         return leaderActionNum;
     }
 
-    public void playLeaderCard(Market market) {
+    public void playLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard=-1;
 
@@ -340,7 +340,8 @@ public class Player {
                 System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
             }
             numLeaderCard = in.nextInt();
-            if(this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerboard))
+            if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerboard))&&
+                    (!this.playerLeaderCards[numLeaderCard].isPlayed()))
                 this.playerLeaderCards[numLeaderCard].activateAbility(this);
                 this.playerboard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
         }

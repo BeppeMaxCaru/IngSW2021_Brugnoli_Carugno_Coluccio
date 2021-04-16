@@ -9,13 +9,22 @@ import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.WhiteMarbleResource
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class contains all the LeaderCards to be given to players
+ */
 public class LeaderCardDeck {
+    /**
+     * Array that contains all the initial LeaderCards
+     */
     private LeaderCard[] leaderCardsDeck;
 
-    //inizializza una per una
+    /**
+     * Constructor creates LeaderCards and puts them in the attribute
+     */
     public LeaderCardDeck(){
         this.leaderCardsDeck = new LeaderCard[16];
 
+        //Creation of DiscountDevelopmentCardsLeaderCards
         this.leaderCardsDeck[0] = new DiscountDevelopmentCardsLeaderCard("YELLOW",
                 "GREEN",
                 "SERVANTS");
@@ -32,6 +41,7 @@ public class LeaderCardDeck {
                 "PURPLE",
                 "COINS");
 
+        //Creation of ExtraProductionPowerLeaderCards
         this.leaderCardsDeck[4] = new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW",2),
                 "SHIELDS");
         this.leaderCardsDeck[5] = new ExtraProductionPowerLeaderCard(new DevelopmentCard("BLUE",2),
@@ -41,11 +51,13 @@ public class LeaderCardDeck {
         this.leaderCardsDeck[7] = new ExtraProductionPowerLeaderCard(new DevelopmentCard("GREEN",2),
                 "COINS");
 
+        //Creation of ExtraWarehouseSpaceLeaderCards
         this.leaderCardsDeck[8] = new ExtraWarehouseSpaceLeaderCard("COINS","STONES");
         this.leaderCardsDeck[9] = new ExtraWarehouseSpaceLeaderCard("STONES","SERVANTS");
         this.leaderCardsDeck[10] = new ExtraWarehouseSpaceLeaderCard("SERVANTS","SHIELDS");
         this.leaderCardsDeck[11] = new ExtraWarehouseSpaceLeaderCard("SHIELDS","COINS");
 
+        //Creation of WhiteMarbleResourceLeaderCards
         this.leaderCardsDeck[12] = new WhiteMarbleResourceLeaderCard("YELLOW",
                 "BLUE",
                 "SERVANTS");
@@ -60,6 +72,9 @@ public class LeaderCardDeck {
                 "COINS");
     }
 
+    /**
+     * This method shuffles the LeaderCards array and returns the first card
+     */
     public LeaderCard drawOneLeaderCard(){
         LeaderCard leaderCardDrawn = this.leaderCardsDeck[0];
         List<LeaderCard> leaderCardList = Arrays.asList(this.leaderCardsDeck);

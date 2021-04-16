@@ -94,5 +94,6 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
         while(player.getPlayerboard().getResourceMarbles()[i]!=null)
             i++;
         player.getPlayerboard().getResourceMarbles()[i]=this.whiteMarbleResource;
+        this.setPlayed(true);
     }
 }

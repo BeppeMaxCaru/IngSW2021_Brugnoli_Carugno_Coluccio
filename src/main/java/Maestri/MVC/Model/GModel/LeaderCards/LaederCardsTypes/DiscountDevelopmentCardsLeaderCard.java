@@ -47,5 +47,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     @Override
     public void activateAbility(Player player) {
         //player.getPlayerboard().;
+        this.setPlayed(true);
     }
 }

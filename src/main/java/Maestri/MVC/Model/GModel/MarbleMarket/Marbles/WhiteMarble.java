@@ -9,6 +9,9 @@ import java.util.Scanner;
  */
 public class WhiteMarble extends Marble {
 
+    /**
+     * This method checks if the player has ResourceMarbles to be collected instead of WhiteMarbles
+     */
     @Override
     public void drawMarble(Player[] players, int playerNumber) {
         int chosenMarble=-1;
