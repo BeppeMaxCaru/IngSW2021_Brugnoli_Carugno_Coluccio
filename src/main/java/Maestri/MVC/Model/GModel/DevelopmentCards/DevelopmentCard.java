@@ -1,5 +1,7 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
+import Maestri.MVC.Model.GModel.GameModel;
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.util.HashMap;

@@ -75,7 +75,7 @@ public class FaithPath {
     public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
         if(discardVaticanCard.get(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints()) != 0) {
             if (crossPosition > crossPositionPlayerX || faithPath[crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
-                playerboard.setVictoryPoints(faithPath[crossPositionPlayerX].getVictoryPoints());
+                playerboard.sumVictoryPoints(faithPath[crossPositionPlayerX].getVictoryPoints());
             else
                 discardVaticanCard.put(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints(), 0);
         }

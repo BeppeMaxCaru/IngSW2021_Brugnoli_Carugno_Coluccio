@@ -407,11 +407,12 @@ public class Player {
     public int numResourcesReserve() {
         int numResources = 0;
 
-        for(String key: getPlayerboard().getWareHouse().getWarehouseResources().keySet())
+        for(String key: getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
             numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get(key);
+            numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get("extra" + key);
+        }
         for(String key: getPlayerboard().getChest().getChestResources().keySet())
             numResources = numResources + getPlayerboard().getChest().getChestResources().get(key);
-        // ExtraWarehouse ??
 
         return numResources;
     }
