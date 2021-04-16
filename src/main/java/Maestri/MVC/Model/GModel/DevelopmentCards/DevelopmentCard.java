@@ -119,53 +119,32 @@ public class DevelopmentCard {
     //faccio avvenire il pagamento direttamente nella playerboard
     public void payDevelopmentCard(Playerboard playerboard) {
 
-        if (!checkResourcesAvailability(playerboard, this.cost)) {
-            System.out.println("Not enough resources to buy card");
-            System.out.println("");
-
-        } else if (checkResourcesAvailability(playerboard, this.cost)) {
-            Map<String, Integer> reourcesToPay = new HashMap<>();
-            playerboard.placeNewDevelopmentCard(this);
-            while (!reourcesToPay.equals(this.cost)) {
-                //Metodo da aggiungere in playerboard che conitnua a fare pescare il giocatore
-                //da dove vuole finchè non raggiunge le risorse richieste dallo scambio
-                //playerboard.pickResource()
+        //Toglie al player le risorse nella mappa
+        for (String key : this.cost.keySet()) {
+            int resourcesToRemove = this.cost.get(key);
+            for (int i=0;i<resourcesToRemove;i++) {
+                playerboard.pickResourceToPay(key);
             }
-            //Qui non serve aggiornare la chest come dopo la produzione
-            //ma, una volta tolte le risorse da chest e warehouse si dà
-            //la carta da mettere su una delle 3 pile della playerboard
-            //e le risorse collezionate si "buttano"
-            //Metodo da aggiungere con cui posizionare la carta
-            //E si controlla nel metodo che la carta su cui viene posizionata
-            //la nuova carta acquistata è compatibile con quella nuova appena acquistata
-            //Playerboard.getDevelopmentCards.putOnTop(this)
         }
     }
 
-    public boolean activateProduction(Playerboard playerboard) {
+    public void activateProduction(Playerboard playerboard) {
 
-        if (!checkResourcesAvailability(playerboard, this.input)) {
-            System.out.println("Not enough resources to activate production");
-            return false;
-        } else {
-            Map<String, Integer> resourcesToTrade = new HashMap<>();
-            while (!resourcesToTrade.equals(this.input)) {
-                //Metodo da aggiungere in playerboard che conitnua a fare pescare il giocatore
-                //da dove vuole finchè non raggiunge le risorse richieste dallo scambio
-                //playerboard.pickResource()
+            //Toglie al player le risorse nella mappa
+        for (String key : this.input.keySet()) {
+            int resourcesToRemove = this.input.get(key);
+            for (int i=0;i<resourcesToRemove;i++) {
+                playerboard.pickResourceToPay(key);
             }
-            //Controllare siccome delicatissimo!!!!!!!
-            //Per essere corretto le risorse di pickResource vanno tolte
-            //completamente dalla playerboard siccome questa lambda function
-            //somma le risorse ottenute dalla produzione a quelle presenti in chest
-            //da cui bisogna aver tolto quelle prese per lo scambio
-            //chestResourcesNow = chestResourcesBefore - resourcesPickedFromChest + output
-            playerboard.getFaithPath().moveCross(this.faithPoints);
-            Map<String, Integer> resourcesAfterProduction = playerboard.getChest().getChestResources();
-            this.output.forEach((key, value) -> resourcesAfterProduction.merge(key, value, Integer::sum));
-            playerboard.getChest().setChestResources(resourcesAfterProduction);
         }
-        return true;
+        //playerboard.pickResourceToPay(this.input);
+
+        //unisco output a chest!
+        playerboard.getFaithPath().moveCross(this.faithPoints);
+        Map<String, Integer> resourcesAfterProduction = playerboard.getChest().getChestResources();
+        this.output.forEach((key, value) -> resourcesAfterProduction.merge(key, value, Integer::sum));
+        playerboard.getChest().setChestResources(resourcesAfterProduction);
+
     }
 
     public void printDevelopmentCard() {

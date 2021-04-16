@@ -214,18 +214,13 @@ public class Player {
 
         if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
             if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
-                Map<String, Integer> resourcesToPay = developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost();
+                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerboard);
+
                 playerboard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
                 //aggiungere remove per togliere la carta
                 List<DevelopmentCard> reducedDeck = Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
                 reducedDeck.remove(0);
                 developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
-                //Bisogna togliere qui le risorse al player
-                //!!!!!!!!!!!!!!!!!!!!!!!!
-                //Alice personalizza questo metodo
-                //this.playerboard.pickResource(resourcesToPay);
-                //payDevelopmentCard
-                //!!!!!!!!!!!!!!!!!!!!!!
                 return true;
             } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
                 return false;
