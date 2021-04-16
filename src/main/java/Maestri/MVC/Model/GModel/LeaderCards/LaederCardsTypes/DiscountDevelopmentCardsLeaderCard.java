@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
 
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
@@ -43,4 +44,8 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         return check;
     }
 
+    @Override
+    public void activateAbility(Player player) {
+        //player.getPlayerboard().;
+    }
 }

@@ -18,6 +18,9 @@ public class Playerboard {
     private FaithPath faithPath;
     private int victoryPoints;
 
+    private String[] leaderCardsDiscounts = new String[2];
+    private String[] whiteMarblePossibleResources = new String[2];
+
     //Update Giuseppe: synchronizing DevelopmentCards in playerboard
     public Playerboard(DevelopmentCard[] playerboardDevelopmentCard, Chest chest, WareHouse wareHouse, FaithPath faithPath, int victoryPoints) {
         this.developmentCardsBought = 0;
@@ -88,9 +91,35 @@ public class Playerboard {
         victoryPoints = victoryPoints + i;
     }
 
+    public String[] getLeaderCardsDiscounts() {
+        return this.leaderCardsDiscounts;
+    }
+
+    public void addLeaderCardsDiscounts(String discount) {
+        for (int i=0;i<this.leaderCardsDiscounts.length;i++) {
+            if (this.leaderCardsDiscounts[i].equals(null)) {
+                this.leaderCardsDiscounts[i] = discount;
+                return;
+            }
+        };
+    }
+
+    public String[] getWhiteMarblePossibleResources() {
+        return this.whiteMarblePossibleResources;
+    }
+
+    public void addWhiteMarblePossibleResources(String possibleResources) {
+        for (int i=0;i<this.whiteMarblePossibleResources.length;i++) {
+            if (this.whiteMarblePossibleResources[i].equals(null)) {
+                this.whiteMarblePossibleResources[i] = possibleResources;
+                return;
+            }
+        };
+    }
+
     /** This method picks resources from warehouse/chest to pay the player's development cards. */
 
-    public void pickResource(String resource) {
+    public void pickResourceToPay(String resource) {
         int fromWhat = -1;
         int numResources;
         Scanner in = new Scanner(System.in);
@@ -183,23 +212,19 @@ public class Playerboard {
         }
 
         // output
-        while (resourceOutputNum < 0 || resourceOutputNum > 4) {
-            System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
+        while (resourceOutputNum < 0 || resourceOutputNum > 3) {
+            System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
             resourceOutputNum = in.nextInt();
         }
 
-        if(resourceOutputNum == 4)
-            resourceChoice.add("REDCROSS");
-        else {
-            i = 0;
-            for (String key : chest.getChestResources().keySet()) {
-                if (i == resourceOutputNum) {
-                    resourceChoice = new ArrayList<>();
-                    resourceChoice.add(key);
-                    break;
-                }
-                i++;
+        i = 0;
+        for (String key : chest.getChestResources().keySet()) {
+            if (i == resourceOutputNum) {
+                resourceChoice = new ArrayList<>();
+                resourceChoice.add(key);
+                break;
             }
+            i++;
         }
 
         return resourceChoice;
