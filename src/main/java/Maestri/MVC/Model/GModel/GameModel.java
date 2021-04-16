@@ -116,6 +116,8 @@ public class GameModel {
         }
     }
 
+    /** This method proclaims the winner. */
+
     public int checkWinner() {
         int maxVictoryPoints = 0;
         int playerWithMaxVictoryPoints = 0;
@@ -126,7 +128,8 @@ public class GameModel {
                 playerWithMaxVictoryPoints = i;
             }
             else if(maxVictoryPoints == getPlayers()[i].sumAllVictoryPoints()) {
-                // Confronto tra riserve
+                if(getPlayers()[i].numResourcesReserve() > getPlayers()[playerWithMaxVictoryPoints].numResourcesReserve())
+                    playerWithMaxVictoryPoints = i;
             }
         }
 

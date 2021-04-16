@@ -382,14 +382,21 @@ public class Player {
         // Punti dalle carte leader.
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
+        numResources = numResources + numResourcesReserve();
+        victoryPoints = victoryPoints + numResources / 5;
+
+        return victoryPoints;
+    }
+
+    public int numResourcesReserve() {
+        int numResources = 0;
+
         for(String key: getPlayerboard().getWareHouse().getWarehouseResources().keySet())
             numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get(key);
         for(String key: getPlayerboard().getChest().getChestResources().keySet())
             numResources = numResources + getPlayerboard().getChest().getChestResources().get(key);
         // ExtraWarehouse ??
 
-        victoryPoints = victoryPoints + numResources / 5;
-
-        return victoryPoints;
+        return numResources;
     }
 }
