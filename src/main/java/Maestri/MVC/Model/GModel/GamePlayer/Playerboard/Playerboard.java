@@ -1,7 +1,7 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.Marble;
 
 import java.util.*;
 
@@ -17,6 +17,7 @@ public class Playerboard {
     private WareHouse wareHouse;
     private FaithPath faithPath;
     private int victoryPoints;
+    private Marble[] resourceMarbles;
 
     private String[] leaderCardsDiscounts = new String[2];
     private String[] whiteMarblePossibleResources = new String[2];
@@ -32,6 +33,14 @@ public class Playerboard {
         this.wareHouse = wareHouse;
         this.faithPath = faithPath;
         this.victoryPoints = victoryPoints;
+        this.resourceMarbles = new Marble[2];
+    }
+
+    /**
+     * This method returns which Marbles player has to pick instead of WhiteMarbles
+     */
+    public Marble[] getResourceMarbles(){
+        return this.resourceMarbles;
     }
 
     public int getDevelopmentCardsBought() {

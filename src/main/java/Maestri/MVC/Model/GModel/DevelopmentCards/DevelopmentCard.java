@@ -125,7 +125,7 @@ public class DevelopmentCard {
         for (String key : this.cost.keySet()) {
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResourceToPay(key);
+                playerboard.pickResource(key);
             }
         }
     }
@@ -136,7 +136,7 @@ public class DevelopmentCard {
         for (String key : this.input.keySet()) {
             int resourcesToRemove = this.input.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResourceToPay(key);
+                playerboard.pickResource(key);
             }
         }
 
