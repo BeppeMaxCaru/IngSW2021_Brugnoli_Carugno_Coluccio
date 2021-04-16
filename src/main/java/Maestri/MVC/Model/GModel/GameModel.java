@@ -109,7 +109,8 @@ public class GameModel {
         for(int i = 0; i < players.length; i++) {
             if(getPlayers()[i].getPlayerboard().getFaithPath().getCrossPosition() == 24 || getPlayers()[i].getPlayerboard().getDevelopmentCardsBought() == 7) {
                 {
-                    // Tutti i giocatori fino al giocatore a destra del primo giocatore giocano il loro ultimo turno.
+                    // Tutti i giocatori fino al giocatore a destra del primo giocatore giocano il loro ultimo turno. Come si fa??
+
                     checkWinner();
                 }
             }
