@@ -29,6 +29,9 @@ public class DevelopmentCard {
                            int faithPoints,
                            int victoryPoints) {
 
+        this.colour = colour;
+        this.level = level;
+
         this.cost = new HashMap<String, Integer>();
         this.cost.put("COINS", coinsCost);
         this.cost.put("STONES", stonesCost);
@@ -46,6 +49,9 @@ public class DevelopmentCard {
         this.output.put("STONES", stonesOutput);
         this.output.put("SERVANTS", servantsOutput);
         this.output.put("SHIELDS", shieldsOutput);
+
+        this.faithPoints = faithPoints;
+        this.victoryPoints = victoryPoints;
 
     }
 
