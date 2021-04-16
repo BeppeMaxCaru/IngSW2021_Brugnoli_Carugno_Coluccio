@@ -90,7 +90,7 @@ public class Playerboard {
 
     /** This method picks resources from warehouse/chest to pay the player's development cards. */
 
-    public void pickResourceToPayDevCard(String resource) {
+    public void pickResource(String resource) {
         int fromWhat = -1;
         int numResources;
         Scanner in = new Scanner(System.in);
@@ -183,19 +183,23 @@ public class Playerboard {
         }
 
         // output
-        while (resourceOutputNum < 0 || resourceOutputNum > 3) {
-            System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+        while (resourceOutputNum < 0 || resourceOutputNum > 4) {
+            System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
             resourceOutputNum = in.nextInt();
         }
 
-        i = 0;
-        for (String key : chest.getChestResources().keySet()) {
-            if (i == resourceOutputNum) {
-                resourceChoice = new ArrayList<>();
-                resourceChoice.add(key);
-                break;
+        if(resourceOutputNum == 4)
+            resourceChoice.add("REDCROSS");
+        else {
+            i = 0;
+            for (String key : chest.getChestResources().keySet()) {
+                if (i == resourceOutputNum) {
+                    resourceChoice = new ArrayList<>();
+                    resourceChoice.add(key);
+                    break;
+                }
+                i++;
             }
-            i++;
         }
 
         return resourceChoice;

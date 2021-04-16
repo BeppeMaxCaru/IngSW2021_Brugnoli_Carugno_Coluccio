@@ -65,6 +65,8 @@ public class DevelopmentCard {
 
     public Map<String, Integer> getDevelopmentCardOutput() {return this.output; }
 
+    public int getFaithPoints() { return this.faithPoints; }
+
     public boolean checkResourcesAvailability(Playerboard playerboard, Map<String, Integer> requirements) {
 
         Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();

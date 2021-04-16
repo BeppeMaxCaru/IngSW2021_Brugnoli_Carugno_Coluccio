@@ -241,6 +241,7 @@ public class Player {
         int i, j;
         int numResource;
         int activateProduction = -1;
+        int redCross = 0;
         Scanner in = new Scanner(System.in);
         Map<String, Integer> inputResources = new HashMap<>();
         inputResources.put("COINS", 0);
@@ -271,9 +272,12 @@ public class Player {
                     numResource = outputResources.get(key);
                     outputResources.put(key, numResource + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
                 }
+                // Aggiunta alla conta totale i redCross.
+                redCross = redCross + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
             }
         }
 
+        // Chiede se vuole attivare il potere di produzione base.
         activateProduction = -1;
         while(activateProduction != 0 && activateProduction != 1) {
             System.out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
@@ -282,9 +286,14 @@ public class Player {
         if(activateProduction == 1) {
             i = 0;
             for(String s : getPlayerboard().activateBasicProductionPower()) {
-                if(i == 2) {
-                    numResource = outputResources.get(s);
-                    outputResources.put(s, numResource + 1);
+                if(i == 2) { // Se siamo alla terza risorsa, che per forza è l'output...
+                    if(s.equals("REDCROSS"))
+                        // Aggiunta alla conta totale i redCross.
+                        redCross = redCross + 1;
+                    else {
+                        numResource = outputResources.get(s);
+                        outputResources.put(s, numResource + 1);
+                    }
                 }
                 else {
                     numResource = inputResources.get(s);
@@ -294,10 +303,23 @@ public class Player {
             }
         }
 
+        // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
         if(devCard.checkResourcesAvailability(playerboard, inputResources)) {
-            // Devo finire
+            for(String key: inputResources.keySet()) {
+                numResource = inputResources.get(key);
+                for(i = 0; i < numResource; i++)
+                    playerboard.pickResource(key);
+            }
         }
 
+        // Aggiungi risorse al chest.
+        for(String key: outputResources.keySet()) {
+            numResource = getPlayerboard().getChest().getChestResources().get(key);
+            getPlayerboard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
+        }
+
+        //RedCross
+        getPlayerboard().getFaithPath().moveCross(redCross);
     }
 
     /** This method asks the player if he wants to do a leader action. */
