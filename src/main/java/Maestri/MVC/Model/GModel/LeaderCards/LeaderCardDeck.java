@@ -74,6 +74,14 @@ public class LeaderCardDeck {
     }
 
     /**
+     * Returns the initial leader cards deck
+     * @return the initial leader cards deck
+     */
+    public LeaderCard[] getLeaderCardsDeck() {
+        return this.leaderCardsDeck;
+    }
+
+    /**
      * Shuffles the leader card deck and returns the first leader card
      */
     public LeaderCard drawOneLeaderCard(){

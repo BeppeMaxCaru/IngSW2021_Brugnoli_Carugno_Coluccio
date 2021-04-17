@@ -37,12 +37,11 @@ public class Player {
      * Initializes a new player
      * @param nickname - nickname to assign to the player
      * @param playerNumber - index to track the player order
-     * @param playerBoard - pl
      */
-    public Player(String nickname, Integer playerNumber, Playerboard playerBoard) {
+    public Player(String nickname, Integer playerNumber) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
-        this.playerBoard = playerBoard;
+        this.playerBoard = new Playerboard();
         this.playerLeaderCards = new LeaderCard[4];
     }
 

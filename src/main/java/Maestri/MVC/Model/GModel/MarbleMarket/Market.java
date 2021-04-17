@@ -75,6 +75,14 @@ public class Market {
     }
 
     /**
+     * Returns the current market state
+     * @return the current market state
+     */
+    public Marble[][] getMarketArrangement() {
+        return this.marketArrangement;
+    }
+
+    /**
      * Updates the market after a player draws marbles from a row
      * @param row          - row from where the player draws the marbles
      * @param players      - players playing the game

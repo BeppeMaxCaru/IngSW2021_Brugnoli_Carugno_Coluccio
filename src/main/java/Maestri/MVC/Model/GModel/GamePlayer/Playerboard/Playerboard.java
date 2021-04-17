@@ -41,16 +41,16 @@ public class Playerboard {
     private String[] whiteMarblePossibleResources = new String[2];
 
     //Update Giuseppe: synchronizing DevelopmentCards in playerboard
-    public Playerboard(DevelopmentCard[] playerboardDevelopmentCard, Chest chest, WareHouse wareHouse, FaithPath faithPath, int victoryPoints) {
+    public Playerboard() {
         this.developmentCardsBought = 0;
         //this.playerboardDevelopmentCards = playerDevelopmentCards;
 
         this.playerboardDevelopmentCards = new DevelopmentCard[3][3];
 
-        this.chest = chest;
-        this.wareHouse = wareHouse;
-        this.faithPath = faithPath;
-        this.victoryPoints = victoryPoints;
+        this.chest = new Chest();
+        this.wareHouse = new WareHouse();
+        this.faithPath = new FaithPath();
+        this.victoryPoints = 0;
     }
 
     /**
