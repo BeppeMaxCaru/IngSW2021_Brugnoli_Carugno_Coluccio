@@ -45,8 +45,8 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
         Scanner in = new Scanner(System.in);
 
-        numWarehouseResources = player.getPlayerboard().getWareHouse().getWarehouseResources().get(this.input);
-        numChestResources = player.getPlayerboard().getChest().getChestResources().get(this.input);
+        numWarehouseResources = player.getPlayerBoard().getWareHouse().getWarehouseResources().get(this.input);
+        numChestResources = player.getPlayerBoard().getChest().getChestResources().get(this.input);
 
         while(i > 0) {
             if((numChestResources>0)&&(numWarehouseResources>0))
@@ -62,12 +62,12 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
                 fromWhat=1;
 
             if(fromWhat == 0 ) {
-                    numResources = player.getPlayerboard().getWareHouse().getWarehouseResources().get(input);
-                    player.getPlayerboard().getWareHouse().getWarehouseResources().put(input, numResources - 1);
+                    numResources = player.getPlayerBoard().getWareHouse().getWarehouseResources().get(input);
+                    player.getPlayerBoard().getWareHouse().getWarehouseResources().put(input, numResources - 1);
             }
             else{
-                numResources = player.getPlayerboard().getChest().getChestResources().get(input);
-                player.getPlayerboard().getChest().getChestResources().put(input, numResources - 1);
+                numResources = player.getPlayerBoard().getChest().getChestResources().get(input);
+                player.getPlayerBoard().getChest().getChestResources().put(input, numResources - 1);
             }
             i--;
         }
@@ -78,16 +78,16 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
         }
 
         i = 0;
-        for (String key : player.getPlayerboard().getChest().getChestResources().keySet()) {
+        for (String key : player.getPlayerBoard().getChest().getChestResources().keySet()) {
             if(i == resourceOutputNum) {
-                numResources = player.getPlayerboard().getChest().getChestResources().get(key);
-                player.getPlayerboard().getChest().getChestResources().put(key, numResources + 1);
+                numResources = player.getPlayerBoard().getChest().getChestResources().get(key);
+                player.getPlayerBoard().getChest().getChestResources().put(key, numResources + 1);
                 break;
             }
             i++;
         }
 
-        player.getPlayerboard().getFaithPath().moveCross(1);
+        player.getPlayerBoard().getFaithPath().moveCross(1);
 
         this.setPlayed(true);
     }

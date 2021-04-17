@@ -3,6 +3,7 @@ package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
 /**
@@ -40,7 +41,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
                 this.whiteMarbleResource = new GreyMarble();
                 break;
             case "SERVANTS":
-                this.whiteMarbleResource = new VioletMarble();
+                this.whiteMarbleResource = new PurpleMarble();
                 break;
             case "SHIELDS":
                 this.whiteMarbleResource = new BlueMarble();
@@ -91,9 +92,9 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
     @Override
     public void activateAbility(Player player) {
         int i=0;
-        while(player.getPlayerboard().getResourceMarbles()[i]!=null)
+        while(player.getPlayerBoard().getResourceMarbles()[i]!=null)
             i++;
-        player.getPlayerboard().getResourceMarbles()[i]=this.whiteMarbleResource;
+        player.getPlayerBoard().getResourceMarbles()[i]=this.whiteMarbleResource;
         this.setPlayed(true);
     }
 }

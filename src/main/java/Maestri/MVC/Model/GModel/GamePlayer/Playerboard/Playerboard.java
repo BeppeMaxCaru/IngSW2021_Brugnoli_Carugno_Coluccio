@@ -1,7 +1,7 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
-import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.Marble;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.util.*;
 

@@ -1,7 +1,5 @@
 package Maestri.MVC.Model.GModel;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Cell;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
@@ -12,10 +10,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Represents the state of game "Maestri del Rinascimento"
+ */
 public class GameModel {
 
     int numberOfPlayers;
     private Player[] players;
+    int currentPlayer;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private LeaderCardDeck leaderCardDeck;
     private Market market;
@@ -48,7 +50,7 @@ public class GameModel {
     public void setStartingLeaderCards() {
         for (int i=0;i<4;i++) {
             for (int j=0;j<this.numberOfPlayers;j++) {
-                this.players[j].setPlayerLeaderCards(i, this.leaderCardDeck.drawOneLeaderCard());
+                this.players[j].setPlayerLeaderCard(i, this.leaderCardDeck.drawOneLeaderCard());
             }
         }
     }
@@ -100,8 +102,8 @@ public class GameModel {
 
     public void relationWithVatican(int crossPosition) {
         for(int i = 0; i < players.length; i++) {
-            if(getPlayers()[i].getPlayerboard().getFaithPath().getFaithPath()[crossPosition].isPopeSpace())
-                getPlayers()[i].getPlayerboard().getFaithPath().checkRelationWithVatican(crossPosition, getPlayers()[i].getPlayerboard());
+            if(getPlayers()[i].getPlayerBoard().getFaithPath().getFaithPath()[crossPosition].isPopeSpace())
+                getPlayers()[i].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, getPlayers()[i].getPlayerBoard());
         }
     }
 

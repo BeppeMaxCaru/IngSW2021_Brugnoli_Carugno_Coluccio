@@ -68,9 +68,9 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     public void activateAbility(Player player) {
         int i=0;
         //Check the correct position of the array and insert the Resource discount
-        while(player.getPlayerboard().getDevelopmentCardDiscount()[i]!=null)
+        while(player.getPlayerBoard().getDevelopmentCardDiscount()[i]!=null)
             i++;
-        player.getPlayerboard().getDevelopmentCardDiscount()[i]=this.discount;
+        player.getPlayerBoard().getDevelopmentCardDiscount()[i]=this.discount;
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }
