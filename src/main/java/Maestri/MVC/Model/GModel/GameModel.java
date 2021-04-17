@@ -86,6 +86,10 @@ public class GameModel {
         this.players[index].pickLineFromMarket(this.market, this.players);
     }
 
+    /**
+     * This method sets each player number, randomly.
+     */
+
     public void setPlayersNumber() {
         List<Integer> numbers = new ArrayList<>(getPlayers().length);
         int j = 0;
@@ -108,12 +112,16 @@ public class GameModel {
     }
 
     public void checkEndPlay(int playerNumber) {
+        // Try/Catch??
         // Tutti i giocatori fino al giocatore a destra del primo giocatore giocano il loro ultimo turno. Come si fa??
 
         checkWinner();
     }
 
-    /** This method proclaims the winner. */
+    /**
+     * This method proclaims the winner.
+     * @return the winner's player number.
+     */
 
     public int checkWinner() {
         int maxVictoryPoints = 0;

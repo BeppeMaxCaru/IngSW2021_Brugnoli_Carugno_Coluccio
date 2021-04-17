@@ -7,15 +7,32 @@ import java.util.*;
 
 
 public class Playerboard {
-
+    /**
+     * Number of development cards bought.
+     */
     private int developmentCardsBought;
     //private DevelopmentCard[] playerboardDevelopmentCards;
+    /**
+     * Decks of development cards.
+     */
     private DevelopmentCard[][] playerboardDevelopmentCards;
+    /**
+     * Infinity reserve of resources.
+     */
     //Mappa da aggiungere con tutti i depositi disponibili
     //private Map<Integer, Deposits> availablePlayerboardDeposits;
     private Chest chest;
+    /**
+     * Reserve of resources with arrengement rules.
+     */
     private WareHouse wareHouse;
+    /**
+     * Path where you put your red cross.
+     */
     private FaithPath faithPath;
+    /**
+     * Numbers of victory points gets during the play.
+     */
     private int victoryPoints;
     private final Marble[] resourceMarbles = new Marble[2];
     private final String[] developmentCardDiscount =new String[2];
@@ -185,7 +202,10 @@ public class Playerboard {
         }
     }
 
-    /** This method activates the basic production power of the playerboard. */
+    /**
+     * This method activates the basic production power of the playerboard.
+     * @return a list where in the first two positions there are the resources he wants to discard, in the last the resources he wants.
+     */
 
     public List<String> activateBasicProductionPower() {
         int resourceOutputNum = -1;
