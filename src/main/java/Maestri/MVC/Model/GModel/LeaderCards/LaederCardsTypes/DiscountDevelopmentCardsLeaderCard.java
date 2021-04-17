@@ -5,22 +5,29 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 /**
- * These LeaderCards allow players to pay DevelopmentCards 1 resource less than their cost
+ * This leader card allows players to pay development cards 1 resource less than their cost
  */
 public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     /**
-     * Array that contains the two colours of required cards for the activation
+     * Contains the two colours of the development cards required to play the leader card
      */
     private final String[] requisite;
 
     /**
-     * Resource to be discounted
+     * Resource to discount
      */
     private final String discount;
 
     /**
      * Constructor associates inputs by LeaderCardDeck to attributes of the class
+     */
+
+    /**
+     * Initializes this leader card type
+     * @param firstRequiredDevelopmentCard - first development card's colour required
+     * @param secondRequiredDevelopmentCard - second development card's colour required
+     * @param resource - resource to discount
      */
     public DiscountDevelopmentCardsLeaderCard(String firstRequiredDevelopmentCard,
                                               String secondRequiredDevelopmentCard,
@@ -37,7 +44,9 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     }
 
     /**
-     * Control if the player owns DevelopmentCards of specific colours
+     * Checks if the player can play the leader card
+     * @param playerboard - player's player board
+     * @return true if the player satisfies the requisites to play the card
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
@@ -62,7 +71,8 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     }
 
     /**
-     * This method give to the player his personal discounts
+     * Gives to the player the perk to discount one resource from the cost of the development card to buy
+     * @param player - player playing the leader card
      */
     @Override
     public void activateAbility(Player player) {

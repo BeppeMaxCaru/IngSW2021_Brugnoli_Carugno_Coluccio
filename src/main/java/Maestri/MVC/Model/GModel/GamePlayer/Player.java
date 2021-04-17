@@ -12,18 +12,22 @@ import java.util.*;
  * Represents a player with all its information
  */
 public class Player {
+
     /**
      * Name that the player chooses to join the game
      */
     private String nickname;
+
     /**
      * Order in which the player joined the game
      */
     private Integer playerNumber;
+
     /**
      * Player board that the player is using to play the game
      */
     private Playerboard playerBoard;
+
     /**
      * Leader cards that the player has available
      */

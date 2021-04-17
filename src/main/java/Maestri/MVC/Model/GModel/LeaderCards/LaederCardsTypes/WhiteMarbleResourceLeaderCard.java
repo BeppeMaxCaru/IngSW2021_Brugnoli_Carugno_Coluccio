@@ -7,22 +7,25 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
 /**
- * These LeaderCards allow players to collect resources instead of WhiteMarbles
+ * This leader card allows players to receive one resource from the white marble
  */
 public class WhiteMarbleResourceLeaderCard extends LeaderCard {
 
     /**
-     * Array that contains the two colours of required cards for the activation
+     * Contains the two colours of the development cards required to play the leader card
      */
     private final String[] requisite;
 
     /**
-     * Marble in which the player converts white marbles
+     * Marble in which the player can convert white marble
      */
     private final Marble whiteMarbleResource;
 
     /**
-     * Constructor associates inputs by LeaderCardDeck to attributes of the class
+     * Initializes this leader card type
+     * @param firstRequiredDevelopmentCard - first development card's colour required
+     * @param secondRequiredDevelopmentCard - second development card's colour required
+     * @param resourceFromWhiteMarble - resource to receive from white marble
      */
     public WhiteMarbleResourceLeaderCard(String firstRequiredDevelopmentCard,
                                          String secondRequiredDevelopmentCard,
@@ -49,10 +52,13 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
             default:
                 this.whiteMarbleResource = new WhiteMarble();
         }
-
-
     }
 
+    /**
+     * Checks if the player can play the leader card
+     * @param playerboard - player's player board
+     * @return true if the player satisfies the requisites to play the card
+     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;
@@ -89,6 +95,10 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
         return check;
     }
 
+    /**
+     * Gives to the player the perk to receive one resource from the white marble instead of nothing
+     * @param player - player playing the leader card
+     */
     @Override
     public void activateAbility(Player player) {
         int i=0;

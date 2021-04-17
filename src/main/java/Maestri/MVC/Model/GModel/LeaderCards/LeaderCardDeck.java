@@ -10,16 +10,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class contains all the LeaderCards to be given to players
+ * Contains all the available leader cards of the game
  */
 public class LeaderCardDeck {
+
     /**
-     * Array that contains all the initial LeaderCards
+     * Contains all the initial leader cards
      */
     private LeaderCard[] leaderCardsDeck;
 
     /**
-     * Constructor creates LeaderCards and puts them in the attribute
+     * Initializes the entire leader cards starting deck
      */
     public LeaderCardDeck(){
         this.leaderCardsDeck = new LeaderCard[16];
@@ -73,7 +74,7 @@ public class LeaderCardDeck {
     }
 
     /**
-     * This method shuffles the LeaderCards array and returns the first card
+     * Shuffles the leader card deck and returns the first leader card
      */
     public LeaderCard drawOneLeaderCard(){
         LeaderCard leaderCardDrawn = this.leaderCardsDeck[0];

@@ -3,20 +3,24 @@ package Maestri.MVC.Model.GModel.LeaderCards;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
+/**
+ * Composes the leader card deck
+ */
 public class LeaderCard {
 
     /**
-     * Attribute that indicates if LeaderCard is been played by the player
+     * True if the leader card has been played
      */
     private boolean played;
 
     /**
-     * Attribute that indicates victoryPoints of the LeaderCard
+     * Victory points of the leader card
      */
     private final int victoryPoints;
 
     /**
-     * Constructor assigns inpun victoryPoints to the associate attribute and sets that LeaderCard isn't played yet
+     * Initializes the leader card as not played and assigns its victory points
+     * @param victoryPoints - victory points to assign to the leader card
      */
     public LeaderCard(int victoryPoints) {
         this.played=false;
@@ -24,32 +28,46 @@ public class LeaderCard {
     }
 
     /**
-     * This method returns if LeaderCard is been played
+     * Returns true if the leader card has been played
      */
     public boolean isPlayed() {
         return this.played;
     }
 
     /**
-     * This method sets the playing of the LeaderCard
+     * Sets the leader card as played
      */
     public void setPlayed(boolean play){
         this.played=play;
     }
 
+    /**
+     * Returns the leader card's victory points
+     * @return the leader card's victory points
+     */
     public int getVictoryPoints(){
         return this.victoryPoints;
     }
 
+    /**
+     * Checks if the player has on his player board the requisites needed to play the leader card
+     * @param playerboard - player's player board
+     * @return true if the player can play the leader card
+     */
     public boolean checkRequisites(Playerboard playerboard) {
         return false;
     }
 
+    /**
+     * Gives the permanent perk of the leader card to the player
+     * @param player - player playing the leader card
+     */
     public void activateAbility(Player player) {
     }
 
     /**
-     * If the player chooses to discard one LeaderCard, he obtains 1 faithPoint
+     * Moves the player's red cross one cell forward on the faith path if the player chooses to discard the leader card
+     * @param playerboard - player's player board
      */
     public void discard(Playerboard playerboard) {
         playerboard.getFaithPath().moveCross(1);
