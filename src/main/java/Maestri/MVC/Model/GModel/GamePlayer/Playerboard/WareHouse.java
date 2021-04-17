@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class WareHouse {
-
+    /**
+     * A map where you can find resources and the relative quantity in the warehouse.
+     */
     public Map <String, Integer> warehouseResources;
 
     public WareHouse() {
@@ -16,9 +18,18 @@ public class WareHouse {
         warehouseResources.put("STONES", 0);
     }
 
+    /**
+     * @return a map where you can find resources and the relative quantity in the warehouse.
+     */
+
     public Map <String, Integer> getWarehouseResources() {
         return this.warehouseResources;
     }
+
+    /**
+     * this method sets the warehouse's resources.
+     * @param warehouseResources a map where you can find resources and the relative quantity in the warehouse
+     */
 
     public void setWarehouseResources(Map <String, Integer> warehouseResources) {
         this.warehouseResources = warehouseResources;

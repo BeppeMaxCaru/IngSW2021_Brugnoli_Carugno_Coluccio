@@ -303,8 +303,8 @@ public class Player {
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /**
-     *
-     * @param devCard -
+     * This method activates the production on the player's playerboard.
+     * @param devCard the development cards on the playerboard.
      */
     public void activateProduction(DevelopmentCard devCard) {
         int i, j;
@@ -317,7 +317,6 @@ public class Player {
         inputResources.put("SHIELDS", 0);
         inputResources.put("SERVANTS", 0);
         inputResources.put("STONES", 0);
-        // Red Cross???
         Map<String, Integer> outputResources = new HashMap<>();
         outputResources.put("COINS", 0);
         outputResources.put("SHIELDS", 0);
@@ -391,7 +390,10 @@ public class Player {
         getPlayerBoard().getFaithPath().moveCross(redCross);
     }
 
-    /** This method asks the player if he wants to do a leader action. */
+    /**
+     * This method asks the player if he wants to do a leader action.
+     * @return 1 if the player want to do a leader action, 0 if he doesn't.
+     */
 
     public int getLeaderAction( ) {
         Scanner in = new Scanner(System.in);
@@ -404,6 +406,10 @@ public class Player {
 
         return leaderActionNum;
     }
+
+    /**
+     * This method allows the player to play a leader card.
+     */
 
     public void playLeaderCard() {
         Scanner in = new Scanner(System.in);
@@ -423,7 +429,9 @@ public class Player {
         }
     }
 
-    /** This method allows the player to discard a leader card. */
+    /**
+     * This method allows the player to discard a leader card.
+     * */
 
     public void discardLeaderCard() {
         Scanner in = new Scanner(System.in);
@@ -445,6 +453,11 @@ public class Player {
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
     }
 
+    /**
+     * This method sums all the player's victory points at the end of the play.
+     * @return the number of victory points.
+     */
+
     public int sumAllVictoryPoints() {
         int victoryPoints = 0;
         int numResources = 0;
@@ -453,7 +466,7 @@ public class Player {
         victoryPoints = victoryPoints + getPlayerBoard().getVictoryPoints();
 
         // Punti dalla posizione della croce.
-        victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getVictoryPoints();
+        victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getFaithPath()[getPlayerBoard().getFaithPath().getCrossPosition()].getVictoryPoints();
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
         numResources = numResources + numResourcesReserve();
@@ -461,6 +474,11 @@ public class Player {
 
         return victoryPoints;
     }
+
+    /**
+     * This method sums all the resources in chest, warehouse and extrawarehouse at the end of the play.
+     * @return the number of resources.
+     */
 
     public int numResourcesReserve() {
         int numResources = 0;
