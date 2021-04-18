@@ -18,8 +18,6 @@ public class Test_DevelopmentCard {
                 2,4);
 
         assertEquals(card.getDevelopmentCardLevel(), testDevelopmentCard.getDevelopmentCardLevel());
-
-
     }
 
 }

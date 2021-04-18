@@ -43,14 +43,14 @@ public class ServerMain {
         }
 
         String s = "";
-        try {
+        /*try {
             while ((s=in.readLine()) != null) {
                 System.out.println(s);
             }
         } catch (IOException e) {
             e.printStackTrace();
             //Gestire
-        }
+        }*/
 
 
     }
