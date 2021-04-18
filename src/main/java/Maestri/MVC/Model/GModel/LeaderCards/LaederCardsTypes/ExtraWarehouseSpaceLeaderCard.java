@@ -52,7 +52,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
      */
     @Override
     public void activateAbility(Player player) {
-        player.getPlayerboard().getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
+        player.getPlayerBoard().getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }

@@ -1,18 +1,21 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 /**
- * RedMarble produces faithPoints
+ * This red marble produces faithPoints
  */
 public class RedMarble extends Marble {
 
     /**
-     * The only effect of the red marble is to increase the faithPath position of one step
+     * Moves the current player's red cross one cell forward in the faith path
+     * @param players - players playing the game
+     * @param playerNumber - number of the current player
      */
     @Override
     public void drawMarble(Player[] players, int playerNumber)
     {
-        players[playerNumber].getPlayerboard().getFaithPath().moveCross(1);
+        players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
     }
 }

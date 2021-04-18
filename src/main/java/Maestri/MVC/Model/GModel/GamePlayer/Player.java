@@ -8,53 +8,101 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.util.*;
 
+/**
+ * Represents a player with all its information
+ */
 public class Player {
+
+    /**
+     * Name that the player chooses to join the game
+     */
     private String nickname;
+
+    /**
+     * Order in which the player joined the game
+     */
     private Integer playerNumber;
-    private Playerboard playerboard;
+
+    /**
+     * Player board that the player is using to play the game
+     */
+    private Playerboard playerBoard;
+
+    /**
+     * Leader cards that the player has available
+     */
     private LeaderCard[] playerLeaderCards;
 
-    public Player(String nickname, Integer playerNumber, Playerboard playerboard) {
+    /**
+     * Initializes a new player
+     * @param nickname - nickname to assign to the player
+     * @param playerNumber - index to track the player order
+     */
+    public Player(String nickname, Integer playerNumber) {
         this.nickname = nickname;
         this.playerNumber = playerNumber;
-        this.playerboard = playerboard;
+        this.playerBoard = new Playerboard();
         this.playerLeaderCards = new LeaderCard[4];
     }
 
-    /** This method asks the player's nickname. */
-
-    public String getNickname() {
+    /**
+     * Asks and sets the player's nickname
+     */
+    public void chooseNickname() {
         Scanner in = new Scanner(System.in);
 
-        System.out.println("Player nickname:");
+        System.out.println("Choose your nickname to join the game: ");
         nickname = in.nextLine();
 
-        return this.nickname;
+        this.nickname = nickname;
     }
 
+    /**
+     * Returns the player's nickname
+     * @return the player's nickname
+     */
     public Integer getPlayerNumber() {
         return this.playerNumber;
     }
 
-    public void setPlayerNumber(Integer i) {
-        playerNumber = i;
+    /**
+     * Sets the player's number
+     * @param number - the player's number
+     */
+    public void setPlayerNumber(Integer number) {
+        playerNumber = number;
     }
 
-    public Playerboard getPlayerboard() {
-        return this.playerboard;
+    /**
+     * Returns the player's board
+     * @return the player's board
+     */
+    public Playerboard getPlayerBoard() {
+        return this.playerBoard;
     }
 
+    /**
+     * Returns the player's leader cards
+     * @return the player's leader cards
+     */
     public LeaderCard[] getPlayerLeaderCards() {
         return this.playerLeaderCards;
     }
 
-    public void setPlayerLeaderCards(int index, LeaderCard leaderCard) {
+    /**
+     * Sets to the player a leader card in the specified position of his leader cards deck
+     * @param index - index where to set the leader card
+     * @param leaderCard - leader card to set
+     */
+    public void setPlayerLeaderCard(int index, LeaderCard leaderCard) {
         this.playerLeaderCards[index] = leaderCard;
     }
 
-    /** This method sets the player's initial resources due to his playerNumber. */
-
-    public void setStartingPlayerBoard(Integer playerNumber) {
+    /**
+     * Sets to the player its starting board depending on its number
+     * @param playerNumber - the player's number
+     */
+    public void setStartingPlayerboard(Integer playerNumber) {
         Map<Integer, Integer[]> startingResources =  new HashMap<>();
         int numChosenResources;
         int numInitialRedCross;
@@ -79,42 +127,47 @@ public class Player {
                         resourceNum = in.nextInt();
                     }
                     i = 0;
-                    for (String key2 : getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
+                    for (String key2 : getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
                         if(i == resourceNum) {
-                            resourceNumWarehouse = getPlayerboard().getWareHouse().getWarehouseResources().get(key2);
-                            getPlayerboard().getWareHouse().getWarehouseResources().put(key2, resourceNumWarehouse + 1);
+                            resourceNumWarehouse = getPlayerBoard().getWareHouse().getWarehouseResources().get(key2);
+                            getPlayerBoard().getWareHouse().getWarehouseResources().put(key2, resourceNumWarehouse + 1);
                         }
                         i++;
                     }
                     numChosenResources--;
                 }
                 if(numInitialRedCross == 1) {
-                    getPlayerboard().getFaithPath().moveCross(1);
+                    getPlayerBoard().getFaithPath().moveCross(1);
                 }
                 break;
             }
         }
     }
 
-    /** This method asks the player what action he wants to do. */
-
-    public int getAction( ) {
-        int actionNum = -1;
+    /**
+     * Asks the player which action he wants to perform
+     * @return the chosen action's number
+     */
+    public int getAction() {
+        int actionNumber = -1;
         Scanner in = new Scanner(System.in);
 
-        while(actionNum < 0 || actionNum > 2) {
+        while(actionNumber < 0 || actionNumber > 2) {
             System.out.println("What action do you want to do? Choose one of them:");
             System.out.println("Write 0 if you want to take resources from the market.");
             System.out.println("Write 1 if you want to buy a development card.");
             System.out.println("Write 2 if you want to activate the production.");
-            actionNum = in.nextInt();
+            actionNumber = in.nextInt();
         }
 
-        return actionNum;
+        return actionNumber;
     }
 
-    /** This method allows the player to pick a line from the market, after choosing the first action. */
-
+    /**
+     * Draws marbles from the market
+     * @param market - market from where to draw marbles
+     * @param players - players playing the game
+     */
     public void pickLineFromMarket(Market market, Player[] players) {
         Scanner in = new Scanner(System.in);
         int rowColumnChoice = -1;
@@ -148,8 +201,11 @@ public class Player {
 
     }
 
-    /** This method asks the player what development cards he wants to buy. */
-
+    /**
+     * Buys a development card
+     * @param developmentCardsDecksGrid
+     * @return true if the player buys a card successfully
+     */
     public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
 
         Scanner consoleInput = new Scanner(System.in);
@@ -212,7 +268,7 @@ public class Player {
         Integer resourceCost;
         int input=-1;
         Scanner discountChoice = new Scanner(System.in);
-        for(String res : this.playerboard.getDevelopmentCardDiscount())
+        for(String res : this.playerBoard.getDevelopmentCardDiscount())
         {
             resourceCost=developmentCardCost.get(res);
             if(resourceCost!=0)
@@ -227,27 +283,32 @@ public class Player {
             }
         }
 
-        if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
-            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
-                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerboard);
+        if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerBoard, developmentCardCost)) {
+            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard)) {
+                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard);
 
-                playerboard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
-                playerboard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
+                playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
+                playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
                 //aggiungere remove per togliere la carta
                 List<DevelopmentCard> reducedDeck = Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
                 reducedDeck.remove(0);
                 developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
                 return true;
-            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerboard)) {
+            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard)) {
                 return false;
             }
-        } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerboard, developmentCardCost)) {
+        } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerBoard, developmentCardCost)) {
             return false;
         }
         return false;
         //If buy isn't possible action is denied and player has to choose new action and start all over
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * This method activates the production on the player's playerboard.
+     * @param devCard the development cards on the playerboard.
+     */
     public void activateProduction(DevelopmentCard devCard) {
         int i, j;
         int numResource;
@@ -259,7 +320,6 @@ public class Player {
         inputResources.put("SHIELDS", 0);
         inputResources.put("SERVANTS", 0);
         inputResources.put("STONES", 0);
-        // Red Cross???
         Map<String, Integer> outputResources = new HashMap<>();
         outputResources.put("COINS", 0);
         outputResources.put("SHIELDS", 0);
@@ -267,24 +327,24 @@ public class Player {
         outputResources.put("STONES", 0);
 
         for(j = 0; j < 3; j++) {
-            for (i = 0; getPlayerboard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
+            for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
             while(activateProduction != 0 && activateProduction != 1) {
-                System.out.println("This is the resources you have to pay: " + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                System.out.println("For this:" + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                System.out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                System.out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
                 System.out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
                 activateProduction = in.nextInt();
             }
             if(activateProduction == 1) {
-                for(String key: getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
+                for(String key: getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
                     numResource = inputResources.get(key);
-                    inputResources.put(key, numResource + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
+                    inputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
                 }
-                for(String key: getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
+                for(String key: getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
                     numResource = outputResources.get(key);
-                    outputResources.put(key, numResource + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
+                    outputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
                 }
                 // Aggiunta alla conta totale i redCross.
-                redCross = redCross + getPlayerboard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
+                redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
             }
         }
 
@@ -296,7 +356,7 @@ public class Player {
         }
         if(activateProduction == 1) {
             i = 0;
-            for(String s : getPlayerboard().activateBasicProductionPower()) {
+            for(String s : getPlayerBoard().activateBasicProductionPower()) {
                 if(i == 2) { // Se siamo alla terza risorsa, che per forza è l'output...
                     if(s.equals("REDCROSS"))
                         // Aggiunta alla conta totale i redCross.
@@ -315,25 +375,28 @@ public class Player {
         }
 
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
-        if(devCard.checkResourcesAvailability(playerboard, inputResources)) {
+        if(devCard.checkResourcesAvailability(playerBoard, inputResources)) {
             for(String key: inputResources.keySet()) {
                 numResource = inputResources.get(key);
                 for(i = 0; i < numResource; i++)
-                    playerboard.pickResource(key);
+                    playerBoard.pickResource(key);
             }
         }
 
         // Aggiungi risorse al chest.
         for(String key: outputResources.keySet()) {
-            numResource = getPlayerboard().getChest().getChestResources().get(key);
-            getPlayerboard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
+            numResource = getPlayerBoard().getChest().getChestResources().get(key);
+            getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
         }
 
         //RedCross
-        getPlayerboard().getFaithPath().moveCross(redCross);
+        getPlayerBoard().getFaithPath().moveCross(redCross);
     }
 
-    /** This method asks the player if he wants to do a leader action. */
+    /**
+     * This method asks the player if he wants to do a leader action.
+     * @return 1 if the player want to do a leader action, 0 if he doesn't.
+     */
 
     public int getLeaderAction( ) {
         Scanner in = new Scanner(System.in);
@@ -347,6 +410,10 @@ public class Player {
         return leaderActionNum;
     }
 
+    /**
+     * This method allows the player to play a leader card.
+     */
+
     public void playLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard=-1;
@@ -358,14 +425,16 @@ public class Player {
                 System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
             }
             numLeaderCard = in.nextInt();
-            if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerboard))&&
+            if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))&&
                     (!this.playerLeaderCards[numLeaderCard].isPlayed()))
                 this.playerLeaderCards[numLeaderCard].activateAbility(this);
-                this.playerboard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
+                this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
         }
     }
 
-    /** This method allows the player to discard a leader card. */
+    /**
+     * This method allows the player to discard a leader card.
+     * */
 
     public void discardLeaderCard() {
         Scanner in = new Scanner(System.in);
@@ -381,21 +450,26 @@ public class Player {
         }
 
         //Rimozione carta leader dal deck
-        this.playerLeaderCards[numLeaderCard].discard(this.playerboard);
+        this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
         List<LeaderCard> updatedPlayerLeaderCardList = Arrays.asList(this.playerLeaderCards);
         updatedPlayerLeaderCardList.remove(numLeaderCard);
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
     }
+
+    /**
+     * This method sums all the player's victory points at the end of the play.
+     * @return the number of victory points.
+     */
 
     public int sumAllVictoryPoints() {
         int victoryPoints = 0;
         int numResources = 0;
 
         // Punti delle tessere del tracciato fede, carte sviluppo e carte leader.
-        victoryPoints = victoryPoints + getPlayerboard().getVictoryPoints();
+        victoryPoints = victoryPoints + getPlayerBoard().getVictoryPoints();
 
         // Punti dalla posizione della croce.
-        victoryPoints = victoryPoints + getPlayerboard().getFaithPath().getVictoryPoints();
+        victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getFaithPath()[getPlayerBoard().getFaithPath().getCrossPosition()].getVictoryPoints();
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
         numResources = numResources + numResourcesReserve();
@@ -404,15 +478,20 @@ public class Player {
         return victoryPoints;
     }
 
+    /**
+     * This method sums all the resources in chest, warehouse and extrawarehouse at the end of the play.
+     * @return the number of resources.
+     */
+
     public int numResourcesReserve() {
         int numResources = 0;
 
-        for(String key: getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
-            numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get(key);
-            numResources = numResources + getPlayerboard().getWareHouse().getWarehouseResources().get("extra" + key);
+        for(String key: getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
+            numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get(key);
+            numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key);
         }
-        for(String key: getPlayerboard().getChest().getChestResources().keySet())
-            numResources = numResources + getPlayerboard().getChest().getChestResources().get(key);
+        for(String key: getPlayerBoard().getChest().getChestResources().keySet())
+            numResources = numResources + getPlayerBoard().getChest().getChestResources().get(key);
 
         return numResources;
     }
