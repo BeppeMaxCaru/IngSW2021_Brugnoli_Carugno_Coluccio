@@ -70,7 +70,7 @@ public class Market {
             }
         }
         //The 13th marble of the array becomes the excess marble
-        this.excessMarble = marbleArray[n + 1];
+        this.excessMarble = marbleArray[n];
 
     }
 
@@ -93,16 +93,21 @@ public class Market {
         Marble temp;//Temporary marble to save the previous excess marble
         temp = this.excessMarble;
 
-        //I save the excess marble on a temporary position. It is activated the effect of the first marble of the row, that becomes the excess marble
-        this.marketArrangement[row][i].drawMarble(players, playerNumber);
-        this.excessMarble = this.marketArrangement[row][i];
-        for (i = 0; i < column - 1; i++) {
-            //It is activated the effect of every marble of the row. Every marble slides to an upper position of the market grid
+        //I save the excess marble on a temporary position.
+        this.excessMarble=this.marketArrangement[row][i];
+
+        /*
+         It is activated the effect of each marble of the row.
+         Every marble slides to an upper position of the market grid.
+         */
+        for (i = 0; i < column-1 ; i++){
             this.marketArrangement[row][i].drawMarble(players, playerNumber);
-            this.marketArrangement[row][i] = this.marketArrangement[row][i + 1];
+            this.marketArrangement[row][i] = this.marketArrangement[row][i+1];
         }
-        //The previous excess Marble is inserted into the lower position of the market row
+
+        //The previous excess Marble is inserted into the lowest position of the market row
         i++;
+        this.marketArrangement[row][i].drawMarble(players, playerNumber);
         this.marketArrangement[row][i] = temp;
     }
 
@@ -117,18 +122,27 @@ public class Market {
         Marble temp;//Temporary marble to save the previous excess marble
         temp=this.excessMarble;
 
-        //I save the excess marble on a temporary position. It is activated the effect of the first marble of the column, that becomes the excess marble
-        this.marketArrangement[i][column].drawMarble(players, playerNumber);
+        //I save the excess marble on a temporary position.
         this.excessMarble=this.marketArrangement[i][column];
+
         for(i=0; i<row-1; i++)
         {
-            //It is activated the effect of every marble of the column. Every marble slides to an upper position of the market grid
+            /*
+             It is activated the effect of every marble of the column.
+             Every marble slides to an upper position of the market grid
+             */
             this.marketArrangement[i][column].drawMarble(players, playerNumber);
             this.marketArrangement[i][column]=this.marketArrangement[i+1][column];
         }
-        //The previous excess Marble is inserted into the lower position of the market column
+
+        //The previous excess Marble is inserted into the lowest position of the market column
         i++;
+        this.marketArrangement[i][column].drawMarble(players, playerNumber);
         this.marketArrangement[i][column]=temp;
+    }
+
+    public Marble getExcessMarble(){
+        return excessMarble;
     }
 
 }
