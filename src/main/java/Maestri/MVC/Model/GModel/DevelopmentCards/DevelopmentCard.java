@@ -84,17 +84,19 @@ public class DevelopmentCard {
         Map<String, Integer> warehouseResources = playerboard.getWareHouse().getWarehouseResources();
         Map<String, Integer> chestResources = playerboard.getChest().getChestResources();
         //Sum the two maps to get the total player resources
+        //Needs to be fixed
         Map<String, Integer> allPlayerResources = new HashMap<>(warehouseResources);
         chestResources.forEach((key, value) -> allPlayerResources.merge(key, value, (v1, v2) -> v1+v2));
 
         //Check if one map is contained into the other one
         //to see if player has enough resources
-        for (Map.Entry<String, Integer> entry : requirements.entrySet()) {
-            String key = entry.getKey();
-            Integer value = entry.getValue();
-            int resourceOfPlayer = allPlayerResources.getOrDefault(key,0);
-            if (resourceOfPlayer == 0 || resourceOfPlayer<value) {
-                //Non si può comprare/scambiare
+        for (String key : requirements.keySet()) {
+            if (!allPlayerResources.keySet().contains(key)) {
+                System.out.println("Not enough resources to buy this card");
+                System.out.println("");
+                return false;
+            }
+            if (allPlayerResources.get(key)<requirements.get(key)) {
                 System.out.println("Not enough resources to buy this card");
                 System.out.println("");
                 return false;

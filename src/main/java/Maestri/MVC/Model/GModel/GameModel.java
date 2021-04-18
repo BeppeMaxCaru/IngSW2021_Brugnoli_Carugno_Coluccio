@@ -24,7 +24,7 @@ public class GameModel {
     private ActionCountersDeck actionCountersDeck;
     private boolean BlackCrossPawn = false;
 
-    //Who chooses tha action????? from the controller!
+    //Who chooses the action????? from the controller!
     //private Map<Integer, String> playerActions
 
     public GameModel(int numberOfPlayers) {
