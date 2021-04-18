@@ -75,7 +75,7 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 1,2);
 
-        assertTrue(developmentCard.checkResourcesAvailability(playerboard,developmentCard.getDevelopmentCardCost()));
+        assertTrue(developmentCard.checkResourcesAvailability(playerboard, developmentCard.getDevelopmentCardCost()));
         assertTrue(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard));
     }
 
@@ -103,7 +103,7 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 1,2);
 
-        assertFalse(developmentCard.checkResourcesAvailability(playerboard,developmentCard.getDevelopmentCardCost()));
+        assertFalse(developmentCard.checkResourcesAvailability(playerboard, developmentCard.getDevelopmentCardCost()));
         assertFalse(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard));
     }
 

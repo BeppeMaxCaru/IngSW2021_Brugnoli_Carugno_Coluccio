@@ -4,20 +4,32 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.util.*;
 
+/**
+ * Represents all the development cards of the game
+ */
 public class DevelopmentCardsDecksGrid {
-
+    /**
+     * All the development cards grouped orderly in decks according to their level and colour
+     */
     private final DevelopmentCard[][][] developmentCardsDecks;
+    /**
+     * All the available development card colours
+     */
     private Map<String, Integer> developmentCardsColours;
+    /**
+     * All the available development cards levels
+     */
     private Collection<Integer> developmentCardsLevels;
 
     private Scanner consoleInput = new Scanner(System.in);
-    //private String colour;
-    //private int level;
 
+    /**
+     * Initializes the development cards in a 3(levels)x4(colours) ordered matrix and groups them in decks of 4
+     */
     public DevelopmentCardsDecksGrid() {
-        //costruisco tutta la griglia
+        //Initializes the grid where they are distrubuted
         this.developmentCardsDecks = new DevelopmentCard[3][4][4];
-
+        //Initializes the possible colours and levels
         this.developmentCardsColours = new HashMap<>();
         this.developmentCardsLevels = new HashSet<>();
         //Level 1 GREEN
@@ -284,33 +296,49 @@ public class DevelopmentCardsDecksGrid {
                 0,1,3,0,
                 0,12);
 
-        //Shuffle the grid
+        //Shuffle each development cards deck in the grid
         for (int i=0;i<3;i++) {
-            //Mi basta i+1 (siccome parto da 0) dato che il livello massimo è 3
-            //mentre i colori possono essere potenzialmente infiniti
+            //Level is capped at 3
+            //Colours can be infinite
+            //Adds one since levels start from one but grid from zero so the levels saved are correct
             this.developmentCardsLevels.add(i+1);
             for (int j=0;j<4;j++) {
                 List<DevelopmentCard> developmentCardsList = Arrays.asList(this.developmentCardsDecks[i][j]);
                 Collections.shuffle(developmentCardsList);
                 this.developmentCardsDecks[i][j] = developmentCardsList.toArray(this.developmentCardsDecks[i][j]);
-                //Mette i colori nella lista di colori delle carte
+                //Saves all the possible colours
                 this.developmentCardsColours.put(this.developmentCardsDecks[i][j][0].getDevelopmentCardColour(), j);
             }
         }
     }
 
+    /**
+     * Returns the orderly distributed development cards
+     * @return the orderly distributed development cards
+     */
     public DevelopmentCard[][][] getDevelopmentCardsDecks() {
         return this.developmentCardsDecks;
     }
 
+    /**
+     * Returns the available development card colours
+     * @return the available development card colours
+     */
     public Map<String, Integer> getDevelopmentCardsColours() {
         return this.developmentCardsColours;
     }
 
+    /**
+     * Returns the available development card levels
+     * @return the available development card levels
+     */
     public Collection<Integer> getDevelopmentCardsLevels() {
         return this.developmentCardsLevels;
     }
 
+    /**
+     * Prints all the drawable development cards
+     */
     public void printDevelopmentCardsDecks() {
         for (int i=0;i<3;i++) {
             for (int j=0;j<4;j++) {
@@ -319,7 +347,13 @@ public class DevelopmentCardsDecksGrid {
         }
     }
 
+    /**
+     * Checks if there are still development cards in a grid's deck
+     * @param developmentCards - development cards deck
+     * @return
+     */
     public boolean stillCardsInTheDeck(DevelopmentCard[] developmentCards) {
+        //Checks if the deck is empty or not
         if (developmentCards.length==0) {
             return false;
         } else if (developmentCards.length!=0) {
@@ -328,13 +362,24 @@ public class DevelopmentCardsDecksGrid {
         return false;
     }
 
-    public void removeDevelopmentCard(int column) {
+    /**
+     * Removes 2 development card from the available ones
+     * @param column - column to remove the development cards from
+     */
+    public void removeDevelopmentCards(int column) {
         int removedCards = 0;
-        for (int i=2;i>0;i--) {
+        //Scrolls the column up starting from level 1 cards
+        for (int i=2;i>=0;i--) {
             List<DevelopmentCard> deckToReduce = Arrays.asList(this.developmentCardsDecks[i][column]);
             if (removedCards==2) return;
-            if (deckToReduce.remove(0)!=null) removedCards = removedCards+1;
-            if (deckToReduce.remove(0)!=null) removedCards = removedCards+1;
+            if (deckToReduce.size()!=0) {
+                deckToReduce.remove(0);
+                removedCards = removedCards+1;
+            }
+            if (deckToReduce.size()!=0) {
+                deckToReduce.remove(0);
+                removedCards = removedCards+1;
+            }
             this.developmentCardsDecks[i][column] = deckToReduce.toArray(this.developmentCardsDecks[i][column]);
         }
     }

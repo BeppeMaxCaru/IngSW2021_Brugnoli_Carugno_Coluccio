@@ -12,6 +12,6 @@ public class GreenBannerCounter extends ActionCounter {
     }
 
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
-        developmentCardsDecksGrid.removeDevelopmentCard(0);
+        developmentCardsDecksGrid.removeDevelopmentCards(0);
     }
 }

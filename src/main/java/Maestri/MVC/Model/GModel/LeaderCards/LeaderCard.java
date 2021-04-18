@@ -19,8 +19,8 @@ public class LeaderCard {
     private final int victoryPoints;
 
     /**
-     * Initializes the leader card as not played and assigns its victory points
-     * @param victoryPoints - victory points to assign to the leader card
+     * Initializes the leader card as not played and its victory points
+     * @param victoryPoints - victory points of the leader card
      */
     public LeaderCard(int victoryPoints) {
         this.played=false;

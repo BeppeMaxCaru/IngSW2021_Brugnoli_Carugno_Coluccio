@@ -12,6 +12,6 @@ public class PurpleBannerCounter extends ActionCounter {
     }
 
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
-        developmentCardsDecksGrid.removeDevelopmentCard(1);
+        developmentCardsDecksGrid.removeDevelopmentCards(1);
     }
 }

@@ -12,6 +12,6 @@ public class BlueBannerCounter extends ActionCounter {
     }
 
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
-        developmentCardsDecksGrid.removeDevelopmentCard(2);
+        developmentCardsDecksGrid.removeDevelopmentCards(2);
     }
 }
