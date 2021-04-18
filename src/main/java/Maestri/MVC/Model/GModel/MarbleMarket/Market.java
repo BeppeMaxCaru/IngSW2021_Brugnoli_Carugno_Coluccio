@@ -83,6 +83,14 @@ public class Market {
     }
 
     /**
+     * Returns the current excess marble
+     * @return the current excess marble
+     */
+    public Marble getExcessMarble(){
+        return excessMarble;
+    }
+
+    /**
      * Updates the market after a player draws marbles from a row
      * @param row          - row from where the player draws the marbles
      * @param players      - players playing the game
@@ -141,8 +149,5 @@ public class Market {
         this.marketArrangement[i][column]=temp;
     }
 
-    public Marble getExcessMarble(){
-        return excessMarble;
-    }
 
 }

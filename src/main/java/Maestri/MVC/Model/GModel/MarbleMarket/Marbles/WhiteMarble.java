@@ -22,9 +22,9 @@ public class WhiteMarble extends Marble {
     @Override
     public void drawMarble(Player[] players, int playerNumber) {
         int chosenMarble=-1;
-        if(players[playerNumber].getPlayerBoard().getResourceMarbles().length>0)
+        if(players[playerNumber].getPlayerBoard().getResourceMarbles()[0]!=null)
         {
-            if(players[playerNumber].getPlayerBoard().getResourceMarbles().length==1)
+            if(players[playerNumber].getPlayerBoard().getResourceMarbles()[1]==null)
                 players[playerNumber].getPlayerBoard().getResourceMarbles()[0].drawMarble(players, playerNumber);
             else {
                 while(chosenMarble<0||chosenMarble>1){
