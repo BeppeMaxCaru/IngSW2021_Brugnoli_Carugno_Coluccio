@@ -204,7 +204,7 @@ public class Playerboard {
 
     /**
      * This method activates the basic production power of the playerboard.
-     * @return a list where in the first two positions there are the resources he wants to discard, in the last the resources he wants.
+     * @return a list where in the first two positions there are the resources he wants to discard,  in the last the resources he wants.
      */
 
     public List<String> activateBasicProductionPower() {
