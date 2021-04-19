@@ -45,6 +45,7 @@ public class Player {
         this.playerLeaderCards = new LeaderCard[4];
     }
 
+
     /**
      * Asks and sets the player's nickname
      */
@@ -495,7 +496,8 @@ public class Player {
 
         for(String key: getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
             numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get(key);
-            numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key);
+            if(getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key) != null)
+                numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key);
         }
         for(String key: getPlayerBoard().getChest().getChestResources().keySet())
             numResources = numResources + getPlayerBoard().getChest().getChestResources().get(key);
