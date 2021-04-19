@@ -23,7 +23,7 @@ public class GreyMarble extends Marble {
         Integer numOfResources = whResources.get("STONES");
         boolean discard;
 
-        discard=WareHouse.checkConstraints(players[playerNumber].getPlayerBoard().getWareHouse(), "STONES");
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("STONES");
         //Calling the Warehouse method for checking the warehouse capacity
 
         if(!discard)

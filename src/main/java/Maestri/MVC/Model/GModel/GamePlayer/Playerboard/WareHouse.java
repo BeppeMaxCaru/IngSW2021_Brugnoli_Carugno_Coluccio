@@ -11,11 +11,11 @@ public class WareHouse {
     public Map <String, Integer> warehouseResources;
 
     public WareHouse() {
-        warehouseResources = new HashMap<>();
-        warehouseResources.put("COINS", 0);
-        warehouseResources.put("SHIELDS", 0);
-        warehouseResources.put("SERVANTS", 0);
-        warehouseResources.put("STONES", 0);
+        this.warehouseResources = new HashMap<>();
+        this.warehouseResources.put("COINS", 0);
+        this.warehouseResources.put("SHIELDS", 0);
+        this.warehouseResources.put("SERVANTS", 0);
+        this.warehouseResources.put("STONES", 0);
     }
 
     /**
@@ -40,7 +40,7 @@ public class WareHouse {
      * @param res1 resource to be checked
      * @return true if the resource has to be discarded, false if the player can collect it
      */
-    public static boolean checkConstraints(WareHouse wareHouse, String res1) {
+    public boolean checkConstraints(String res1) {
 
         String[] res={"COINS", "SHIELDS", "SERVANTS", "STONES"};
         String[] r;
@@ -48,9 +48,9 @@ public class WareHouse {
         int k=0;
         for(int i=0; i<4; i++)
         {
-            if(res[i].equals(res1))
+            if(!res[i].equals(res1))
             {
-                r[k]=res[i];
+                r[k] = res[i];
                 k++;
             }
         }
@@ -58,15 +58,14 @@ public class WareHouse {
 
         boolean discard=false;
 
-        Map<String, Integer> whResources=wareHouse.getWarehouseResources();
-        Integer numOfResources = whResources.get(res1);
-        Integer extraSpace=whResources.get(extraRes);
+        Integer numOfResources = this.warehouseResources.get(res1);
+        Integer extraSpace = this.warehouseResources.get(extraRes);
 
         Scanner keyboard = new Scanner(System.in);
         int resourceChoice;
 
         //if LeaderCard extra space is available
-        if(whResources.get((extraRes))!=null)
+        if(this.warehouseResources.get((extraRes))!=null)
         {
             do {
                 System.out.println("Where do you go to collect this resource? Insert 0 for LeaderCard, 1 for Warehouse");
@@ -80,7 +79,7 @@ public class WareHouse {
                     //If the location isn't full, the resource hasn't to be discarded
                     {
                         extraSpace++;
-                        whResources.put(extraRes, extraSpace);
+                        this.warehouseResources.put(extraRes, extraSpace);
                     }
                 }
             }while((resourceChoice < 0) || (resourceChoice > 1));
@@ -92,7 +91,7 @@ public class WareHouse {
                  If there aren't any res1 in warehouse
                  If all other resources have cardinality=1, resource has to be discarded
                  */
-                if ((whResources.get(r[0]) == 1) && (whResources.get(r[1]) == 1) && (whResources.get(r[2]) == 1))
+                if ((this.warehouseResources.get(r[0]) == 1) && (this.warehouseResources.get(r[1]) == 1) && (this.warehouseResources.get(r[2]) == 1))
                     discard=true;
                 break;
             case 1:
@@ -100,9 +99,9 @@ public class WareHouse {
                  If there is 1 res1 in warehouse
                  If there are already two resources with cardinality=2, resource has to be discarded
                  */
-                if (((whResources.get(r[0]) == 2) && (whResources.get(r[1]) == 2)) ||
-                        ((whResources.get(r[0]) == 2) && (whResources.get(r[2]) == 2)) ||
-                        ((whResources.get(r[2]) == 2) && (whResources.get(r[1]) == 2)))
+                if (((this.warehouseResources.get(r[0]) == 2) && (this.warehouseResources.get(r[1]) == 2)) ||
+                        ((this.warehouseResources.get(r[0]) == 2) && (this.warehouseResources.get(r[2]) == 2)) ||
+                        ((this.warehouseResources.get(r[2]) == 2) && (this.warehouseResources.get(r[1]) == 2)))
                     discard=true;
                 break;
             case 2:
@@ -110,7 +109,7 @@ public class WareHouse {
                  If there are 2 res2 in warehouse
                  If there is already a resource with cardinality=3, resource has to be discarded
                  */
-                if ((whResources.get(r[0]) == 3) || (whResources.get(r[1]) == 3) || (whResources.get(r[2]) == 3))
+                if ((this.warehouseResources.get(r[0]) == 3) || (this.warehouseResources.get(r[1]) == 3) || (this.warehouseResources.get(r[2]) == 3))
                     discard=true;
                 break;
             case 3:

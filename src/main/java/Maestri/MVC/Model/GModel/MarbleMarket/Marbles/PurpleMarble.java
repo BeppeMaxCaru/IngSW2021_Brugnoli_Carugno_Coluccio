@@ -23,7 +23,7 @@ public class PurpleMarble extends Marble {
         Integer numOfResources = whResources.get("SERVANTS");
         boolean discard;
 
-        discard=WareHouse.checkConstraints(players[playerNumber].getPlayerBoard().getWareHouse(), "SERVANTS");
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SERVANTS");
         //Calling the Warehouse method for checking the warehouse capacity
 
         if(!discard)

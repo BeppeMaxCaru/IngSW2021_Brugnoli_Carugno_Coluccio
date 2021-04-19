@@ -19,19 +19,18 @@ public class YellowMarble extends Marble {
     @Override
     public void drawMarble(Player[] players, int playerNumber) {
 
-        Map<String, Integer> whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
-        Integer numOfResources = whResources.get("COINS");
+        Integer numOfResources = players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS");
         boolean discard;
 
-        discard= WareHouse.checkConstraints(players[playerNumber].getPlayerBoard().getWareHouse(), "COINS");
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("COINS");
         //Calling the Warehouse method for checking the warehouse capacity
 
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse
             numOfResources++;
-            whResources.put("COINS", numOfResources);
-            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources().put("COINS", numOfResources);
+            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources());
         }
         else
         {
