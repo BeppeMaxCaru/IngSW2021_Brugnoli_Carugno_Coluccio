@@ -114,7 +114,6 @@ public class Market {
         }
 
         //The previous excess Marble is inserted into the lowest position of the market row
-        i++;
         this.marketArrangement[row][i].drawMarble(players, playerNumber);
         this.marketArrangement[row][i] = temp;
     }
@@ -144,7 +143,6 @@ public class Market {
         }
 
         //The previous excess Marble is inserted into the lowest position of the market column
-        i++;
         this.marketArrangement[i][column].drawMarble(players, playerNumber);
         this.marketArrangement[i][column]=temp;
     }
