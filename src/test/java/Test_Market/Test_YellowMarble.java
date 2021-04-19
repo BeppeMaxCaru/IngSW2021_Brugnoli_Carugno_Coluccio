@@ -1,3 +1,5 @@
+package Test_Market;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
@@ -33,17 +35,29 @@ public class Test_YellowMarble {
    }
 
     //Try the YellowMarble effect
-   @Test
-   public void tryDrawMarble2() {
-       Marble marble = new YellowMarble();
-       players[0] = new Player("Beppe",0);
-       marble.drawMarble(players,0);
-       marble.drawMarble(players,0);
-       marble.drawMarble(players,0);
-       assertEquals(3,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
-   }
+    @Test
+    public void tryDrawMarble2() {
+        Marble marble = new YellowMarble();
+        players[0] = new Player("Beppe",0);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        assertEquals(3,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
+    }
 
-   //Check the discard of the marble
+    //Check that other players don't obtain COINS
+    @Test
+    public void tryDrawMarble3() {
+        Marble marble = new YellowMarble();
+        players[0] = new Player("Beppe",0);
+        players[1] = new Player("Simo",1);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        assertEquals(0,players[1].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
+    }
+
+    //Try to discard the marble
     @Test
     public void tryDiscardResource1() {
         Marble marble = new YellowMarble();
@@ -67,6 +81,19 @@ public class Test_YellowMarble {
         marble.drawMarble(players,0);
         marble.drawMarble(players,0);
         assertEquals(1,players[1].getPlayerBoard().getFaithPath().getCrossPosition());
+    }
+
+    //Check that player doesn't obtain faithPoints
+    @Test
+    public void tryDiscardResource3() {
+        Marble marble = new YellowMarble();
+        players[0] = new Player("Beppe",0);
+        players[1] = new Player("Simo",1);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        marble.drawMarble(players,0);
+        assertEquals(0,players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
 }

@@ -23,7 +23,7 @@ public class Playerboard {
     //private Map<Integer, Deposits> availablePlayerboardDeposits;
     private Chest chest;
     /**
-     * Reserve of resources with arrengement rules.
+     * Reserve of resources with arrangement rules.
      */
     private WareHouse wareHouse;
     /**
@@ -34,7 +34,7 @@ public class Playerboard {
      * Numbers of victory points gets during the play.
      */
     private int victoryPoints;
-    private final Marble[] resourceMarbles = new Marble[2];
+    private Marble[] resourceMarbles = new Marble[2];
     private final String[] developmentCardDiscount =new String[2];
 
     private String[] leaderCardsDiscounts = new String[2];
@@ -287,5 +287,13 @@ public class Playerboard {
 
 
         return resourceChoice;
+    }
+
+    public void setResourceMarbles(Marble marble){
+        int i=0;
+        while((i<this.resourceMarbles.length)&&(this.resourceMarbles[i]!=null)){
+            i++;
+        }
+        this.resourceMarbles[i]=marble;
     }
 }
