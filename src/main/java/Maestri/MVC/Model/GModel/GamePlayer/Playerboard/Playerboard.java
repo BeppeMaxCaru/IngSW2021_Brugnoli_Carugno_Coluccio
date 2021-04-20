@@ -99,7 +99,7 @@ public class Playerboard {
     }
 
     public Chest getChest() {
-        return chest;
+        return this.chest;
     }
 
     public WareHouse getWareHouse() {
@@ -110,7 +110,7 @@ public class Playerboard {
     }
 
     public FaithPath getFaithPath() {
-        return faithPath;
+        return this.faithPath;
     }
 
     public int getVictoryPoints() {
@@ -118,7 +118,7 @@ public class Playerboard {
     }
 
     public void sumVictoryPoints(int i) {
-        victoryPoints = victoryPoints + i;
+        this.victoryPoints = this.victoryPoints + i;
     }
 
     public String[] getLeaderCardsDiscounts() {
@@ -126,7 +126,7 @@ public class Playerboard {
     }
 
     public void addLeaderCardsDiscounts(String discount) {
-        for (int i=0;i<this.leaderCardsDiscounts.length;i++) {
+        for (int i = 0;i < this.leaderCardsDiscounts.length; i++) {
             if (this.leaderCardsDiscounts[i].equals(null)) {
                 this.leaderCardsDiscounts[i] = discount;
                 return;
@@ -139,7 +139,7 @@ public class Playerboard {
     }
 
     public void addWhiteMarblePossibleResources(String possibleResources) {
-        for (int i=0;i<this.whiteMarblePossibleResources.length;i++) {
+        for (int i = 0; i < this.whiteMarblePossibleResources.length; i++) {
             if (this.whiteMarblePossibleResources[i].equals(null)) {
                 this.whiteMarblePossibleResources[i] = possibleResources;
                 return;
@@ -152,8 +152,8 @@ public class Playerboard {
     public void pickResource(String resource) {
         int fromWhat = -1;
         int fromWhichWarehouse = -1;
-        Integer whRes=wareHouse.getWarehouseResources().get(resource);
-        Integer esRes=wareHouse.getWarehouseResources().get("extra"+resource);
+        Integer whRes = this.wareHouse.getWarehouseResources().get(resource);
+        Integer esRes = this.wareHouse.getWarehouseResources().get("extra"+resource);
         Integer numResources;
         Scanner in = new Scanner(System.in);
 
@@ -164,13 +164,13 @@ public class Playerboard {
 
         if(fromWhat == 0) {
             numResources = 0;
-            numResources=numResources+whRes+esRes;
+            numResources = numResources + whRes + esRes;
             if(numResources != 0)
             {
-                if((whRes!=0)&& (esRes==0))
-                    wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                if((whRes != 0) && (esRes == 0))
+                    this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
                 else if ((whRes==0)&& (esRes!=0))
-                    wareHouse.getWarehouseResources().put("extra"+resource, esRes - 1);
+                    this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                 else
                 {
                     while((fromWhichWarehouse<0)||(fromWhichWarehouse>1))
@@ -178,26 +178,26 @@ public class Playerboard {
                         System.out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
                         fromWhichWarehouse = in.nextInt();
                         if (fromWhichWarehouse==0)
-                            wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
                         else
-                            wareHouse.getWarehouseResources().put("extra"+resource, esRes - 1);
+                            this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     }
                 }
             }
             else {
                 System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
-                numResources = chest.getChestResources().get(resource);
-                chest.getChestResources().put(resource, numResources - 1);
+                numResources = this.chest.getChestResources().get(resource);
+                this.chest.getChestResources().put(resource, numResources - 1);
             }
         }
         else {
-            numResources = chest.getChestResources().get(resource);
+            numResources = this.chest.getChestResources().get(resource);
             if(numResources != 0)
-                chest.getChestResources().put(resource, numResources - 1);
+                this.chest.getChestResources().put(resource, numResources - 1);
             else {
                 System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
-                numResources = wareHouse.getWarehouseResources().get(resource);
-                wareHouse.getWarehouseResources().put(resource, numResources - 1);
+                numResources = this.wareHouse.getWarehouseResources().get(resource);
+                this.wareHouse.getWarehouseResources().put(resource, numResources - 1);
             }
         }
     }
@@ -219,8 +219,8 @@ public class Playerboard {
         Scanner in = new Scanner(System.in);
 
         // Available resources from warehouse
-        for (String key : wareHouse.getWarehouseResources().keySet()) {
-            numResources = wareHouse.getWarehouseResources().get(key);
+        for (String key : this.wareHouse.getWarehouseResources().keySet()) {
+            numResources = this.wareHouse.getWarehouseResources().get(key);
             if (numResources != 0) {
                 availableResourceWarehouse = new ArrayList<>();
                 availableResourceWarehouse.add(key);
@@ -228,8 +228,8 @@ public class Playerboard {
         }
 
         // Available resources from chest
-        for (String key : chest.getChestResources().keySet()) {
-            numResources = chest.getChestResources().get(key);
+        for (String key : this.chest.getChestResources().keySet()) {
+            numResources = this.chest.getChestResources().get(key);
             if (numResources != 0) {
                 availableResourceChest = new ArrayList<>();
                 availableResourceChest.add(key);
@@ -275,7 +275,7 @@ public class Playerboard {
             resourceChoice.add("REDCROSS");
         else {
             i = 0;
-            for (String key : chest.getChestResources().keySet()) {
+            for (String key : this.chest.getChestResources().keySet()) {
                 if (i == resourceOutputNum) {
                     resourceChoice = new ArrayList<>();
                     resourceChoice.add(key);
@@ -289,10 +289,10 @@ public class Playerboard {
     }
 
     public void setResourceMarbles(Marble marble){
-        int i=0;
-        while((i<this.resourceMarbles.length)&&(this.resourceMarbles[i]!=null)){
+        int i = 0;
+        while((i < this.resourceMarbles.length) && (this.resourceMarbles[i] != null)){
             i++;
         }
-        this.resourceMarbles[i]=marble;
+        this.resourceMarbles[i] = marble;
     }
 }

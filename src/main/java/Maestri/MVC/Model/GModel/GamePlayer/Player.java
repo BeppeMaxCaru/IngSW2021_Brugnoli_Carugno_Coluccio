@@ -71,7 +71,7 @@ public class Player {
      * @param number - the player's number
      */
     public void setPlayerNumber(Integer number) {
-        playerNumber = number;
+        this.playerNumber = number;
     }
 
     /**
@@ -101,9 +101,8 @@ public class Player {
 
     /**
      * Sets to the player its starting board depending on its number
-     * @param playerNumber - the player's number
      */
-    public void setStartingPlayerboard(Integer playerNumber) {
+    public void setStartingPlayerboard() {
         Map<Integer, Integer[]> startingResources =  new HashMap<>();
         int numChosenResources;
         int numInitialRedCross;
@@ -118,7 +117,7 @@ public class Player {
         startingResources.put(3, new Integer[] {2, 1});
 
         for (Integer key : startingResources.keySet()){
-            if(playerNumber.equals(key)) {
+            if(this.playerNumber.equals(key)) {
                 numChosenResources = startingResources.get(key)[0];
                 numInitialRedCross = startingResources.get(key)[1];
                 while(numChosenResources > 0) {
@@ -188,7 +187,7 @@ public class Player {
                 System.out.println("Choose the column's number you want to get the resources from:");
                 System.out.println(market);
                 columnNum = in.nextInt();
-                market.updateColumn(columnNum, players, playerNumber);
+                market.updateColumn(columnNum, players, this.playerNumber);
             }
         }
         else {
@@ -196,7 +195,7 @@ public class Player {
                 System.out.println("Choose the row's number you want to get the resources from:");
                 System.out.println(market);
                 rowNum = in.nextInt();
-                market.updateRow(rowNum, players, playerNumber);
+                market.updateRow(rowNum, players, this.playerNumber);
             }
         }
 
@@ -384,11 +383,11 @@ public class Player {
         }
 
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
-        if(devCard.checkResourcesAvailability(playerBoard, inputResources)) {
+        if(devCard.checkResourcesAvailability(this.playerBoard, inputResources)) {
             for(String key: inputResources.keySet()) {
                 numResource = inputResources.get(key);
                 for(i = 0; i < numResource; i++)
-                    playerBoard.pickResource(key);
+                    this.playerBoard.pickResource(key);
             }
         }
 
