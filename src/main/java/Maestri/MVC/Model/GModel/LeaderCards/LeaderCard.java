@@ -29,6 +29,7 @@ public class LeaderCard {
 
     /**
      * Returns true if the leader card has been played
+     * @return true if the leader card has been played
      */
     public boolean isPlayed() {
         return this.played;

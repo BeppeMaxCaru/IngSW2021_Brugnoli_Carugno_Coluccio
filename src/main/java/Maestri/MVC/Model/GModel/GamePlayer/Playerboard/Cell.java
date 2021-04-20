@@ -1,21 +1,29 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
+/**
+ * Composes the faith path
+ */
 public class Cell {
 
     /**
-     * Cell's victory points.
+     * Victory points of the cell
      */
     private final int victoryPoints;
     /**
-     * Cell where there's a relation in Vatican.
+     * True if the cell is a pope space
      */
     private final boolean popeSpace;
     /**
-     * Victory points of the vatican section's card.
+     * Victory points of the vatican section's card
      */
     private final int vaticanSectionVictoryPoints;
 
-
+    /**
+     * Initializes the cell
+     * @param victoryPoints - victory points of the cell
+     * @param popeSpace - true if the cell is a pope space
+     * @param vaticanSectionVictoryPoints - victory points of the vatican section's card
+     */
     public Cell(int victoryPoints, boolean popeSpace, int vaticanSectionVictoryPoints) {
         this.victoryPoints = victoryPoints;
         this.popeSpace = popeSpace;
@@ -23,27 +31,28 @@ public class Cell {
     }
 
     /**
-     * @return the cell's victory points.
+     * Returns the victory points of the cell
+     * @return
      */
-
     public int getVictoryPoints() {
-        return victoryPoints;
+        return this.victoryPoints;
     }
 
-    /**
-     * @return a boolean that verify if the cross is in a pope space.
-     */
 
+    /**
+     * Returns true if the cell is a pope space
+     * @return true if the cell is a pope space
+     */
     public boolean isPopeSpace() {
-        return popeSpace;
+        return this.popeSpace;
     }
 
     /**
-     * @return the victory points of the vatican section's card.
+     * Returns the victory points of the vatican section's card
+     * @return the victory points of the vatican section's card
      */
-
     public int getVaticanSectionVictoryPoints() {
-        return vaticanSectionVictoryPoints;
+        return this.vaticanSectionVictoryPoints;
     }
 }
 

@@ -3,33 +3,40 @@ package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Contains the resources the player receives from production
+ */
 public class Chest {
+
     /**
-     * A map where you can find resources and the relative quantity in the chest.
+     * Contains the resources types and their respective quantity
      */
     private Map<String, Integer> chestResources;
 
-    public Chest() {
-        chestResources = new HashMap<>();
-        chestResources.put("COINS", 0);
-        chestResources.put("SHIELDS", 0);
-        chestResources.put("SERVANTS", 0);
-        chestResources.put("STONES", 0);
-    }
-
     /**
-     * @return a map where you can find resources and the relative quantity in the chest.
+     * Initializes the chest as empty
      */
-
-    public Map<String, Integer> getChestResources() {
-        return chestResources;
+    public Chest() {
+        this.chestResources = new HashMap<>();
+        this.chestResources.put("COINS", 0);
+        this.chestResources.put("SHIELDS", 0);
+        this.chestResources.put("SERVANTS", 0);
+        this.chestResources.put("STONES", 0);
     }
 
     /**
-     * This method sets the chest's resources.
-     * @param chestResources a map where you can find resources and the relative quantity in the chest.
+     * Returns the chest's resources
+     * @return the chest's resources
+     */
+    public Map<String, Integer> getChestResources() {
+        return this.chestResources;
+    }
+
+    /**
+     * Sets the chest's resources
+     * @param chestResources - resources to set
      */
     public void setChestResources(Map<String, Integer> chestResources) {
-
+        this.chestResources = chestResources;
     }
 }

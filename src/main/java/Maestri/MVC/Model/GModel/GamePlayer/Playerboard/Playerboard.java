@@ -213,9 +213,9 @@ public class Playerboard {
         int i;
         int resourceInputNum = -1;
         int fromWhat = -1;
-        List<String> availableResourceWarehouse = null;
-        List<String> availableResourceChest = null;
-        List<String> resourceChoice = null;
+        List<String> availableResourceWarehouse = new ArrayList<>();
+        List<String> availableResourceChest = new ArrayList<>();
+        List<String> resourceChoice = new ArrayList<>();
         Scanner in = new Scanner(System.in);
 
         // Available resources from warehouse
@@ -242,7 +242,7 @@ public class Playerboard {
                 System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
                 fromWhat = in.nextInt();
             }
-            if (fromWhat == 0 && availableResourceWarehouse != null) {
+            if (fromWhat == 0 && !availableResourceWarehouse.isEmpty()) {
                 while (resourceInputNum < 0 || resourceInputNum > availableResourceWarehouse.size() - 1) {
                     System.out.println("Choose a resource from warehouse:");
                     for (int j = 0; j < availableResourceWarehouse.size(); j++) {
@@ -252,7 +252,7 @@ public class Playerboard {
                 }
                 resourceChoice = new ArrayList<>();
                 resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
-            } else if (availableResourceChest != null) {
+            } else if (!availableResourceChest.isEmpty()) {
                 while (resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
                     System.out.println("Choose a resource from chest:");
                     for (int j = 0; j < availableResourceChest.size(); j++) {
@@ -284,7 +284,6 @@ public class Playerboard {
                 i++;
             }
         }
-
 
         return resourceChoice;
     }

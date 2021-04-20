@@ -1,3 +1,5 @@
+package Test_PlayerBoard;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.FaithPath;

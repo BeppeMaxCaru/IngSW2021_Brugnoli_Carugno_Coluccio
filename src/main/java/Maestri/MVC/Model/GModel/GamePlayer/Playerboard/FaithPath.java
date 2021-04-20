@@ -7,21 +7,29 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Represents the player board's path where to move the player's red cross
+ */
 public class FaithPath {
 
     /**
-     * Faith path as a cell's array.
+     * Contains all the 25 cells of the path
      */
     private final Cell[] faithPath;
+
     /**
-     * Cross's position on faith path.
+     * Red cross position on the faith path
      */
     private int crossPosition;
+
     /**
-     * A map where are disabled the Vatican's cards.
+     * Tracks where vatican's card are not available
      */
     public Map<Integer, Integer> discardVaticanCard;
 
+    /**
+     * Initializes all the 25 cells of the faith path and the starting position of each player's red cross
+     */
     public FaithPath() {
 
         this.faithPath = new Cell[25];
@@ -53,48 +61,47 @@ public class FaithPath {
 
         this.crossPosition = 0;
 
-        discardVaticanCard = new HashMap<>();
-        discardVaticanCard.put(2, 2);
-        discardVaticanCard.put(3, 3);
-        discardVaticanCard.put(4, 4);
+        this.discardVaticanCard = new HashMap<>();
+        this.discardVaticanCard.put(2, 2);
+        this.discardVaticanCard.put(3, 3);
+        this.discardVaticanCard.put(4, 4);
     }
 
     /**
-     * @return faith path's cell.
+     * Returns the faith path track
+     * @return the faith path track
      */
-
     public Cell[] getFaithPath() {
         return this.faithPath;
     }
 
     /**
-     * @return cross position on faith path.
+     * Returns the red cross position
+     * @return the red cross position
      */
-
-    public int getCrossPosition( ) {
+    public int getCrossPosition() {
         return this.crossPosition;
     }
 
     /**
-     * @param i number of positions the cross has to advance.
+     * Advances the red cross of the player
+     * @param i - number of positions that the player's red cross advances
      */
-
     public void moveCross(int i) {
-        crossPosition = crossPosition + i;
+        this.crossPosition = this.crossPosition + i;
     }
 
     /**
-     * This method checks on the faith path if the player has the possibility to turn (or remove) the card after a relation in Vatican.
-     * @param crossPositionPlayerX the cross's position of the player that just had a relation in Vatican.
-     * @param playerboard the playerboard to increase the total number of victory points if the player can turn the card.
+     * Assigns or not the vatican section victory points depending on the red cross position
+     * @param crossPositionPlayerX - red cross position of the player
+     * @param playerboard - the player's player board that receives the vatican section victory points
      */
-
     public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
-        if(discardVaticanCard.get(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints()) != 0) {
-            if (crossPosition > crossPositionPlayerX || faithPath[crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
-                playerboard.sumVictoryPoints(faithPath[crossPositionPlayerX].getVictoryPoints());
+        if(this.discardVaticanCard.get(this.faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints()) != 0) {
+            if (this.crossPosition > crossPositionPlayerX || this.faithPath[this.crossPosition].getVaticanSectionVictoryPoints() == faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints())
+                playerboard.sumVictoryPoints(this.faithPath[crossPositionPlayerX].getVictoryPoints());
             else
-                discardVaticanCard.put(faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints(), 0);
+                this.discardVaticanCard.put(this.faithPath[crossPositionPlayerX].getVaticanSectionVictoryPoints(), 0);
         }
     }
 }

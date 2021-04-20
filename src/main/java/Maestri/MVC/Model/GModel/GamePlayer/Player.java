@@ -338,7 +338,7 @@ public class Player {
             for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
             while(activateProduction != 0 && activateProduction != 1) {
                 System.out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                System.out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                System.out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
                 System.out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
                 activateProduction = in.nextInt();
             }
@@ -351,7 +351,7 @@ public class Player {
                     numResource = outputResources.get(key);
                     outputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
                 }
-                // Aggiunta alla conta totale i redCross.
+                // Aggiunta alla conta totale i redCross
                 redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
             }
         }
@@ -364,6 +364,7 @@ public class Player {
         }
         if(activateProduction == 1) {
             i = 0;
+            //Controllo checkResourcesAvailability
             for(String s : getPlayerBoard().activateBasicProductionPower()) {
                 if(i == 2) { // Se siamo alla terza risorsa, che per forza è l'output...
                     if(s.equals("REDCROSS"))
