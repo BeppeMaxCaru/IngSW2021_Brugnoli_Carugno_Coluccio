@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Contains the resources the player receives from production
+ * Contains the resources that players receives from production
  */
 public class Chest {
 

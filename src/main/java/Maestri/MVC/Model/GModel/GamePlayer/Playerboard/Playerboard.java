@@ -5,48 +5,57 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.util.*;
 
-
+/**
+ * Includes all the player's game components
+ */
 public class Playerboard {
+
     /**
-     * Number of development cards bought.
+     * Number of development cards bought
      */
     private int developmentCardsBought;
-    //private DevelopmentCard[] playerboardDevelopmentCards;
+
     /**
-     * Decks of development cards.
+     * Development cards spaces where to place development cards bought
      */
     private DevelopmentCard[][] playerboardDevelopmentCards;
+
     /**
-     * Infinity reserve of resources.
+     * Unlimited resources reserve
      */
-    //Mappa da aggiungere con tutti i depositi disponibili
-    //private Map<Integer, Deposits> availablePlayerboardDeposits;
     private Chest chest;
+
     /**
-     * Reserve of resources with arrangement rules.
+     * Limited resources reserve
      */
     private WareHouse wareHouse;
+
     /**
-     * Path where you put your red cross.
+     * Tracks the player position
      */
     private FaithPath faithPath;
+
     /**
-     * Numbers of victory points gets during the play.
+     * Victory points collected
      */
     private int victoryPoints;
+
+    /**
+     * Optional permanent perk received from leader cards that allows to receive one resource from a white marble
+     */
     private final Marble[] resourceMarbles = new Marble[2];
+
+    /**
+     * Optional permanent perk received from leader cards that allows to receive a one resource discount to apply while buying a development card
+     */
     private final String[] developmentCardDiscount =new String[2];
 
-    private String[] leaderCardsDiscounts = new String[2];
-    private String[] whiteMarblePossibleResources = new String[2];
-
-    //Update Giuseppe: synchronizing DevelopmentCards in playerboard
+    /**
+     * Initializes the player board
+     */
     public Playerboard() {
         this.developmentCardsBought = 0;
-        //this.playerboardDevelopmentCards = playerDevelopmentCards;
-
         this.playerboardDevelopmentCards = new DevelopmentCard[3][3];
-
         this.chest = new Chest();
         this.wareHouse = new WareHouse();
         this.faithPath = new FaithPath();
@@ -60,29 +69,28 @@ public class Playerboard {
         return this.resourceMarbles;
     }
 
+    /**
+     * Returns the development cards discounts
+     * @return the development cards discounts
+     */
     public String[] getDevelopmentCardDiscount() {
         return this.developmentCardDiscount;
     }
 
-    public int getDevelopmentCardsBought() {
-        return this.developmentCardsBought;
-    }
-
+    /**
+     * Returns the player board's development cards
+     * @return the player board's development cards
+     */
     public DevelopmentCard[][] getPlayerboardDevelopmentCards() {
         return this.playerboardDevelopmentCards;
     }
 
-    /*public void payNewDevelopmentCard(DevelopmentCard developmentCard) {
-        Map<String, Integer> resourcesToPay = new HashMap<>();
-        while(!resourcesToPay.equals(developmentCard.getDevelopmentCardCost())) {
-            //Metodo che fa prendere risorse da tutti gli slot disponibili
-            //this.pickResources();
-        }
-
-    }*/
-
+    /**
+     * Places a development card on the player board
+     * @param developmentCard - the development card to place
+     */
     public void placeNewDevelopmentCard(DevelopmentCard developmentCard) {
-        System.out.println("Choose space number where to place new development card: ");
+        System.out.println("Choose space number where to place new development card (0 to 2): ");
         Scanner playerInput = new Scanner(System.in);
         System.out.println("");
         int spaceChoosenFromPlayer = playerInput.nextInt();
@@ -92,16 +100,55 @@ public class Playerboard {
             spaceChoosenFromPlayer = playerInput.nextInt();
             System.out.println("");
         }
-        if(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(this)){
-            this.getPlayerboardDevelopmentCards()[developmentCard.getDevelopmentCardLevel()][spaceChoosenFromPlayer]=developmentCard;
+        //Checks the chosen space
+        while (!isCardBelowCompatible(spaceChoosenFromPlayer, developmentCard)) {
+            System.out.println("Placement not possible!");
+            System.out.println("Insert new valid place (0 to 3): ");
+            spaceChoosenFromPlayer = playerInput.nextInt();
+            System.out.println("");
         }
-
     }
 
+    /**
+     * Checks that the new development card can be placed on the top of a development card pile
+     * @param pile - the chosen development card pile
+     * @param developmentCard - the development card to place
+     * @return true if the development card can be placed on top
+     */
+    public boolean isCardBelowCompatible(int pile, DevelopmentCard developmentCard) {
+        for (int i=0;i<3;i++) {
+            if (i==0) {
+                if (this.playerboardDevelopmentCards[i][pile]==null) {
+                    this.playerboardDevelopmentCards[i][pile] = developmentCard;
+                    this.developmentCardsBought = this.developmentCardsBought + 1;
+                    return true;
+                }
+            } else {
+                DevelopmentCard developmentCardToUpgrade = this.playerboardDevelopmentCards[i-1][pile];
+                if (developmentCardToUpgrade.getDevelopmentCardLevel()==(developmentCard.getDevelopmentCardLevel()-1)) {
+                    if (developmentCardToUpgrade.getDevelopmentCardColour().equals(developmentCard.getDevelopmentCardColour())) {
+                        this.playerboardDevelopmentCards[i][pile] = developmentCard;
+                        this.developmentCardsBought = this.developmentCardsBought + 1;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the chest
+     * @return the chest
+     */
     public Chest getChest() {
         return this.chest;
     }
 
+    /**
+     * Returns the warehouse
+     * @return the warehouse
+     */
     public WareHouse getWareHouse() {
         return this.wareHouse;
     }
@@ -109,46 +156,34 @@ public class Playerboard {
     public void setWareHouse(WareHouse wareHouse) {
     }
 
+    /**
+     * Returns the faith path
+     * @return the faith path
+     */
     public FaithPath getFaithPath() {
         return this.faithPath;
     }
 
+    /**
+     * Returns the victory points
+     * @return the victory points
+     */
     public int getVictoryPoints() {
         return this.victoryPoints;
     }
 
-    public void sumVictoryPoints(int i) {
-        this.victoryPoints = this.victoryPoints + i;
+    /**
+     * Sums new victory points to the player board's victory points
+     * @param victoryPoints - victory points to add
+     */
+    public void sumVictoryPoints(int victoryPoints) {
+        this.victoryPoints = this.victoryPoints + victoryPoints;
     }
 
-    public String[] getLeaderCardsDiscounts() {
-        return this.leaderCardsDiscounts;
-    }
-
-    public void addLeaderCardsDiscounts(String discount) {
-        for (int i = 0;i < this.leaderCardsDiscounts.length; i++) {
-            if (this.leaderCardsDiscounts[i].equals(null)) {
-                this.leaderCardsDiscounts[i] = discount;
-                return;
-            }
-        };
-    }
-
-    public String[] getWhiteMarblePossibleResources() {
-        return this.whiteMarblePossibleResources;
-    }
-
-    public void addWhiteMarblePossibleResources(String possibleResources) {
-        for (int i = 0; i < this.whiteMarblePossibleResources.length; i++) {
-            if (this.whiteMarblePossibleResources[i].equals(null)) {
-                this.whiteMarblePossibleResources[i] = possibleResources;
-                return;
-            }
-        };
-    }
-
-    /** This method picks resources from warehouse/chest to pay the player's development cards. */
-
+    /**
+     * Removes a resource from the warehouse or the chest
+     * @param resource - resource to remove
+     */
     public void pickResource(String resource) {
         int fromWhat = -1;
         int fromWhichWarehouse = -1;
@@ -195,6 +230,8 @@ public class Playerboard {
             if(numResources != 0)
                 this.chest.getChestResources().put(resource, numResources - 1);
             else {
+                //ALI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //You need to make the player choose beetween warehouse or extrawarehouse again
                 System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
                 numResources = this.wareHouse.getWarehouseResources().get(resource);
                 this.wareHouse.getWarehouseResources().put(resource, numResources - 1);
@@ -203,10 +240,9 @@ public class Playerboard {
     }
 
     /**
-     * This method activates the basic production power of the playerboard.
-     * @return a list where in the first two positions there are the resources he wants to discard,  in the last the resources he wants.
+     * Activates the basic production power of the player board
+     * @return a list with the first two resources to discard and the third one to receive
      */
-
     public List<String> activateBasicProductionPower() {
         int resourceOutputNum = -1;
         int numResources;
@@ -222,7 +258,6 @@ public class Playerboard {
         for (String key : this.wareHouse.getWarehouseResources().keySet()) {
             numResources = this.wareHouse.getWarehouseResources().get(key);
             if (numResources != 0) {
-                availableResourceWarehouse = new ArrayList<>();
                 availableResourceWarehouse.add(key);
             }
         }
@@ -231,12 +266,11 @@ public class Playerboard {
         for (String key : this.chest.getChestResources().keySet()) {
             numResources = this.chest.getChestResources().get(key);
             if (numResources != 0) {
-                availableResourceChest = new ArrayList<>();
                 availableResourceChest.add(key);
             }
         }
 
-        // two input
+        // Two input
         for (i = 0; i < 2; i++) {
             while (fromWhat != 0 && fromWhat != 1) {
                 System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
@@ -250,7 +284,6 @@ public class Playerboard {
                     }
                     resourceInputNum = in.nextInt();
                 }
-                resourceChoice = new ArrayList<>();
                 resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
             } else if (!availableResourceChest.isEmpty()) {
                 while (resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
@@ -288,6 +321,11 @@ public class Playerboard {
         return resourceChoice;
     }
 
+    //For testing
+    /**
+     * Adds a white marble perk to the player
+     * @param marble - the marble perk to add
+     */
     public void setResourceMarbles(Marble marble){
         int i = 0;
         while((i < this.resourceMarbles.length) && (this.resourceMarbles[i] != null)){

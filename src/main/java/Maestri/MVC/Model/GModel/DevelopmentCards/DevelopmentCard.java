@@ -227,7 +227,7 @@ public class DevelopmentCard {
             }
         }
 
-        System.out.println("Card not compatible with playerboard cards");
+        System.out.println("Card not compatible with player board cards");
         System.out.println("");
         return false;
     }
@@ -265,7 +265,6 @@ public class DevelopmentCard {
         playerboard.getFaithPath().moveCross(this.faithPoints);
 
         //Returns to the player output resources and adds them to the player's chest
-        playerboard.getFaithPath().moveCross(this.faithPoints);
         Map<String, Integer> resourcesAfterProduction = playerboard.getChest().getChestResources();
         this.output.forEach((key, value) -> resourcesAfterProduction.merge(key, value, Integer::sum));
         playerboard.getChest().setChestResources(resourcesAfterProduction);

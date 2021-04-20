@@ -4,12 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+/**
+ * Contains the resources that players receive from the market
+ */
 public class WareHouse {
+
     /**
-     * A map where you can find resources and the relative quantity in the warehouse.
+     * Contains the resources types and their respective quantity
      */
     public Map <String, Integer> warehouseResources;
 
+    /**
+     * Initializes the warehouse as empty
+     */
     public WareHouse() {
         this.warehouseResources = new HashMap<>();
         this.warehouseResources.put("COINS", 0);
@@ -19,28 +26,27 @@ public class WareHouse {
     }
 
     /**
-     * @return a map where you can find resources and the relative quantity in the warehouse.
+     * Returns the warehouse's resources
+     * @return the warehouse's resources
      */
-
     public Map <String, Integer> getWarehouseResources() {
         return this.warehouseResources;
     }
 
     /**
-     * this method sets the warehouse's resources.
-     * @param warehouseResources a map where you can find resources and the relative quantity in the warehouse
+     * Sets the warehouse's resources
+     * @param warehouseResources - the resources to set
      */
-
     public void setWarehouseResources(Map <String, Integer> warehouseResources) {
         this.warehouseResources = warehouseResources;
     }
 
     /**
-     * this method checks if the player can collect resources or if he has to discard them and to give other players faithPoints
-     * @param res1 resource to be checked
-     * @return true if the resource has to be discarded, false if the player can collect it
+     * Checks that adding a new resource doesn't violate warehouse limit
+     * @param newResource - resource to add
+     * @return true the resource is discarded instead of collected
      */
-    public boolean checkConstraints(String res1) {
+    public boolean checkConstraints(String newResource) {
 
         String[] res={"COINS", "SHIELDS", "SERVANTS", "STONES"};
         String[] r;
@@ -48,17 +54,17 @@ public class WareHouse {
         int k=0;
         for(int i=0; i<4; i++)
         {
-            if(!res[i].equals(res1))
+            if(!res[i].equals(newResource))
             {
                 r[k] = res[i];
                 k++;
             }
         }
-        String extraRes="extra"+res1;
+        String extraRes="extra"+newResource;
 
         boolean discard=false;
 
-        Integer numOfResources = this.warehouseResources.get(res1);
+        Integer numOfResources = this.warehouseResources.get(newResource);
         Integer extraSpace = this.warehouseResources.get(extraRes);
 
         Scanner keyboard = new Scanner(System.in);

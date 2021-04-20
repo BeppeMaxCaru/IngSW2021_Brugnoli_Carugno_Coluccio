@@ -1,6 +1,7 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 
 import java.util.*;
 
