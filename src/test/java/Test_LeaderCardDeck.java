@@ -9,8 +9,6 @@ public class Test_LeaderCardDeck {
 
     @Test
     public void testLeaderCardsDeckLength() {
-        for(int i=0; i<16; i++)
-            System.out.println(this.leaderCardDeck.getLeaderCardsDeck()[i].getClass());
         assertEquals(16, this.leaderCardDeck.getLeaderCardsDeck().length);
     }
 
@@ -38,5 +36,15 @@ public class Test_LeaderCardDeck {
         assertEquals(0,i);
     }
 
+    @Test
+    public void printDecks(){
+        for(int i=0; i<16; i++)
+            System.out.println(this.leaderCardDeck.getLeaderCardsDeck()[i].getClass());
+        System.out.println("\n");
+        System.out.println(this.leaderCardDeck.drawOneLeaderCard().getClass());
+        System.out.println();
+        for(int i=0; i<15; i++)
+            System.out.println(this.leaderCardDeck.getLeaderCardsDeck()[i].getClass());
+    }
 
 }
