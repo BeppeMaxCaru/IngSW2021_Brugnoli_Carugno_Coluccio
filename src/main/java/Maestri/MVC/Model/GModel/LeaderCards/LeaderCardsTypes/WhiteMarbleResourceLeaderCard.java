@@ -1,4 +1,4 @@
-package Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes;
+package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;

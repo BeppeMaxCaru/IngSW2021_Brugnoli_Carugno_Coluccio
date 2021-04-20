@@ -34,7 +34,7 @@ public class Playerboard {
      * Numbers of victory points gets during the play.
      */
     private int victoryPoints;
-    private Marble[] resourceMarbles = new Marble[2];
+    private final Marble[] resourceMarbles = new Marble[2];
     private final String[] developmentCardDiscount =new String[2];
 
     private String[] leaderCardsDiscounts = new String[2];

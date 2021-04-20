@@ -370,7 +370,7 @@ public class DevelopmentCardsDecksGrid {
         int removedCards = 0;
         //Scrolls the column up starting from level 1 cards
         for (int i=2;i>=0;i--) {
-            List<DevelopmentCard> deckToReduce = Arrays.asList(this.developmentCardsDecks[i][column]);
+            List<DevelopmentCard> deckToReduce = new ArrayList<>(Arrays.asList(this.developmentCardsDecks[i][column]));
             if (removedCards==2) return;
             if (deckToReduce.size()!=0) {
                 deckToReduce.remove(0);

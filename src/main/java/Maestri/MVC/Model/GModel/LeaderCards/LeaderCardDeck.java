@@ -1,12 +1,14 @@
 package Maestri.MVC.Model.GModel.LeaderCards;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.DiscountDevelopmentCardsLeaderCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.ExtraProductionPowerLeaderCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.ExtraWarehouseSpaceLeaderCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LaederCardsTypes.WhiteMarbleResourceLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.DiscountDevelopmentCardsLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.WhiteMarbleResourceLeaderCard;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,6 +73,11 @@ public class LeaderCardDeck {
         this.leaderCardsDeck[15] = new WhiteMarbleResourceLeaderCard("PURPLE",
                 "GREEN",
                 "COINS");
+
+        //Instructions for mixing the array of cards, converting it into a list
+        List<LeaderCard> cardsList = Arrays.asList(this.leaderCardsDeck);
+        Collections.shuffle(cardsList);
+        cardsList.toArray(this.leaderCardsDeck);
     }
 
     /**
@@ -86,7 +93,7 @@ public class LeaderCardDeck {
      */
     public LeaderCard drawOneLeaderCard(){
         LeaderCard leaderCardDrawn = this.leaderCardsDeck[0];
-        List<LeaderCard> leaderCardList = Arrays.asList(this.leaderCardsDeck);
+        List<LeaderCard> leaderCardList = new ArrayList<>(Arrays.asList(this.leaderCardsDeck));
         leaderCardList.remove(0);
         this.leaderCardsDeck = leaderCardList.toArray(this.leaderCardsDeck);
         return leaderCardDrawn;

@@ -233,7 +233,7 @@ public class Player {
         }
         int column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         //Check if selected pile is empty
-        while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column].length==0) {
+        while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]==null) {
             System.out.println("Empty development cards pile!");
             System.out.println("Choose new pile");
             System.out.println("");
@@ -296,7 +296,7 @@ public class Player {
                 playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
                 //Removes the development card from the grid by removing it
                 //from the deck where it was bought
-                List<DevelopmentCard> reducedDeck = Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+                List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]));
                 reducedDeck.remove(0);
                 developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
                 return true;
