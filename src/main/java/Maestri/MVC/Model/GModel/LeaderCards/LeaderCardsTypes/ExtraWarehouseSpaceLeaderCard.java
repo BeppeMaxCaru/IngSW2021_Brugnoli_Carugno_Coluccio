@@ -5,22 +5,24 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 /**
- * These LeaderCards add an extra warehouse space containing 2 resources to the player
+ * Adds two extra spaces to the warehouse for a resource
  */
 public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
 
     /**
-     * DevelopmentCard required for the activation
+     * Resource cost of the leader card
      */
     private final String requisite;
 
     /**
-     * Extra Resource type
+     * Extra resource type
      */
     private final String resourceSpace;
 
     /**
-     * Constructor associates inputs by LeaderCardDeck to attributes of the class
+     * Initializes this leader card type
+     * @param resourceCost - type of resource to pay to activate the leader card
+     * @param resourceSpace - type of the extra resource space
      */
     public ExtraWarehouseSpaceLeaderCard(String resourceCost, String resourceSpace) {
         super(3);
@@ -32,7 +34,9 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
     }
 
     /**
-     * The player needs 5 of the specific resource for the activation of the LeaderCard
+     * Checks if the player has enough resources to play the leader card
+     * @param playerboard - player's player board
+     * @return true if the player can play this card
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
@@ -48,7 +52,8 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
     }
 
     /**
-     * This method adds to the Player Warehouse the extra space
+     * Adds the extra spaces to the warehouse
+     * @param player - player playing the leader card
      */
     @Override
     public void activateAbility(Player player) {

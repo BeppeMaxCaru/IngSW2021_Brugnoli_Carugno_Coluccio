@@ -17,7 +17,7 @@ public class GameModel {
 
     int numberOfPlayers;
     private Player[] players;
-    int currentPlayer;
+    int currentPlayer = 0;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private LeaderCardDeck leaderCardDeck;
     private Market market;
@@ -106,7 +106,7 @@ public class GameModel {
 
     public void relationWithVatican(int crossPosition) {
         for(int i = 0; i < players.length; i++) {
-            if(getPlayers()[i].getPlayerBoard().getFaithPath().getFaithPath()[crossPosition].isPopeSpace())
+            if(getPlayers()[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace())
                 getPlayers()[i].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, getPlayers()[i].getPlayerBoard());
         }
     }

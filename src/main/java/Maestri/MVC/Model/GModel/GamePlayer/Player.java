@@ -34,6 +34,11 @@ public class Player {
     private LeaderCard[] playerLeaderCards;
 
     /**
+     * Player total victory points
+     */
+    private int playerTotalVictoryPoints = 0;
+
+    /**
      * Initializes a new player
      * @param nickname - nickname to assign to the player
      * @param playerNumber - index to track the player order
@@ -313,10 +318,10 @@ public class Player {
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /**
-     * This method activates the production on the player's playerboard.
-     * @param devCard the development cards on the playerboard.
+     * Activates the production powers on the player's player board
+     * @param devCard - development cards on the player board
      */
-    public void activateProduction(DevelopmentCard devCard) {
+    public boolean activateProduction(DevelopmentCard devCard) {
         int i, j;
         int numResource;
         int activateProduction = -1;
@@ -389,9 +394,12 @@ public class Player {
                 for(i = 0; i < numResource; i++)
                     this.playerBoard.pickResource(key);
             }
+        } else {
+            System.out.println("Not enough resources to activate production!");
+            return false;
         }
 
-        // Aggiungi risorse al chest.
+        //Adds output resources to the chest
         for(String key: outputResources.keySet()) {
             numResource = getPlayerBoard().getChest().getChestResources().get(key);
             getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
@@ -399,14 +407,15 @@ public class Player {
 
         //RedCross
         getPlayerBoard().getFaithPath().moveCross(redCross);
+
+        return true;
     }
 
     /**
-     * This method asks the player if he wants to do a leader action.
-     * @return 1 if the player want to do a leader action, 0 if he doesn't.
+     * Asks the player to perform a leader action
+     * @return true if the player wants to perform it
      */
-
-    public int getLeaderAction( ) {
+    public boolean getLeaderAction() {
         Scanner in = new Scanner(System.in);
         int leaderActionNum = -1;
 
@@ -415,13 +424,17 @@ public class Player {
             leaderActionNum = in.nextInt();
         }
 
-        return leaderActionNum;
+        if (leaderActionNum==1) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**
-     * This method allows the player to play a leader card.
+     * Plays a leader card
      */
-
     public void playLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard=-1;
@@ -441,9 +454,8 @@ public class Player {
     }
 
     /**
-     * This method allows the player to discard a leader card.
-     * */
-
+     * Discards a leader card
+     */
     public void discardLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
@@ -464,11 +476,12 @@ public class Player {
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
     }
 
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    //Possible fix required
     /**
      * This method sums all the player's victory points at the end of the play.
      * @return the number of victory points.
      */
-
     public int sumAllVictoryPoints() {
         int victoryPoints = 0;
         int numResources = 0;
@@ -477,7 +490,9 @@ public class Player {
         victoryPoints = victoryPoints + getPlayerBoard().getVictoryPoints();
 
         // Punti dalla posizione della croce.
-        victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getFaithPath()[getPlayerBoard().getFaithPath().getCrossPosition()].getVictoryPoints();
+        //Non serve se modifichi move cross in modo tale che aggiunga i victory points di una cella ai punti
+        //della player board quando il giocatore ci capita sopra così li tieni aggiornati
+        victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getFaithPathTrack()[getPlayerBoard().getFaithPath().getCrossPosition()].getVictoryPoints();
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
         numResources = numResources + numResourcesReserve();
