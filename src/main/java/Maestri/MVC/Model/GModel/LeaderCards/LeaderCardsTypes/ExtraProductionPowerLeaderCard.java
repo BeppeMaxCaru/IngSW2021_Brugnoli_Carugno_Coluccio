@@ -14,17 +14,19 @@ import java.util.*;
 public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
     /**
-     * DevelopmentCard required for the activation
+     * Development card required to play the leader card
      */
     private final DevelopmentCard requisite;
 
     /**
-     * Resource to be spent
+     * Input resource required to activate the production
      */
     private final String input;
 
     /**
-     * Constructor associates inputs by LeaderCardDeck to attributes of the class
+     * Initializes this leader card type
+     * @param requisite - development card required
+     * @param resourceInput - input resource
      */
     public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput) {
         super(4);
@@ -33,6 +35,10 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
     }
 
+    /**
+     * Gifts an extra production power to the player
+     * @param player - player playing the leader card
+     */
     @Override
     public void activateAbility(Player player) {
 
@@ -92,6 +98,11 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
         this.setPlayed(true);
     }
 
+    /**
+     * Checks if the player can play the leader card
+     * @param playerboard - player's player board
+     * @return true if the player can play the leader card
+     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;

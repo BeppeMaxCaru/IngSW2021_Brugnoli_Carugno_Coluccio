@@ -217,7 +217,7 @@ public class Playerboard {
                                 this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                         }
                     }
-                    i++;
+                    i=0;
                 }
                 else {
                     System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
@@ -228,7 +228,7 @@ public class Playerboard {
                 numResources = this.chest.getChestResources().get(resource);
                 if (numResources != 0) {
                     this.chest.getChestResources().put(resource, numResources - 1);
-                    i++;
+                    i=0;
                 }
                 else {
                     System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");

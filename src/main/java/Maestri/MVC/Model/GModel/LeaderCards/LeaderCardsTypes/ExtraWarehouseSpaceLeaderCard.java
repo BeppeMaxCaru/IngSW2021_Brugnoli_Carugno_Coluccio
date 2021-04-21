@@ -36,7 +36,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
     /**
      * Checks if the player has enough resources to play the leader card
      * @param playerboard - player's player board
-     * @return true if the player can play this card
+     * @return true if the player can play the leader card
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {

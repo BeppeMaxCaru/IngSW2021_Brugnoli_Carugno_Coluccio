@@ -57,7 +57,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
     /**
      * Checks if the player can play the leader card
      * @param playerboard - player's player board
-     * @return true if the player satisfies the requisites to play the card
+     * @return true if the player can play the leader card
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {

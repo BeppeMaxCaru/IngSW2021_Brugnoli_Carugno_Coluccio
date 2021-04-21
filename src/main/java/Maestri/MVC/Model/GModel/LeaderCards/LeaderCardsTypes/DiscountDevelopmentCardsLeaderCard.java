@@ -10,7 +10,7 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     /**
-     * Contains the two colours of the development cards required to play the leader card
+     * Colours of the development cards required to play the leader card
      */
     private final String[] requisite;
 
@@ -18,10 +18,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
      * Resource to discount
      */
     private final String discount;
-
-    /**
-     * Constructor associates inputs by LeaderCardDeck to attributes of the class
-     */
 
     /**
      * Initializes this leader card type
@@ -46,7 +42,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     /**
      * Checks if the player can play the leader card
      * @param playerboard - player's player board
-     * @return true if the player satisfies the requisites to play the card
+     * @return true if the player can play the leader card
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
