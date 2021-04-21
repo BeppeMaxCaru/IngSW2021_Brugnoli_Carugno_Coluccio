@@ -4,6 +4,7 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.util.*;
@@ -321,7 +322,7 @@ public class Player {
      * Activates the production powers on the player's player board
      * @param devCard - development cards on the player board
      */
-    public boolean activateProduction(DevelopmentCard devCard) {
+    public boolean activateProduction(DevelopmentCard devCard, ExtraProductionPowerLeaderCard extraprod) {
         int i, j;
         int numResource;
         int activateProduction = -1;
@@ -387,6 +388,16 @@ public class Player {
             }
         }
 
+        // Richiesta di attivazione potere di produzione extra.
+        activateProduction = -1;
+        while(activateProduction != 0 && activateProduction != 1) {
+            System.out.println("Do you want to activate the extra production power?: Write 1 if you want or 0 if you don't:");
+            activateProduction = in.nextInt();
+        }
+        if(activateProduction == 1)
+            extraprod.activateAbility(this.playerBoard);
+
+
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
         if(devCard.checkResourcesAvailability(this.playerBoard, inputResources)) {
             for(String key: inputResources.keySet()) {
@@ -394,7 +405,8 @@ public class Player {
                 for(i = 0; i < numResource; i++)
                     this.playerBoard.pickResource(key);
             }
-        } else {
+        }
+        else {
             System.out.println("Not enough resources to activate production!");
             return false;
         }
@@ -448,7 +460,7 @@ public class Player {
             numLeaderCard = in.nextInt();
             if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))&&
                     (!this.playerLeaderCards[numLeaderCard].isPlayed()))
-                this.playerLeaderCards[numLeaderCard].activateAbility(this);
+                this.playerLeaderCards[numLeaderCard].activateAbility(this.playerBoard);
                 this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
         }
     }

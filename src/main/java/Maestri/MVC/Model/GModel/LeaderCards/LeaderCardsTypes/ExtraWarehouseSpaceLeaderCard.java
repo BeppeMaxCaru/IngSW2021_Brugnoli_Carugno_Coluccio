@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
@@ -53,11 +52,11 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
 
     /**
      * Adds the extra spaces to the warehouse
-     * @param player - player playing the leader card
+     * @param playerboard - player playing the leader card's playerboard
      */
     @Override
-    public void activateAbility(Player player) {
-        player.getPlayerBoard().getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
+    public void activateAbility(Playerboard playerboard) {
+        playerboard.getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }

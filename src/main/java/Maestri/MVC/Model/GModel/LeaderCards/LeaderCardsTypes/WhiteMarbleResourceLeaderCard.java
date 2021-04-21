@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
@@ -90,21 +89,21 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
                 }
             }
         }
-        else check=false;
+        else check = false;
 
         return check;
     }
 
     /**
      * Gives to the player the perk to receive one resource from the white marble instead of nothing
-     * @param player - player playing the leader card
+     * @param playerboard - player playing the leader card's playerboard
      */
     @Override
-    public void activateAbility(Player player) {
-        int i=0;
-        while(player.getPlayerBoard().getResourceMarbles()[i]!=null)
+    public void activateAbility(Playerboard playerboard) {
+        int i = 0;
+        while(playerboard.getResourceMarbles()[i] != null)
             i++;
-        player.getPlayerBoard().getResourceMarbles()[i]=this.whiteMarbleResource;
+        playerboard.getResourceMarbles()[i] = this.whiteMarbleResource;
         this.setPlayed(true);
     }
 }

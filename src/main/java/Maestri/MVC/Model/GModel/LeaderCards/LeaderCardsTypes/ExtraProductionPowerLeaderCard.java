@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
@@ -40,60 +39,41 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
      * @param player - player playing the leader card
      */
     @Override
-    public void activateAbility(Player player) {
+    public void activateAbility(Playerboard playerboard) {
 
         int numWarehouseResources;
         int numChestResources;
-        int fromWhat = -1;
         int resourceOutputNum = -1;
         int numResources;
-        int i = 1;
+        int i = 0;
 
         Scanner in = new Scanner(System.in);
 
-        numWarehouseResources = player.getPlayerBoard().getWareHouse().getWarehouseResources().get(this.input);
-        numChestResources = player.getPlayerBoard().getChest().getChestResources().get(this.input);
+        // Numero di risorse nel warehouse del tipo this.input
+        numWarehouseResources = playerboard.getWareHouse().getWarehouseResources().get(this.input);
+        numWarehouseResources = numWarehouseResources + playerboard.getWareHouse().getWarehouseResources().get("extra" + this.input);
+        // Numero di risorse nel chest del tipo this.input
+        numChestResources = playerboard.getChest().getChestResources().get(this.input);
 
-        while(i > 0) {
-            if((numChestResources>0)&&(numWarehouseResources>0))
-            {
-                while(fromWhat != 0 && fromWhat != 1) {
-                    System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-                    fromWhat = in.nextInt();
-                }
-            }
-            else if (numChestResources==0)
-                fromWhat=0;
-            else
-                fromWhat=1;
+        if((numChestResources > 0) || (numWarehouseResources > 0))
+            playerboard.pickResource(this.input);
 
-            if(fromWhat == 0 ) {
-                    numResources = player.getPlayerBoard().getWareHouse().getWarehouseResources().get(input);
-                    player.getPlayerBoard().getWareHouse().getWarehouseResources().put(input, numResources - 1);
-            }
-            else{
-                numResources = player.getPlayerBoard().getChest().getChestResources().get(input);
-                player.getPlayerBoard().getChest().getChestResources().put(input, numResources - 1);
-            }
-            i--;
-        }
-
+        // Scelta della risorsa in output
         while(resourceOutputNum < 0 || resourceOutputNum > 3) {
             System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
             resourceOutputNum = in.nextInt();
         }
 
-        i = 0;
-        for (String key : player.getPlayerBoard().getChest().getChestResources().keySet()) {
+        for (String key : playerboard.getChest().getChestResources().keySet()) {
             if(i == resourceOutputNum) {
-                numResources = player.getPlayerBoard().getChest().getChestResources().get(key);
-                player.getPlayerBoard().getChest().getChestResources().put(key, numResources + 1);
+                numResources = playerboard.getChest().getChestResources().get(key);
+                playerboard.getChest().getChestResources().put(key, numResources + 1);
                 break;
             }
             i++;
         }
 
-        player.getPlayerBoard().getFaithPath().moveCross(1);
+        playerboard.getFaithPath().moveCross(1);
 
         this.setPlayed(true);
     }
@@ -105,11 +85,11 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
      */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        boolean check=false;
-        for(int i=0; i<3; i++)
+        boolean check = false;
+        for(int i = 0; i < 3; i++)
         {
             if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour()))
-                check=true;
+                check = true;
         }
         return check;
     }

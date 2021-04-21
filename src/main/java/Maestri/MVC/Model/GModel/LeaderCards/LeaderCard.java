@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.LeaderCards;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 /**
@@ -61,9 +60,9 @@ public class LeaderCard {
 
     /**
      * Gives the permanent perk of the leader card to the player
-     * @param player - player playing the leader card
+     * @param playerboard - player's playerboard
      */
-    public void activateAbility(Player player) {
+    public void activateAbility(Playerboard playerboard) {
     }
 
     /**

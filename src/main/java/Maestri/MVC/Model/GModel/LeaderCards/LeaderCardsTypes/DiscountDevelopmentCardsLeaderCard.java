@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
@@ -68,15 +67,15 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
 
     /**
      * Gives to the player the perk to discount one resource from the cost of the development card to buy
-     * @param player - player playing the leader card
+     * @param playerboard - player playing the leader card's playerboard
      */
     @Override
-    public void activateAbility(Player player) {
-        int i=0;
+    public void activateAbility(Playerboard playerboard) {
+        int i = 0;
         //Check the correct position of the array and insert the Resource discount
-        while(player.getPlayerBoard().getDevelopmentCardDiscount()[i]!=null)
+        while(playerboard.getDevelopmentCardDiscount()[i] != null)
             i++;
-        player.getPlayerBoard().getDevelopmentCardDiscount()[i]=this.discount;
+        playerboard.getDevelopmentCardDiscount()[i] = this.discount;
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }
