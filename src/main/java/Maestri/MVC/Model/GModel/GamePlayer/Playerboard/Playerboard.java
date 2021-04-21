@@ -191,50 +191,49 @@ public class Playerboard {
         Integer esRes = this.wareHouse.getWarehouseResources().get("extra"+resource);
         Integer numResources;
         Scanner in = new Scanner(System.in);
+        int i = 1;
 
         while(fromWhat != 0 && fromWhat != 1) {
             System.out.println("Do you want to pick the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
             fromWhat = in.nextInt();
         }
 
-        if(fromWhat == 0) {
-            numResources = 0;
-            numResources = numResources + whRes + esRes;
-            if(numResources != 0)
-            {
-                if((whRes != 0) && (esRes == 0))
-                    this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                else if ((whRes==0)&& (esRes!=0))
-                    this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
-                else
-                {
-                    while((fromWhichWarehouse<0)||(fromWhichWarehouse>1))
-                    {
-                        System.out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
-                        fromWhichWarehouse = in.nextInt();
-                        if (fromWhichWarehouse==0)
-                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                        else
-                            this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
+        while(i > 0) {
+            if (fromWhat == 0) {
+                numResources = 0;
+                numResources = numResources + whRes + esRes;
+                if (numResources != 0) {
+                    if ((whRes != 0) && (esRes == 0))
+                        this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                    else if ((whRes == 0) && (esRes != 0))
+                        this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
+                    else {
+                        while ((fromWhichWarehouse < 0) || (fromWhichWarehouse > 1)) {
+                            System.out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
+                            fromWhichWarehouse = in.nextInt();
+                            if (fromWhichWarehouse == 0)
+                                this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                            else
+                                this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
+                        }
                     }
+                    i++;
+                }
+                else {
+                    System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
+                    fromWhat = 1;
                 }
             }
             else {
-                System.out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
                 numResources = this.chest.getChestResources().get(resource);
-                this.chest.getChestResources().put(resource, numResources - 1);
-            }
-        }
-        else {
-            numResources = this.chest.getChestResources().get(resource);
-            if(numResources != 0)
-                this.chest.getChestResources().put(resource, numResources - 1);
-            else {
-                //ALI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //You need to make the player choose beetween warehouse or extrawarehouse again
-                System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
-                numResources = this.wareHouse.getWarehouseResources().get(resource);
-                this.wareHouse.getWarehouseResources().put(resource, numResources - 1);
+                if (numResources != 0) {
+                    this.chest.getChestResources().put(resource, numResources - 1);
+                    i++;
+                }
+                else {
+                    System.out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
+                    fromWhat = 0;
+                }
             }
         }
     }
@@ -259,6 +258,12 @@ public class Playerboard {
             numResources = this.wareHouse.getWarehouseResources().get(key);
             if (numResources != 0) {
                 availableResourceWarehouse.add(key);
+            }
+            else {
+                numResources = this.wareHouse.getWarehouseResources().get("extra" + key);
+                if (numResources != 0) {
+                    availableResourceWarehouse.add("extra" + key);
+                }
             }
         }
 
