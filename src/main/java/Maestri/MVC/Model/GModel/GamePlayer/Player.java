@@ -219,50 +219,50 @@ public class Player {
         System.out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
         System.out.println("Choose development card colour: ");
         String colour = consoleInput.nextLine();
-        System.out.println("");
+        System.out.println();
         while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
             System.out.println("Card of this colour doesn't exist!");
             System.out.println("Choose a valid development card colour: ");
             colour = consoleInput.nextLine();
-            System.out.println("");
+            System.out.println();
         }
         System.out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
         System.out.println("Choose development card level: ");
         int level = consoleInput.nextInt();
-        System.out.println("");
+        System.out.println();
         //check if the input card exists otherwise choose again
         while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
             System.out.println("Card of this level doesn't exist!");
             System.out.println("Choose a valid development card level: ");
             level = consoleInput.nextInt();
-            System.out.println("");
+            System.out.println();
         }
         int column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         //Check if selected pile is empty
         while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]==null) {
             System.out.println("Empty development cards pile!");
             System.out.println("Choose new pile");
-            System.out.println("");
+            System.out.println();
             System.out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
             System.out.println("Choose development card colour: ");
             colour = consoleInput.nextLine();
-            System.out.println("");
+            System.out.println();
             while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
                 System.out.println("Card of this colour doesn't exist!");
                 System.out.println("Choose a valid development card colour: ");
                 colour = consoleInput.nextLine();
-                System.out.println("");
+                System.out.println();
             }
             System.out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
             System.out.println("Choose development card level: ");
             level = consoleInput.nextInt();
-            System.out.println("");
+            System.out.println();
             //check if the input card exists otherwise choose again
             while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
                 System.out.println("Card of this level doesn't exist!");
                 System.out.println("Choose a valid development card level: ");
                 level = consoleInput.nextInt();
-                System.out.println("");
+                System.out.println();
             }
             column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         }
@@ -340,24 +340,25 @@ public class Player {
         outputResources.put("STONES", 0);
 
         for(j = 0; j < 3; j++) {
-            for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
-            while(activateProduction != 0 && activateProduction != 1) {
-                System.out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                System.out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
-                System.out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
-                activateProduction = in.nextInt();
-            }
-            if(activateProduction == 1) {
-                for(String key: getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
-                    numResource = inputResources.get(key);
-                    inputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
+            for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) {
+                while (activateProduction != 0 && activateProduction != 1) {
+                    System.out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                    System.out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
+                    System.out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
+                    activateProduction = in.nextInt();
                 }
-                for(String key: getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
-                    numResource = outputResources.get(key);
-                    outputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
+                if (activateProduction == 1) {
+                    for (String key : getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
+                        numResource = inputResources.get(key);
+                        inputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
+                    }
+                    for (String key : getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
+                        numResource = outputResources.get(key);
+                        outputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
+                    }
+                    // Aggiunta alla conta totale i redCross
+                    redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
                 }
-                // Aggiunta alla conta totale i redCross
-                redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
             }
         }
 
