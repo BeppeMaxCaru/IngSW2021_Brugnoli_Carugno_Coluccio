@@ -3,7 +3,6 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
-import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
 /**
  * This leader card allows players to receive one resource from the white marble
@@ -68,7 +67,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
             {
                 for(int k=0; k<3; k++)
                 {
-                    if ((playerboard.getPlayerboardDevelopmentCards()[k][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index])))
+                    if ((playerboard.getPlayerboardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(this.requisite[index])))
                         check=true;
                 }
             }

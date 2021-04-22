@@ -55,7 +55,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
             {
                 for(int k=0; k<3; k++)
                 {
-                    if(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(card))
+                    if((playerboard.getPlayerboardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(card)))
                         check=true;
                 }
             }
