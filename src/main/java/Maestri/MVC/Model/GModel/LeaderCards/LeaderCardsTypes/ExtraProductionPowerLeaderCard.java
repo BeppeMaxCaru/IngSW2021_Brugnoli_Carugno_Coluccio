@@ -36,7 +36,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
 
     /**
      * Gifts an extra production power to the player
-     * @param player - player playing the leader card
+     * @param playerboard - player playing the leader card
      */
     @Override
     public void activateAbility(Playerboard playerboard) {
@@ -45,9 +45,13 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
         int numChestResources;
         int resourceOutputNum = -1;
         int numResources;
-        int i = 0;
+        int i = 0, j=0;
 
         Scanner in = new Scanner(System.in);
+
+        while(playerboard.getExtraProductionPowerInput()[j] != null)
+            j++;
+        playerboard.getExtraProductionPowerInput()[j]=this.input;
 
         // Numero di risorse nel warehouse del tipo this.input
         numWarehouseResources = playerboard.getWareHouse().getWarehouseResources().get(this.input);

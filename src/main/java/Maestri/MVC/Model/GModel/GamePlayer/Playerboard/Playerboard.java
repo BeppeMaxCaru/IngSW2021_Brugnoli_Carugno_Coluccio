@@ -51,6 +51,11 @@ public class Playerboard {
     private final String[] developmentCardDiscount =new String[2];
 
     /**
+     * Optional permanent perk received from leader cards that indicates the input resource for extra production power
+     */
+    private final String[] extraProductionPowerInput =new String[2];
+
+    /**
      * Initializes the player board
      */
     public Playerboard() {
@@ -64,6 +69,7 @@ public class Playerboard {
 
     /**
      * This method returns which Marbles player has to pick instead of WhiteMarbles
+     * @return player's available marbles
      */
     public Marble[] getResourceMarbles(){
         return this.resourceMarbles;
@@ -75,6 +81,14 @@ public class Playerboard {
      */
     public String[] getDevelopmentCardDiscount() {
         return this.developmentCardDiscount;
+    }
+
+    /**
+     * Returns the extra production power inputs
+     * @return the extra production power inputs
+     */
+    public String[] getExtraProductionPowerInput(){
+        return this.extraProductionPowerInput;
     }
 
     /**
