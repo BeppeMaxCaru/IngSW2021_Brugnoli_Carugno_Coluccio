@@ -472,20 +472,34 @@ public class Player {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
 
-        //Scelta della carta leader da scartare
-        while(numLeaderCard < 0 || numLeaderCard > this.playerLeaderCards.length) {
-            System.out.println("What leader card do you want to discard?:");
-            for (int i = 0; i < this.playerLeaderCards.length; i++) {
-                System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
+        int k=0;
+        while(this.playerLeaderCards[k]!=null)
+            k++;
+
+
+        if(k>0){
+            if(k==1)
+                numLeaderCard=0;
+            else
+            {
+                //Scelta della carta leader da scartare
+                while(numLeaderCard < 0 || numLeaderCard > k) {
+                    System.out.println("What leader card do you want to discard?:");
+                    for (int i = 0; i < k; i++) {
+                        System.out.println("Write " + i + " for this: " + this.playerLeaderCards[i]);
+                    }
+                    numLeaderCard = in.nextInt();
+                }
             }
-            numLeaderCard = in.nextInt();
+
+            //Rimozione carta leader dal deck
+            this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
+            List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
+            updatedPlayerLeaderCardList.remove(numLeaderCard);
+            this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
         }
 
-        //Rimozione carta leader dal deck
-        this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
-        List<LeaderCard> updatedPlayerLeaderCardList = Arrays.asList(this.playerLeaderCards);
-        updatedPlayerLeaderCardList.remove(numLeaderCard);
-        this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
+
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

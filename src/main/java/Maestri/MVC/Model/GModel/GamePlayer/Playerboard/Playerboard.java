@@ -106,20 +106,20 @@ public class Playerboard {
     public void placeNewDevelopmentCard(DevelopmentCard developmentCard) {
         System.out.println("Choose space number where to place new development card (0 to 2): ");
         Scanner playerInput = new Scanner(System.in);
-        System.out.println("");
+        System.out.println();
         int spaceChoosenFromPlayer = playerInput.nextInt();
         while (spaceChoosenFromPlayer<0||spaceChoosenFromPlayer>2) {
             System.out.println("Space not existing!");
             System.out.println("Choose valid space number where to place new development card: ");
             spaceChoosenFromPlayer = playerInput.nextInt();
-            System.out.println("");
+            System.out.println();
         }
         //Checks the chosen space
         while (!isCardBelowCompatible(spaceChoosenFromPlayer, developmentCard)) {
             System.out.println("Placement not possible!");
             System.out.println("Insert new valid place (0 to 3): ");
             spaceChoosenFromPlayer = playerInput.nextInt();
-            System.out.println("");
+            System.out.println();
         }
     }
 

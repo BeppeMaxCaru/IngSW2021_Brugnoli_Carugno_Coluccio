@@ -1,3 +1,5 @@
+package Test_LeaderCards;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
