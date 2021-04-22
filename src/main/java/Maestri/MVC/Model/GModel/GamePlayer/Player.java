@@ -370,7 +370,7 @@ public class Player {
         if(activateProduction == 1) {
             i = 0;
             //Controllo checkResourcesAvailability
-            for(String s : getPlayerBoard().activateBasicProductionPower()) {
+            for (String s : getPlayerBoard().activateBasicProductionPower()) {
                 if(i == 2) { // Se siamo alla terza risorsa, che per forza è l'output...
                     if(s.equals("REDCROSS"))
                         // Aggiunta alla conta totale i redCross.
@@ -388,6 +388,7 @@ public class Player {
             }
         }
 
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         // Richiesta di attivazione potere di produzione extra.
         activateProduction = -1;
         while(activateProduction != 0 && activateProduction != 1) {
@@ -502,11 +503,9 @@ public class Player {
 
     }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Possible fix required
     /**
-     * This method sums all the player's victory points at the end of the play.
-     * @return the number of victory points.
+     * This method sums all the player's victory points at the end of the game
+     * @return the total victory points
      */
     public int sumAllVictoryPoints() {
         int victoryPoints = 0;
@@ -528,10 +527,9 @@ public class Player {
     }
 
     /**
-     * This method sums all the resources in chest, warehouse and extrawarehouse at the end of the play.
-     * @return the number of resources.
+     * Returns all the player resources count
+     * @return all the player resources count
      */
-
     public int numResourcesReserve() {
         int numResources = 0;
 

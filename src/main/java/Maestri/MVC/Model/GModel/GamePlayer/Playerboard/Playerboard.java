@@ -48,7 +48,7 @@ public class Playerboard {
     /**
      * Optional permanent perk received from leader cards that allows to receive a one resource discount to apply while buying a development card
      */
-    private final String[] developmentCardDiscount =new String[2];
+    private final String[] developmentCardDiscount = new String[2];
 
     /**
      * Optional permanent perk received from leader cards that indicates the input resource for extra production power
@@ -269,15 +269,19 @@ public class Playerboard {
 
         // Available resources from warehouse
         for (String key : this.wareHouse.getWarehouseResources().keySet()) {
-            numResources = this.wareHouse.getWarehouseResources().get(key);
-            if (numResources != 0) {
-                availableResourceWarehouse.add(key);
-            }
-            else {
-                numResources = this.wareHouse.getWarehouseResources().get("extra" + key);
+            //Exclude extra resources to correct the cycle
+            if (!key.contains("extra")) {
+                numResources = this.wareHouse.getWarehouseResources().get(key);
+                numResources = numResources + this.wareHouse.getWarehouseResources().get("extra" + key);
                 if (numResources != 0) {
-                    availableResourceWarehouse.add("extra" + key);
-                }
+                    availableResourceWarehouse.add(key);
+                } /*else {
+                    numResources = this.wareHouse.getWarehouseResources().get("extra" + key);
+                    if (numResources != 0) {
+                        //Adds the normal key then in pick resource you choose from where to remove it
+                        availableResourceWarehouse.add(key);
+                    }
+                }*/
             }
         }
 
@@ -295,6 +299,7 @@ public class Playerboard {
                 System.out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
                 fromWhat = in.nextInt();
             }
+            //Adds resource available in warehouse
             if (fromWhat == 0 && !availableResourceWarehouse.isEmpty()) {
                 while (resourceInputNum < 0 || resourceInputNum > availableResourceWarehouse.size() - 1) {
                     System.out.println("Choose a resource from warehouse:");
@@ -304,6 +309,7 @@ public class Playerboard {
                     resourceInputNum = in.nextInt();
                 }
                 resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
+            //Adds resource available in chest
             } else if (!availableResourceChest.isEmpty()) {
                 while (resourceInputNum < 0 || resourceInputNum > availableResourceChest.size() - 1) {
                     System.out.println("Choose a resource from chest:");
@@ -312,10 +318,10 @@ public class Playerboard {
                     }
                     resourceInputNum = in.nextInt();
                 }
-                resourceChoice = new ArrayList<>();
-                resourceChoice.add(availableResourceWarehouse.get(resourceInputNum));
+                resourceChoice.add(availableResourceChest.get(resourceInputNum));
             }
         }
+
 
         // output
         while (resourceOutputNum < 0 || resourceOutputNum > 4) {
@@ -323,19 +329,11 @@ public class Playerboard {
             resourceOutputNum = in.nextInt();
         }
 
-        if(resourceOutputNum == 4)
-            resourceChoice.add("REDCROSS");
-        else {
-            i = 0;
-            for (String key : this.chest.getChestResources().keySet()) {
-                if (i == resourceOutputNum) {
-                    resourceChoice = new ArrayList<>();
-                    resourceChoice.add(key);
-                    break;
-                }
-                i++;
-            }
-        }
+        if (resourceOutputNum==0) resourceChoice.add("COINS");
+        else if (resourceOutputNum==1) resourceChoice.add("SHIELDS");
+        else if (resourceOutputNum==2) resourceChoice.add("SERVANTS");
+        else if (resourceOutputNum==3) resourceChoice.add("STONES");
+        else if (resourceOutputNum==4) resourceChoice.add("REDCROSS");
 
         return resourceChoice;
     }
