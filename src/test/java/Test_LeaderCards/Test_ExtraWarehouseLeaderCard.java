@@ -20,6 +20,34 @@ public class Test_ExtraWarehouseLeaderCard {
     }
 
     @Test
+    public void try_constraints1(){
+        players[0] = new Player("Beppe",0);
+
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 4);
+        assertFalse(card.checkRequisites(players[0].getPlayerBoard()));
+    }
+
+    @Test
+    public void try_constraints2(){
+        players[0] = new Player("Beppe",0);
+
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 5);
+        assertTrue(card.checkRequisites(players[0].getPlayerBoard()));
+    }
+
+    @Test
+    public void try_constraints3(){
+        players[0] = new Player("Beppe",0);
+
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 3);
+        players[0].getPlayerBoard().getWareHouse().getWarehouseResources().put("COINS", 2);
+        assertTrue(card.checkRequisites(players[0].getPlayerBoard()));
+    }
+
+    @Test
     public void try_array() {
         players[0] = new Player("Beppe",0);
 

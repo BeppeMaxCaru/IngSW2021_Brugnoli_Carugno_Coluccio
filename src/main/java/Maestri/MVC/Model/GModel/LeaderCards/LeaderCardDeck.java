@@ -5,6 +5,10 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.DiscountDevelopment
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.WhiteMarbleResourceLeaderCard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.BlueMarble;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.GreyMarble;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.PurpleMarble;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.YellowMarble;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,17 +66,13 @@ public class LeaderCardDeck {
 
         //Creation of WhiteMarbleResourceLeaderCards
         this.leaderCardsDeck[12] = new WhiteMarbleResourceLeaderCard("YELLOW",
-                "BLUE",
-                "SERVANTS");
+                "BLUE", new PurpleMarble());
         this.leaderCardsDeck[13] = new WhiteMarbleResourceLeaderCard("GREEN",
-                "PURPLE",
-                "SHIELDS");
+                "PURPLE", new BlueMarble());
         this.leaderCardsDeck[14] = new WhiteMarbleResourceLeaderCard("BLUE",
-                "YELLOW",
-                "STONES");
+                "YELLOW", new GreyMarble());
         this.leaderCardsDeck[15] = new WhiteMarbleResourceLeaderCard("PURPLE",
-                "GREEN",
-                "COINS");
+                "GREEN", new YellowMarble());
 
         //Instructions for mixing the array of cards, converting it into a list
         List<LeaderCard> cardsList = Arrays.asList(this.leaderCardsDeck);

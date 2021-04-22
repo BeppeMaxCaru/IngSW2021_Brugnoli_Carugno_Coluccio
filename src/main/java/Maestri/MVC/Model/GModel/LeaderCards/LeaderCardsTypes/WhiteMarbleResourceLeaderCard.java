@@ -28,29 +28,13 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
      */
     public WhiteMarbleResourceLeaderCard(String firstRequiredDevelopmentCard,
                                          String secondRequiredDevelopmentCard,
-                                         String resourceFromWhiteMarble) {
+                                         Marble resourceFromWhiteMarble) {
         super(5);
 
         this.requisite = new String[2];
         this.requisite[0] = firstRequiredDevelopmentCard;
         this.requisite[1] = secondRequiredDevelopmentCard;
-
-        switch(resourceFromWhiteMarble){
-            case "COINS":
-                this.whiteMarbleResource = new YellowMarble();
-                break;
-            case "STONES":
-                this.whiteMarbleResource = new GreyMarble();
-                break;
-            case "SERVANTS":
-                this.whiteMarbleResource = new PurpleMarble();
-                break;
-            case "SHIELDS":
-                this.whiteMarbleResource = new BlueMarble();
-                break;
-            default:
-                this.whiteMarbleResource = new WhiteMarble();
-        }
+        this.whiteMarbleResource= resourceFromWhiteMarble;
     }
 
     /**
@@ -68,7 +52,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
         {
             for(int k=0; k<3; k++)
             {
-                if (playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index]))
+                if ((playerboard.getPlayerboardDevelopmentCards()[k][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index])))
                 {
                     check=true;
                     cardsRequired++;
@@ -84,7 +68,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
             {
                 for(int k=0; k<3; k++)
                 {
-                    if (playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index]))
+                    if ((playerboard.getPlayerboardDevelopmentCards()[k][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index])))
                         check=true;
                 }
             }
