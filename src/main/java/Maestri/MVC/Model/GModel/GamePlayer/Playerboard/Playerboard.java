@@ -329,11 +329,11 @@ public class Playerboard {
             resourceOutputNum = in.nextInt();
         }
 
-        if (resourceOutputNum==0) resourceChoice.add("COINS");
-        else if (resourceOutputNum==1) resourceChoice.add("SHIELDS");
-        else if (resourceOutputNum==2) resourceChoice.add("SERVANTS");
-        else if (resourceOutputNum==3) resourceChoice.add("STONES");
-        else if (resourceOutputNum==4) resourceChoice.add("REDCROSS");
+        if (resourceOutputNum == 0) resourceChoice.add("COINS");
+        else if (resourceOutputNum == 1) resourceChoice.add("SHIELDS");
+        else if (resourceOutputNum == 2) resourceChoice.add("SERVANTS");
+        else if (resourceOutputNum == 3) resourceChoice.add("STONES");
+        else resourceChoice.add("REDCROSS");
 
         return resourceChoice;
     }
