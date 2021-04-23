@@ -320,12 +320,11 @@ public class Player {
      * Activates the production powers on the player's player board
      * @param devCard - development cards on the player board
      */
-    public boolean activateProduction(DevelopmentCard devCard, ExtraProductionPowerLeaderCard extraprod) {
+    public boolean activateProduction(DevelopmentCard devCard) {
         int i;
         int numResource;
         int numResourceChoice;
         int activateProduction = -1;
-        int activateExtraProduction = -1;
         int numExtraProductionActivate = 0;
         int redCross = 0;
         Scanner in = new Scanner(System.in);
@@ -391,25 +390,19 @@ public class Player {
         }
 
         // Chiede se vuole attivare l'extra production power.
-        while(activateExtraProduction != 0 && activateExtraProduction != 1) {
-            System.out.println("Do you want to activate the extra production power?: Write 1 if you want or 0 if you don't:");
-            activateExtraProduction = in.nextInt();
-        }
-        if(activateExtraProduction == 1) {
-            i = 0;
-            while(this.playerBoard.getExtraProductionPowerInput()[i] != null) {
-                activateProduction = -1;
-                while(activateProduction != 0 && activateProduction != 1) {
-                    System.out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
-                    activateProduction = in.nextInt();
-                }
-                if(activateProduction == 1) {
-                    numResource = inputResources.get(this.playerBoard.getExtraProductionPowerInput()[i]);
-                    inputResources.put(this.playerBoard.getExtraProductionPowerInput()[i], numResource + 1);
-                    numExtraProductionActivate++;
-                }
-                i++;
+        i = 0;
+        while(this.playerBoard.getExtraProductionPowerInput()[i] != null) {
+            activateProduction = -1;
+            while(activateProduction != 0 && activateProduction != 1) {
+                System.out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
+                activateProduction = in.nextInt();
             }
+            if(activateProduction == 1) {
+                numResource = inputResources.get(this.playerBoard.getExtraProductionPowerInput()[i]);
+                inputResources.put(this.playerBoard.getExtraProductionPowerInput()[i], numResource + 1);
+                numExtraProductionActivate++;
+            }
+            i++;
         }
 
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
