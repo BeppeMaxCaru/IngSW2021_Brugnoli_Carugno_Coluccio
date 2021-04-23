@@ -4,7 +4,6 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.util.*;
@@ -207,7 +206,7 @@ public class Player {
 
     /**
      * Buys a development card
-     * @param developmentCardsDecksGrid
+     * @param developmentCardsDecksGrid - developments cards available to buy
      * @return true if the player buys a card successfully
      */
     public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
