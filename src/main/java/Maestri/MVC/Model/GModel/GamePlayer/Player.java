@@ -425,25 +425,19 @@ public class Player {
                 System.out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
                 numResourceChoice = in.nextInt();
             }
-            if(numResourceChoice == 4) {
-                redCross = redCross + 1;
-            }
-            else {
-                i = 0;
-                for(String s: outputResources.keySet()) {
-                    if(i == numResourceChoice) {
-                        numResource = outputResources.get(s);
-                        outputResources.put(s, numResource + 1);
-                    }
-                    i++;
-                }
-            }
+
+            if (i==0) outputResources.put("COINS", outputResources.get("COINS") + 1);
+            else if (i==1) outputResources.put("SHIELDS", outputResources.get("SHIELDS") + 1);
+            else if (i==2) outputResources.put("SERVANTS", outputResources.get("SERVANTS") + 1);
+            else if (i==3) outputResources.put("STONES", outputResources.get("STONES") + 1);
+            else if (i==4) redCross = redCross + 1;
+
             redCross = redCross + 1;
             numExtraProductionActivate--;
         }
 
         //Adds output resources to the chest
-        for(String key: outputResources.keySet()) {
+        for(String key : outputResources.keySet()) {
             numResource = getPlayerBoard().getChest().getChestResources().get(key);
             getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
         }
@@ -549,7 +543,7 @@ public class Player {
 
         //Punti dalle risorse rimaste nel warehouse, chest, extraWarehouse.
         numResources = numResources + numResourcesReserve();
-        victoryPoints = victoryPoints + numResources / 5;
+        victoryPoints = victoryPoints + (numResources / 5);
 
         return victoryPoints;
     }
@@ -560,13 +554,16 @@ public class Player {
      */
     public int numResourcesReserve() {
         int numResources = 0;
-
-        for(String key: getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
-            numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get(key);
-            if(getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key) != null)
-                numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key);
+        //Watch out for extras!
+        for(String key : getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
+            if (!key.contains("extra")) {
+                numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get(key);
+                if (getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key) != null)
+                    numResources = numResources + getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + key);
+            }
         }
-        for(String key: getPlayerBoard().getChest().getChestResources().keySet())
+        //Ok no extras
+        for(String key : getPlayerBoard().getChest().getChestResources().keySet())
             numResources = numResources + getPlayerBoard().getChest().getChestResources().get(key);
 
         return numResources;
