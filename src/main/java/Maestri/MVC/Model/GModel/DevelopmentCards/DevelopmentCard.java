@@ -248,29 +248,6 @@ public class DevelopmentCard {
     }
 
     /**
-     * Removes input resources from the player's player board required to activate the production and returns to him output resources and faith points
-     * @param playerboard - player's player board
-     */
-    public void activateProduction(Playerboard playerboard) {
-
-        //For each input resource to remove asks the player where to pick it from
-        for (String key : this.input.keySet()) {
-            int resourcesToRemove = this.input.get(key);
-            for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key);
-            }
-        }
-
-        //Returns to the player output faith points and move its cross forward on its faith path
-        playerboard.getFaithPath().moveCross(this.faithPoints);
-
-        //Returns to the player output resources and adds them to the player's chest
-        Map<String, Integer> resourcesAfterProduction = playerboard.getChest().getChestResources();
-        this.output.forEach((key, value) -> resourcesAfterProduction.merge(key, value, Integer::sum));
-        playerboard.getChest().setChestResources(resourcesAfterProduction);
-    }
-
-    /**
      * Prints the development card
      */
     public void printDevelopmentCard() {
