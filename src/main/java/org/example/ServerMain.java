@@ -14,7 +14,10 @@ public class ServerMain {
 
     static int portNumber = 1234;
 
-    public static void main( String[] args ) {
+    public static void main( String args[]) {
+
+        //String hostName = args[0];
+        //int portNumber = Integer.parseInt(args[1]);
 
         System.out.println( "Server started!" );
 
@@ -24,13 +27,16 @@ public class ServerMain {
         } catch (IOException e) {
             e.printStackTrace();
             //Gestire contenuto
+            System.out.println("Cannot start server");
         }
+
         Socket clientSocket = null;
         try {
             clientSocket = serverSocket.accept();
         } catch (IOException e) {
             e.printStackTrace();
             //Gestire contenuto
+            System.out.println("Cannot accept client");
         }
 
         BufferedReader in;
