@@ -30,8 +30,8 @@ public class GameModel {
     public GameModel(int numberOfPlayers) {
         this.players = new Player[numberOfPlayers];
         for (int i=0;i<numberOfPlayers;i++) {
-            //this.players[i] = new Player();
-            //setStartingPlayerResources();
+            //this.players[i] = new Player(this.players[i].chooseNickname(), i);
+            //this.players[i].setStartingPlayerResources();
         }
         this.setStartingLeaderCards();
         this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
@@ -139,6 +139,21 @@ public class GameModel {
         }
 
         return playerWithMaxVictoryPoints;
+    }
+
+    //Method that cycles the players
+    public void gameInProgress() {
+        while (true) {
+            this.players[this.currentPlayer].getLeaderAction();
+            this.players[this.currentPlayer].getAction();
+            this.players[this.currentPlayer].getLeaderAction();
+            this.currentPlayer++;
+            if (this.currentPlayer==this.players.length) {
+                this.currentPlayer = 0;
+            }
+        }
+        //There is a winner
+
     }
 
 }

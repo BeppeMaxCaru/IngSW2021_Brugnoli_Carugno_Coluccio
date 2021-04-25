@@ -103,6 +103,28 @@ public class Player {
     }
 
     /**
+     * Asks to choose the game mode
+     * @return the game mode chosen
+     */
+    public int chooseGameMode() {
+        Scanner localInput = new Scanner(System.in);
+        System.out.println("Welcome to Masters of Renaissance!");
+        System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+        //String gameMode = localInput.nextLine();
+        while (true) {
+            try {
+                String gameMode = localInput.nextLine();
+                int number = Integer.parseInt(gameMode);
+                if (number == 0 || number == 1) return number;
+
+            } catch (NumberFormatException n) {
+                System.out.println("Number not valid!");
+                System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+            }
+        }
+    }
+
+    /**
      * Sets to the player its starting board depending on its number
      */
     public void setStartingPlayerboard() {
