@@ -476,13 +476,28 @@ public class Player {
     public boolean getLeaderAction() {
         Scanner in = new Scanner(System.in);
         int leaderActionNum = -1;
+        int leaderNum = -1;
 
-        while(leaderActionNum != 0 && leaderActionNum != 1) {
+        while (leaderActionNum != 0 && leaderActionNum != 1) {
             System.out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
             leaderActionNum = in.nextInt();
         }
 
-        return leaderActionNum == 1;
+        if (leaderActionNum == 0)
+            return false;
+        else {
+            while (leaderNum != 0 && leaderNum != 1) {
+                System.out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
+                leaderNum = in.nextInt();
+            }
+            if(leaderNum==0)
+                this.playLeaderCard();
+            else{
+                this.discardLeaderCard();
+                this.getPlayerBoard().getFaithPath().moveCross(1);
+            }
+            return true;
+        }
     }
 
     /**
