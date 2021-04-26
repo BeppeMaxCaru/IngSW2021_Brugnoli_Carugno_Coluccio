@@ -18,22 +18,22 @@ public class Playerboard {
     /**
      * Development cards spaces where to place development cards bought
      */
-    private DevelopmentCard[][] playerboardDevelopmentCards;
+    private final DevelopmentCard[][] playerboardDevelopmentCards;
 
     /**
      * Unlimited resources reserve
      */
-    private Chest chest;
+    private final Chest chest;
 
     /**
      * Limited resources reserve
      */
-    private WareHouse wareHouse;
+    private final WareHouse wareHouse;
 
     /**
      * Tracks the player position
      */
-    private FaithPath faithPath;
+    private final FaithPath faithPath;
 
     /**
      * Victory points collected
@@ -130,7 +130,7 @@ public class Playerboard {
      * @return true if the development card can be placed on top
      */
     public boolean isCardBelowCompatible(int pile, DevelopmentCard developmentCard) {
-        for (int i=0;i<3;i++) {
+        /*for (int i=0;i<3;i++) {
             if (i==0) {
                 if (this.playerboardDevelopmentCards[i][pile]==null) {
                     this.playerboardDevelopmentCards[i][pile] = developmentCard;
@@ -140,15 +140,32 @@ public class Playerboard {
             } else {
                 DevelopmentCard developmentCardToUpgrade = this.playerboardDevelopmentCards[i-1][pile];
                 if (developmentCardToUpgrade.getDevelopmentCardLevel()==(developmentCard.getDevelopmentCardLevel()-1)) {
-                    if (developmentCardToUpgrade.getDevelopmentCardColour().equals(developmentCard.getDevelopmentCardColour())) {
-                        this.playerboardDevelopmentCards[i][pile] = developmentCard;
-                        this.developmentCardsBought = this.developmentCardsBought + 1;
-                        return true;
-                    }
+                    this.playerboardDevelopmentCards[i][pile] = developmentCard;
+                    this.developmentCardsBought = this.developmentCardsBought + 1;
+                    return true;
                 }
             }
         }
-        return false;
+        return false;*/
+
+        int i=0;
+        while((i<3)&&(this.playerboardDevelopmentCards[i][pile]!=null)){
+            i++;
+        }
+        //If the pile is full card can't be inserted
+        if(i==3)
+            return false;
+        else
+            //If the first available position of the pile isn't compatible with the dev. card level, the card can't be inserted
+            if(developmentCard.getDevelopmentCardLevel()!=i+1)
+                return false;
+        else
+        {
+            //If the pile isn't full and the first available position of the pile is compatible with the dev. card level, the card can be inserted
+            this.playerboardDevelopmentCards[i][pile]=developmentCard;
+            return true;
+        }
+
     }
 
     /**

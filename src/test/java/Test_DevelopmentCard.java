@@ -1,12 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Chest;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import org.junit.jupiter.api.Test;
-
-import java.util.Scanner;
-
 
 public class Test_DevelopmentCard {
 
@@ -31,14 +27,14 @@ public class Test_DevelopmentCard {
     @Test
     public void developmentCardAttributesAndGetters() {
 
-        DevelopmentCard developmentCard1 = new DevelopmentCard("RED",7,
-                5,4,5,4,
-                2,7,2,7,
+        DevelopmentCard developmentCard1 = new DevelopmentCard("RED",1,
+                1,1,1,0,
+                2,0,2,0,
                 2,3,2,3,
                 0,1);
-        DevelopmentCard developmentCard2 = new DevelopmentCard("RED",7,
-                5,4,5,4,
-                2,7,2,7,
+        DevelopmentCard developmentCard2 = new DevelopmentCard("RED",1,
+                1,1,1,0,
+                2,0,2,0,
                 2,3,2,3,
                 0,1);
 
@@ -64,10 +60,10 @@ public class Test_DevelopmentCard {
     public void validBuy() {
 
         Playerboard playerboard = new Playerboard();
-        playerboard.getChest().getChestResources().put("COINS", 4);
-        playerboard.getChest().getChestResources().put("STONES", 5);
-        playerboard.getWareHouse().getWarehouseResources().put("SERVANTS", 7);
-        playerboard.getWareHouse().getWarehouseResources().put("SHIELDS", 6);
+        playerboard.getChest().getChestResources().put("COINS", 2);
+        playerboard.getChest().getChestResources().put("STONES", 2);
+        playerboard.getWareHouse().getWarehouseResources().put("SERVANTS", 2);
+        playerboard.getWareHouse().getWarehouseResources().put("SHIELDS", 2);
 
         DevelopmentCard developmentCard = new DevelopmentCard("BLUE",1,
                 1,1,2,2,
@@ -82,29 +78,18 @@ public class Test_DevelopmentCard {
     @Test
     public void invalidBuy() {
         Playerboard playerboard = new Playerboard();
-        playerboard.getChest().getChestResources().put("COINS",4);
-        playerboard.getChest().getChestResources().put("STONES", 5);
-        playerboard.getWareHouse().getWarehouseResources().put("SERVANTS", 7);
-        playerboard.getWareHouse().getWarehouseResources().put("SHIELDS", 6);
-        DevelopmentCard developmentCard1 = new DevelopmentCard("BLUE",1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-        DevelopmentCard developmentCard2 = new DevelopmentCard("BLUE",1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-        DevelopmentCard developmentCard3 = new DevelopmentCard("BLUE",1,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
-
-        //Scanner in = new Scanner(System.in);
-        //in.nextInt();
-
-        //playerboard.placeNewDevelopmentCard(developmentCard1);
-        //playerboard.placeNewDevelopmentCard(developmentCard2);
-        //playerboard.placeNewDevelopmentCard(developmentCard3);
+        playerboard.getChest().getChestResources().put("COINS",2);
+        playerboard.getChest().getChestResources().put("STONES", 2);
+        playerboard.getWareHouse().getWarehouseResources().put("SERVANTS", 2);
+        playerboard.getWareHouse().getWarehouseResources().put("SHIELDS", 2);
 
         DevelopmentCard developmentCard = new DevelopmentCard("BLUE",1,
-                4,5,8,6,
+                3,2,2,2,
                 1,1,1,1,
                 1,1,1,1,
                 1,2);
 
         assertFalse(developmentCard.checkResourcesAvailability(playerboard, developmentCard.getDevelopmentCardCost()));
-        //assertFalse(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard));
     }
 
 }

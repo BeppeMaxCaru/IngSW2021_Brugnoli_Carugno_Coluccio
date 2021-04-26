@@ -14,11 +14,11 @@ public class DevelopmentCard {
     /**
      * Colour of the development card
      */
-    private String colour;
+    private final String colour;
     /**
      * Level of the development card
      */
-    private int level;
+    private final int level;
     /**
      * Cost of the development card
      */

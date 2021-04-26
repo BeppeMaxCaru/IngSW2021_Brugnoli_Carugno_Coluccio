@@ -482,10 +482,7 @@ public class Player {
             leaderActionNum = in.nextInt();
         }
 
-        if (leaderActionNum == 1)
-            return true;
-        else
-            return false;
+        return leaderActionNum == 1;
     }
 
     /**
