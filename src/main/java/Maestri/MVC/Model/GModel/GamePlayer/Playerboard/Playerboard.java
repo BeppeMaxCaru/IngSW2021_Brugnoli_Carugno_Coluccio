@@ -68,6 +68,14 @@ public class Playerboard {
     }
 
     /**
+     * This method returns the number of development cards bought by the player
+     * @return the number of development cards bought by the player
+     */
+    public int getDevelopmentCardsBought() {
+        return this.developmentCardsBought;
+    }
+
+    /**
      * This method returns which Marbles player has to pick instead of WhiteMarbles
      * @return player's available marbles
      */
