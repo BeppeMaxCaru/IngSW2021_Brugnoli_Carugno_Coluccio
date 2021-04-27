@@ -62,18 +62,21 @@ public class ClientMain {
             {
                 players[0].getLeaderAction();
 
-                switch (players[0].getAction()){
-                    case 0:
-                        players[0].pickLineFromMarket(localMarket, players);
-                        break;
-                    case 1:
-                        players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid);
-                        break;
-                    case 2:
-                        players[0].activateProduction();
-                        break;
+                boolean correctAction=true;
+                do{
+                    switch (players[0].getAction()) {
+                        case 0:
+                            players[0].pickLineFromMarket(localMarket, players);
+                            break;
+                        case 1:
+                            correctAction=players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid);
+                            break;
+                        case 2:
+                            correctAction=players[0].activateProduction();
+                            break;
+                    }
+                }while (!correctAction);
 
-                }
                 players[0].getLeaderAction();
                 localActionCountersDeck.drawCounter();
 

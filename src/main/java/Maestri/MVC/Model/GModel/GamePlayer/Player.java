@@ -292,20 +292,23 @@ public class Player {
         int input=-1;
         Scanner discountChoice = new Scanner(System.in);
         //Checks the discounts that the player has available
-        for(String res : this.playerBoard.getDevelopmentCardDiscount())
-        {
-            resourceCost=developmentCardCost.get(res);
-            if(resourceCost!=0)
+        if(this.playerBoard.getDevelopmentCardDiscount()[0]!=null){
+            for(String res : this.playerBoard.getDevelopmentCardDiscount())
             {
-                while(input<0||input>1)
+                resourceCost=developmentCardCost.get(res);
+                if(resourceCost!=0)
                 {
-                    System.out.println("Do you want to pay the reduced price for this resource? Insert 0 for no, 1 for yes");
-                    input=discountChoice.nextInt();
+                    while(input<0||input>1)
+                    {
+                        System.out.println("Do you want to pay the reduced price for this resource? Insert 0 for no, 1 for yes");
+                        input=discountChoice.nextInt();
+                    }
+                    if(input==1)
+                        developmentCardCost.put(res, resourceCost-1);
                 }
-                if(input==1)
-                    developmentCardCost.put(res, resourceCost-1);
             }
         }
+
 
         //Checks if the player has enough resources to buy the new development card
         if (this.getPlayerBoard().checkResourcesAvailability(developmentCardCost)) {
@@ -328,9 +331,8 @@ public class Player {
             } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard)) {
                 return false;
             }
-        } else if (!this.getPlayerBoard().checkResourcesAvailability(developmentCardCost)) {
+        } else
             return false;
-        }
         //Returns false if the player wasn't able to buy the development card
         return false;
         //If buying the card isn't a possible action or is denied and player has to choose new action and start all over

@@ -396,15 +396,15 @@ public class Playerboard {
         //to see if player has enough resources
         for (String key : requisites.keySet()) {
             //Checks if the player has the current required resource type
-            if (!allPlayerResources.keySet().contains(key)) {
+            if (!allPlayerResources.containsKey(key)) {
                 System.out.println("Not enough resources to buy this card");
-                System.out.println("");
+                System.out.println();
                 return false;
             }
             //Checks if the player has enough resources of the current required resource type
             if (allPlayerResources.get(key)<requisites.get(key)) {
                 System.out.println("Not enough resources to buy this card");
-                System.out.println("");
+                System.out.println();
                 return false;
             }
         }
