@@ -308,7 +308,7 @@ public class Player {
         }
 
         //Checks if the player has enough resources to buy the new development card
-        if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerBoard, developmentCardCost)) {
+        if (this.getPlayerBoard().checkResourcesAvailability(developmentCardCost)) {
             //Checks if the player can place the new development card on his board
             if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard)) {
                 //Removes the resources from the player who bought the development card
@@ -328,7 +328,7 @@ public class Player {
             } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard)) {
                 return false;
             }
-        } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkResourcesAvailability(playerBoard, developmentCardCost)) {
+        } else if (!this.getPlayerBoard().checkResourcesAvailability(developmentCardCost)) {
             return false;
         }
         //Returns false if the player wasn't able to buy the development card
@@ -339,9 +339,8 @@ public class Player {
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     /**
      * Activates the production powers on the player's player board
-     * @param devCard - development cards on the player board
      */
-    public boolean activateProduction(DevelopmentCard devCard) {
+    public boolean activateProduction() {
         int i;
         int numResource;
         int numResourceChoice;
@@ -427,7 +426,7 @@ public class Player {
         }
 
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
-        if(devCard.checkResourcesAvailability(this.playerBoard, inputResources)) {
+        if(this.getPlayerBoard().checkResourcesAvailability(inputResources)) {
             for(String key: inputResources.keySet()) {
                 numResource = inputResources.get(key);
                 for(int j = 0; j < numResource; j++)
@@ -490,7 +489,7 @@ public class Player {
                 System.out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
                 leaderNum = in.nextInt();
             }
-            if(leaderNum==0)
+            if(leaderNum==1)
                 this.playLeaderCard();
             else{
                 this.discardLeaderCard();
@@ -527,10 +526,12 @@ public class Player {
     public void discardLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
+        int k;
 
-        int k=0;
-        while(this.playerLeaderCards[k]!=null)
-            k++;
+        for(k=0; k<4; k++){
+            if(this.playerLeaderCards[k]==null)
+                break;
+        }
 
 
         if(k>0){

@@ -367,4 +367,48 @@ public class Playerboard {
         }
         this.resourceMarbles[i] = marble;
     }
+
+    /**
+     * Checks if a player has enough resources on its player board to buy the leader card
+     * @param requisites - development card's requisites (cost or input)
+     * @return true if the player has enough resources to buy the development card
+     */
+    public boolean checkResourcesAvailability(Map<String, Integer> requisites) {
+        //Gets the all possible places where the player can store resources
+        Map<String, Integer> warehouseResources = this.getWareHouse().getWarehouseResources();
+        Map<String, Integer> chestResources = this.getChest().getChestResources();
+        //Sum the two maps to get the total player resources
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Needs to be fixed in case of leader card that add extra space
+        Map<String, Integer> allPlayerResources = new HashMap<>(warehouseResources);
+        chestResources.forEach((key, value) -> allPlayerResources.merge(key, value, (v1, v2) -> v1+v2));
+        //Add leader cards resources
+        for (String key : allPlayerResources.keySet()) {
+            if (allPlayerResources.keySet().contains("extra"+key)) {
+                Integer leaderCardResources = allPlayerResources.get("extra"+key);
+                Integer keyResources = allPlayerResources.get(key);
+                allPlayerResources.put(key, keyResources+leaderCardResources);
+                allPlayerResources.remove("extra"+key);
+            }
+        }
+
+        //Check if one map is contained into the other one
+        //to see if player has enough resources
+        for (String key : requisites.keySet()) {
+            //Checks if the player has the current required resource type
+            if (!allPlayerResources.keySet().contains(key)) {
+                System.out.println("Not enough resources to buy this card");
+                System.out.println("");
+                return false;
+            }
+            //Checks if the player has enough resources of the current required resource type
+            if (allPlayerResources.get(key)<requisites.get(key)) {
+                System.out.println("Not enough resources to buy this card");
+                System.out.println("");
+                return false;
+            }
+        }
+        //If true the player has enough resource to buy the card
+        return true;
+    }
 }

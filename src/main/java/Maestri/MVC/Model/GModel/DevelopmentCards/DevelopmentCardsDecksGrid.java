@@ -1,8 +1,5 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
-
 import java.util.*;
 
 /**
@@ -16,19 +13,19 @@ public class DevelopmentCardsDecksGrid {
     /**
      * All the available development card colours
      */
-    private Map<String, Integer> developmentCardsColours;
+    private final Map<String, Integer> developmentCardsColours;
     /**
      * All the available development cards levels
      */
-    private Collection<Integer> developmentCardsLevels;
+    private final Collection<Integer> developmentCardsLevels;
 
-    private Scanner consoleInput = new Scanner(System.in);
+    //private final Scanner consoleInput = new Scanner(System.in);
 
     /**
      * Initializes the development cards in a 3(levels)x4(colours) ordered matrix and groups them in decks of 4
      */
     public DevelopmentCardsDecksGrid() {
-        //Initializes the grid where they are distrubuted
+        //Initializes the grid where they are distributed
         this.developmentCardsDecks = new DevelopmentCard[3][4][4];
         //Initializes the possible colours and levels
         this.developmentCardsColours = new HashMap<>();
@@ -351,16 +348,11 @@ public class DevelopmentCardsDecksGrid {
     /**
      * Checks if there are still development cards in a grid's deck
      * @param developmentCards - development cards deck
-     * @return
+     * @return if there are still development cards in a grid's deck
      */
     public boolean stillCardsInTheDeck(DevelopmentCard[] developmentCards) {
         //Checks if the deck is empty or not
-        if (developmentCards.length==0) {
-            return false;
-        } else if (developmentCards.length!=0) {
-            return true;
-        }
-        return false;
+        return developmentCards[0] != null;
     }
 
     /**

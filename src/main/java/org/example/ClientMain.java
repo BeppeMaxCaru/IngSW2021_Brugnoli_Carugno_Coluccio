@@ -3,7 +3,10 @@ package org.example;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import org.graalvm.compiler.hotspot.nodes.PluginFactory_JumpToExceptionHandlerInCallerNode;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
+//import org.graalvm.compiler.hotspot.nodes.PluginFactory_JumpToExceptionHandlerInCallerNode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,23 +19,82 @@ import java.util.Scanner;
 
 public class ClientMain {
 
-    //Optional classes for local game
-    private DevelopmentCardsDecksGrid localDevelopmentCardsDeckGrid;
-    private ActionCountersDeck localActionCountersDeck;
-    private Player player;
-    //private int gameMode;
-
     public static void main(String[] args) throws IOException {
 
         String hostName = "127.0.0.1";
         int portNumber = 1234;
 
-        int gameMode;
+        int gameMode = -1;
+
+        String nickName;
 
         System.out.println("Welcome to Masters of Renaissance!");
+
         Scanner localInput = new Scanner(System.in);
-        System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-        //String gameMode = localInput.nextLine();
+        while (gameMode < 0 || gameMode > 1) {
+            System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+            gameMode = localInput.nextInt();
+        }
+
+        if (gameMode == 0) {
+
+            Player[] players = new Player[2];
+            System.out.println("Write your nickname: ");
+            Scanner nickInput = new Scanner(System.in);
+            nickName = nickInput.nextLine();
+            players[0] = new Player(nickName, 0);
+            players[1] = new Player("Lorenzo il Magnifico",1);
+
+            ActionCountersDeck localActionCountersDeck = new ActionCountersDeck();
+            DevelopmentCardsDecksGrid localDevelopmentCardsDeckGrid = new DevelopmentCardsDecksGrid();
+            Market localMarket = new Market();
+
+            LeaderCardDeck localLeaderCardDeck = new LeaderCardDeck();
+
+            players[0].setPlayerLeaderCard(0,localLeaderCardDeck.drawOneLeaderCard());
+            players[0].setPlayerLeaderCard(1,localLeaderCardDeck.drawOneLeaderCard());
+            players[0].setPlayerLeaderCard(2,localLeaderCardDeck.drawOneLeaderCard());
+            players[0].setPlayerLeaderCard(3,localLeaderCardDeck.drawOneLeaderCard());
+
+            players[0].discardLeaderCard();
+            players[0].discardLeaderCard();
+
+            boolean endGame=false;
+
+            while (!endGame||players[0].getPlayerBoard().getFaithPath().getCrossPosition()<25||players[1].getPlayerBoard().getFaithPath().getCrossPosition()<25)
+            {
+                players[0].getLeaderAction();
+
+                switch (players[0].getAction()){
+                    case 0:
+                        players[0].pickLineFromMarket(localMarket, players);
+                        break;
+                    case 1:
+                        players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid);
+                        break;
+                    case 2:
+                        players[0].activateProduction();
+                        break;
+
+                }
+                players[0].getLeaderAction();
+                localActionCountersDeck.drawCounter();
+
+                int[] availableDevCards = new int[4];
+                for (int i=0; i<4; i++)
+                {
+                    availableDevCards[i]=12;
+                    for(int k=0; k<3; k++){
+                        for (int j=0; j<4; j++){
+                            if(localDevelopmentCardsDeckGrid.getDevelopmentCardsDecks()[k][i][j]==null)
+                                availableDevCards[i]--;
+                        }
+                    }
+                    if(availableDevCards[i]==0)
+                        endGame=true;
+                }
+            }
+        /*
 
         //serve metodo per tenere main di tipo static!!!!!!!!!
         while (true) {
@@ -45,26 +107,29 @@ public class ClientMain {
                 System.out.println("Number not valid!");
                 System.out.println("Write 0 for single-player or 1 for multiplayer: ");
             }
+        }*/
+
         }
-
-        //this.player = new Player();
-
-        try (Socket clientSocket = new Socket(hostName, portNumber);
-             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-             BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
-        ) {
-            String userInput;
-            while ((userInput = stdIn.readLine()) != null) {
-                out.println(userInput);
-                System.out.println("echo: " + in.readLine());
+        else{
+            try (Socket clientSocket = new Socket(hostName, portNumber);
+                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
+            ) {
+                String userInput;
+                while ((userInput = stdIn.readLine()) != null) {
+                    out.println(userInput);
+                    System.out.println("echo: " + in.readLine());
+                }
+            } catch (UnknownHostException e) {
+                System.err.println("No info about host: " + hostName);
+                System.exit(1);
+            } catch (IOException e) {
+                System.err.println("Couldn't get I/O for connection to hostname: " + hostName);
+                System.exit(1);
             }
-        } catch (UnknownHostException e) {
-            System.err.println("No info about host: " + hostName);
-            System.exit(1);
-        } catch (IOException e) {
-            System.err.println("Couldn't get I/O for connection to hostname: " + hostName);
-            System.exit(1);
         }
+
+
     }
 }
