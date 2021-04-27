@@ -28,7 +28,7 @@ public class ClientMain {
 
         String nickName;
 
-        System.out.println("Welcome to Masters of Renaissance!");
+      /*  System.out.println("Welcome to Masters of Renaissance!");
 
         Scanner localInput = new Scanner(System.in);
         while (gameMode < 0 || gameMode > 1) {
@@ -121,7 +121,7 @@ public class ClientMain {
                 System.err.println("Couldn't get I/O for connection to hostname: " + hostName);
                 System.exit(1);
             }
-        }
+        } */
 
 
     }

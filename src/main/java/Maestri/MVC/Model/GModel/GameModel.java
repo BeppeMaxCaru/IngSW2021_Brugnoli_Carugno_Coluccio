@@ -112,10 +112,12 @@ public class GameModel {
     }
 
     public void checkEndPlay(int playerNumber) {
-        // Try/Catch??
-        // Tutti i giocatori fino al giocatore a destra del primo giocatore giocano il loro ultimo turno. Come si fa??
-
-        checkWinner();
+        for (Player player : players) {
+            if (player.getPlayerBoard().getFaithPath().getCrossPosition() == 24 || player.getPlayerBoard().getDevelopmentCardsBought() == 7) {
+                // ??
+                checkWinner();
+            }
+        }
     }
 
     /**
