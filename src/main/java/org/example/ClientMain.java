@@ -51,17 +51,14 @@ public class ClientMain {
 
             LeaderCardDeck localLeaderCardDeck = new LeaderCardDeck();
 
-            players[0].setPlayerLeaderCard(0,localLeaderCardDeck.drawOneLeaderCard());
-            players[0].setPlayerLeaderCard(1,localLeaderCardDeck.drawOneLeaderCard());
-            players[0].setPlayerLeaderCard(2,localLeaderCardDeck.drawOneLeaderCard());
-            players[0].setPlayerLeaderCard(3,localLeaderCardDeck.drawOneLeaderCard());
-
-            players[0].discardLeaderCard();
-            players[0].discardLeaderCard();
+            for(int index=0; index<players[0].getPlayerLeaderCards().length; index++)
+                players[0].setPlayerLeaderCard(index,localLeaderCardDeck.drawOneLeaderCard());
+            for(int ind=0; ind<2; ind++)
+                players[0].discardLeaderCard();
 
             boolean endGame=false;
 
-            while (!endGame||players[0].getPlayerBoard().getFaithPath().getCrossPosition()<25||players[1].getPlayerBoard().getFaithPath().getCrossPosition()<25)
+            while (!endGame&&players[0].getPlayerBoard().getFaithPath().getCrossPosition()<25&&players[1].getPlayerBoard().getFaithPath().getCrossPosition()<25)
             {
                 players[0].getLeaderAction();
 
@@ -94,20 +91,13 @@ public class ClientMain {
                         endGame=true;
                 }
             }
-        /*
 
-        //serve metodo per tenere main di tipo static!!!!!!!!!
-        while (true) {
-            try {
-                String input = localInput.nextLine();
-                gameMode = Integer.parseInt(input);
-                if (gameMode == 0 || gameMode == 1) break;
-
-            } catch (NumberFormatException n) {
-                System.out.println("Number not valid!");
-                System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+            if(endGame||players[1].getPlayerBoard().getFaithPath().getCrossPosition()==25)
+                System.out.println("Game over. Lorenzo il Magnifico wins!!");
+            else{
+                System.out.println("Game over. You win!!");
+                System.out.println("You have obtained "+players[0].sumAllVictoryPoints()+" victory points!!");
             }
-        }*/
 
         }
         else{
