@@ -48,4 +48,9 @@ public class PurpleMarble extends Marble {
             }
         }
     }
+
+    @Override
+    public String getColour(){
+        return " PURPLE ";
+    }
 }

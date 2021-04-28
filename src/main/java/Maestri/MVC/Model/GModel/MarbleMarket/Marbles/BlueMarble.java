@@ -1,7 +1,6 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.WareHouse;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.util.Map;
@@ -10,6 +9,8 @@ import java.util.Map;
  * This blue marble produces SHIELDS
  */
 public class BlueMarble extends Marble {
+
+    String colour= "  BLUE  ";
 
     /**
      * If the drawing player has enough space in its warehouse it receives one shield otherwise other players receive one faith point
@@ -48,5 +49,9 @@ public class BlueMarble extends Marble {
                     p.getPlayerBoard().getFaithPath().moveCross(1);
             }
         }
+    }
+    @Override
+    public String getColour(){
+        return this.colour;
     }
 }

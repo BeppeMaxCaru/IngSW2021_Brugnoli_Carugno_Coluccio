@@ -46,4 +46,9 @@ public class YellowMarble extends Marble {
             }
         }
     }
+
+    @Override
+    public String getColour(){
+        return " YELLOW ";
+    }
 }

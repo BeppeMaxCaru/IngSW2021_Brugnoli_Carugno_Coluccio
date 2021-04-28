@@ -202,7 +202,7 @@ public class Player {
         // Scelta colonna/riga.
         while(rowColumnChoice != 0 && rowColumnChoice != 1) {
             System.out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
-            System.out.println(market);
+            market.printMarket();
             rowColumnChoice = in.nextInt();
         }
 
@@ -210,7 +210,7 @@ public class Player {
         if(rowColumnChoice == 0) {
             while(columnNum < 0 || columnNum > 3) {
                 System.out.println("Choose the column's number you want to get the resources from:");
-                System.out.println(market);
+                market.printMarket();
                 columnNum = in.nextInt();
                 market.updateColumn(columnNum, players, this.playerNumber);
             }
@@ -566,7 +566,10 @@ public class Player {
 
         if(k>0){
             if(k==1)
+            {
                 numLeaderCard=0;
+                System.out.println("Discarded " +this.playerLeaderCards[numLeaderCard]);
+            }
             else
             {
                 //Scelta della carta leader da scartare

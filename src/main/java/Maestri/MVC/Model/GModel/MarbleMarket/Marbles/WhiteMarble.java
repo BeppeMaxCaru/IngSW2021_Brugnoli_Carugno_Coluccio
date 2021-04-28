@@ -37,4 +37,9 @@ public class WhiteMarble extends Marble {
         }
         else System.out.println("You picked: "+this.getClass());
     }
+
+    @Override
+    public String getColour(){
+        return " WHITE  ";
+    }
 }

@@ -19,4 +19,9 @@ public class RedMarble extends Marble {
         players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
         System.out.println("You picked: "+this.getClass());
     }
+
+    @Override
+    public String getColour(){
+        return "  RED   ";
+    }
 }

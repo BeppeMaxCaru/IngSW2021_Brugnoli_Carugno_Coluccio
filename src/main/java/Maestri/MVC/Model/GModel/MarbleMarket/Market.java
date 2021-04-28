@@ -147,5 +147,19 @@ public class Market {
         this.marketArrangement[i][column]=temp;
     }
 
+    public void printMarket(){
+        for (int i=0; i<this.row; i++){
+            System.out.print("|");
+            for (int k=0; k<this.column; k++)
+            {
+                System.out.print(this.marketArrangement[i][k].getColour()+"|");
+            }
+            System.out.print(" ←");
+            System.out.println();
+        }
+        System.out.println("    ↑        ↑        ↑        ↑");
+        System.out.println("excessMarble:"+this.getExcessMarble().getColour());
+    }
+
 
 }
