@@ -70,7 +70,7 @@ public class LeaderCard {
      * @param playerboard - player's player board
      */
     public void discard(Playerboard playerboard) {
-        playerboard.getFaithPath().moveCross(1);
+        //playerboard.getFaithPath().moveCross(1);
     }
 
 }

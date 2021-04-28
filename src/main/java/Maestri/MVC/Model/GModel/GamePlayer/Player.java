@@ -478,6 +478,8 @@ public class Player {
         Scanner in = new Scanner(System.in);
         int leaderActionNum = -1;
         int leaderNum = -1;
+        boolean correctLeaderAction=false;
+        int attempts=0;
 
         while (leaderActionNum != 0 && leaderActionNum != 1) {
             System.out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
@@ -486,46 +488,72 @@ public class Player {
 
         if (leaderActionNum == 0)
             return false;
-        else {
-            while (leaderNum != 0 && leaderNum != 1) {
-                System.out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
-                leaderNum = in.nextInt();
-            }
+
+        while (leaderNum != 0 && leaderNum != 1) {
+            System.out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
+            leaderNum = in.nextInt();
+        }
+        while (!correctLeaderAction&&attempts<4)
+        {
             if(leaderNum==1)
-                this.playLeaderCard();
+            {
+                correctLeaderAction=this.playLeaderCard();
+                attempts++;
+            }
             else{
-                this.discardLeaderCard();
+                correctLeaderAction=this.discardLeaderCard();
+                attempts++;
                 this.getPlayerBoard().getFaithPath().moveCross(1);
             }
-            return true;
         }
+        return correctLeaderAction;
     }
 
     /**
      * Plays a leader card
      */
-    public void playLeaderCard() {
+    public boolean playLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard=-1;
 
+        int k;
+        for(k=0; k<4; k++){
+            if(this.playerLeaderCards[k]==null)
+                break;
+        }
+
         //Scelta della carta leader da giocare
-        while((numLeaderCard<0) || (numLeaderCard > this.playerLeaderCards.length)){
+        do{
             System.out.println("What leader card do you want to play?:");
-            for (int i = 0; i < this.playerLeaderCards.length; i++) {
+            for (int i = 0; i < k; i++) {
                 System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
             }
             numLeaderCard = in.nextInt();
+        }while((numLeaderCard<0) || (numLeaderCard > k));
+
+        if(this.playerLeaderCards[numLeaderCard]!=null){
             if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))&&
-                    (!this.playerLeaderCards[numLeaderCard].isPlayed()))
+                    (!this.playerLeaderCards[numLeaderCard].isPlayed())){
                 this.playerLeaderCards[numLeaderCard].activateAbility(this.playerBoard);
                 this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
+                return true;
+            }
+            else {
+                System.out.println("Not enough resources for play this Leader Card");
+                return false;
+            }
+        }else
+        {
+            System.out.println("Number isn't correct!!");
+            return false;
         }
+
     }
 
     /**
      * Discards a leader card
      */
-    public void discardLeaderCard() {
+    public boolean discardLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
         int k;
@@ -556,7 +584,9 @@ public class Player {
             List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
             updatedPlayerLeaderCardList.remove(numLeaderCard);
             this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
+            return true;
         }
+        else return false;
 
 
     }

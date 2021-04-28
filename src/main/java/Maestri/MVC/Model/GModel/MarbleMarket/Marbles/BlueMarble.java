@@ -26,6 +26,7 @@ public class BlueMarble extends Marble {
 
         discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SHIELDS");
         //Calling the Warehouse method for checking the warehouse capacity
+        System.out.println("You picked: "+this.getClass());
 
         if(!discard)
         {

@@ -25,6 +25,7 @@ public class GreyMarble extends Marble {
 
         discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("STONES");
         //Calling the Warehouse method for checking the warehouse capacity
+        System.out.println("You picked: "+this.getClass());
 
         if(!discard)
         {

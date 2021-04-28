@@ -35,5 +35,6 @@ public class WhiteMarble extends Marble {
                 players[playerNumber].getPlayerBoard().getResourceMarbles()[chosenMarble].drawMarble(players, playerNumber);
             }
         }
+        else System.out.println("You picked: "+this.getClass());
     }
 }

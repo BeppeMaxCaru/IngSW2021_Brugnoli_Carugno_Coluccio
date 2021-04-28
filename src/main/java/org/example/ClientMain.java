@@ -3,7 +3,6 @@ package org.example;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 //import org.graalvm.compiler.hotspot.nodes.PluginFactory_JumpToExceptionHandlerInCallerNode;
@@ -28,7 +27,7 @@ public class ClientMain {
 
         String nickName;
 
-      /*  System.out.println("Welcome to Masters of Renaissance!");
+        System.out.println("Welcome to Masters of Renaissance!");
 
         Scanner localInput = new Scanner(System.in);
         while (gameMode < 0 || gameMode > 1) {
@@ -78,7 +77,7 @@ public class ClientMain {
                 }while (!correctAction);
 
                 players[0].getLeaderAction();
-                localActionCountersDeck.drawCounter();
+                localActionCountersDeck.drawCounter().activate(localActionCountersDeck,players[1].getPlayerBoard(),localDevelopmentCardsDeckGrid);
 
                 int[] availableDevCards = new int[4];
                 for (int i=0; i<4; i++)
@@ -95,10 +94,23 @@ public class ClientMain {
                 }
             }
 
-            if(endGame||players[1].getPlayerBoard().getFaithPath().getCrossPosition()==25)
-                System.out.println("Game over. Lorenzo il Magnifico wins!!");
-            else{
-                System.out.println("Game over. You win!!");
+            System.out.println("Game over.");
+
+            if(endGame)
+            {
+                System.out.println("Lorenzo il Magnifico wins!!");
+                System.out.println("There aren't any available DevelopmentCards of one type.");
+            }
+
+            if(players[1].getPlayerBoard().getFaithPath().getCrossPosition()==25)
+            {
+                System.out.println("Lorenzo il Magnifico wins!!");
+                System.out.println("Lorenzo reaches the end of FaithPath.");
+            }
+
+            if(players[0].getPlayerBoard().getFaithPath().getCrossPosition()==25){
+                System.out.println("You win!!");
+                System.out.println("You reach the end of FaithPath.");
                 System.out.println("You have obtained "+players[0].sumAllVictoryPoints()+" victory points!!");
             }
 
@@ -121,8 +133,7 @@ public class ClientMain {
                 System.err.println("Couldn't get I/O for connection to hostname: " + hostName);
                 System.exit(1);
             }
-        } */
-
+        }
 
     }
 }

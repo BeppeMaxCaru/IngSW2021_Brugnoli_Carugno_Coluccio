@@ -17,5 +17,6 @@ public class RedMarble extends Marble {
     public void drawMarble(Player[] players, int playerNumber)
     {
         players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
+        System.out.println("You picked: "+this.getClass());
     }
 }

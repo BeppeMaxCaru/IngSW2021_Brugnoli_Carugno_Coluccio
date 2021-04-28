@@ -20,7 +20,7 @@ public class ActionCountersDeck {
         this.actionCountersDeck[3] = new GreenBannerCounter(2);
         this.actionCountersDeck[4] = new PurpleBannerCounter(2);
         this.actionCountersDeck[5] = new YellowBannerCounter(2);
-        this.top = 5;
+        shuffle();
     }
 
     public ActionCounter drawCounter() {

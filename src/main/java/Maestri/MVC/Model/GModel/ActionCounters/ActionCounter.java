@@ -26,7 +26,7 @@ public class ActionCounter {
      * @param playerboard
      * @param developmentCardsDecksGrid
      */
-    public void activate(ActionCounter[] actionCountersDeck, Playerboard playerboard,
+    public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard,
                          DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
 
     }
