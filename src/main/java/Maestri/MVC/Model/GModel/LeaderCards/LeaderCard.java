@@ -65,12 +65,14 @@ public class LeaderCard {
     public void activateAbility(Playerboard playerboard) {
     }
 
+
     /**
      * Moves the player's red cross one cell forward on the faith path if the player chooses to discard the leader card
      * @param playerboard - player's player board
      */
+    /*
     public void discard(Playerboard playerboard) {
         //playerboard.getFaithPath().moveCross(1);
-    }
+    }*/
 
 }

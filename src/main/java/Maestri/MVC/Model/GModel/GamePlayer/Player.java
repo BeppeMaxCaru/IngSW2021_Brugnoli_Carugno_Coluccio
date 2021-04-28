@@ -514,7 +514,7 @@ public class Player {
      */
     public boolean playLeaderCard() {
         Scanner in = new Scanner(System.in);
-        int numLeaderCard=-1;
+        int numLeaderCard;
 
         int k;
         for(k=0; k<4; k++){
@@ -580,7 +580,7 @@ public class Player {
             }
 
             //Rimozione carta leader dal deck
-            this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
+            //this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
             List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
             updatedPlayerLeaderCardList.remove(numLeaderCard);
             this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
