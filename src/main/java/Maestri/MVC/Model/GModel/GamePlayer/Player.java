@@ -210,7 +210,7 @@ public class Player {
         if(rowColumnChoice == 0) {
             while(columnNum < 0 || columnNum > 3) {
                 System.out.println("Choose the column's number you want to get the resources from:");
-                market.printMarket();
+                //market.printMarket();
                 columnNum = in.nextInt();
                 market.updateColumn(columnNum, players, this.playerNumber);
             }
@@ -218,7 +218,7 @@ public class Player {
         else {
             while(rowNum < 0 || rowNum > 2) {
                 System.out.println("Choose the row's number you want to get the resources from:");
-                System.out.println(market);
+                //market.printMarket();
                 rowNum = in.nextInt();
                 market.updateRow(rowNum, players, this.playerNumber);
             }
@@ -515,39 +515,51 @@ public class Player {
     public boolean playLeaderCard() {
         Scanner in = new Scanner(System.in);
         int numLeaderCard;
-
         int k;
+        int notPlayed=0;
+
         for(k=0; k<4; k++){
             if(this.playerLeaderCards[k]==null)
                 break;
+            if(!this.playerLeaderCards[k].isPlayed())
+                notPlayed++;
         }
 
-        //Scelta della carta leader da giocare
-        do{
-            System.out.println("What leader card do you want to play?:");
-            for (int i = 0; i < k; i++) {
-                System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
-            }
-            numLeaderCard = in.nextInt();
-        }while((numLeaderCard<0) || (numLeaderCard > k));
+        //If there are cards that aren't played yet
+        if(notPlayed<k)
+        {
+            //Scelta della carta leader da giocare
+            do{
+                System.out.println("What leader card do you want to play?:");
+                for (int i = 0; i < k; i++) {
+                    if(!this.playerLeaderCards[i].isPlayed())
+                        System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
+                }
+                numLeaderCard = in.nextInt();
 
-        if(this.playerLeaderCards[numLeaderCard]!=null){
-            if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))&&
-                    (!this.playerLeaderCards[numLeaderCard].isPlayed())){
-                this.playerLeaderCards[numLeaderCard].activateAbility(this.playerBoard);
-                this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
-                return true;
-            }
-            else {
-                System.out.println("Not enough resources for play this Leader Card");
+                if(this.playerLeaderCards[numLeaderCard].isPlayed()) {
+                    System.out.println("You can't play this card, you have already played it.");
+                    numLeaderCard = -1;
+                }
+            }while((numLeaderCard<0) || (numLeaderCard > k));
+
+            if(this.playerLeaderCards[numLeaderCard]!=null){
+                if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))){
+                    this.playerLeaderCards[numLeaderCard].activateAbility(this.playerBoard);
+                    this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
+                    return true;
+                }
+                else {
+                    System.out.println("Not enough resources for play this Leader Card");
+                    return false;
+                }
+            }else
+            {
+                System.out.println("Number isn't correct!!");
                 return false;
             }
-        }else
-        {
-            System.out.println("Number isn't correct!!");
-            return false;
         }
-
+        return false;
     }
 
     /**
@@ -557,14 +569,18 @@ public class Player {
         Scanner in = new Scanner(System.in);
         int numLeaderCard = -1;
         int k;
+        int notPlayed=0;
 
         for(k=0; k<4; k++){
             if(this.playerLeaderCards[k]==null)
                 break;
+            if(!this.playerLeaderCards[k].isPlayed())
+                notPlayed++;
         }
 
 
-        if(k>0){
+        //If deck isn't empty and there are cards not played yet
+        if(k>0&&notPlayed>0){
             if(k==1)
             {
                 numLeaderCard=0;
@@ -576,9 +592,15 @@ public class Player {
                 while(numLeaderCard < 0 || numLeaderCard > k) {
                     System.out.println("What leader card do you want to discard?:");
                     for (int i = 0; i < k; i++) {
-                        System.out.println("Write " + i + " for this: " + this.playerLeaderCards[i]);
+                        if(!this.playerLeaderCards[i].isPlayed())
+                            System.out.println("Write " + i + " for this: " + this.playerLeaderCards[i]);
                     }
                     numLeaderCard = in.nextInt();
+                    if(this.playerLeaderCards[numLeaderCard].isPlayed())
+                    {
+                        System.out.println("You can't discard this card, you have already played it.");
+                        numLeaderCard=-1;
+                    }
                 }
             }
 

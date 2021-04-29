@@ -59,7 +59,17 @@ public class ClientMain {
 
             while (!endGame&&players[0].getPlayerBoard().getFaithPath().getCrossPosition()<25&&players[1].getPlayerBoard().getFaithPath().getCrossPosition()<25)
             {
-                players[0].getLeaderAction();
+
+                if(players[0].getPlayerLeaderCards()[0]!=null)
+                {
+                    if(players[0].getPlayerLeaderCards()[1]==null && !players[0].getPlayerLeaderCards()[0].isPlayed())
+                        players[0].getLeaderAction();
+                    else if(players[0].getPlayerLeaderCards()[1]!=null &&
+                            (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
+                        players[0].getLeaderAction();
+                    else System.out.println("You have activated all your Leader cards. You can't do a Leader Action.");
+                }
+                    else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
                 boolean correctAction=true;
                 do{
@@ -76,7 +86,13 @@ public class ClientMain {
                     }
                 }while (!correctAction);
 
-                players[0].getLeaderAction();
+                if(players[0].getPlayerLeaderCards()[0]!=null)
+                    if(players[0].getPlayerLeaderCards()[1]==null && !players[0].getPlayerLeaderCards()[0].isPlayed())
+                        players[0].getLeaderAction();
+                    else if(players[0].getPlayerLeaderCards()[1]!=null &&
+                            (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
+                        players[0].getLeaderAction();
+
                 localActionCountersDeck.drawCounter().activate(localActionCountersDeck,players[1].getPlayerBoard(),localDevelopmentCardsDeckGrid);
 
                 int[] availableDevCards = new int[4];
@@ -92,6 +108,8 @@ public class ClientMain {
                     if(availableDevCards[i]==0)
                         endGame=true;
                 }
+
+                System.out.println();
             }
 
             System.out.println("Game over.");
