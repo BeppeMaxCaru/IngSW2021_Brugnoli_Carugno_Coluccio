@@ -97,198 +97,198 @@ public class DevelopmentCardsDecksGrid {
                 0,12);
 
         //Level 1 PURPLE
-        this.developmentCardsDecks[2][1][0] = new DevelopmentCard("PURPLE",1,
+        this.developmentCardsDecks[2][3][0] = new DevelopmentCard("PURPLE",1,
                 0,0,2,0,
                 0,1,0,0,
                 0,0,0,0,
                 1,1);
-        this.developmentCardsDecks[2][1][1] = new DevelopmentCard("PURPLE",1,
+        this.developmentCardsDecks[2][3][1] = new DevelopmentCard("PURPLE",1,
                 1,0,1,1,
                 1,0,0,0,
                 0,0,0,1,
                 0,2);
-        this.developmentCardsDecks[2][1][2] = new DevelopmentCard("PURPLE",1,
+        this.developmentCardsDecks[2][3][2] = new DevelopmentCard("PURPLE",1,
                 0,0,3,0,
                 2,0,0,0,
                 0,1,1,1,
                 0,3);
-        this.developmentCardsDecks[2][1][3] = new DevelopmentCard("PURPLE",1,
+        this.developmentCardsDecks[2][3][3] = new DevelopmentCard("PURPLE",1,
                 0,2,2,0,
                 1,0,0,1,
                 0,2,0,0,
                 1,4);
 
         //Level 2 PURPLE
-        this.developmentCardsDecks[1][1][0] = new DevelopmentCard("PURPLE",2,
+        this.developmentCardsDecks[1][3][0] = new DevelopmentCard("PURPLE",2,
                 0,0,4,0,
                 1,0,0,0,
                 0,0,0,0,
                 2,5);
-        this.developmentCardsDecks[1][1][1] = new DevelopmentCard("PURPLE",2,
+        this.developmentCardsDecks[1][3][1] = new DevelopmentCard("PURPLE",2,
                 2,0,3,0,
                 1,0,1,0,
                 0,0,0,3,
                 0,6);
-        this.developmentCardsDecks[1][1][2] = new DevelopmentCard("PURPLE",2,
+        this.developmentCardsDecks[1][3][2] = new DevelopmentCard("PURPLE",2,
                 0,0,5,0,
                 0,2,0,0,
                 2,0,0,0,
                 2,7);
-        this.developmentCardsDecks[1][1][3] = new DevelopmentCard("PURPLE",2,
+        this.developmentCardsDecks[1][3][3] = new DevelopmentCard("PURPLE",2,
                 0,0,3,3,
                 0,1,0,0,
                 0,0,2,0,
                 1,8);
 
         //Level 3 PURPLE
-        this.developmentCardsDecks[0][1][0] = new DevelopmentCard("PURPLE",3,
+        this.developmentCardsDecks[0][3][0] = new DevelopmentCard("PURPLE",3,
                 0,0,6,0,
                 0,2,0,0,
                 3,0,0,0,
                 2,9);
-        this.developmentCardsDecks[0][1][1] = new DevelopmentCard("PURPLE",3,
+        this.developmentCardsDecks[0][3][1] = new DevelopmentCard("PURPLE",3,
                 2,0,5,2,
                 0,1,0,1,
                 2,0,2,0,
                 1,10);
-        this.developmentCardsDecks[0][1][2] = new DevelopmentCard("PURPLE",3,
+        this.developmentCardsDecks[0][3][2] = new DevelopmentCard("PURPLE",3,
                 0,0,7,0,
                 1,0,0,0,
                 0,1,0,0,
                 3,11);
-        this.developmentCardsDecks[0][1][3] = new DevelopmentCard("PURPLE",3,
+        this.developmentCardsDecks[0][3][3] = new DevelopmentCard("PURPLE",3,
                 0,0,4,4,
                 1,0,0,0,
                 0,3,1,0,
                 0,12);
 
         //Level 1 BLUE
-        this.developmentCardsDecks[2][2][0] = new DevelopmentCard("BLUE",1,
+        this.developmentCardsDecks[2][1][0] = new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,
                 1,1);
-        this.developmentCardsDecks[2][2][1] = new DevelopmentCard("BLUE",1,
+        this.developmentCardsDecks[2][1][1] = new DevelopmentCard("BLUE",1,
                 1,1,1,0,
                 0,0,1,0,
                 0,1,0,0,
                 0,2);
-        this.developmentCardsDecks[2][2][2] = new DevelopmentCard("BLUE",1,
+        this.developmentCardsDecks[2][1][2] = new DevelopmentCard("BLUE",1,
                 3,0,0,0,
                 0,2,0,0,
                 1,0,1,1,
                 0,3);
-        this.developmentCardsDecks[2][2][3] = new DevelopmentCard("BLUE",1,
+        this.developmentCardsDecks[2][1][3] = new DevelopmentCard("BLUE",1,
                 2,0,2,0,
                 0,1,0,1,
                 0,0,2,0,
                 1,4);
 
         //Level 2 BLUE
-        this.developmentCardsDecks[1][2][0] = new DevelopmentCard("BLUE",2,
+        this.developmentCardsDecks[1][1][0] = new DevelopmentCard("BLUE",2,
                 4,0,0,0,
                 0,0,1,0,
                 0,0,0,0,
                 2,5);
-        this.developmentCardsDecks[1][2][1] = new DevelopmentCard("BLUE",2,
+        this.developmentCardsDecks[1][1][1] = new DevelopmentCard("BLUE",2,
                 3,2,0,0,
                 1,1,0,0,
                 0,0,3,0,
                 0,6);
-        this.developmentCardsDecks[1][2][2] = new DevelopmentCard("BLUE",2,
+        this.developmentCardsDecks[1][1][2] = new DevelopmentCard("BLUE",2,
                 5,0,0,0,
                 0,0,2,0,
                 0,0,0,2,
                 2,7);
-        this.developmentCardsDecks[1][2][3] = new DevelopmentCard("BLUE",2,
+        this.developmentCardsDecks[1][1][3] = new DevelopmentCard("BLUE",2,
                 3,3,0,0,
                 0,0,1,0,
                 0,2,0,0,
                 1,8);
 
         //Level 3 BLUE
-        this.developmentCardsDecks[0][2][0] = new DevelopmentCard("BLUE",3,
+        this.developmentCardsDecks[0][1][0] = new DevelopmentCard("BLUE",3,
                 6,0,0,0,
                 0,0,2,0,
                 0,0,0,3,
                 2,9);
-        this.developmentCardsDecks[0][2][1] = new DevelopmentCard("BLUE",3,
+        this.developmentCardsDecks[0][1][1] = new DevelopmentCard("BLUE",3,
                 5,2,0,0,
                 1,0,0,1,
                 0,2,2,0,
                 1,10);
-        this.developmentCardsDecks[0][2][2] = new DevelopmentCard("BLUE",3,
+        this.developmentCardsDecks[0][1][2] = new DevelopmentCard("BLUE",3,
                 7,0,0,0,
                 0,1,0,0,
                 0,0,0,1,
                 3,11);
-        this.developmentCardsDecks[0][2][3] = new DevelopmentCard("BLUE",3,
+        this.developmentCardsDecks[0][1][3] = new DevelopmentCard("BLUE",3,
                 4,4,0,0,
                 0,0,1,0,
                 1,0,0,3,
                 0,12);
 
         //Level 1 YELLOW
-        this.developmentCardsDecks[2][3][0] = new DevelopmentCard("YELLOW",1,
+        this.developmentCardsDecks[2][2][0] = new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
                 1,1);
-        this.developmentCardsDecks[2][3][1] = new DevelopmentCard("YELLOW",1,
+        this.developmentCardsDecks[2][2][1] = new DevelopmentCard("YELLOW",1,
                 1,1,0,1,
                 0,0,0,1,
                 1,0,0,0,
                 0,2);
-        this.developmentCardsDecks[2][3][2] = new DevelopmentCard("YELLOW",1,
+        this.developmentCardsDecks[2][2][2] = new DevelopmentCard("YELLOW",1,
                 0,3,0,0,
                 0,0,0,2,
                 1,1,1,0,
                 0,3);
-        this.developmentCardsDecks[2][3][3] = new DevelopmentCard("YELLOW",1,
+        this.developmentCardsDecks[2][2][3] = new DevelopmentCard("YELLOW",1,
                 0,2,0,2,
                 1,0,1,0,
                 0,0,0,2,
                 1,4);
 
         //Level 2 YELLOW
-        this.developmentCardsDecks[1][3][0] = new DevelopmentCard("YELLOW",2,
+        this.developmentCardsDecks[1][2][0] = new DevelopmentCard("YELLOW",2,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
                 2,5);
-        this.developmentCardsDecks[1][3][1] = new DevelopmentCard("YELLOW",2,
+        this.developmentCardsDecks[1][2][1] = new DevelopmentCard("YELLOW",2,
                 0,3,0,2,
                 0,1,0,1,
                 3,0,0,0,
                 0,6);
-        this.developmentCardsDecks[1][3][2] = new DevelopmentCard("YELLOW",2,
+        this.developmentCardsDecks[1][2][2] = new DevelopmentCard("YELLOW",2,
                 0,5,0,0,
                 0,0,0,2,
                 0,0,2,0,
                 2,7);
-        this.developmentCardsDecks[1][3][3] = new DevelopmentCard("YELLOW",2,
+        this.developmentCardsDecks[1][2][3] = new DevelopmentCard("YELLOW",2,
                 0,3,3,0,
                 0,0,0,1,
                 2,0,0,0,
                 1,8);
 
         //Level 3 YELLOW
-        this.developmentCardsDecks[0][3][0] = new DevelopmentCard("YELLOW",3,
+        this.developmentCardsDecks[0][2][0] = new DevelopmentCard("YELLOW",3,
                 0,6,0,0,
                 0,0,0,2,
                 0,0,3,0,
                 2,9);
-        this.developmentCardsDecks[0][3][1] = new DevelopmentCard("YELLOW",3,
+        this.developmentCardsDecks[0][2][1] = new DevelopmentCard("YELLOW",3,
                 0,5,2,0,
                 0,1,1,0,
                 2,0,0,2,
                 1,10);
-        this.developmentCardsDecks[0][3][2] = new DevelopmentCard("YELLOW",3,
+        this.developmentCardsDecks[0][2][2] = new DevelopmentCard("YELLOW",3,
                 0,7,0,0,
                 0,0,0,1,
                 0,0,1,0,
                 3,11);
-        this.developmentCardsDecks[0][3][3] = new DevelopmentCard("YELLOW",3,
+        this.developmentCardsDecks[0][2][3] = new DevelopmentCard("YELLOW",3,
                 0,4,4,0,
                 0,0,0,1,
                 0,1,3,0,
@@ -335,17 +335,6 @@ public class DevelopmentCardsDecksGrid {
     }
 
     /**
-     * Prints all the drawable development cards
-     */
-    public void printDevelopmentCardsDecks() {
-        for (int i=0;i<3;i++) {
-            for (int j=0;j<4;j++) {
-                this.developmentCardsDecks[i][j][0].printDevelopmentCard();
-            }
-        }
-    }
-
-    /**
      * Checks if there are still development cards in a grid's deck
      * @param developmentCards - development cards deck
      * @return if there are still development cards in a grid's deck
@@ -375,6 +364,45 @@ public class DevelopmentCardsDecksGrid {
             }
             this.developmentCardsDecks[i][column] = deckToReduce.toArray(this.developmentCardsDecks[i][column]);
         }
+    }
+
+    public void printGrid(){
+
+        for(int row=0; row<3; row++)
+        {
+            int rowNumber=3-row;
+            System.out.println("| LEVEL "+rowNumber+" - GREEN       | LEVEL "+rowNumber+" - BLUE        | LEVEL "+rowNumber+" - YELLOW      | LEVEL "+rowNumber+" - PURPLE      |");
+            for(int k=0; k<4; k++){
+                if(this.developmentCardsDecks[row][k][0]!=null)
+                    System.out.print("| Req: "+this.getDevelopmentCardsDecks()[row][k][0].printCardReq()+" ");
+                else System.out.print("|                       ");
+            }
+            System.out.print("|");
+            System.out.println();
+
+            for(int k=0; k<4; k++){
+                if(this.developmentCardsDecks[row][k][0]!=null)
+                    System.out.print("| "+this.getDevelopmentCardsDecks()[row][k][0].printCardProductionPower()+" ");
+                else System.out.print("|                       ");
+            }
+            System.out.print("|");
+            System.out.println();
+
+            for(int k=0; k<4; k++){
+                if(this.developmentCardsDecks[row][k][0]!=null)
+                {
+                    System.out.print("| Victory Points: "+this.getDevelopmentCardsDecks()[row][k][0].getVictoryPoints()+"    ");
+                    if(this.developmentCardsDecks[row][k][0].getVictoryPoints()<10)
+                        System.out.print(" ");
+                }
+                else System.out.print("|                       ");
+            }
+            System.out.print("|");
+            System.out.println();
+
+            System.out.println();
+        }
+
     }
 
 }

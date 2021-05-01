@@ -79,4 +79,13 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }
+
+    @Override
+    public void printLeaderCard(){
+        System.out.println("DISCOUNT DEVELOPMENT CARD");
+        System.out.println("req: 1 "+this.requisite[0]+" 1 "+this.requisite[1]);
+        System.out.println("Victory Points: "+this.getVictoryPoints());
+        System.out.println("Discount -1 "+this.discount);
+        System.out.println();
+    }
 }

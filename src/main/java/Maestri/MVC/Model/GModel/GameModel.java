@@ -111,13 +111,14 @@ public class GameModel {
         }
     }
 
-    public void checkEndPlay(int playerNumber) {
-        for (Player player : players) {
+    public boolean checkEndPlay() {
+        for (Player player : this.players) {
             if (player.getPlayerBoard().getFaithPath().getCrossPosition() == 24 || player.getPlayerBoard().getDevelopmentCardsBought() == 7) {
                 // ??
-                checkWinner();
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -129,7 +130,7 @@ public class GameModel {
         int maxVictoryPoints = 0;
         int playerWithMaxVictoryPoints = 0;
 
-        for(int i = 0; i < players.length; i++) {
+        for(int i = 0; i < this.players.length; i++) {
             if(maxVictoryPoints < getPlayers()[i].sumAllVictoryPoints()) {
                 maxVictoryPoints = getPlayers()[i].sumAllVictoryPoints();
                 playerWithMaxVictoryPoints = i;
@@ -144,18 +145,51 @@ public class GameModel {
     }
 
     //Method that cycles the players
-    public void gameInProgress() {
-        while (true) {
-            this.players[this.currentPlayer].getLeaderAction();
-            this.players[this.currentPlayer].getAction();
-            this.players[this.currentPlayer].getLeaderAction();
-            this.currentPlayer++;
-            if (this.currentPlayer==this.players.length) {
-                this.currentPlayer = 0;
+    public void gameInProgress(){
+
+        while (this.checkEndPlay()) {
+            for (Player player : this.players) {
+
+                if (player.getPlayerLeaderCards()[0] != null) {
+                    if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
+                        player.getLeaderAction();
+                    else if (player.getPlayerLeaderCards()[1] != null &&
+                            (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
+                        player.getLeaderAction();
+                    else System.out.println("You have activated all your Leader cards. You can't do a Leader Action.");
+                } else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
+
+                boolean correctAction = true;
+                do {
+                    switch (player.getAction()) {
+                        case 0:
+                            player.pickLineFromMarket(this.market, this.players);
+                            break;
+                        case 1:
+                            correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid);
+                            break;
+                        case 2:
+                            correctAction = player.activateProduction();
+                            break;
+                    }
+                } while (!correctAction);
+
+                if (player.getPlayerLeaderCards()[0] != null)
+                    if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
+                        player.getLeaderAction();
+                    else if (player.getPlayerLeaderCards()[1] != null &&
+                            (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
+                        player.getLeaderAction();
+
+                System.out.println();
             }
         }
+        System.out.println("Game over.");
         //There is a winner
-
+        System.out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
+        for (int pn=0; pn<this.players.length; pn++)
+            if(pn!=this.checkWinner())
+                System.out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
     }
 
 }

@@ -171,6 +171,7 @@ public class Playerboard {
         {
             //If the pile isn't full and the first available position of the pile is compatible with the dev. card level, the card can be inserted
             this.playerboardDevelopmentCards[i][pile]=developmentCard;
+            this.developmentCardsBought = this.developmentCardsBought + 1;
             return true;
         }
 
@@ -240,11 +241,13 @@ public class Playerboard {
         while(i > 0) {
             if (fromWhat == 0) {
                 numResources = 0;
-                numResources = numResources + whRes + esRes;
+                numResources = numResources + whRes;
+                if(esRes!=null)
+                    numResources=numResources + esRes;
                 if (numResources != 0) {
-                    if ((whRes != 0) && (esRes == 0))
-                        this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                    else if ((whRes == 0) && (esRes != 0))
+                    if ((whRes != 0) && (esRes == null || esRes == 0))
+                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                    else if (whRes == 0)
                         this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     else {
                         while ((fromWhichWarehouse < 0) || (fromWhichWarehouse > 1)) {
@@ -390,9 +393,10 @@ public class Playerboard {
         //Needs to be fixed in case of leader card that add extra space
         Map<String, Integer> allPlayerResources = new HashMap<>(warehouseResources);
         chestResources.forEach((key, value) -> allPlayerResources.merge(key, value, (v1, v2) -> v1+v2));
+
         //Add leader cards resources
         for (String key : allPlayerResources.keySet()) {
-            if (allPlayerResources.keySet().contains("extra"+key)) {
+            if (allPlayerResources.containsKey("extra"+key)) {
                 Integer leaderCardResources = allPlayerResources.get("extra"+key);
                 Integer keyResources = allPlayerResources.get(key);
                 allPlayerResources.put(key, keyResources+leaderCardResources);
@@ -404,11 +408,11 @@ public class Playerboard {
         //to see if player has enough resources
         for (String key : requisites.keySet()) {
             //Checks if the player has the current required resource type
-            if (!allPlayerResources.containsKey(key)) {
+            /*if (!allPlayerResources.containsKey(key)) {
                 System.out.println("Not enough resources to buy this card");
                 System.out.println();
                 return false;
-            }
+            }*/
             //Checks if the player has enough resources of the current required resource type
             if (allPlayerResources.get(key)<requisites.get(key)) {
                 System.out.println("Not enough resources to buy this card");

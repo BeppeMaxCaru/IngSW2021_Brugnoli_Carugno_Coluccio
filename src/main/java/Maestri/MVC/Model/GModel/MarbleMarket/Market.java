@@ -159,6 +159,7 @@ public class Market {
         }
         System.out.println("    ↑        ↑        ↑        ↑");
         System.out.println("excessMarble:"+this.getExcessMarble().getColour());
+        System.out.println();
     }
 
 

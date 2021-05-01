@@ -61,6 +61,10 @@ public class Player {
         this.nickname = in.nextLine();
     }
 
+    public String getNickname(){
+        return this.nickname;
+    }
+
     /**
      * Returns the player's nickname
      * @return the player's nickname
@@ -202,7 +206,6 @@ public class Player {
         // Scelta colonna/riga.
         while(rowColumnChoice != 0 && rowColumnChoice != 1) {
             System.out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
-            market.printMarket();
             rowColumnChoice = in.nextInt();
         }
 
@@ -256,6 +259,7 @@ public class Player {
             level = consoleInput.nextInt();
             System.out.println();
         }
+        level=3-level;
         int column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         //Check if selected pile is empty
         while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]==null) {
@@ -533,7 +537,10 @@ public class Player {
                 System.out.println("What leader card do you want to play?:");
                 for (int i = 0; i < k; i++) {
                     if(!this.playerLeaderCards[i].isPlayed())
-                        System.out.println("Write" + i + "for this:" + this.playerLeaderCards[i]);
+                    {
+                        System.out.println("Write" + i + "for this: ");
+                        this.playerLeaderCards[i].printLeaderCard();
+                    }
                 }
                 numLeaderCard = in.nextInt();
 
@@ -582,10 +589,7 @@ public class Player {
         //If deck isn't empty and there are cards not played yet
         if(k>0&&notPlayed>0){
             if(k==1)
-            {
                 numLeaderCard=0;
-                System.out.println("Discarded " +this.playerLeaderCards[numLeaderCard]);
-            }
             else
             {
                 //Scelta della carta leader da scartare
@@ -593,7 +597,10 @@ public class Player {
                     System.out.println("What leader card do you want to discard?:");
                     for (int i = 0; i < k; i++) {
                         if(!this.playerLeaderCards[i].isPlayed())
-                            System.out.println("Write " + i + " for this: " + this.playerLeaderCards[i]);
+                        {
+                            System.out.println("Write " + i + " for this: ");
+                            this.playerLeaderCards[i].printLeaderCard();
+                        }
                     }
                     numLeaderCard = in.nextInt();
                     if(this.playerLeaderCards[numLeaderCard].isPlayed())
@@ -603,6 +610,8 @@ public class Player {
                     }
                 }
             }
+            System.out.println("Discarded");
+            this.playerLeaderCards[numLeaderCard].printLeaderCard();
 
             //Rimozione carta leader dal deck
             //this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);

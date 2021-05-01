@@ -47,7 +47,6 @@ public class ClientMain {
             ActionCountersDeck localActionCountersDeck = new ActionCountersDeck();
             DevelopmentCardsDecksGrid localDevelopmentCardsDeckGrid = new DevelopmentCardsDecksGrid();
             Market localMarket = new Market();
-
             LeaderCardDeck localLeaderCardDeck = new LeaderCardDeck();
 
             for(int index=0; index<players[0].getPlayerLeaderCards().length; index++)
@@ -57,7 +56,7 @@ public class ClientMain {
 
             boolean endGame=false;
 
-            while (!endGame&&players[0].getPlayerBoard().getFaithPath().getCrossPosition()<25&&players[1].getPlayerBoard().getFaithPath().getCrossPosition()<25)
+            while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition()<24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition()<24)
             {
 
                 if(players[0].getPlayerLeaderCards()[0]!=null)
@@ -71,8 +70,24 @@ public class ClientMain {
                 }
                     else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
+                System.out.println("YOUR RESOURCES:");
+                System.out.println("COINS   : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
+                        +players[0].getPlayerBoard().getChest().getChestResources().get("COINS")+" in chest");
+                System.out.println("SERVANTS: "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
+                        +players[0].getPlayerBoard().getChest().getChestResources().get("SERVANTS")+" in chest");
+                System.out.println("SHIELDS : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
+                        +players[0].getPlayerBoard().getChest().getChestResources().get("SHIELDS")+" in chest");
+                System.out.println("STONES  : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
+                        +players[0].getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
+                System.out.println();
+                System.out.println("MARKET GRID:");
+                localMarket.printMarket();
+                System.out.println("DEVELOPMENT CARDS GRID:");
+                localDevelopmentCardsDeckGrid.printGrid();
+
                 boolean correctAction=true;
                 do{
+
                     switch (players[0].getAction()) {
                         case 0:
                             players[0].pickLineFromMarket(localMarket, players);

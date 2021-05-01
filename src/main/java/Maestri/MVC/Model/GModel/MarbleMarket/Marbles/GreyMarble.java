@@ -52,6 +52,6 @@ public class GreyMarble extends Marble {
 
     @Override
     public String getColour(){
-        return "  GREY  ";
+        return " GREY   ";
     }
 }

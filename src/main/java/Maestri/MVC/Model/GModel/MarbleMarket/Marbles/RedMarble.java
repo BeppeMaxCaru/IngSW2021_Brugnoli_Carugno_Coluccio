@@ -22,6 +22,6 @@ public class RedMarble extends Marble {
 
     @Override
     public String getColour(){
-        return "  RED   ";
+        return " RED    ";
     }
 }

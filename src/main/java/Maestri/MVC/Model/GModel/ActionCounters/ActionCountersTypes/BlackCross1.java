@@ -15,7 +15,7 @@ public class BlackCross1 extends ActionCounter {
         //modifica la playerboard spostando la croce nera
         actionCountersDeck.shuffle();
         playerboard.getFaithPath().moveCross(1);
-
+        System.out.println("Drawn BlackCross1");
     }
 
 }

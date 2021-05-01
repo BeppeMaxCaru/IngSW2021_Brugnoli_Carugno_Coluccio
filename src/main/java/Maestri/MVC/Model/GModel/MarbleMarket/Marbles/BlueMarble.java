@@ -10,8 +10,6 @@ import java.util.Map;
  */
 public class BlueMarble extends Marble {
 
-    String colour= "  BLUE  ";
-
     /**
      * If the drawing player has enough space in its warehouse it receives one shield otherwise other players receive one faith point
      * @param players - players playing the game
@@ -52,6 +50,6 @@ public class BlueMarble extends Marble {
     }
     @Override
     public String getColour(){
-        return this.colour;
+        return " BLUE   ";
     }
 }

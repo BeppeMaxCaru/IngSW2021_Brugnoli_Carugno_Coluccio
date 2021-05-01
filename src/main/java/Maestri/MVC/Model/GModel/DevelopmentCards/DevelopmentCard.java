@@ -202,20 +202,40 @@ public class DevelopmentCard {
         }
     }
 
-    /**
-     * Prints the development card
-     */
-    public void printDevelopmentCard() {
-        //Possible optional alignment
-        System.out.println("     ");
-        System.out.println("     Colour: " + this.colour);
-        System.out.println("     Level:  " + this.colour);
-        System.out.println("     Cost:              " + this.cost);
-        System.out.println("     Production input:  " + this.input);
-        System.out.println("     Production output: " + this.output);
-        System.out.println("     Faith points:      " + this.faithPoints);
-        System.out.println("     Victory points:    " + this.victoryPoints);
-        System.out.println("     ");
+    public String printCardReq(){
+        StringBuilder req= new StringBuilder();
+        for(String str:this.cost.keySet())
+            if(this.cost.get(str)!=0)
+            {
+                req.append(this.cost.get(str));
+                req.append(str, 0, 3);
+                req.append(" ");
+            }
+
+        req.append("              ");
+        return req.substring(0,16);
+    }
+
+    public String printCardProductionPower(){
+        StringBuilder req= new StringBuilder();
+        for(String str:this.input.keySet())
+            if(this.input.get(str)!=0)
+            {
+                req.append(this.input.get(str));
+                req.append(str, 0, 2);
+                req.append(" ");
+            }
+        req.append("} ");
+        for(String str:this.output.keySet())
+            if(this.output.get(str)!=0)
+            {
+                req.append(this.output.get(str));
+                req.append(str, 0, 2);
+                req.append(" ");
+            }
+
+        req.append("                     ");
+        return req.substring(0,21);
     }
 
 }

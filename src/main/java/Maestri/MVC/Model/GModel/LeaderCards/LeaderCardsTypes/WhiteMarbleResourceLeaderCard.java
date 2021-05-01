@@ -89,4 +89,13 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
         playerboard.getResourceMarbles()[i] = this.whiteMarbleResource;
         this.setPlayed(true);
     }
+
+    @Override
+    public void printLeaderCard(){
+        System.out.println("WHITE MARBLE RESOURCE");
+        System.out.println("req: 2 "+this.requisite[0] + " 1 "+this.requisite[1]);
+        System.out.println("Victory Points: "+this.getVictoryPoints());
+        System.out.println("white marble: "+this.whiteMarbleResource.getColour());
+        System.out.println();
+    }
 }

@@ -60,4 +60,13 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
         //This card is activated, player can't activate it again
         this.setPlayed(true);
     }
+
+    @Override
+    public void printLeaderCard(){
+        System.out.println("EXTRA WAREHOUSE SPACE");
+        System.out.println("req: 5 "+this.requisite);
+        System.out.println("Victory Points: "+this.getVictoryPoints());
+        System.out.println("extra "+this.resourceSpace);
+        System.out.println();
+    }
 }

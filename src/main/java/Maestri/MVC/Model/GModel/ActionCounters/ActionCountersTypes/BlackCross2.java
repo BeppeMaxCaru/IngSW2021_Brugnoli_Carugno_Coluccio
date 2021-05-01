@@ -13,5 +13,6 @@ public class BlackCross2 extends ActionCounter {
 
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
         playerboard.getFaithPath().moveCross(2);
+        System.out.println("Drawn BlackCross2");
     }
 }
