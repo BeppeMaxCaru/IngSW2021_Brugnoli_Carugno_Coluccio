@@ -3,9 +3,11 @@ package Maestri.MVC.Model.GModel.MarbleMarket;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Represents the Market game component
@@ -96,7 +98,7 @@ public class Market {
      * @param players      - players playing the game
      * @param playerNumber - number of the current player that is drawing marbles
      */
-    public void updateRow(int row, Player[] players, int playerNumber) {
+    public void updateRow(int row, Player[] players, int playerNumber, Scanner in, PrintWriter out) {
         int i = 0;
         Marble temp;//Temporary marble to save the previous excess marble
         temp = this.excessMarble;
@@ -109,12 +111,12 @@ public class Market {
          Every marble slides to an upper position of the market grid.
          */
         for (i = 0; i < column-1 ; i++){
-            this.marketArrangement[row][i].drawMarble(players, playerNumber);
+            this.marketArrangement[row][i].drawMarble(players, playerNumber, in, out);
             this.marketArrangement[row][i] = this.marketArrangement[row][i+1];
         }
 
         //The previous excess Marble is inserted into the lowest position of the market row
-        this.marketArrangement[row][i].drawMarble(players, playerNumber);
+        this.marketArrangement[row][i].drawMarble(players, playerNumber, in, out);
         this.marketArrangement[row][i] = temp;
     }
 
@@ -124,7 +126,7 @@ public class Market {
      * @param players - players playing the game
      * @param playerNumber - number of the current player that is drawing marbles
      */
-    public void updateColumn(int column, Player[] players, int playerNumber){
+    public void updateColumn(int column, Player[] players, int playerNumber, Scanner in, PrintWriter out){
         int i=0;
         Marble temp;//Temporary marble to save the previous excess marble
         temp=this.excessMarble;
@@ -138,28 +140,28 @@ public class Market {
              It is activated the effect of every marble of the column.
              Every marble slides to an upper position of the market grid
              */
-            this.marketArrangement[i][column].drawMarble(players, playerNumber);
+            this.marketArrangement[i][column].drawMarble(players, playerNumber, in, out);
             this.marketArrangement[i][column]=this.marketArrangement[i+1][column];
         }
 
         //The previous excess Marble is inserted into the lowest position of the market column
-        this.marketArrangement[i][column].drawMarble(players, playerNumber);
+        this.marketArrangement[i][column].drawMarble(players, playerNumber, in, out);
         this.marketArrangement[i][column]=temp;
     }
 
-    public void printMarket(){
+    public void printMarket(PrintWriter out){
         for (int i=0; i<this.row; i++){
-            System.out.print("|");
+            out.print("|");
             for (int k=0; k<this.column; k++)
             {
-                System.out.print(this.marketArrangement[i][k].getColour()+"|");
+                out.print(this.marketArrangement[i][k].getColour()+"|");
             }
-            System.out.print(" ←");
-            System.out.println();
+            out.print(" ←");
+            out.println();
         }
-        System.out.println("    ↑        ↑        ↑        ↑");
-        System.out.println("excessMarble:"+this.getExcessMarble().getColour());
-        System.out.println();
+        out.println("    ↑        ↑        ↑        ↑");
+        out.println("excessMarble:"+this.getExcessMarble().getColour());
+        out.println();
     }
 
 

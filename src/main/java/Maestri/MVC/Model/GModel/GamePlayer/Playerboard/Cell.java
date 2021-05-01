@@ -32,7 +32,7 @@ public class Cell {
 
     /**
      * Returns the victory points of the cell
-     * @return
+     * @return victory points of the cell
      */
     public int getVictoryPoints() {
         return this.victoryPoints;

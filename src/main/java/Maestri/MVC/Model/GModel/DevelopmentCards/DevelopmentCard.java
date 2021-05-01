@@ -4,8 +4,10 @@ import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Represents a development card
@@ -159,7 +161,7 @@ public class DevelopmentCard {
      * @param playerboard - player's player board
      * @return true if the player can place the development card on his player board
      */
-    public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard) {
+    public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard, PrintWriter out) {
         //Gets the player board's spaces where development cards are places
         DevelopmentCard[][] playerDevelopmentCards = playerboard.getPlayerboardDevelopmentCards();
         //Checks if there are empty spaces or cards that are of the same colour of the
@@ -182,8 +184,8 @@ public class DevelopmentCard {
             }
         }
 
-        System.out.println("Card not compatible with player board cards");
-        System.out.println("");
+        out.println("Card not compatible with player board cards");
+        out.println("");
         return false;
     }
 
@@ -191,13 +193,13 @@ public class DevelopmentCard {
      * Removes resources from the player's player board equals to the development card cost
      * @param playerboard - player's player board
      */
-    public void payDevelopmentCard(Playerboard playerboard) {
+    public void payDevelopmentCard(Playerboard playerboard, Scanner in, PrintWriter out) {
 
         //For each cost resource to remove asks the player where to pick it from
         for (String key : this.cost.keySet()) {
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key);
+                playerboard.pickResource(key, in, out);
             }
         }
     }

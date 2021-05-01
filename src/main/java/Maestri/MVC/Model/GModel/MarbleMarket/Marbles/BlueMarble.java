@@ -3,7 +3,9 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * This blue marble produces SHIELDS
@@ -16,16 +18,16 @@ public class BlueMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber) {
+    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
 
         Map<String, Integer> whResources;
         whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("SHIELDS");
         boolean discard;
 
-        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SHIELDS");
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SHIELDS", in, out);
         //Calling the Warehouse method for checking the warehouse capacity
-        System.out.println("You picked: "+this.getClass());
+        out.println("You picked: "+this.getClass());
 
         if(!discard)
         {

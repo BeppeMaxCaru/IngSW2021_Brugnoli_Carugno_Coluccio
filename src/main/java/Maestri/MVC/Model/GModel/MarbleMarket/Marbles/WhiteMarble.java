@@ -3,6 +3,7 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -20,22 +21,22 @@ public class WhiteMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber) {
+    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
         int chosenMarble=-1;
         if(players[playerNumber].getPlayerBoard().getResourceMarbles()[0]!=null)
         {
             if(players[playerNumber].getPlayerBoard().getResourceMarbles()[1]==null)
-                players[playerNumber].getPlayerBoard().getResourceMarbles()[0].drawMarble(players, playerNumber);
+                players[playerNumber].getPlayerBoard().getResourceMarbles()[0].drawMarble(players, playerNumber, in, out);
             else {
                 while(chosenMarble<0||chosenMarble>1){
-                    System.out.println("Which resource do you want to pick? Press 0 for the first res., press 1 for the second res.");
+                    out.println("Which resource do you want to pick? Press 0 for the first res., press 1 for the second res.");
                     Scanner playerInput = new Scanner(System.in);
                     chosenMarble = playerInput.nextInt();
                 }
-                players[playerNumber].getPlayerBoard().getResourceMarbles()[chosenMarble].drawMarble(players, playerNumber);
+                players[playerNumber].getPlayerBoard().getResourceMarbles()[chosenMarble].drawMarble(players, playerNumber, in, out);
             }
         }
-        else System.out.println("You picked: "+this.getClass());
+        else out.println("You picked: "+this.getClass());
     }
 
     @Override

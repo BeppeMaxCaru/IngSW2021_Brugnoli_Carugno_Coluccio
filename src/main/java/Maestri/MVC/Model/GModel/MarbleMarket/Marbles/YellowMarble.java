@@ -4,7 +4,9 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.WareHouse;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.PrintWriter;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * This yellow marble produces COINS
@@ -17,14 +19,14 @@ public class YellowMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber) {
+    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
 
         Integer numOfResources = players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS");
         boolean discard;
 
-        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("COINS");
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("COINS", in, out);
         //Calling the Warehouse method for checking the warehouse capacity
-        System.out.println("You picked: "+this.getClass());
+        out.println("You picked: " + this.getClass());
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse

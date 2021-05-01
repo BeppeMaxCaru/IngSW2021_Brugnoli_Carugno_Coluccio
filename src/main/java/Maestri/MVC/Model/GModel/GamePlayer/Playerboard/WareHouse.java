@@ -1,5 +1,6 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -46,7 +47,7 @@ public class WareHouse {
      * @param newResource - resource to add
      * @return true the resource is discarded instead of collected
      */
-    public boolean checkConstraints(String newResource) {
+    public boolean checkConstraints(String newResource, Scanner in, PrintWriter out) {
 
         String[] res={"COINS", "SHIELDS", "SERVANTS", "STONES"};
         String[] r;
@@ -67,15 +68,14 @@ public class WareHouse {
         Integer numOfResources = this.warehouseResources.get(newResource);
         Integer extraSpace = this.warehouseResources.get(extraRes);
 
-        Scanner keyboard = new Scanner(System.in);
         int resourceChoice;
 
         //if LeaderCard extra space is available
         if(this.warehouseResources.get((extraRes))!=null)
         {
             do {
-                System.out.println("Where do you go to collect this resource? Insert 0 for LeaderCard, 1 for Warehouse");
-                resourceChoice = keyboard.nextInt();
+                out.println("Where do you go to collect this resource? Insert 0 for LeaderCard, 1 for Warehouse");
+                resourceChoice = in.nextInt();
                 if(resourceChoice==0)
                 {
                     if(extraSpace==2)

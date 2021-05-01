@@ -4,6 +4,9 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class ActionCounter {
 
     /**
@@ -22,12 +25,12 @@ public class ActionCounter {
     /**
      * This function receives the components that can be modified by the action counters and subsequently
      * modifies the components depending on the method overridden in the subclasses
-     * @param actionCountersDeck
-     * @param playerboard
-     * @param developmentCardsDecksGrid
+     * @param actionCountersDeck actionCountersDeck
+     * @param playerboard playerboard
+     * @param developmentCardsDecksGrid developmentCardsDecksGrid
      */
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard,
-                         DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
+                         DevelopmentCardsDecksGrid developmentCardsDecksGrid, PrintWriter out) {
 
     }
 

@@ -6,9 +6,9 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.*;
 
 /**
  * Represents the state of game "Maestri del Rinascimento"
@@ -23,6 +23,7 @@ public class GameModel {
     private Market market;
     private ActionCountersDeck actionCountersDeck;
     private boolean BlackCrossPawn = false;
+    private Socket socket;
 
     //Who chooses the action????? from the controller!
     //private Map<Integer, String> playerActions
@@ -75,15 +76,15 @@ public class GameModel {
         return this.BlackCrossPawn;
     }
 
-    public void buyDevelopmentCardAction() {
+    public void buyDevelopmentCardAction(Scanner in, PrintWriter out) {
         int index = 0;
-        this.players[index].buyDevelopmentCard(this.developmentCardsDecksGrid);
+        this.players[index].buyDevelopmentCard(this.developmentCardsDecksGrid, in ,out);
         //this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
-    public void pickResourcesFromMarket(){
+    public void pickResourcesFromMarket(Scanner in, PrintWriter out){
         int index=0;
-        this.players[index].pickLineFromMarket(this.market, this.players);
+        this.players[index].pickLineFromMarket(this.market, this.players, in, out);
     }
 
     /**
@@ -145,51 +146,51 @@ public class GameModel {
     }
 
     //Method that cycles the players
-    public void gameInProgress(){
+    public void gameInProgress(Scanner in, PrintWriter out) {
 
         while (this.checkEndPlay()) {
             for (Player player : this.players) {
 
                 if (player.getPlayerLeaderCards()[0] != null) {
                     if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
-                        player.getLeaderAction();
+                        player.getLeaderAction(in, out);
                     else if (player.getPlayerLeaderCards()[1] != null &&
                             (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
-                        player.getLeaderAction();
-                    else System.out.println("You have activated all your Leader cards. You can't do a Leader Action.");
-                } else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
+                        player.getLeaderAction(in, out);
+                    else out.println("You have activated all your Leader cards. You can't do a Leader Action.");
+                } else out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
                 boolean correctAction = true;
                 do {
-                    switch (player.getAction()) {
+                    switch (player.getAction(in, out)) {
                         case 0:
-                            player.pickLineFromMarket(this.market, this.players);
+                            player.pickLineFromMarket(this.market, this.players, in, out);
                             break;
                         case 1:
-                            correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid);
+                            correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
                             break;
                         case 2:
-                            correctAction = player.activateProduction();
+                            correctAction = player.activateProduction(in, out);
                             break;
                     }
                 } while (!correctAction);
 
                 if (player.getPlayerLeaderCards()[0] != null)
                     if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
-                        player.getLeaderAction();
+                        player.getLeaderAction(in, out);
                     else if (player.getPlayerLeaderCards()[1] != null &&
                             (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
-                        player.getLeaderAction();
+                        player.getLeaderAction(in, out);
 
-                System.out.println();
+                out.println();
             }
         }
-        System.out.println("Game over.");
+        out.println("Game over.");
         //There is a winner
-        System.out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
+        out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
         for (int pn=0; pn<this.players.length; pn++)
             if(pn!=this.checkWinner())
-                System.out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
+                out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
     }
 
 }
