@@ -60,7 +60,6 @@ public class ClientMain {
 
             while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition() < 24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition() < 24)
             {
-
                 if(players[0].getPlayerLeaderCards()[0] != null)
                 {
                     if(players[0].getPlayerLeaderCards()[1] == null && !players[0].getPlayerLeaderCards()[0].isPlayed())
