@@ -6,6 +6,10 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
@@ -28,24 +32,35 @@ public class GameModel {
     //Who chooses the action????? from the controller!
     //private Map<Integer, String> playerActions
 
-    public GameModel(int numberOfPlayers) {
-        this.players = new Player[numberOfPlayers];
-        for (int i=0;i<numberOfPlayers;i++) {
+    public GameModel() {
+        this.players = new Player[4];
+        /*for (int i=0;i<numberOfPlayers;i++) {
             //this.players[i] = new Player(this.players[i].chooseNickname(), i);
             //this.players[i].setStartingPlayerResources();
-        }
+        }*/
         this.setStartingLeaderCards();
         this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
         this.leaderCardDeck = new LeaderCardDeck();
         this.market = new Market();
-        if (numberOfPlayers==1) {
+        /*if (numberOfPlayers==1) {
             this.actionCountersDeck = new ActionCountersDeck();
             this.BlackCrossPawn = true;
-        }
+        }*/
     }
 
     public Player[] getPlayers() {
         return this.players;
+    }
+
+    public boolean addNewPlayer(Player newPlayer) {
+        for (int i=0;i<this.players.length;i++) {
+            if (this.players[i].equals(null)) {
+                this.players[i] = newPlayer;
+                this.players[i].setPlayerNumber(i);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setStartingLeaderCards() {
@@ -85,6 +100,15 @@ public class GameModel {
     public void pickResourcesFromMarket(Scanner in, PrintWriter out){
         int index=0;
         this.players[index].pickLineFromMarket(this.market, this.players, in, out);
+    }
+
+    public void addClient(Socket clientSocket) {
+        try {
+            //for (Player player : players)
+            //Player newClient = new Player();
+        } catch (Exception e) {
+            //clientSocket;
+        }
     }
 
     /**

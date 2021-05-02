@@ -148,6 +148,10 @@ public class ClientMain {
 
         }
         else{
+            //Trial Beppe
+            //Ask nickname before gameMode branch
+            //Call player constructor directly on the server?
+            //Player player = new Player();
             try (Socket clientSocket = new Socket(hostName, portNumber);
                  PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                  BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

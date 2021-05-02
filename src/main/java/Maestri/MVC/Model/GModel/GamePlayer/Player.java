@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * Represents a player with all its information
  */
-public class Player {
+public class Player extends Thread implements Runnable {
 
     /**
      * Name that the player chooses to join the game
@@ -46,6 +46,7 @@ public class Player {
      */
     public Player(String nickname) {
         this.nickname = nickname;
+        //this.playerNumber = playerNumber;
         this.playerBoard = new Playerboard();
         this.playerLeaderCards = new LeaderCard[4];
     }
@@ -657,5 +658,12 @@ public class Player {
             numResources = numResources + getPlayerBoard().getChest().getChestResources().get(key);
 
         return numResources;
+    }
+
+    @Override
+    public void run() {
+        //this.getLeaderAction();
+        //this.getAction();
+        //this.getLeaderAction();
     }
 }
