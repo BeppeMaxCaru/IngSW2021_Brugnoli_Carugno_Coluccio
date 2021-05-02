@@ -660,6 +660,35 @@ public class Player extends Thread implements Runnable {
         return numResources;
     }
 
+    public void printPlayerCards(Scanner in, PrintWriter out)
+    {
+        for(int row=2; row>=0; row--)
+        {
+
+            for(int k=0; k<3; k++){
+                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
+                    System.out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].printCardProductionPower()+" ");
+                else System.out.print("|                       ");
+            }
+            System.out.print("|");
+            System.out.println();
+
+            for(int k=0; k<3; k++){
+                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
+                {
+                    System.out.print("| Victory Points: "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()+"    ");
+                    if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()<10)
+                        System.out.print(" ");
+                }
+                else System.out.print("|                       ");
+            }
+            System.out.print("|");
+            System.out.println();
+
+            System.out.println();
+        }
+    }
+
     @Override
     public void run() {
         //this.getLeaderAction();

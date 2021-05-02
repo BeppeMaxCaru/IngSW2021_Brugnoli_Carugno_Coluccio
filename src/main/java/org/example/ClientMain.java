@@ -5,7 +5,6 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
-//import org.graalvm.compiler.hotspot.nodes.PluginFactory_JumpToExceptionHandlerInCallerNode;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -47,7 +46,6 @@ public class ClientMain {
             players[1] = new Player("Lorenzo il Magnifico");
             players[1].setPlayerNumber(1);
 
-
             ActionCountersDeck localActionCountersDeck = new ActionCountersDeck();
             DevelopmentCardsDecksGrid localDevelopmentCardsDeckGrid = new DevelopmentCardsDecksGrid();
             Market localMarket = new Market();
@@ -85,8 +83,12 @@ public class ClientMain {
                         +players[0].getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
                 System.out.println();
 
+                System.out.println("YOUR DEVELOPMENT CARDS: ");
+                players[0].printPlayerCards(input, output);
+
                 System.out.println("YOUR FAITH PATH POSITION    : "+players[0].getPlayerBoard().getFaithPath().getCrossPosition());
                 System.out.println("LORENZO BLACK CROSS POSITION: "+players[1].getPlayerBoard().getFaithPath().getCrossPosition());
+                System.out.println();
 
                 System.out.println("MARKET GRID:");
                 localMarket.printMarket(output);
