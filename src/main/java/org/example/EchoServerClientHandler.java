@@ -11,26 +11,14 @@ import java.util.Scanner;
 public class EchoServerClientHandler extends Thread implements Runnable{
     private Socket clientSocket;
     private String nickname;
-    private Scanner in;
-    private PrintWriter out;
 
     private Player player;// = new Player();
     //this.player.chooseNickname();
 
     public EchoServerClientHandler(Socket clientSocket, GameModel gameModel) {
         this.clientSocket = clientSocket;
-        //Online input
-        try {
-            this.in = new Scanner(this.clientSocket.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //Online output
-        try {
-            this.out = new PrintWriter(this.clientSocket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //Start asking
+        /*out.println("buongiorno");
         try {
             out.println("Insert your nickname: ");
             this.nickname = in.nextLine();
@@ -49,38 +37,67 @@ public class EchoServerClientHandler extends Thread implements Runnable{
                 this.player.setPlayerLeaderCard(i, gameModel.getLeaderCardDeck().drawOneLeaderCard());
             }
             for (int i=0;i<2;i++) {
-                this.player.discardLeaderCard(this.in, this.out);
+                this.player.discardLeaderCard(in, out);
             }
         } catch (Exception e) {
             out.println("You weren't able to join a game");
             out.println("Try next time");
-        }
+        }*/
     }
 
     //@Override
-    public void run(GameModel gameModel) {
+    public void run() {
         try {
-            // Leggo e scrivo nella connessione finche' non ricevo "quit"
-            while (true) {
-                this.player.getLeaderAction(this.in, this.out);
-                this.player.getAction(this.in, this.out);
-                this.player.getLeaderAction(this.in, this.out);
+            Scanner in = new Scanner(this.clientSocket.getInputStream());
+            PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
-                /*String line = in.nextLine();
+            out.println("Insert your nickname: ");
+            String clientInput = in.nextLine();
+            this.player = new Player(clientInput);
+
+            while (true) {
+                out.println("Ciao! Inserisci un comando: ");
+                clientInput = in.nextLine();
+                if (clientInput.equals("quit")) break;
+                //else out.println(clientInput);
+            }
+
+            // Leggo e scrivo nella connessione finche' non ricevo "quit"
+            /*if (gameModel.getCurrentPlayer()==this.player.getPlayerNumber()) {
+                this.player.getLeaderAction(in, out);
+                this.player.getAction(in, out);
+                this.player.getLeaderAction(in, out);
+
+                String line = in.nextLine();
                 if (line.equals("quit")) {
                     break;
                 } else {
                     out.println("Received: " + line);
                     out.flush();
-                }*/
-                break;
-            }
-// Chiudo gli stream e il socket
+                }
+            }*/
+            // Chiudo gli stream e il socket
+
             in.close();
             out.close();
-            clientSocket.close();
-        } catch (IOException e) {
+            this.clientSocket.close();
+            //this.wait();
+        } catch (Exception e) {
             System.err.println(e.getMessage());
+            //this.out.println("Lost connection");
+        }
+    }
+
+    //Closing stream and socket
+    public void disconnectClient() {
+        try {
+            //this.in.close();
+            //this.out.close();
+            this.clientSocket.close();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            //this.out.println("Thanks for playing");
+            //this.out.println("See you next time");
         }
     }
 }

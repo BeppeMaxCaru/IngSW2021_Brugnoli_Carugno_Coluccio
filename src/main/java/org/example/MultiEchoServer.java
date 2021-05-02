@@ -2,7 +2,6 @@ package org.example;
 
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-//import com.sun.org.apache.xalan.internal.xsltc.compiler.Parser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -36,9 +35,6 @@ public class MultiEchoServer {
             try {
                 Socket clientSocket = serverSocket.accept();
                 EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, game1);
-                /*for (int i=0;i<this.game1.getPlayers().length;i++) {
-                    if (this.game1.getPlayers()[i].equals(null)) newClient.setName();
-                }*/
                 executor.submit(newClient);
                 //newClient.setName();
             } catch(IOException e) {

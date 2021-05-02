@@ -27,8 +27,6 @@ public class GameModel {
     private Market market;
     private ActionCountersDeck actionCountersDeck;
     private boolean BlackCrossPawn = false;
-    private Socket socket;
-
     //Who chooses the action????? from the controller!
     //private Map<Integer, String> playerActions
 
@@ -52,15 +50,15 @@ public class GameModel {
         return this.players;
     }
 
-    public boolean addNewPlayer(Player newPlayer) {
+    public void addNewPlayer(Player newPlayer) {
         for (int i=0;i<this.players.length;i++) {
-            if (this.players[i].equals(null)) {
+            if (this.players[i]==null) {
                 this.players[i] = newPlayer;
                 this.players[i].setPlayerNumber(i);
-                return true;
+                return;
             }
         }
-        return false;
+        return;
     }
 
     public void setStartingLeaderCards() {
@@ -109,6 +107,10 @@ public class GameModel {
         } catch (Exception e) {
             //clientSocket;
         }
+    }
+
+    public int getCurrentPlayer() {
+        return this.currentPlayer;
     }
 
     /**
@@ -170,7 +172,7 @@ public class GameModel {
     }
 
     //Method that cycles the players
-    public void gameInProgress(Scanner in, PrintWriter out) {
+    public void startGame(Scanner in, PrintWriter out) {
 
         while (this.checkEndPlay()) {
             for (Player player : this.players) {

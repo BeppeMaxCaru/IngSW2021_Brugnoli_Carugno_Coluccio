@@ -148,7 +148,7 @@ public class ClientMain {
             }
 
         }
-        else{
+        else {
             //Trial Beppe
             //Ask nickname before gameMode branch
             //Call player constructor directly on the server?
@@ -159,10 +159,21 @@ public class ClientMain {
                  BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
             ) {
                 String userInput;
+
+                System.out.println(in.readLine());
+                //out.println();
+
                 while ((userInput = stdIn.readLine()) != null) {
                     out.println(userInput);
                     System.out.println("echo: " + in.readLine());
                 }
+
+
+                /*while ((in.readLine()) != null) {
+                    System.out.println(in.readLine());
+                    System.out.println("Received: " + in.readLine());
+                }*/
+
             } catch (UnknownHostException e) {
                 System.err.println("No info about host: " + hostName);
                 System.exit(1);
