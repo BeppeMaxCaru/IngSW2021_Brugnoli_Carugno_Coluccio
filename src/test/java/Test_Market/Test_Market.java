@@ -6,6 +6,9 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 public class Test_Market {
     Player[] players= new Player[2];
     Market market = new Market();
@@ -17,40 +20,40 @@ public class Test_Market {
 
     @Test
     public void print_arrangement(){
-        market.printMarket();
+        market.printMarket(new PrintWriter(System.out));
     }
 
     @Test
     public void test_updateColumn(){
-        players[0]= new Player("Simo", 0);
+        players[0]= new Player("Simo");
 
-        market.printMarket();
+        market.printMarket(new PrintWriter(System.out));
 
-        market.updateColumn(0, players, 0);
+        market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS"));
         System.out.println(players[0].getPlayerBoard().getFaithPath().getCrossPosition());
 
-        market.printMarket();
+        market.printMarket(new PrintWriter(System.out));
 
     }
 
     @Test
     public void test_updateRow(){
-        players[0]= new Player("Simo", 0);
+        players[0]= new Player("Simo");
 
-        market.printMarket();
+        market.printMarket(new PrintWriter(System.out));
 
-        market.updateRow(0, players, 0);
+        market.updateRow(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS"));
         System.out.println(players[0].getPlayerBoard().getFaithPath().getCrossPosition());
 
-        market.printMarket();
+        market.printMarket(new PrintWriter(System.out));
 
     }
 

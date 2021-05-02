@@ -10,13 +10,13 @@ public class Test_Player {
 
     @Test
     public void constructorTrial(){
-        players[0] = new Player("Ali", 0);
+        players[0] = new Player("Ali");
         assertEquals(Player.class, players[0].getClass());
     }
 
     @Test
     public void sumAllVictoryPointsTrial() {
-        players[0] = new Player("Ali", 0);
+        players[0] = new Player("Ali");
 
         players[0].getPlayerBoard().getFaithPath().moveCross(3);
 
@@ -27,7 +27,7 @@ public class Test_Player {
 
     @Test
     public void numResourceReserveTrial(){
-        players[0] = new Player("Ali", 0);
+        players[0] = new Player("Ali");
         players[0].getPlayerBoard().getWareHouse().getWarehouseResources().put("COINS", 1);
         players[0].getPlayerBoard().getWareHouse().getWarehouseResources().put("STONES", 2);
         players[0].getPlayerBoard().getWareHouse().getWarehouseResources().put("SERVANTS", 3);

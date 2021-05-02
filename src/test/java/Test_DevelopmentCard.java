@@ -4,6 +4,8 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+
 public class Test_DevelopmentCard {
 
     @Test
@@ -71,8 +73,8 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 1,2);
 
-        assertTrue(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost()));
-        assertTrue(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard));
+        assertTrue(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost(), new PrintWriter(System.out)));
+        assertTrue(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard, new PrintWriter(System.out)));
     }
 
     @Test
@@ -89,7 +91,7 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 1,2);
 
-        assertFalse(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost()));
+        assertFalse(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost(), new PrintWriter(System.out)));
     }
 
 }

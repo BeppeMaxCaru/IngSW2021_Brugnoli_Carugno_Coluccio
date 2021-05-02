@@ -235,6 +235,11 @@ public class DevelopmentCard {
                 req.append(str, 0, 2);
                 req.append(" ");
             }
+        if(this.faithPoints!=0)
+        {
+            req.append(this.faithPoints);
+            req.append("FP ");
+        }
 
         req.append("                     ");
         return req.substring(0,21);

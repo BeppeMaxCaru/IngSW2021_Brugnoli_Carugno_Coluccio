@@ -42,11 +42,10 @@ public class Player {
     /**
      * Initializes a new player
      * @param nickname - nickname to assign to the player
-     * @param playerNumber - index to track the player order
+     *
      */
-    public Player(String nickname, Integer playerNumber) {
+    public Player(String nickname) {
         this.nickname = nickname;
-        this.playerNumber = playerNumber;
         this.playerBoard = new Playerboard();
         this.playerLeaderCards = new LeaderCard[4];
     }
@@ -58,7 +57,7 @@ public class Player {
     public void chooseNickname(Scanner in, PrintWriter out) {
 
         out.println("Choose your nickname to join the game: ");
-        this.nickname = in.nextLine();
+        this.nickname = in.next();
     }
 
     public String getNickname(){
@@ -236,12 +235,12 @@ public class Player {
 
         out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
         out.println("Choose development card colour: ");
-        String colour = in.nextLine();
+        String colour = in.next();
         out.println();
         while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
             out.println("Card of this colour doesn't exist!");
             out.println("Choose a valid development card colour: ");
-            colour = in.nextLine();
+            colour = in.next();
             out.println();
         }
         out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
@@ -264,12 +263,12 @@ public class Player {
             out.println();
             out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
             out.println("Choose development card colour: ");
-            colour = in.nextLine();
+            colour = in.next();
             out.println();
             while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
                 out.println("Card of this colour doesn't exist!");
                 out.println("Choose a valid development card colour: ");
-                colour = in.nextLine();
+                colour = in.next();
                 out.println();
             }
             out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
@@ -473,7 +472,7 @@ public class Player {
      * Asks the player to perform a leader action
      * @return true if the player wants to perform it
      */
-    public boolean getLeaderAction(Scanner in, PrintWriter out) {
+    public void getLeaderAction(Scanner in, PrintWriter out) {
         int leaderActionNum = -1;
         int leaderNum = -1;
         boolean correctLeaderAction=false;
@@ -485,7 +484,7 @@ public class Player {
         }
 
         if (leaderActionNum == 0)
-            return false;
+            return;
 
         while (leaderNum != 0 && leaderNum != 1) {
             out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
@@ -504,7 +503,6 @@ public class Player {
                 this.getPlayerBoard().getFaithPath().moveCross(1);
             }
         }
-        return correctLeaderAction;
     }
 
     /**

@@ -298,7 +298,8 @@ public class Playerboard {
             //Exclude extra resources to correct the cycle
             if (!key.contains("extra")) {
                 numResources = this.wareHouse.getWarehouseResources().get(key);
-                numResources = numResources + this.wareHouse.getWarehouseResources().get("extra" + key);
+                if(this.wareHouse.getWarehouseResources().containsKey("extra"+key))
+                    numResources = numResources + this.wareHouse.getWarehouseResources().get("extra" + key);
                 if (numResources != 0) {
                     availableResourceWarehouse.add(key);
                 } /*else {

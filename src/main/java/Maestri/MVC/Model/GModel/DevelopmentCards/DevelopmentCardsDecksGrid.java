@@ -355,11 +355,14 @@ public class DevelopmentCardsDecksGrid {
         for (int i=2;i>=0;i--) {
             List<DevelopmentCard> deckToReduce = new ArrayList<>(Arrays.asList(this.developmentCardsDecks[i][column]));
             if (removedCards==2) return;
-            if (deckToReduce.size()!=0) {
+            if (this.developmentCardsDecks[i][column][0]!=null) {
                 deckToReduce.remove(0);
                 removedCards = removedCards+1;
             }
-            if (deckToReduce.size()!=0) {
+            this.developmentCardsDecks[i][column] = deckToReduce.toArray(this.developmentCardsDecks[i][column]);
+            deckToReduce = new ArrayList<>(Arrays.asList(this.developmentCardsDecks[i][column]));
+
+            if (this.developmentCardsDecks[i][column][0]!=null) {
                 deckToReduce.remove(0);
                 removedCards = removedCards+1;
             }

@@ -6,6 +6,9 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import org.junit.jupiter.api.Test;
 
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 
 public class Test_ExtraWarehouseLeaderCard {
 
@@ -13,7 +16,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_creation() {
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         assertEquals(ExtraWarehouseSpaceLeaderCard.class, card.getClass());
@@ -21,7 +24,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_constraints1(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 4);
@@ -30,7 +33,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_constraints2(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 5);
@@ -39,7 +42,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_constraints3(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 3);
@@ -49,7 +52,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_array() {
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -58,7 +61,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_array2() {
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -67,34 +70,34 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_discard1() {
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         players[0].getPlayerLeaderCards()[0]=card;
-        players[0].discardLeaderCard();
+        players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
     @Test
     public void try_discard2() {
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         players[0].getPlayerLeaderCards()[0]=card;
-        players[0].discardLeaderCard();
+        players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertNull(players[0].getPlayerLeaderCards()[0]);
     }
 
     @Test
     public void try_activation1(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         assertNull(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("extraSTONES"));
     }
 
     @Test
     public void try_activation2(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         card.activateAbility(players[0].getPlayerBoard());
@@ -103,7 +106,7 @@ public class Test_ExtraWarehouseLeaderCard {
 
     @Test
     public void try_activation3(){
-        players[0] = new Player("Beppe",0);
+        players[0] = new Player("Beppe");
 
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
         card.activateAbility(players[0].getPlayerBoard());

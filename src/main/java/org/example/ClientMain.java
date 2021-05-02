@@ -11,7 +11,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -39,10 +38,15 @@ public class ClientMain {
 
             Player[] players = new Player[2];
             System.out.println("Write your nickname: ");
-            Scanner nickInput = new Scanner(System.in);
-            nickName = nickInput.nextLine();
-            players[0] = new Player(nickName, 0);
-            players[1] = new Player("Lorenzo il Magnifico",1);
+            Scanner input = new Scanner(System.in);
+            PrintWriter output = new PrintWriter(System.out,true);
+            nickName = input.nextLine();
+
+            players[0] = new Player(nickName);
+            players[0].setPlayerNumber(0);
+            players[1] = new Player("Lorenzo il Magnifico");
+            players[1].setPlayerNumber(1);
+
 
             ActionCountersDeck localActionCountersDeck = new ActionCountersDeck();
             DevelopmentCardsDecksGrid localDevelopmentCardsDeckGrid = new DevelopmentCardsDecksGrid();
@@ -52,7 +56,7 @@ public class ClientMain {
             for(int index=0; index<players[0].getPlayerLeaderCards().length; index++)
                 players[0].setPlayerLeaderCard(index,localLeaderCardDeck.drawOneLeaderCard());
             for(int ind=0; ind<2; ind++)
-                players[0].discardLeaderCard();
+                players[0].discardLeaderCard(input, output);
 
             boolean endGame=false;
 
@@ -62,10 +66,10 @@ public class ClientMain {
                 if(players[0].getPlayerLeaderCards()[0]!=null)
                 {
                     if(players[0].getPlayerLeaderCards()[1]==null && !players[0].getPlayerLeaderCards()[0].isPlayed())
-                        players[0].getLeaderAction();
+                        players[0].getLeaderAction(input, output);
                     else if(players[0].getPlayerLeaderCards()[1]!=null &&
                             (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
-                        players[0].getLeaderAction();
+                        players[0].getLeaderAction(input, output);
                     else System.out.println("You have activated all your Leader cards. You can't do a Leader Action.");
                 }
                     else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
@@ -80,49 +84,44 @@ public class ClientMain {
                 System.out.println("STONES  : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
                         +players[0].getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
                 System.out.println();
+
+                System.out.println("YOUR FAITH PATH POSITION    : "+players[0].getPlayerBoard().getFaithPath().getCrossPosition());
+                System.out.println("LORENZO BLACK CROSS POSITION: "+players[1].getPlayerBoard().getFaithPath().getCrossPosition());
+
                 System.out.println("MARKET GRID:");
-                localMarket.printMarket();
+                localMarket.printMarket(output);
                 System.out.println("DEVELOPMENT CARDS GRID:");
-                localDevelopmentCardsDeckGrid.printGrid();
+                localDevelopmentCardsDeckGrid.printGrid(output);
 
                 boolean correctAction=true;
                 do{
 
-                    switch (players[0].getAction()) {
+                    switch (players[0].getAction(input, output)) {
                         case 0:
-                            players[0].pickLineFromMarket(localMarket, players);
+                            players[0].pickLineFromMarket(localMarket, players, input, output);
+                            correctAction=true;
                             break;
                         case 1:
-                            correctAction=players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid);
+                            correctAction=players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid, input, output);
                             break;
                         case 2:
-                            correctAction=players[0].activateProduction();
+                            correctAction=players[0].activateProduction(input, output);
                             break;
                     }
                 }while (!correctAction);
 
                 if(players[0].getPlayerLeaderCards()[0]!=null)
                     if(players[0].getPlayerLeaderCards()[1]==null && !players[0].getPlayerLeaderCards()[0].isPlayed())
-                        players[0].getLeaderAction();
+                        players[0].getLeaderAction(input, output);
                     else if(players[0].getPlayerLeaderCards()[1]!=null &&
                             (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
-                        players[0].getLeaderAction();
+                        players[0].getLeaderAction(input, output);
 
-                localActionCountersDeck.drawCounter().activate(localActionCountersDeck,players[1].getPlayerBoard(),localDevelopmentCardsDeckGrid);
+                localActionCountersDeck.drawCounter().activate(localActionCountersDeck,players[1].getPlayerBoard(),localDevelopmentCardsDeckGrid, output);
 
-                int[] availableDevCards = new int[4];
                 for (int i=0; i<4; i++)
-                {
-                    availableDevCards[i]=12;
-                    for(int k=0; k<3; k++){
-                        for (int j=0; j<4; j++){
-                            if(localDevelopmentCardsDeckGrid.getDevelopmentCardsDecks()[k][i][j]==null)
-                                availableDevCards[i]--;
-                        }
-                    }
-                    if(availableDevCards[i]==0)
+                    if(localDevelopmentCardsDeckGrid.getDevelopmentCardsDecks()[0][i][0]==null)
                         endGame=true;
-                }
 
                 System.out.println();
             }
@@ -142,7 +141,7 @@ public class ClientMain {
             }
 
             if(players[0].getPlayerBoard().getFaithPath().getCrossPosition()==25){
-                System.out.println("You win!!");
+                System.out.println(players[0].getNickname()+" wins!!");
                 System.out.println("You reach the end of FaithPath.");
                 System.out.println("You have obtained "+players[0].sumAllVictoryPoints()+" victory points!!");
             }

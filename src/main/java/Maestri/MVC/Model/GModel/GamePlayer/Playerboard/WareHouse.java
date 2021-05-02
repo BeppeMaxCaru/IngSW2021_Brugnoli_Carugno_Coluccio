@@ -97,7 +97,7 @@ public class WareHouse {
                  If there aren't any res1 in warehouse
                  If all other resources have cardinality=1, resource has to be discarded
                  */
-                if ((this.warehouseResources.get(r[0]) == 1) && (this.warehouseResources.get(r[1]) == 1) && (this.warehouseResources.get(r[2]) == 1))
+                if ((this.warehouseResources.get(r[0]) >= 1) && (this.warehouseResources.get(r[1]) >= 1) && (this.warehouseResources.get(r[2]) >= 1))
                     discard=true;
                 break;
             case 1:
@@ -105,9 +105,9 @@ public class WareHouse {
                  If there is 1 res1 in warehouse
                  If there are already two resources with cardinality=2, resource has to be discarded
                  */
-                if (((this.warehouseResources.get(r[0]) == 2) && (this.warehouseResources.get(r[1]) == 2)) ||
-                        ((this.warehouseResources.get(r[0]) == 2) && (this.warehouseResources.get(r[2]) == 2)) ||
-                        ((this.warehouseResources.get(r[2]) == 2) && (this.warehouseResources.get(r[1]) == 2)))
+                if (((this.warehouseResources.get(r[0]) >= 2) && (this.warehouseResources.get(r[1]) >= 2)) ||
+                        ((this.warehouseResources.get(r[0]) >= 2) && (this.warehouseResources.get(r[2]) >= 2)) ||
+                        ((this.warehouseResources.get(r[2]) >= 2) && (this.warehouseResources.get(r[1]) >= 2)))
                     discard=true;
                 break;
             case 2:
@@ -115,7 +115,7 @@ public class WareHouse {
                  If there are 2 res2 in warehouse
                  If there is already a resource with cardinality=3, resource has to be discarded
                  */
-                if ((this.warehouseResources.get(r[0]) == 3) || (this.warehouseResources.get(r[1]) == 3) || (this.warehouseResources.get(r[2]) == 3))
+                if ((this.warehouseResources.get(r[0]) >= 3) || (this.warehouseResources.get(r[1]) >= 3) || (this.warehouseResources.get(r[2]) >= 3))
                     discard=true;
                 break;
             case 3:
