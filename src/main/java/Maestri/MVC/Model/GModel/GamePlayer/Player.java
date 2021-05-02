@@ -107,37 +107,15 @@ public class Player extends Thread implements Runnable {
     }
 
     /**
-     * Asks to choose the game mode
-     * @return the game mode chosen
-     */
-    public int chooseGameMode(Scanner in, PrintWriter out) {
-
-        out.println("Welcome to Masters of Renaissance!");
-        out.println("Write 0 for single-player or 1 for multiplayer: ");
-        //String gameMode = localInput.nextLine();
-        while (true) {
-            try {
-                String gameMode = in.nextLine();
-                int number = Integer.parseInt(gameMode);
-                if (number == 0 || number == 1) return number;
-
-            } catch (NumberFormatException n) {
-                out.println("Number not valid!");
-                out.println("Write 0 for single-player or 1 for multiplayer: ");
-            }
-        }
-    }
-
-    /**
      * Sets to the player its starting board depending on its number
      */
     public void setStartingPlayerboard(Scanner in, PrintWriter out) {
         Map<Integer, Integer[]> startingResources =  new HashMap<>();
         int numChosenResources;
         int numInitialRedCross;
-        int resourceNum;
+        String resourceNum = " ";
+        String resource;
         int resourceNumWarehouse;
-        int i;
 
         startingResources.put(0, new Integer[] {0, 0});
         startingResources.put(1, new Integer[] {1, 0});
@@ -149,19 +127,19 @@ public class Player extends Thread implements Runnable {
                 numChosenResources = startingResources.get(key)[0];
                 numInitialRedCross = startingResources.get(key)[1];
                 while(numChosenResources > 0) {
-                    resourceNum = -1;
-                    while(resourceNum < 0 || resourceNum > 3) {
+                    while(!resourceNum.equals("0") && !resourceNum.equals("1") && !resourceNum.equals("2") && !resourceNum.equals("3")) {
                         out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
-                        resourceNum = in.nextInt();
+                        resourceNum = in.nextLine();
                     }
-                    i = 0;
-                    for (String key2 : getPlayerBoard().getWareHouse().getWarehouseResources().keySet()) {
-                        if(i == resourceNum) {
-                            resourceNumWarehouse = getPlayerBoard().getWareHouse().getWarehouseResources().get(key2);
-                            getPlayerBoard().getWareHouse().getWarehouseResources().put(key2, resourceNumWarehouse + 1);
-                        }
-                        i++;
-                    }
+
+                    if (resourceNum.equals("0")) resource = "COINS";
+                    else if (resourceNum.equals("1")) resource = "SHIELDS";
+                    else if (resourceNum.equals("2")) resource = "SERVANTS";
+                    else resource = "STONES";
+
+                    resourceNumWarehouse = getPlayerBoard().getWareHouse().getWarehouseResources().get(resource);
+                    getPlayerBoard().getWareHouse().getWarehouseResources().put(resource, resourceNumWarehouse + 1);
+
                     numChosenResources--;
                 }
                 if(numInitialRedCross == 1) {
@@ -176,17 +154,16 @@ public class Player extends Thread implements Runnable {
      * Asks the player which action he wants to perform
      * @return the chosen action's number
      */
-    public int getAction(Scanner in, PrintWriter out) {
-        int actionNumber = -1;
+    public String getAction(Scanner in, PrintWriter out) {
+        String actionNumber = " ";
 
-        while(actionNumber < 0 || actionNumber > 2) {
+        while(!actionNumber.equals("0") && !actionNumber.equals("1") && !actionNumber.equals("2")) {
             out.println("What action do you want to do? Choose one of them:");
             out.println("Write 0 if you want to take resources from the market.");
             out.println("Write 1 if you want to buy a development card.");
             out.println("Write 2 if you want to activate the production.");
-            actionNumber = in.nextInt();
+            actionNumber = in.nextLine();
         }
-
         return actionNumber;
     }
 

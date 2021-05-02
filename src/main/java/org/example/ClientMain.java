@@ -20,24 +20,24 @@ public class ClientMain {
 
         String hostName = "127.0.0.1";
         int portNumber = 1234;
-
-        int gameMode = -1;
-
+        String gameMode;
         String nickName;
+        Scanner input = new Scanner(System.in);
 
+        // Game mode
         System.out.println("Welcome to Masters of Renaissance!");
-
-        Scanner localInput = new Scanner(System.in);
-        while (gameMode < 0 || gameMode > 1) {
+        System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+        gameMode = input.nextLine();
+        while (!gameMode.equals("0") && !gameMode.equals("1")) {
+            System.out.println("Number not valid!");
             System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-            gameMode = localInput.nextInt();
+            gameMode = input.nextLine();
         }
 
-        if (gameMode == 0) {
+        if (gameMode.equals("0")) {
 
             Player[] players = new Player[2];
             System.out.println("Write your nickname: ");
-            Scanner input = new Scanner(System.in);
             PrintWriter output = new PrintWriter(System.out,true);
             nickName = input.nextLine();
 
@@ -56,14 +56,14 @@ public class ClientMain {
             for(int ind=0; ind<2; ind++)
                 players[0].discardLeaderCard(input, output);
 
-            boolean endGame=false;
+            boolean endGame = false;
 
-            while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition()<24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition()<24)
+            while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition() < 24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition() < 24)
             {
 
-                if(players[0].getPlayerLeaderCards()[0]!=null)
+                if(players[0].getPlayerLeaderCards()[0] != null)
                 {
-                    if(players[0].getPlayerLeaderCards()[1]==null && !players[0].getPlayerLeaderCards()[0].isPlayed())
+                    if(players[0].getPlayerLeaderCards()[1] == null && !players[0].getPlayerLeaderCards()[0].isPlayed())
                         players[0].getLeaderAction(input, output);
                     else if(players[0].getPlayerLeaderCards()[1]!=null &&
                             (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
@@ -95,19 +95,18 @@ public class ClientMain {
                 System.out.println("DEVELOPMENT CARDS GRID:");
                 localDevelopmentCardsDeckGrid.printGrid(output);
 
-                boolean correctAction=true;
-                do{
-
+                boolean correctAction = true;
+                do {
                     switch (players[0].getAction(input, output)) {
-                        case 0:
+                        case "0":
                             players[0].pickLineFromMarket(localMarket, players, input, output);
-                            correctAction=true;
+                            correctAction = true;
                             break;
-                        case 1:
-                            correctAction=players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid, input, output);
+                        case "1":
+                            correctAction = players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid, input, output);
                             break;
-                        case 2:
-                            correctAction=players[0].activateProduction(input, output);
+                        case "2":
+                            correctAction = players[0].activateProduction(input, output);
                             break;
                     }
                 }while (!correctAction);

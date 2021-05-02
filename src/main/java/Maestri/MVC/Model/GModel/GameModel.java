@@ -187,13 +187,13 @@ public class GameModel {
                 boolean correctAction = true;
                 do {
                     switch (player.getAction(in, out)) {
-                        case 0:
+                        case "0":
                             player.pickLineFromMarket(this.market, this.players, in, out);
                             break;
-                        case 1:
+                        case "1":
                             correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
                             break;
-                        case 2:
+                        case "2":
                             correctAction = player.activateProduction(in, out);
                             break;
                     }
