@@ -155,15 +155,22 @@ public class Player extends Thread implements Runnable {
      * @return the chosen action's number
      */
     public String getAction(Scanner in, PrintWriter out) {
-        String actionNumber = " ";
+        String actionNumber;
 
+        out.println("What action do you want to do? Choose one of them:");
+        out.println("Write 0 if you want to take resources from the market.");
+        out.println("Write 1 if you want to buy a development card.");
+        out.println("Write 2 if you want to activate the production.");
+        actionNumber = in.nextLine();
         while(!actionNumber.equals("0") && !actionNumber.equals("1") && !actionNumber.equals("2")) {
+            out.println("Number not valid!");
             out.println("What action do you want to do? Choose one of them:");
             out.println("Write 0 if you want to take resources from the market.");
             out.println("Write 1 if you want to buy a development card.");
             out.println("Write 2 if you want to activate the production.");
             actionNumber = in.nextLine();
         }
+
         return actionNumber;
     }
 
@@ -174,31 +181,43 @@ public class Player extends Thread implements Runnable {
      */
     public void pickLineFromMarket(Market market, Player[] players, Scanner in, PrintWriter out) {
 
-        int rowColumnChoice = -1;
-        int columnNum = -1;
-        int rowNum = -1;
+        String rowColumnChoice;
+        String columnNum;
+        String rowNum;
 
         // Scelta colonna/riga.
-        while(rowColumnChoice != 0 && rowColumnChoice != 1) {
+        out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
+        rowColumnChoice = in.nextLine();
+        while(!rowColumnChoice.equals("0") && !rowColumnChoice.equals("1")) {
+            out.println("Number not valid!");
             out.println("Do you want to choose a column or a row from the market? Write 0 for column, 1 for row:");
-            rowColumnChoice = in.nextInt();
+            rowColumnChoice = in.nextLine();
         }
 
         // Scelta numero di colonna/riga e mette risorse nel warehouse.
-        if(rowColumnChoice == 0) {
-            while(columnNum < 0 || columnNum > 3) {
+        if(rowColumnChoice.equals("0")) {
+            out.println("Choose the column's number you want to get the resources from:");
+            //market.printMarket();
+            columnNum = in.nextLine();
+            while (!columnNum.equals("0") && !columnNum.equals("1") && !columnNum.equals("2") && !columnNum.equals("3")) {
+                out.println("Number not valid!");
                 out.println("Choose the column's number you want to get the resources from:");
                 //market.printMarket();
-                columnNum = in.nextInt();
-                market.updateColumn(columnNum, players, this.playerNumber, in, out);
+                columnNum = in.nextLine();
             }
+            int var = Integer.parseInt(columnNum);
+            market.updateColumn(var, players, this.playerNumber, in, out);
         }
         else {
-            while(rowNum < 0 || rowNum > 2) {
+            out.println("Choose the row's number you want to get the resources from:");
+            //market.printMarket();
+            rowNum = in.nextLine();
+            while (!rowNum.equals("0") && !rowNum.equals("1") && !rowNum.equals("2")) {
                 out.println("Choose the row's number you want to get the resources from:");
                 //market.printMarket();
-                rowNum = in.nextInt();
-                market.updateRow(rowNum, players, this.playerNumber, in, out);
+                rowNum = in.nextLine();
+                int var = Integer.parseInt(rowNum);
+                market.updateRow(var, players, this.playerNumber, in, out);
             }
         }
 
@@ -223,19 +242,30 @@ public class Player extends Thread implements Runnable {
         }
         out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
         out.println("Choose development card level: ");
-        int level = in.nextInt();
+        String level = in.next();
         out.println();
-        //check if the input card exists otherwise choose again
-        while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
-            out.println("Card of this level doesn't exist!");
-            out.println("Choose a valid development card level: ");
-            level = in.nextInt();
+        while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
+            out.println("Choose development card level: ");
+            level = in.next();
             out.println();
         }
-        level=3-level;
+        int varLevel = Integer.parseInt(level);
+        //check if the input card exists otherwise choose again
+        while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(varLevel)) {
+            out.println("Card of this level doesn't exist!");
+            level = " ";
+            while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
+                out.println("Choose a valid development card level: ");
+                level = in.next();
+                out.println();
+            }
+            varLevel = Integer.parseInt(level);
+        }
+
+        varLevel = 3 - varLevel;
         int column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         //Check if selected pile is empty
-        while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]==null) {
+        while (developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0] == null) {
             out.println("Empty development cards pile!");
             out.println("Choose new pile");
             out.println();
@@ -251,37 +281,44 @@ public class Player extends Thread implements Runnable {
             }
             out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
             out.println("Choose development card level: ");
-            level = in.nextInt();
+            level = in.next();
             out.println();
-            //check if the input card exists otherwise choose again
-            while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(level)) {
-                out.println("Card of this level doesn't exist!");
-                out.println("Choose a valid development card level: ");
-                level = in.nextInt();
+            while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
+                out.println("Choose development card level: ");
+                level = in.next();
                 out.println();
+            }
+            varLevel = Integer.parseInt(level);
+            //check if the input card exists otherwise choose again
+            while (!developmentCardsDecksGrid.getDevelopmentCardsLevels().contains(varLevel)) {
+                out.println("Card of this level doesn't exist!");
+                level = " ";
+                while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
+                    out.println("Choose a valid development card level: ");
+                    level = in.next();
+                    out.println();
+                }
+                varLevel = Integer.parseInt(level);
             }
             column = developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour);
         }
 
         //Asks player if he wants to activate discount perks
-        Map<String, Integer> developmentCardCost = developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost();
+        Map<String, Integer> developmentCardCost = developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0].getDevelopmentCardCost();
         Integer resourceCost;
-        int input=-1;
-        Scanner discountChoice = new Scanner(System.in);
         //Checks the discounts that the player has available
-        if(this.playerBoard.getDevelopmentCardDiscount()[0]!=null){
-            for(String res : this.playerBoard.getDevelopmentCardDiscount())
-            {
-                resourceCost=developmentCardCost.get(res);
-                if(resourceCost!=0)
-                {
-                    while(input<0||input>1)
-                    {
+        if(this.playerBoard.getDevelopmentCardDiscount()[0] != null){
+            for(String res : this.playerBoard.getDevelopmentCardDiscount()) {
+                resourceCost = developmentCardCost.get(res);
+                if(resourceCost != 0) {
+                    out.println("Do you want to pay the reduced price for this resource? Insert 0 for no, 1 for yes");
+                    String input = in.nextLine();
+                    while(!input.equals("0") && !input.equals("1")) {
+                        out.println("Number not valid!");
                         out.println("Do you want to pay the reduced price for this resource? Insert 0 for no, 1 for yes");
-                        input=discountChoice.nextInt();
+                        input = in.nextLine();
                     }
-                    if(input==1)
-                        developmentCardCost.put(res, resourceCost-1);
+                    if(input.equals("1")) developmentCardCost.put(res, resourceCost-1);
                 }
             }
         }
@@ -290,22 +327,22 @@ public class Player extends Thread implements Runnable {
         //Checks if the player has enough resources to buy the new development card
         if (this.getPlayerBoard().checkResourcesAvailability(developmentCardCost, out)) {
             //Checks if the player can place the new development card on his board
-            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard, out)) {
+            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard, out)) {
                 //Removes the resources from the player who bought the development card
                 //according to the development card cost
-                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, in, out);
+                developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0].payDevelopmentCard(this.playerBoard, in, out);
                 //Ask the player where to place the new development card on his board
-                playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0], in, out);
+                playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0], in, out);
                 //Updates the player victory points by adding to them the
                 //victory points obtained from the new development card
-                playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
+                playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0].getVictoryPoints());
                 //Removes the development card from the grid by removing it
                 //from the deck where it was bought
-                List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]));
+                List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column]));
                 reducedDeck.remove(0);
-                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+                developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column]);
                 return true;
-            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard, out)) {
+            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[varLevel][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard, out)) {
                 return false;
             }
         } else
@@ -451,32 +488,36 @@ public class Player extends Thread implements Runnable {
      * @return true if the player wants to perform it
      */
     public void getLeaderAction(Scanner in, PrintWriter out) {
-        int leaderActionNum = -1;
-        int leaderNum = -1;
-        boolean correctLeaderAction=false;
-        int attempts=0;
+        String leaderActionNum;
+        String leaderNum;
+        boolean correctLeaderAction = false;
+        int attempts = 0;
 
-        while (leaderActionNum != 0 && leaderActionNum != 1) {
+        out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
+        leaderActionNum = in.nextLine();
+        while (!leaderActionNum.equals("0") && !leaderActionNum.equals("1")) {
+            out.println("Number not valid!");
             out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
-            leaderActionNum = in.nextInt();
+            leaderActionNum = in.nextLine();
         }
 
-        if (leaderActionNum == 0)
+        if (leaderActionNum.equals("0"))
             return;
 
-        while (leaderNum != 0 && leaderNum != 1) {
+        out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
+        leaderNum = in.nextLine();
+        while (!leaderNum.equals("0") && !leaderNum.equals("1")) {
+            out.println("Number not valid!");
             out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
-            leaderNum = in.nextInt();
+            leaderNum = in.nextLine();
         }
-        while (!correctLeaderAction&&attempts<4)
-        {
-            if(leaderNum==1)
-            {
-                correctLeaderAction=this.playLeaderCard(in, out);
+        while (!correctLeaderAction&&attempts < 4) {
+            if(leaderNum.equals("1")) {
+                correctLeaderAction = this.playLeaderCard(in, out);
                 attempts++;
             }
-            else{
-                correctLeaderAction=this.discardLeaderCard(in, out);
+            else {
+                correctLeaderAction = this.discardLeaderCard(in, out);
                 attempts++;
                 this.getPlayerBoard().getFaithPath().moveCross(1);
             }

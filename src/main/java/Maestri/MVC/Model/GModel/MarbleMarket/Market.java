@@ -127,26 +127,26 @@ public class Market {
      * @param playerNumber - number of the current player that is drawing marbles
      */
     public void updateColumn(int column, Player[] players, int playerNumber, Scanner in, PrintWriter out){
-        int i=0;
+        int i = 0;
         Marble temp;//Temporary marble to save the previous excess marble
-        temp=this.excessMarble;
+        temp = this.excessMarble;
 
         //I save the excess marble on a temporary position.
-        this.excessMarble=this.marketArrangement[i][column];
+        this.excessMarble = this.marketArrangement[i][column];
 
-        for(i=0; i<row-1; i++)
+        for(i = 0; i < row - 1; i++)
         {
             /*
              It is activated the effect of every marble of the column.
              Every marble slides to an upper position of the market grid
              */
             this.marketArrangement[i][column].drawMarble(players, playerNumber, in, out);
-            this.marketArrangement[i][column]=this.marketArrangement[i+1][column];
+            this.marketArrangement[i][column]=this.marketArrangement[i + 1][column];
         }
 
         //The previous excess Marble is inserted into the lowest position of the market column
         this.marketArrangement[i][column].drawMarble(players, playerNumber, in, out);
-        this.marketArrangement[i][column]=temp;
+        this.marketArrangement[i][column] = temp;
     }
 
     public void printMarket(PrintWriter out){
