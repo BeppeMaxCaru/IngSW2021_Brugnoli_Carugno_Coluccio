@@ -722,15 +722,16 @@ public class Player extends Thread implements Runnable {
     public void printPlayerCards(PrintWriter out)
     {
         int[] upper = new int[3];
-        int index=0;
-        for(int row=2; row>=0; row--) {
-            int k;
-            for (k = 2; k > 0; k--) {
-                if (this.playerBoard.getPlayerboardDevelopmentCards()[row][k] != null)
+
+        for(int col=0; col<3; col++)
+        {
+            int row;
+            for(row=2; row>0; row--)
+                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][col] != null)
                     break;
-            }
-            upper[index] = k;
-            index++;
+            if(row==-1)
+                row=0;
+            upper[col]=row;
         }
 
         for(int k=0; k<3; k++)
