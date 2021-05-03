@@ -3,7 +3,9 @@ package org.example;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -48,17 +50,24 @@ public class EchoServerClientHandler extends Thread implements Runnable{
     //@Override
     public void run() {
         try {
-            Scanner in = new Scanner(this.clientSocket.getInputStream());
+            //Scanner in = new Scanner(this.clientSocket.getInputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
             out.println("Insert your nickname: ");
-            String clientInput = in.nextLine();
+            String clientInput = in.readLine();
             this.player = new Player(clientInput);
 
+            out.println("Hi " + this.player.getNickname() + "! Welcome to Masters of renaissance online!");
+            out.println("Write QUIT to leave the game anytime you want");
             while (true) {
-                out.println("Ciao! Inserisci un comando: ");
-                clientInput = in.nextLine();
-                if (clientInput.equals("quit")) break;
+                out.println("Inserisci un comando: ");
+                clientInput = in.readLine();
+                if (clientInput.equals("QUIT")) {
+                    out.println("You left the game");
+                    break;
+                }
+                //out.println("Ciao! Inserisci un comando: ");
                 //else out.println(clientInput);
             }
 

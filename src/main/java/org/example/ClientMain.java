@@ -158,21 +158,19 @@ public class ClientMain {
                  BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                  BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
             ) {
-                String userInput;
-
+                //THIS WORKS !!!!!!!!!!!!!!!!!!!!
+                /*String clientInput;
                 System.out.println(in.readLine());
-                //out.println();
-
-                while ((userInput = stdIn.readLine()) != null) {
-                    out.println(userInput);
+                while ((clientInput = stdIn.readLine()) != null) {
+                    System.out.println(clientInput);
                     System.out.println("echo: " + in.readLine());
-                }
-
-
-                /*while ((in.readLine()) != null) {
-                    System.out.println(in.readLine());
-                    System.out.println("Received: " + in.readLine());
                 }*/
+
+                while (true) {
+                    System.out.println("Received: " + in.readLine());
+                    String clientInput = stdIn.readLine();
+                    out.println(clientInput);
+                }
 
             } catch (UnknownHostException e) {
                 System.err.println("No info about host: " + hostName);
