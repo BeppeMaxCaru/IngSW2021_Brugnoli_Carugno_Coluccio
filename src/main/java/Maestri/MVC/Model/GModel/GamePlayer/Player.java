@@ -132,10 +132,20 @@ public class Player extends Thread implements Runnable {
                         resourceNum = in.nextLine();
                     }
 
-                    if (resourceNum.equals("0")) resource = "COINS";
-                    else if (resourceNum.equals("1")) resource = "SHIELDS";
-                    else if (resourceNum.equals("2")) resource = "SERVANTS";
-                    else resource = "STONES";
+                    switch (resourceNum) {
+                        case "0":
+                            resource = "COINS";
+                            break;
+                        case "1":
+                            resource = "SHIELDS";
+                            break;
+                        case "2":
+                            resource = "SERVANTS";
+                            break;
+                        default:
+                            resource = "STONES";
+                            break;
+                    }
 
                     resourceNumWarehouse = getPlayerBoard().getWareHouse().getWarehouseResources().get(resource);
                     getPlayerBoard().getWareHouse().getWarehouseResources().put(resource, resourceNumWarehouse + 1);
@@ -216,9 +226,9 @@ public class Player extends Thread implements Runnable {
                 out.println("Choose the row's number you want to get the resources from:");
                 //market.printMarket();
                 rowNum = in.nextLine();
-                int var = Integer.parseInt(rowNum);
-                market.updateRow(var, players, this.playerNumber, in, out);
             }
+            int var = Integer.parseInt(rowNum);
+            market.updateRow(var, players, this.playerNumber, in, out);
         }
 
     }
@@ -359,8 +369,8 @@ public class Player extends Thread implements Runnable {
     public boolean activateProduction(Scanner in, PrintWriter out) {
         int i;
         int numResource;
-        int numResourceChoice;
-        int activateProduction = -1;
+        String numResourceChoice;
+        String activateProduction;
         int numExtraProductionActivate = 0;
         int redCross = 0;
         Map<String, Integer> inputResources = new HashMap<>();
@@ -376,13 +386,16 @@ public class Player extends Thread implements Runnable {
 
         for(int j = 0; j < 3; j++) {
             for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) {
-                while (activateProduction != 0 && activateProduction != 1) {
-                    out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                    out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
+                out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
+                out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
+                activateProduction = in.nextLine();
+                while (!activateProduction.equals("0") && !activateProduction.equals("1")) {
+                    out.println("Number not valid!");
                     out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
-                    activateProduction = in.nextInt();
+                    activateProduction = in.nextLine();
                 }
-                if (activateProduction == 1) {
+                if (activateProduction.equals("1")) {
                     for (String key : getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
                         numResource = inputResources.get(key);
                         inputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
@@ -398,12 +411,14 @@ public class Player extends Thread implements Runnable {
         }
 
         // Chiede se vuole attivare il potere di produzione base.
-        activateProduction = -1;
-        while(activateProduction != 0 && activateProduction != 1) {
+        out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
+        activateProduction = in.nextLine();
+        while(!activateProduction.equals("0") && !activateProduction.equals("1")) {
+            out.println("Number not valid!");
             out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
-            activateProduction = in.nextInt();
+            activateProduction = in.nextLine();
         }
-        if(activateProduction == 1) {
+        if(activateProduction.equals("1")) {
             i = 0;
             //Controllo checkResourcesAvailability
             for (String s : getPlayerBoard().activateBasicProductionPower(in, out)) {
@@ -427,12 +442,14 @@ public class Player extends Thread implements Runnable {
         // Chiede se vuole attivare l'extra production power.
         i = 0;
         while(this.playerBoard.getExtraProductionPowerInput()[i] != null) {
-            activateProduction = -1;
-            while(activateProduction != 0 && activateProduction != 1) {
+            out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
+            activateProduction = in.nextLine();
+            while(!activateProduction.equals("0") && !activateProduction.equals("1")) {
+                out.println("Number not valid!");
                 out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
-                activateProduction = in.nextInt();
+                activateProduction = in.nextLine();
             }
-            if(activateProduction == 1) {
+            if(activateProduction.equals("1")) {
                 numResource = inputResources.get(this.playerBoard.getExtraProductionPowerInput()[i]);
                 inputResources.put(this.playerBoard.getExtraProductionPowerInput()[i], numResource + 1);
                 numExtraProductionActivate++;
@@ -455,17 +472,31 @@ public class Player extends Thread implements Runnable {
 
         // Scelta delle n risorse di extra production power e inserimento in outputResources
         while(numExtraProductionActivate > 0) {
-            numResourceChoice = -1;
-            while (numResourceChoice < 0 || numResourceChoice > 4) {
+            out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
+            numResourceChoice = in.nextLine();
+            while(!numResourceChoice.equals("0") && !numResourceChoice.equals("1") && !numResourceChoice.equals("2") && !numResourceChoice.equals("3") && !numResourceChoice.equals("4")) {
+                out.println("Number not valid!");
                 out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
-                numResourceChoice = in.nextInt();
+                numResourceChoice = in.nextLine();
             }
 
-            if (i==0) outputResources.put("COINS", outputResources.get("COINS") + 1);
-            else if (i==1) outputResources.put("SHIELDS", outputResources.get("SHIELDS") + 1);
-            else if (i==2) outputResources.put("SERVANTS", outputResources.get("SERVANTS") + 1);
-            else if (i==3) outputResources.put("STONES", outputResources.get("STONES") + 1);
-            else if (i==4) redCross = redCross + 1;
+            switch (numResourceChoice) {
+                case "0":
+                    outputResources.put("COINS", outputResources.get("COINS") + 1);
+                    break;
+                case "1":
+                    outputResources.put("SHIELDS", outputResources.get("SHIELDS") + 1);
+                    break;
+                case "2":
+                    outputResources.put("SERVANTS", outputResources.get("SERVANTS") + 1);
+                    break;
+                case "3":
+                    outputResources.put("STONES", outputResources.get("STONES") + 1);
+                    break;
+                default:
+                    redCross = redCross + 1;
+                    break;
+            }
 
             redCross = redCross + 1;
             numExtraProductionActivate--;
@@ -485,7 +516,6 @@ public class Player extends Thread implements Runnable {
 
     /**
      * Asks the player to perform a leader action
-     * @return true if the player wants to perform it
      */
     public void getLeaderAction(Scanner in, PrintWriter out) {
         String leaderActionNum;
@@ -528,50 +558,56 @@ public class Player extends Thread implements Runnable {
      * Plays a leader card
      */
     public boolean playLeaderCard(Scanner in, PrintWriter out) {
-        int numLeaderCard;
+        String numLeaderCard;
+        int var;
         int k;
-        int notPlayed=0;
+        int notPlayed = 0;
 
-        for(k=0; k<4; k++){
-            if(this.playerLeaderCards[k]==null)
+        for(k = 0; k < 4; k++) {
+            if(this.playerLeaderCards[k] == null)
                 break;
             if(!this.playerLeaderCards[k].isPlayed())
                 notPlayed++;
         }
 
         //If there are cards that aren't played yet
-        if(notPlayed<k)
-        {
+        if(notPlayed < k) {
             //Scelta della carta leader da giocare
-            do{
-                out.println("What leader card do you want to play?:");
-                for (int i = 0; i < k; i++) {
-                    if(!this.playerLeaderCards[i].isPlayed())
-                    {
-                        out.println("Write" + i + "for this: ");
-                        this.playerLeaderCards[i].printLeaderCard(out);
-                    }
+            out.println("What leader card do you want to play?:");
+            for (int i = 0; i < k; i++) {
+                if(!this.playerLeaderCards[i].isPlayed()) {
+                    out.println("Write" + i + "for this: ");
+                    this.playerLeaderCards[i].printLeaderCard(out);
                 }
-                numLeaderCard = in.nextInt();
-
-                if(this.playerLeaderCards[numLeaderCard].isPlayed()) {
-                    out.println("You can't play this card, you have already played it.");
-                    numLeaderCard = -1;
+            }
+            var = -1;
+            numLeaderCard = in.nextLine();
+            while(var < 0 || var > notPlayed - 1) {
+                while (!numLeaderCard.equals("0") && !numLeaderCard.equals("1") && !numLeaderCard.equals("2") && !numLeaderCard.equals("3")) {
+                    out.println("Number not valid!");
+                    out.println("What leader card do you want to discard?:");
+                    numLeaderCard = in.nextLine();
                 }
-            }while((numLeaderCard<0) || (numLeaderCard > k));
+                var = Integer.parseInt(numLeaderCard);
+                if(var < 0 || var > notPlayed - 1) {
+                    out.println("Number not valid!");
+                    out.println("What leader card do you want to discard?:");
+                    numLeaderCard = in.nextLine();
+                }
+            }
 
-            if(this.playerLeaderCards[numLeaderCard]!=null){
-                if((this.playerLeaderCards[numLeaderCard].checkRequisites(this.playerBoard))){
-                    this.playerLeaderCards[numLeaderCard].activateAbility(this.playerBoard);
-                    this.playerBoard.sumVictoryPoints(this.playerLeaderCards[numLeaderCard].getVictoryPoints());
+            if(this.playerLeaderCards[var] != null) {
+                if((this.playerLeaderCards[var].checkRequisites(this.playerBoard))) {
+                    this.playerLeaderCards[var].activateAbility(this.playerBoard);
+                    this.playerBoard.sumVictoryPoints(this.playerLeaderCards[var].getVictoryPoints());
                     return true;
                 }
                 else {
                     out.println("Not enough resources for play this Leader Card");
                     return false;
                 }
-            }else
-            {
+            }
+            else {
                 out.println("Number isn't correct!!");
                 return false;
             }
@@ -583,55 +619,60 @@ public class Player extends Thread implements Runnable {
      * Discards a leader card
      */
     public boolean discardLeaderCard(Scanner in, PrintWriter out) {
-        int numLeaderCard = -1;
+        String numLeaderCard;
+        int var;
         int k;
-        int notPlayed=0;
+        int notPlayed = 0;
 
-        for(k=0; k<4; k++){
-            if(this.playerLeaderCards[k]==null)
+        for(k = 0; k < 4; k++) {
+            if(this.playerLeaderCards[k] == null)
                 break;
             if(!this.playerLeaderCards[k].isPlayed())
                 notPlayed++;
         }
 
-
         //If deck isn't empty and there are cards not played yet
-        if(k>0&&notPlayed>0){
-            if(k==1)
-                numLeaderCard=0;
-            else
-            {
+        if(k > 0 && notPlayed > 0) {
+            if(k == 1) var = 0;
+            else {
                 //Scelta della carta leader da scartare
-                while(numLeaderCard < 0 || numLeaderCard > k) {
-                    out.println("What leader card do you want to discard?:");
-                    for (int i = 0; i < k; i++) {
-                        if(!this.playerLeaderCards[i].isPlayed())
-                        {
-                            out.println("Write " + i + " for this: ");
-                            this.playerLeaderCards[i].printLeaderCard(out);
-                        }
+                out.println("What leader card do you want to discard?:");
+                for (int i = 0; i < k; i++) {
+                    if(!this.playerLeaderCards[i].isPlayed()) {
+                        out.println("Write " + i + " for this: ");
+                        this.playerLeaderCards[i].printLeaderCard(out);
                     }
-                    numLeaderCard = in.nextInt();
-                    if(this.playerLeaderCards[numLeaderCard].isPlayed())
-                    {
-                        out.println("You can't discard this card, you have already played it.");
-                        numLeaderCard=-1;
+                }
+                var = -1;
+                numLeaderCard = in.nextLine();
+                while(var < 0 || var > notPlayed - 1) {
+                    while (!numLeaderCard.equals("0") && !numLeaderCard.equals("1") && !numLeaderCard.equals("2") && !numLeaderCard.equals("3")) {
+                        out.println("Number not valid!");
+                        out.println("What leader card do you want to discard?:");
+                        numLeaderCard = in.nextLine();
                     }
+                    var = Integer.parseInt(numLeaderCard);
+                    if(var < 0 || var > notPlayed - 1) {
+                        out.println("Number not valid!");
+                        out.println("What leader card do you want to discard?:");
+                        numLeaderCard = in.nextLine();
+                    }
+                }
+                if(this.playerLeaderCards[var].isPlayed()) {
+                    out.println("You can't discard this card, you have already played it.");
                 }
             }
             out.println("Discarded");
-            this.playerLeaderCards[numLeaderCard].printLeaderCard(out);
+            this.playerLeaderCards[var].printLeaderCard(out);
 
             //Rimozione carta leader dal deck
             //this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
             List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
-            updatedPlayerLeaderCardList.remove(numLeaderCard);
+            updatedPlayerLeaderCardList.remove(var);
             this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
             return true;
         }
         else return false;
-
-
     }
 
     /**
@@ -678,32 +719,32 @@ public class Player extends Thread implements Runnable {
         return numResources;
     }
 
-    public void printPlayerCards(Scanner in, PrintWriter out)
+    public void printPlayerCards(PrintWriter out)
     {
         for(int row=2; row>=0; row--)
         {
 
             for(int k=0; k<3; k++){
                 if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
-                    System.out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].printCardProductionPower()+" ");
-                else System.out.print("|                       ");
+                    out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].printCardProductionPower()+" ");
+                else out.print("|                       ");
             }
-            System.out.print("|");
-            System.out.println();
+            out.print("|");
+            out.println();
 
             for(int k=0; k<3; k++){
                 if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
                 {
-                    System.out.print("| Victory Points: "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()+"    ");
+                    out.print("| Victory Points: "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()+"    ");
                     if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()<10)
-                        System.out.print(" ");
+                        out.print(" ");
                 }
-                else System.out.print("|                       ");
+                else out.print("|                       ");
             }
-            System.out.print("|");
-            System.out.println();
+            out.print("|");
+            out.println();
 
-            System.out.println();
+            out.println();
         }
     }
 

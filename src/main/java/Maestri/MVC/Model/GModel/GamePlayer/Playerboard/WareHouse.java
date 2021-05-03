@@ -51,8 +51,10 @@ public class WareHouse {
 
         String[] res={"COINS", "SHIELDS", "SERVANTS", "STONES"};
         String[] r;
-        r=new String[3];
-        int k=0;
+        r = new String[3];
+        int k = 0;
+        String resourceChoice;
+
         for(int i=0; i<4; i++)
         {
             if(!res[i].equals(newResource))
@@ -68,15 +70,13 @@ public class WareHouse {
         Integer numOfResources = this.warehouseResources.get(newResource);
         Integer extraSpace = this.warehouseResources.get(extraRes);
 
-        int resourceChoice;
 
         //if LeaderCard extra space is available
-        if(this.warehouseResources.get((extraRes))!=null)
-        {
+        if(this.warehouseResources.get((extraRes)) != null) {
             do {
                 out.println("Where do you go to collect this resource? Insert 0 for LeaderCard, 1 for Warehouse");
-                resourceChoice = in.nextInt();
-                if(resourceChoice==0)
+                resourceChoice = in.nextLine();
+                if(resourceChoice.equals("0"))
                 {
                     if(extraSpace==2)
                         //If the users wants to store resource in full location, it has to be discarded
@@ -88,7 +88,7 @@ public class WareHouse {
                         this.warehouseResources.put(extraRes, extraSpace);
                     }
                 }
-            }while((resourceChoice < 0) || (resourceChoice > 1));
+            } while(!resourceChoice.equals("0") && !resourceChoice.equals("1"));
         }
 
         switch (numOfResources) {

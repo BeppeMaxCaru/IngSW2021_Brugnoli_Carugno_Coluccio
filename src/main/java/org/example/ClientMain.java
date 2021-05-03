@@ -51,21 +51,18 @@ public class ClientMain {
             Market localMarket = new Market();
             LeaderCardDeck localLeaderCardDeck = new LeaderCardDeck();
 
-            for(int index=0; index<players[0].getPlayerLeaderCards().length; index++)
+            for(int index = 0; index < players[0].getPlayerLeaderCards().length; index++)
                 players[0].setPlayerLeaderCard(index,localLeaderCardDeck.drawOneLeaderCard());
-            for(int ind=0; ind<2; ind++)
+            for(int ind = 0; ind < 2; ind++)
                 players[0].discardLeaderCard(input, output);
 
             boolean endGame = false;
 
-            while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition() < 24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition() < 24)
-            {
-                if(players[0].getPlayerLeaderCards()[0] != null)
-                {
+            while (!endGame && players[0].getPlayerBoard().getFaithPath().getCrossPosition() < 24 && players[0].getPlayerBoard().getDevelopmentCardsBought() < 7 && players[1].getPlayerBoard().getFaithPath().getCrossPosition() < 24) {
+                if(players[0].getPlayerLeaderCards()[0] != null) {
                     if(players[0].getPlayerLeaderCards()[1] == null && !players[0].getPlayerLeaderCards()[0].isPlayed())
                         players[0].getLeaderAction(input, output);
-                    else if(players[0].getPlayerLeaderCards()[1]!=null &&
-                            (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
+                    else if(players[0].getPlayerLeaderCards()[1] != null && (!players[0].getPlayerLeaderCards()[0].isPlayed() || !players[0].getPlayerLeaderCards()[1].isPlayed()))
                         players[0].getLeaderAction(input, output);
                     else System.out.println("You have activated all your Leader cards. You can't do a Leader Action.");
                 }
@@ -83,7 +80,7 @@ public class ClientMain {
                 System.out.println();
 
                 System.out.println("YOUR DEVELOPMENT CARDS: ");
-                players[0].printPlayerCards(input, output);
+                players[0].printPlayerCards(output);
 
                 System.out.println("YOUR FAITH PATH POSITION    : "+players[0].getPlayerBoard().getFaithPath().getCrossPosition());
                 System.out.println("LORENZO BLACK CROSS POSITION: "+players[1].getPlayerBoard().getFaithPath().getCrossPosition());
