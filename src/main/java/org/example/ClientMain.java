@@ -115,6 +115,7 @@ public class ClientMain {
                         players[0].getLeaderAction(input, output);
 
                 localActionCountersDeck.drawCounter().activate(localActionCountersDeck,players[1].getPlayerBoard(),localDevelopmentCardsDeckGrid, output);
+                System.out.println("New turn!!");
 
                 for (int i=0; i<4; i++)
                     if(localDevelopmentCardsDeckGrid.getDevelopmentCardsDecks()[0][i][0]==null)

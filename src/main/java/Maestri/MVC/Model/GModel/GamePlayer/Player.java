@@ -721,31 +721,37 @@ public class Player extends Thread implements Runnable {
 
     public void printPlayerCards(PrintWriter out)
     {
-        for(int row=2; row>=0; row--)
-        {
-
-            for(int k=0; k<3; k++){
-                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
-                    out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].printCardProductionPower()+" ");
-                else out.print("|                       ");
+        int[] upper = new int[3];
+        int index=0;
+        for(int row=2; row>=0; row--) {
+            int k;
+            for (k = 2; k > 0; k--) {
+                if (this.playerBoard.getPlayerboardDevelopmentCards()[row][k] != null)
+                    break;
             }
-            out.print("|");
-            out.println();
-
-            for(int k=0; k<3; k++){
-                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k]!=null)
-                {
-                    out.print("| Victory Points: "+this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()+"    ");
-                    if(this.playerBoard.getPlayerboardDevelopmentCards()[row][k].getVictoryPoints()<10)
-                        out.print(" ");
-                }
-                else out.print("|                       ");
-            }
-            out.print("|");
-            out.println();
-
-            out.println();
+            upper[index] = k;
+            index++;
         }
+
+        for(int k=0; k<3; k++)
+        {
+            if(this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k]!=null)
+                out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].printCardProductionPower()+" ");
+            else out.print("|                       ");
+        }
+        out.print("|");
+        out.println();
+
+        for(int k=0; k<3; k++) {
+            if (this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k] != null) {
+                out.print("| Victory Points: " + this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() + "    ");
+                if (this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() < 10)
+                    out.print(" ");
+            } else out.print("|                       ");
+        }
+        out.print("|");
+        out.println();
+
     }
 
     @Override
