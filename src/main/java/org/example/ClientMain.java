@@ -150,16 +150,25 @@ public class ClientMain {
             //Ask nickname before gameMode branch
             //Call player constructor directly on the server?
             //Player player = new Player();
-            try (Socket clientSocket = new Socket(hostName, portNumber);
-                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
-            ) {
+            try {
+
+                Socket clientSocket = new Socket(hostName, portNumber);
+                ServerReceiver serverReceiver = new ServerReceiver(clientSocket);
+                PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+                //BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
+
+                new Thread(serverReceiver).start();
+
                 //THIS WORKS !!!!!!!!!!!!!!!!!!!!
-                String clientInput;
                 while (true) {
-                    System.out.println("Received: " + in.readLine());
-                    clientInput = stdIn.readLine();
+                    //System.out.println("Received: " + in.readLine());
+                    String clientInput = stdIn.readLine();
+                    if (clientInput == "QUIT") {
+                        System.out.println("You left the game");
+                        System.out.println("Bye bye");
+                        break;
+                    }
                     out.println(clientInput);
                 }
 
