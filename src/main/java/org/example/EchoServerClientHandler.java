@@ -47,10 +47,9 @@ public class EchoServerClientHandler extends Thread implements Runnable{
         }*/
     }
 
-    //@Override
+    @Override
     public void run() {
         try {
-            //Scanner in = new Scanner(this.clientSocket.getInputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
@@ -59,7 +58,7 @@ public class EchoServerClientHandler extends Thread implements Runnable{
             this.player = new Player(clientInput);
 
             out.println("Hi " + this.player.getNickname() + "! Welcome to Masters of renaissance online!");
-            out.println("Write QUIT to leave the game anytime you want");
+            //out.println("Write QUIT to leave the game anytime you want");
             while (true) {
                 out.println("Inserisci un comando: ");
                 clientInput = in.readLine();
@@ -71,23 +70,18 @@ public class EchoServerClientHandler extends Thread implements Runnable{
                 //else out.println(clientInput);
             }
 
-            // Leggo e scrivo nella connessione finche' non ricevo "quit"
-            /*if (gameModel.getCurrentPlayer()==this.player.getPlayerNumber()) {
-                this.player.getLeaderAction(in, out);
-                this.player.getAction(in, out);
-                this.player.getLeaderAction(in, out);
-
-                String line = in.nextLine();
-                if (line.equals("quit")) {
+            /*while (true) {
+                this.player.pickLineFromMarket(gameModel.getMarket(), gameModel.getPlayers(), in2, out);
+                //clientInput = in2.nextLine();
+                if (clientInput.equals("QUIT")) {
+                    out.println("You left the game");
                     break;
-                } else {
-                    out.println("Received: " + line);
-                    out.flush();
                 }
+                break;
             }*/
-            // Chiudo gli stream e il socket
 
             in.close();
+
             out.close();
             this.clientSocket.close();
             //this.wait();

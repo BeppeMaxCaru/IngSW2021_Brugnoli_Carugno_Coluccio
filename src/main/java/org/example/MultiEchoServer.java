@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,6 +18,8 @@ public class MultiEchoServer {
     public MultiEchoServer(int port) {
         this.port = port;
     }
+    //Clients
+    private ArrayList<EchoServerClientHandler> clients = new ArrayList<>();
     //GameModel
     private GameModel game1 = new GameModel();
 
@@ -35,6 +38,8 @@ public class MultiEchoServer {
             try {
                 Socket clientSocket = serverSocket.accept();
                 EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, game1);
+                clients.add(newClient);
+
                 executor.submit(newClient);
                 //newClient.setName();
             } catch(IOException e) {

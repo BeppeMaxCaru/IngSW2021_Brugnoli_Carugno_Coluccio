@@ -156,16 +156,10 @@ public class ClientMain {
                  BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)))
             ) {
                 //THIS WORKS !!!!!!!!!!!!!!!!!!!!
-                /*String clientInput;
-                System.out.println(in.readLine());
-                while ((clientInput = stdIn.readLine()) != null) {
-                    System.out.println(clientInput);
-                    System.out.println("echo: " + in.readLine());
-                }*/
-
+                String clientInput;
                 while (true) {
                     System.out.println("Received: " + in.readLine());
-                    String clientInput = stdIn.readLine();
+                    clientInput = stdIn.readLine();
                     out.println(clientInput);
                 }
 
