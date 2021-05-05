@@ -517,7 +517,7 @@ public class Player extends Thread implements Runnable {
     /**
      * Asks the player to perform a leader action
      */
-    public void getLeaderAction(Scanner in, PrintWriter out) {
+    public boolean getLeaderAction(Scanner in, PrintWriter out) {
         String leaderActionNum;
         String leaderNum;
         boolean correctLeaderAction = false;
@@ -532,7 +532,7 @@ public class Player extends Thread implements Runnable {
         }
 
         if (leaderActionNum.equals("0"))
-            return;
+            return true;
 
         out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
         leaderNum = in.nextLine();
@@ -552,6 +552,7 @@ public class Player extends Thread implements Runnable {
                 this.getPlayerBoard().getFaithPath().moveCross(1);
             }
         }
+        return true;
     }
 
     /**

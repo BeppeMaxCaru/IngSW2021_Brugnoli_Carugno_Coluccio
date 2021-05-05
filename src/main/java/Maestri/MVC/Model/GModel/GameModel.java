@@ -180,47 +180,97 @@ public class GameModel implements Runnable {
 
         while (this.checkEndPlay()) {
             for (Player player : this.players) {
+                //int maximumTime = 180;
+                //long startTime = 0;
+               //long endTime = 0;
 
                 if (player.getPlayerLeaderCards()[0] != null) {
-                    if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
-                        player.getLeaderAction(in, out);
-                    else if (player.getPlayerLeaderCards()[1] != null &&
-                            (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
-                        player.getLeaderAction(in, out);
-                    else out.println("You have activated all your Leader cards. You can't do a Leader Action.");
-                } else out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
+                    //for (int i = 0; i < 2; i++) {
+                        if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed()) {
+                            player.getLeaderAction(in, out); // Remove with timer
+                            /* startTime = System.currentTimeMillis();
+                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
+                            endTime = System.currentTimeMillis() - startTime; */
+                        }
+                        else if (player.getPlayerLeaderCards()[1] != null && (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed())) {
+                            player.getLeaderAction(in, out); // Remove with timer
+                            /* startTime = System.currentTimeMillis();
+                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
+                            endTime = System.currentTimeMillis() - startTime; */
+                        }
+                        else out.println("You have activated all your Leader cards. You can't do a Leader Action.");
+                        // i = checkStatusPlayer(endTime, i, out);
+                    //}
+                }
+                else out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
-                boolean correctAction = true;
-                do {
-                    switch (player.getAction(in, out)) {
-                        case "0":
-                            player.pickLineFromMarket(this.market, this.players, in, out);
-                            break;
-                        case "1":
-                            correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
-                            break;
-                        case "2":
-                            correctAction = player.activateProduction(in, out);
-                            break;
-                    }
-                } while (!correctAction);
+                //for (int i = 0; i < 2; i++) {
+                    boolean correctAction = true;
+                    do {
+                        switch (player.getAction(in, out)) {
+                            case "0":
+                                //startTime = System.currentTimeMillis();
+                                player.pickLineFromMarket(this.market, this.players, in, out);
+                                //endTime = System.currentTimeMillis() - startTime;
+                                break;
+                            case "1":
+                                //startTime = System.currentTimeMillis();
+                                correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
+                                //endTime = System.currentTimeMillis() - startTime;
+                                break;
+                            case "2":
+                                //startTime = System.currentTimeMillis();
+                                correctAction = player.activateProduction(in, out);
+                                //endTime = System.currentTimeMillis() - startTime;
+                                break;
+                        }
+                    } while (!correctAction); // Remove with timer
+                    //while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !correctAction);
+                    //i = checkStatusPlayer(endTime, i, out);
+                //}
 
-                if (player.getPlayerLeaderCards()[0] != null)
-                    if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed())
-                        player.getLeaderAction(in, out);
-                    else if (player.getPlayerLeaderCards()[1] != null &&
-                            (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed()))
-                        player.getLeaderAction(in, out);
+                if (player.getPlayerLeaderCards()[0] != null) {
+                    //for (int i = 0; i < 2; i++) {
+                        if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed()) {
+                            player.getLeaderAction(in, out); // Remove with timer
+                            /* startTime = System.currentTimeMillis();
+                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
+                            endTime = System.currentTimeMillis() - startTime; */
+                        }
+                        else if (player.getPlayerLeaderCards()[1] != null && (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed())) {
+                            player.getLeaderAction(in, out); // Remove with timer
+                            /* startTime = System.currentTimeMillis();
+                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
+                            endTime = System.currentTimeMillis() - startTime; */
+                        }
+                      // i = checkStatusPlayer(endTime, i, out);
+                    //}
+                }
 
-                out.println();
+                out.println("Game over.");
+                //There is a winner
+                out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
+                for (int pn = 0; pn < this.players.length; pn++)
+                    if (pn != this.checkWinner())
+                        out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
             }
         }
-        out.println("Game over.");
-        //There is a winner
-        out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
-        for (int pn=0; pn<this.players.length; pn++)
-            if(pn!=this.checkWinner())
-                out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
+    }
+
+    public int checkStatusPlayer(float endTime, int i, PrintWriter out) {
+        int maximumTime = 180;
+
+        if (endTime != 0 && endTime < maximumTime * 1000 && i == 0) {
+            out.println("Are you there?!");
+            out.println();
+            return 0;
+        }
+        else if (endTime != 0 && endTime < maximumTime * 1000 && i == 1) {
+            out.println("You are expelled by the game!");
+            // Gestione espulsione giocatore / Gestione connessione
+            return 1;
+        }
+        else return 2;
     }
 
     @Override
