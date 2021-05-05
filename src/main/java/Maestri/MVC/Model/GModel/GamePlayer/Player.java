@@ -188,8 +188,9 @@ public class Player extends Thread implements Runnable {
      * Draws marbles from the market
      * @param market - market from where to draw marbles
      * @param players - players playing the game
+     * @return
      */
-    public void pickLineFromMarket(Market market, Player[] players, Scanner in, PrintWriter out) {
+    public boolean pickLineFromMarket(Market market, Player[] players, Scanner in, PrintWriter out) {
 
         String rowColumnChoice;
         String columnNum;
@@ -230,6 +231,7 @@ public class Player extends Thread implements Runnable {
             int var = Integer.parseInt(rowNum);
             market.updateRow(var, players, this.playerNumber, in, out);
         }
+        return true;
 
     }
 

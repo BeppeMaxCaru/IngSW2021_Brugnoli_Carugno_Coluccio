@@ -95,8 +95,7 @@ public class ClientMain {
                 do {
                     switch (players[0].getAction(input, output)) {
                         case "0":
-                            players[0].pickLineFromMarket(localMarket, players, input, output);
-                            correctAction = true;
+                            correctAction=players[0].pickLineFromMarket(localMarket, players, input, output);
                             break;
                         case "1":
                             correctAction = players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid, input, output);
@@ -164,7 +163,7 @@ public class ClientMain {
                 while (true) {
                     //System.out.println("Received: " + in.readLine());
                     String clientInput = stdIn.readLine();
-                    if (clientInput == "QUIT") {
+                    if (clientInput.equals("QUIT")) {
                         System.out.println("You left the game");
                         System.out.println("Bye bye");
                         break;

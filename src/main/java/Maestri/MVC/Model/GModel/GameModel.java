@@ -210,7 +210,7 @@ public class GameModel implements Runnable {
                         switch (player.getAction(in, out)) {
                             case "0":
                                 //startTime = System.currentTimeMillis();
-                                player.pickLineFromMarket(this.market, this.players, in, out);
+                                correctAction=player.pickLineFromMarket(this.market, this.players, in, out);
                                 //endTime = System.currentTimeMillis() - startTime;
                                 break;
                             case "1":
