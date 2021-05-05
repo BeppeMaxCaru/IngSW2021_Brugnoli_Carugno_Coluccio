@@ -1,14 +1,11 @@
-package org.example;
+package org.example.Server;
 
 import Maestri.MVC.Model.GModel.GameModel;
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -20,6 +17,10 @@ public class MultiEchoServer {
     }
     //Clients
     private ArrayList<EchoServerClientHandler> clients = new ArrayList<>();
+    //Lobby
+    private ArrayList<Socket> lobby = new ArrayList<>();
+    //GamesQueue
+    private ArrayList<GameModel> gamesInProgress = new ArrayList<>();
     //GameModel
     private GameModel game1 = new GameModel();
 
@@ -37,7 +38,7 @@ public class MultiEchoServer {
         while (true) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, game1);
+                EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, this.clients, game1);
                 clients.add(newClient);
 
                 executor.submit(newClient);

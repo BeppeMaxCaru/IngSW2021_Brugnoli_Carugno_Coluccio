@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Client;
 
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;

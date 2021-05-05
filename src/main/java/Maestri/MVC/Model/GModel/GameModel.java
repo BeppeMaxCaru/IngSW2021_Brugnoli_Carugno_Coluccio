@@ -5,19 +5,21 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
+import org.example.Server.EchoServerClientHandler;
 
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Represents the state of game "Maestri del Rinascimento"
  */
-public class GameModel {
+public class GameModel implements Runnable {
 
     int numberOfPlayers;
     private Player[] players;
@@ -29,6 +31,8 @@ public class GameModel {
     private boolean BlackCrossPawn = false;
     //Who chooses the action????? from the controller!
     //private Map<Integer, String> playerActions
+    private ArrayList<EchoServerClientHandler> clientsPlayingTheGame = new ArrayList<>();
+    ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public GameModel() {
         this.players = new Player[4];
@@ -219,4 +223,8 @@ public class GameModel {
                 out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
     }
 
+    @Override
+    public void run() {
+        //this.startGame();
+    }
 }

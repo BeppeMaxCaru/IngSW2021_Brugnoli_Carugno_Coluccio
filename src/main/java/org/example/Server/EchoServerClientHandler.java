@@ -1,24 +1,25 @@
-package org.example;
+package org.example.Server;
 
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
+import java.util.ArrayList;
 
-public class EchoServerClientHandler extends Thread implements Runnable{
+public class EchoServerClientHandler implements Runnable{
     private Socket clientSocket;
     private String nickname;
 
     private Player player;// = new Player();
     //this.player.chooseNickname();
+    private ArrayList<EchoServerClientHandler> clients;
 
-    public EchoServerClientHandler(Socket clientSocket, GameModel gameModel) {
+    public EchoServerClientHandler(Socket clientSocket, ArrayList<EchoServerClientHandler> clients,GameModel gameModel) {
         this.clientSocket = clientSocket;
+        this.clients = clients;
         //Start asking
         /*out.println("buongiorno");
         try {
