@@ -240,11 +240,11 @@ public class Playerboard {
         Integer numResources;
         int i = 1;
 
-        out.println("Do you want to pick the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
+        out.println("Do you want to pick " + resource + " from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
         fromWhat = in.nextLine();
         while(!fromWhat.equals("0") && !fromWhat.equals("1")) {
             out.println("Number not valid!");
-            out.println("Do you want to pick the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
+            out.println("Do you want to pick " + resource + " from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
             fromWhat = in.nextLine();
         }
 
@@ -260,11 +260,11 @@ public class Playerboard {
                     else if (whRes == 0)
                         this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     else {
-                        out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
+                        out.println("Do you want to pick the " + resource + " from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
                         fromWhichWarehouse = in.nextLine();
                         while(!fromWhichWarehouse.equals("0") && !fromWhichWarehouse.equals("1")) {
                             out.println("Number not valid!");
-                            out.println("Do you want to pick the resource from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
+                            out.println("Do you want to pick the " + resource + " from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
                             fromWhichWarehouse = in.nextLine();
                             if (fromWhichWarehouse.equals("0"))
                                 this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
@@ -299,100 +299,38 @@ public class Playerboard {
      */
     public List<String> activateBasicProductionPower(Scanner in, PrintWriter out) {
         String resourceOutputNum;
-        int numResources;
         int i;
-        int var;
         String resourceInputNum;
-        String fromWhat;
-        List<String> availableResourceWarehouse = new ArrayList<>();
-        List<String> availableResourceChest = new ArrayList<>();
         List<String> resourceChoice = new ArrayList<>();
-
-        // Available resources from warehouse
-        for (String key : this.wareHouse.getWarehouseResources().keySet()) {
-            //Exclude extra resources to correct the cycle
-            if (!key.contains("extra")) {
-                numResources = this.wareHouse.getWarehouseResources().get(key);
-                if(this.wareHouse.getWarehouseResources().containsKey("extra"+key))
-                    numResources = numResources + this.wareHouse.getWarehouseResources().get("extra" + key);
-                if (numResources != 0) {
-                    availableResourceWarehouse.add(key);
-                } /*else {
-                    numResources = this.wareHouse.getWarehouseResources().get("extra" + key);
-                    if (numResources != 0) {
-                        //Adds the normal key then in pick resource you choose from where to remove it
-                        availableResourceWarehouse.add(key);
-                    }
-                }*/
-            }
-        }
-
-        // Available resources from chest
-        for (String key : this.chest.getChestResources().keySet()) {
-            numResources = this.chest.getChestResources().get(key);
-            if (numResources != 0) {
-                availableResourceChest.add(key);
-            }
-        }
 
         // Two input
         for (i = 0; i < 2; i++) {
-            var = -1;
-            out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-            fromWhat = in.nextLine();
-            while (!fromWhat.equals("0") && !fromWhat.equals("1")) {
+            out.println("Choose one resource for pay: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+            resourceInputNum = in.nextLine();
+            while(!resourceInputNum.equals("0") && !resourceInputNum.equals("1") && !resourceInputNum.equals("2") && !resourceInputNum.equals("3")) {
                 out.println("Number not valid!");
-                out.println("Do you want to choose the resource from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-                fromWhat = in.nextLine();
+                out.println("Choose one resource to pay: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
+                resourceInputNum = in.nextLine();
             }
-            //Adds resource available in warehouse
-            if (fromWhat.equals("0") && !availableResourceWarehouse.isEmpty()) {
-                out.println("Choose a resource from warehouse:");
-                for (int j = 0; j < availableResourceWarehouse.size(); j++) {
-                    out.println("Write " + j + " for " + availableResourceWarehouse.get(j));
-                }
-                while (var < 0 || var > availableResourceWarehouse.size() - 1) {
-                    resourceInputNum = in.nextLine();
-                    while(!resourceInputNum.equals("0") && !resourceInputNum.equals("1") && !resourceInputNum.equals("2") && !resourceInputNum.equals("3")) {
-                        out.println("Number not valid!");
-                        out.println("Choose a resource from warehouse:");
-                        resourceInputNum = in.nextLine();
-                    }
-                    var = Integer.parseInt(resourceInputNum);
-                    if(var < 0 || var > availableResourceWarehouse.size() - 1) {
-                        out.println("Number not valid!");
-                        out.println("Choose a resource from warehouse:");
-                    }
-                }
-                resourceChoice.add(availableResourceWarehouse.get(var));
+            switch (resourceInputNum) {
+                case "0":
+                    resourceChoice.add("COINS");
+                    break;
+                case "1":
+                    resourceChoice.add("SHIELDS");
+                    break;
+                case "2":
+                    resourceChoice.add("SERVANTS");
+                    break;
+                case "3":
+                    resourceChoice.add("STONES");
+                    break;
             }
-            //Adds resource available in chest
-            else if (!availableResourceChest.isEmpty()) {
-                out.println("Choose a resource from chest:");
-                for (int j = 0; j < availableResourceChest.size(); j++) {
-                    out.println("Write" + j + "for" + availableResourceChest.get(j));
-                }
-                while (var < 0 || var > availableResourceChest.size() - 1) {
-                    resourceInputNum = in.nextLine();
-                    while(!resourceInputNum.equals("0") && !resourceInputNum.equals("1") && !resourceInputNum.equals("2") && !resourceInputNum.equals("3")) {
-                        out.println("Number not valid!");
-                        out.println("Choose a resource from chest:");
-                        resourceInputNum = in.nextLine();
-                    }
-                    if(var < 0 || var > availableResourceWarehouse.size() - 1) {
-                        out.println("Number not valid!");
-                        out.println("Choose a resource from chest:");
-                    }
-                    var = Integer.parseInt(resourceInputNum);
-                }
-                resourceChoice.add(availableResourceChest.get(var));
-            }
-            else i--;
         }
 
 
         // output
-        out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
+        out.println("Choose one resource to pick: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
         resourceOutputNum = in.nextLine();
         while(!resourceOutputNum.equals("0") && !resourceOutputNum.equals("1") && !resourceOutputNum.equals("2") && !resourceOutputNum.equals("3")) {
             out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
