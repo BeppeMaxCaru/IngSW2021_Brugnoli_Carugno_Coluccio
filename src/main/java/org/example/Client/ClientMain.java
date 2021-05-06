@@ -95,7 +95,7 @@ public class ClientMain {
                 do {
                     switch (players[0].getAction(input, output)) {
                         case "0":
-                            correctAction=players[0].pickLineFromMarket(localMarket, players, input, output);
+                            correctAction = players[0].pickLineFromMarket(localMarket, players, input, output);
                             break;
                         case "1":
                             correctAction = players[0].buyDevelopmentCard(localDevelopmentCardsDeckGrid, input, output);
@@ -118,7 +118,10 @@ public class ClientMain {
 
                 for (int i=0; i<4; i++)
                     if(localDevelopmentCardsDeckGrid.getDevelopmentCardsDecks()[0][i][0]==null)
+                    {
                         endGame=true;
+                        break;
+                    }
 
                 System.out.println();
             }
