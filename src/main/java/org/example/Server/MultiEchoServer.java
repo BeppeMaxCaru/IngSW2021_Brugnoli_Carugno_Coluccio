@@ -41,7 +41,7 @@ public class MultiEchoServer {
                 EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, this.clients, game1);
                 clients.add(newClient);
 
-                executor.submit(newClient);
+                executor.execute(newClient);
                 //newClient.setName();
             } catch(IOException e) {
                 System.out.println("Server failure!");
