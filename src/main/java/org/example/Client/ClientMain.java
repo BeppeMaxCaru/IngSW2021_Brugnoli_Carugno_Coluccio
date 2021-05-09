@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
@@ -160,12 +161,18 @@ public class ClientMain {
                 //BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
 
-                new Thread(serverReceiver).start();
+                //new Thread(serverReceiver).start();
+
+                Thread inputTimer = new Thread(serverReceiver);
+                inputTimer.start();
+
+                //clientSocket.setSoTimeout(60000);
 
                 //THIS WORKS !!!!!!!!!!!!!!!!!!!!
                 while (true) {
                     //System.out.println("Received: " + in.readLine());
                     String clientInput = stdIn.readLine();
+                    //Trial
                     if (clientInput.equals("QUIT")) {
                         System.out.println("You left the game");
                         System.out.println("Bye bye");

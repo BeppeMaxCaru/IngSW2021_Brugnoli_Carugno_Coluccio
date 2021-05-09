@@ -44,6 +44,10 @@ public class Player implements Runnable {
 
     private Socket clientSocket;
 
+    private BufferedReader in;
+    private Scanner inScan;
+    private PrintWriter out;
+
     /**
      * Initializes a new player
      * @param clientSocket
@@ -56,11 +60,13 @@ public class Player implements Runnable {
 
         this.clientSocket = clientSocket;
         try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
+            this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
+            this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
             out.println("Insert your nickname: ");
-            this.nickname= in.readLine();
+            //this.nickname = in.readLine();
+            this.nickname = inScan.nextLine();
             out.println("Welcome! Waiting for the match (thread run)");
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -129,6 +135,18 @@ public class Player implements Runnable {
      */
     public void setPlayerLeaderCard(int index, LeaderCard leaderCard) {
         this.playerLeaderCards[index] = leaderCard;
+    }
+
+    public BufferedReader getInBufferedReader() {
+        return this.in;
+    }
+
+    public Scanner getInScannerReader() {
+        return this.inScan;
+    }
+
+    public PrintWriter getOutPrintWriter() {
+        return this.out;
     }
 
     /**
@@ -898,7 +916,7 @@ public class Player implements Runnable {
             out.println("Hi " + this.nickname + "! Welcome to Masters of renaissance online!");
             //out.println("Write QUIT to leave the game anytime you want");
             while (true) {
-                out.println("Inserisci un comando: ");
+                //out.println("Inserisci un comando: ");
                 String clientInput = in.readLine();
                 if (clientInput.equals("QUIT")) {
                     out.println("You left the game");

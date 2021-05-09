@@ -19,10 +19,10 @@ import java.util.concurrent.Executors;
 /**
  * Represents the state of game "Maestri del Rinascimento"
  */
-public class GameModel extends TimerTask implements Runnable {
+public class GameModel implements Runnable {
 
     int numberOfPlayers;
-    private Player[] players;
+    private Player[] players = new Player[4];
     int currentPlayer = 0;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private LeaderCardDeck leaderCardDeck;
@@ -35,26 +35,22 @@ public class GameModel extends TimerTask implements Runnable {
     ExecutorService executor = Executors.newFixedThreadPool(4);
 
     public GameModel(List<Player> clientsWaiting) {
-        try {
-            //Checks that there are enough clients waiting
-            if (clientsWaiting.size()<2) throw new IllegalArgumentException();
-            //Gets until 4 players
-            for (int i=0;i<this.players.length;i++) {
-                try {
-                    //If there is a player adds it
-                    if (!clientsWaiting.isEmpty()) this.players[i] = clientsWaiting.remove(0);
-                } catch (Exception e) {
-                    //If no clients waiting set other players null
-                    this.players[i] = null;
-                }
+
+        //Gets until 4 players
+        for (int i=0;i<this.players.length;i++) {
+            try {
+                //If there is a player adds it
+                if (!clientsWaiting.isEmpty()) this.players[i] = clientsWaiting.remove(0);
+            } catch (Exception e) {
+                //If no clients waiting set other players null
+                this.players[i] = null;
             }
-        } catch (Exception e) {
         }
+
         this.setStartingLeaderCards();
         this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
         this.leaderCardDeck = new LeaderCardDeck();
         this.market = new Market();
-
     }
 
     public Player[] getPlayers() {
@@ -64,6 +60,11 @@ public class GameModel extends TimerTask implements Runnable {
     public void setPlayers(Player[] players) {
         this.players = players;
     }
+
+    public void setPlayer(Player player, int index) {
+        this.players[index] = player;
+    }
+
 
     public void setStartingLeaderCards() {
         for (int i=0;i<4;i++) {
@@ -178,52 +179,45 @@ public class GameModel extends TimerTask implements Runnable {
     //Method that cycles the players
     public void run() {
 
+        System.out.println("This is the new game");
 
         do {
-            for (Player player : this.players) {
-                if(player!=null){
+            for (int i=0;i<this.players.length;i++) {
+                if (this.players[i]!=null) {
                     try {
 
-                        Scanner in = new Scanner(new InputStreamReader(player.getClientSocket().getInputStream()));
-                        PrintWriter out = new PrintWriter(player.getClientSocket().getOutputStream(), true);
-                        //int maximumTime = 180;
-                        //long startTime = 0;
-                        //long endTime = 0;
+                        //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
+                        //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
 
-                        if (player.getPlayerLeaderCards()[0] != null) {
+                        if (this.players[i].getPlayerLeaderCards()[0] != null) {
                             //for (int i = 0; i < 2; i++) {
-                            if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed()) {
-                                player.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime; */
-                            } else if (player.getPlayerLeaderCards()[1] != null && (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed())) {
-                                player.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime; */
-                            } else out.println("You have activated all your Leader cards. You can't do a Leader Action.");
-                            // i = checkStatusPlayer(endTime, i, out);
-                            //}
-                        } else out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
+                            if (this.players[i].getPlayerLeaderCards()[1] == null && !this.players[i].getPlayerLeaderCards()[0].isPlayed()) {
+                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+
+                            } else if (this.players[i].getPlayerLeaderCards()[1] != null && (!this.players[i].getPlayerLeaderCards()[0].isPlayed() || !this.players[i].getPlayerLeaderCards()[1].isPlayed())) {
+                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+
+                            } else this.players[i].getOutPrintWriter().println("You have activated all your Leader cards. You can't do a Leader Action.");
+
+                        } else this.players[i].getOutPrintWriter().println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
                         //for (int i = 0; i < 2; i++) {
                         boolean correctAction = true;
                         do {
-                            switch (player.getAction(in, out)) {
+                            switch (this.players[i].getAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter())) {
                                 case "0":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = player.pickLineFromMarket(this.market, this.players, in, out);
+                                    correctAction = this.players[i].pickLineFromMarket(this.market, this.players, this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                                 case "1":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = player.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
+                                    correctAction = this.players[i].buyDevelopmentCard(this.developmentCardsDecksGrid, this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                                 case "2":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = player.activateProduction(in, out);
+                                    correctAction = this.players[i].activateProduction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                             }
@@ -232,15 +226,15 @@ public class GameModel extends TimerTask implements Runnable {
                         //i = checkStatusPlayer(endTime, i, out);
                         //}
 
-                        if (player.getPlayerLeaderCards()[0] != null) {
+                        if (this.players[i].getPlayerLeaderCards()[0] != null) {
                             //for (int i = 0; i < 2; i++) {
-                            if (player.getPlayerLeaderCards()[1] == null && !player.getPlayerLeaderCards()[0].isPlayed()) {
-                                player.getLeaderAction(in, out); // Remove with timer
+                            if (this.players[i].getPlayerLeaderCards()[1] == null && !this.players[i].getPlayerLeaderCards()[0].isPlayed()) {
+                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
                             /* startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
                             endTime = System.currentTimeMillis() - startTime; */
-                            } else if (player.getPlayerLeaderCards()[1] != null && (!player.getPlayerLeaderCards()[0].isPlayed() || !player.getPlayerLeaderCards()[1].isPlayed())) {
-                                player.getLeaderAction(in, out); // Remove with timer
+                            } else if (this.players[i].getPlayerLeaderCards()[1] != null && (!this.players[i].getPlayerLeaderCards()[0].isPlayed() || !this.players[i].getPlayerLeaderCards()[1].isPlayed())) {
+                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
                             /* startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
                             endTime = System.currentTimeMillis() - startTime; */
@@ -249,19 +243,19 @@ public class GameModel extends TimerTask implements Runnable {
                             //}
                         }
 
-                        out.println("Game over.");
+                        this.players[i].getOutPrintWriter().println("Game over.");
                         //There is a winner
-                        out.println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
+                        this.players[i].getOutPrintWriter().println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
                         for (int pn = 0; pn < this.players.length; pn++)
                             if (pn != this.checkWinner())
-                                out.println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
+                                this.players[i].getOutPrintWriter().println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
                     }catch (Exception e){
                         System.err.println(e.getMessage());
                     }
                 }
 
             }
-        }while (this.checkEndPlay());
+        } while (this.checkEndPlay());
     }
 
     public int checkStatusPlayer(float endTime, int i, PrintWriter out) {

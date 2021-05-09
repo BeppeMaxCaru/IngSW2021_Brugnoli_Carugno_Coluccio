@@ -8,8 +8,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class MultiEchoServer {
     //Connection
@@ -28,7 +30,9 @@ public class MultiEchoServer {
 
     public void startServer() {
         //4 threads for 4 players
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
+        ExecutorService gameExecutor = Executors.newCachedThreadPool();
+
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(port);
@@ -39,11 +43,21 @@ public class MultiEchoServer {
         System.out.println("Server ready for Masters of Renaissance");
 
         Timer timer = new Timer();
-        try{
-            timer.schedule(new GameModel(this.clients), 10000);
-        } catch (Exception e){
-
-        }
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    if (clients.isEmpty() || clients.size()<2) throw new Exception();
+                    GameModel newGame = new GameModel(clients);
+                    gameExecutor.execute(newGame);
+                    //Debug
+                    System.out.println("New game started");
+                } catch (Exception e) {
+                    //Debug
+                    System.out.println("Not enough players");
+                }
+            }
+        }, 0, 20000);
 
         while (true) {
 
@@ -52,14 +66,14 @@ public class MultiEchoServer {
                 Player newClient = new Player(clientSocket);
                 clients.add(newClient);
 
-                executor.execute(newClient);
+                clientExecutor.execute(newClient);
                 //newClient.setName();
             } catch(IOException e) {
                 System.out.println("Server failure!");
                 break; // Entrerei qui se serverSocket venisse chiuso
             }
         }
-        executor.shutdown();
+        clientExecutor.shutdown();
     }
 
     public void addClients() {
