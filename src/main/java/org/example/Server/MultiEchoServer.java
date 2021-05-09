@@ -1,11 +1,13 @@
 package org.example.Server;
 
 import Maestri.MVC.Model.GModel.GameModel;
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Timer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,13 +18,13 @@ public class MultiEchoServer {
         this.port = port;
     }
     //Clients
-    private ArrayList<EchoServerClientHandler> clients = new ArrayList<>();
+    private ArrayList<Player> clients = new ArrayList<>();
     //Lobby
     private ArrayList<Socket> lobby = new ArrayList<>();
     //GamesQueue
     private ArrayList<GameModel> gamesInProgress = new ArrayList<>();
     //GameModel
-    private GameModel game1 = new GameModel();
+    private GameModel game;
 
     public void startServer() {
         //4 threads for 4 players
@@ -35,10 +37,19 @@ public class MultiEchoServer {
             return;
         }
         System.out.println("Server ready for Masters of Renaissance");
+
+        Timer timer = new Timer();
+        try{
+            timer.schedule(new GameModel(this.clients), 10000);
+        } catch (Exception e){
+
+        }
+
         while (true) {
+
             try {
                 Socket clientSocket = serverSocket.accept();
-                EchoServerClientHandler newClient = new EchoServerClientHandler(clientSocket, this.clients, game1);
+                Player newClient = new Player(clientSocket);
                 clients.add(newClient);
 
                 executor.execute(newClient);
