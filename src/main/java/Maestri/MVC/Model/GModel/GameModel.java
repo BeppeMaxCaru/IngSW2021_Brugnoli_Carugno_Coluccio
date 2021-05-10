@@ -305,7 +305,7 @@ public class GameModel implements Runnable {
                 }
 
             }
-        } while (this.checkEndPlay());
+        } while (!this.checkEndPlay());
         for (int i=0;i<this.players.length;i++) {
             if (this.players[i]!=null) {
                 try {
