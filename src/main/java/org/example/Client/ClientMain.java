@@ -69,21 +69,8 @@ public class ClientMain {
                 }
                     else System.out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
-                System.out.println("YOUR RESOURCES:");
-                System.out.println("COINS   : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
-                        +players[0].getPlayerBoard().getChest().getChestResources().get("COINS")+" in chest");
-                System.out.println("SERVANTS: "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
-                        +players[0].getPlayerBoard().getChest().getChestResources().get("SERVANTS")+" in chest");
-                System.out.println("SHIELDS : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
-                        +players[0].getPlayerBoard().getChest().getChestResources().get("SHIELDS")+" in chest");
-                System.out.println("STONES  : "+players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
-                        +players[0].getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
-                System.out.println();
+                players[0].printAll(output);
 
-                System.out.println("YOUR DEVELOPMENT CARDS: ");
-                players[0].printPlayerCards(output);
-
-                System.out.println("YOUR FAITH PATH POSITION    : "+players[0].getPlayerBoard().getFaithPath().getCrossPosition());
                 System.out.println("LORENZO BLACK CROSS POSITION: "+players[1].getPlayerBoard().getFaithPath().getCrossPosition());
                 System.out.println();
 

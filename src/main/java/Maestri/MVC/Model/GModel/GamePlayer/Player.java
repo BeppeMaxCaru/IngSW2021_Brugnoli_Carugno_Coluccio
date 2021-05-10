@@ -11,11 +11,15 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents a player with all its information
  */
-public class Player implements Runnable {
+public class Player
+        //implements Runnable
+{
 
     /**
      * Name that the player chooses to join the game
@@ -67,7 +71,7 @@ public class Player implements Runnable {
             out.println("Insert your nickname: ");
             //this.nickname = in.readLine();
             this.nickname = inScan.nextLine();
-            out.println("Welcome! Waiting for the match (thread run)");
+            out.println("Hi "+this.nickname+", welcome to Master of Renaissance online! Waiting for the match starting...");
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -801,6 +805,25 @@ public class Player implements Runnable {
 
     }
 
+    public void printAll(PrintWriter out){
+        out.println("YOUR RESOURCES:");
+        out.println("COINS   : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
+                +this.getPlayerBoard().getChest().getChestResources().get("COINS")+" in chest");
+        out.println("SERVANTS: "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
+                +this.getPlayerBoard().getChest().getChestResources().get("SERVANTS")+" in chest");
+        out.println("SHIELDS : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
+                +this.getPlayerBoard().getChest().getChestResources().get("SHIELDS")+" in chest");
+        out.println("STONES  : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
+                +this.getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
+        out.println();
+
+        out.println("YOUR DEVELOPMENT CARDS: ");
+        this.printPlayerCards(out);
+        out.println();
+        out.println("YOUR FAITH PATH POSITION    : "+this.getPlayerBoard().getFaithPath().getCrossPosition());
+
+    }
+
     /*
     @Override
     public void run() {
@@ -907,13 +930,14 @@ public class Player implements Runnable {
         }
     }
 
-    @Override
+    /*@Override
     public void run() {
+        //Lock turnLock = new ReentrantLock();
+        //turnLock.lock();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
-            out.println("Hi " + this.nickname + "! Welcome to Masters of renaissance online!");
             //out.println("Write QUIT to leave the game anytime you want");
             while (true) {
                 //out.println("Inserisci un comando: ");
@@ -935,8 +959,8 @@ public class Player implements Runnable {
             System.err.println(e.getMessage());
             //this.out.println("Lost connection");
         }
-
-    }
+        //turnLock.unlock();
+    }*/
 
     //Closing stream and socket
     public void disconnectPlayer() {

@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents the state of game "Maestri del Rinascimento"
@@ -40,7 +42,14 @@ public class GameModel implements Runnable {
         for (int i=0;i<this.players.length;i++) {
             try {
                 //If there is a player adds it
-                if (!clientsWaiting.isEmpty()) this.players[i] = clientsWaiting.remove(0);
+                if (!clientsWaiting.isEmpty()) {
+                    this.players[i] = clientsWaiting.remove(0);
+                    this.players[i].setPlayerNumber(i);
+                    this.players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                    if(i!=0){
+                        this.players[i].getOutPrintWriter().println("Wait for other players turn...");
+                    }
+                }
             } catch (Exception e) {
                 //If no clients waiting set other players null
                 this.players[i] = null;
@@ -126,13 +135,21 @@ public class GameModel implements Runnable {
         List<Integer> numbers = new ArrayList<>(getPlayers().length);
         int j = 0;
 
-        for (int i = 0; i < 10; i++)
+        int p;
+        for(p=0; p<this.players.length; p++)
+            if(this.players[p]==null)
+                break;
+
+        for (int i = 0; i < p; i++)
             numbers.add(i);
         Collections.shuffle(numbers);
 
         for(int i: numbers) {
-           getPlayers()[j].setPlayerNumber(i);
-           j++;
+            if(this.players[j] != null)
+            {
+                this.players[j].setPlayerNumber(i);
+            }
+            j++;
         }
     }
 
@@ -179,12 +196,42 @@ public class GameModel implements Runnable {
     //Method that cycles the players
     public void run() {
 
+        //Lock turnLock = new ReentrantLock();
+
         System.out.println("This is the new game");
+
+        for (int i=0;i<this.players.length;i++) {
+            //turnLock.lock();
+            if(this.players[i]!=null) {
+                try {
+
+                    this.players[i].getOutPrintWriter().println("It is your turn");
+                    this.players[i].getOutPrintWriter().println();
+                    this.players[i].setStartingPlayerboard(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+
+                    for(int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++)
+                        this.players[i].setPlayerLeaderCard(index,this.leaderCardDeck.drawOneLeaderCard());
+                    for(int ind = 0; ind < 2; ind++)
+                        this.players[i].discardLeaderCard(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+
+                    this.players[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
+                    this.players[i].getOutPrintWriter().println();
+
+
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            //turnLock.unlock();
+        }
+
+
 
         do {
             for (int i=0;i<this.players.length;i++) {
                 if (this.players[i]!=null) {
                     try {
+                        this.players[i].getOutPrintWriter().println("It's your turn again");
 
                         //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
                         //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
@@ -200,6 +247,12 @@ public class GameModel implements Runnable {
                             } else this.players[i].getOutPrintWriter().println("You have activated all your Leader cards. You can't do a Leader Action.");
 
                         } else this.players[i].getOutPrintWriter().println("You have discarded all your Leader cards. You can't do a Leader Action.");
+
+                        this.players[i].printAll(this.players[i].getOutPrintWriter());
+                        System.out.println("MARKET GRID:");
+                        this.market.printMarket(this.players[i].getOutPrintWriter());
+                        System.out.println("DEVELOPMENT CARDS GRID:");
+                        this.developmentCardsDecksGrid.printGrid(this.players[i].getOutPrintWriter());
 
                         //for (int i = 0; i < 2; i++) {
                         boolean correctAction = true;
@@ -243,19 +296,30 @@ public class GameModel implements Runnable {
                             //}
                         }
 
-                        this.players[i].getOutPrintWriter().println("Game over.");
-                        //There is a winner
-                        this.players[i].getOutPrintWriter().println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
-                        for (int pn = 0; pn < this.players.length; pn++)
-                            if (pn != this.checkWinner())
-                                this.players[i].getOutPrintWriter().println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
-                    }catch (Exception e){
+                        this.players[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
+                        this.players[i].getOutPrintWriter().println();
+
+                    } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
                 }
 
             }
         } while (this.checkEndPlay());
+        for (int i=0;i<this.players.length;i++) {
+            if (this.players[i]!=null) {
+                try {
+                    this.players[i].getOutPrintWriter().println("Game over.");
+                    //There is a winner
+                    this.players[i].getOutPrintWriter().println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " Victory Points.");
+                    for (int pn = 0; pn < this.players.length; pn++)
+                        if (pn != this.checkWinner())
+                            this.players[i].getOutPrintWriter().println(this.players[pn].getNickname() + " obtains " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
     }
 
     public int checkStatusPlayer(float endTime, int i, PrintWriter out) {
