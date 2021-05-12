@@ -659,11 +659,13 @@ public class Player
                 }
                 else {
                     out.println("Not enough resources for play this Leader Card");
+                    out.println();
                     return false;
                 }
             }
             else {
                 out.println("Number isn't correct!!");
+                out.println();
                 return false;
             }
         }
