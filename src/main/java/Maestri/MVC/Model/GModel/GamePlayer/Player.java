@@ -291,21 +291,21 @@ public class Player
 
         out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
         out.println("Choose development card colour: ");
-        String colour = in.next();
+        String colour = in.nextLine();
         out.println();
         while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
             out.println("Card of this colour doesn't exist!");
             out.println("Choose a valid development card colour: ");
-            colour = in.next();
+            colour = in.nextLine();
             out.println();
         }
         out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
         out.println("Choose development card level: ");
-        String level = in.next();
+        String level = in.nextLine();
         out.println();
         while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
             out.println("Choose development card level: ");
-            level = in.next();
+            level = in.nextLine();
             out.println();
         }
         int varLevel = Integer.parseInt(level);
@@ -315,7 +315,7 @@ public class Player
             level = " ";
             while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
                 out.println("Choose a valid development card level: ");
-                level = in.next();
+                level = in.nextLine();
                 out.println();
             }
             varLevel = Integer.parseInt(level);
@@ -330,21 +330,21 @@ public class Player
             out.println();
             out.println("Available development cards colours: " + developmentCardsDecksGrid.getDevelopmentCardsColours());
             out.println("Choose development card colour: ");
-            colour = in.next();
+            colour = in.nextLine();
             out.println();
             while (!developmentCardsDecksGrid.getDevelopmentCardsColours().containsKey(colour)) {
                 out.println("Card of this colour doesn't exist!");
                 out.println("Choose a valid development card colour: ");
-                colour = in.next();
+                colour = in.nextLine();
                 out.println();
             }
             out.println("Available development cards levels: " + developmentCardsDecksGrid.getDevelopmentCardsLevels());
             out.println("Choose development card level: ");
-            level = in.next();
+            level = in.nextLine();
             out.println();
             while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
                 out.println("Choose development card level: ");
-                level = in.next();
+                level = in.nextLine();
                 out.println();
             }
             varLevel = Integer.parseInt(level);
@@ -354,7 +354,7 @@ public class Player
                 level = " ";
                 while(!level.equals("1") && !level.equals("2") && !level.equals("3")) {
                     out.println("Choose a valid development card level: ");
-                    level = in.next();
+                    level = in.nextLine();
                     out.println();
                 }
                 varLevel = Integer.parseInt(level);

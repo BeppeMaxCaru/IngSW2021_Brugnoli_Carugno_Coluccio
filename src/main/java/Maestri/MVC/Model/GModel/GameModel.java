@@ -249,9 +249,9 @@ public class GameModel implements Runnable {
                         } else this.players[i].getOutPrintWriter().println("You have discarded all your Leader cards. You can't do a Leader Action.");
 
                         this.players[i].printAll(this.players[i].getOutPrintWriter());
-                        System.out.println("MARKET GRID:");
+                        this.players[i].getOutPrintWriter().println("MARKET GRID:");
                         this.market.printMarket(this.players[i].getOutPrintWriter());
-                        System.out.println("DEVELOPMENT CARDS GRID:");
+                        this.players[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
                         this.developmentCardsDecksGrid.printGrid(this.players[i].getOutPrintWriter());
 
                         //for (int i = 0; i < 2; i++) {
