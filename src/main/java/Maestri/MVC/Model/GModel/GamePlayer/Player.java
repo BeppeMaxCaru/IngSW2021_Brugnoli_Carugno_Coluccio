@@ -590,7 +590,8 @@ public class Player
             out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
             leaderNum = in.nextLine();
         }
-        while (!correctLeaderAction&&attempts < 4) {
+
+        while (!correctLeaderAction && attempts < 2) {
             if(leaderNum.equals("1")) {
                 correctLeaderAction = this.playLeaderCard(in, out);
                 attempts++;
@@ -601,6 +602,7 @@ public class Player
                 this.getPlayerBoard().getFaithPath().moveCross(1);
             }
         }
+
         return true;
     }
 
@@ -621,12 +623,12 @@ public class Player
         }
 
         //If there are cards that aren't played yet
-        if(notPlayed < k) {
+        if(notPlayed <= k) {
             //Scelta della carta leader da giocare
             out.println("What leader card do you want to play?:");
             for (int i = 0; i < k; i++) {
                 if(!this.playerLeaderCards[i].isPlayed()) {
-                    out.println("Write" + i + "for this: ");
+                    out.println("Write " + i + " for this: ");
                     this.playerLeaderCards[i].printLeaderCard(out);
                 }
             }
@@ -635,21 +637,24 @@ public class Player
             while(var < 0 || var > notPlayed - 1) {
                 while (!numLeaderCard.equals("0") && !numLeaderCard.equals("1") && !numLeaderCard.equals("2") && !numLeaderCard.equals("3")) {
                     out.println("Number not valid!");
-                    out.println("What leader card do you want to discard?:");
+                    out.println("What leader card do you want to play?:");
                     numLeaderCard = in.nextLine();
                 }
                 var = Integer.parseInt(numLeaderCard);
                 if(var < 0 || var > notPlayed - 1) {
                     out.println("Number not valid!");
-                    out.println("What leader card do you want to discard?:");
+                    out.println("What leader card do you want to play?:");
                     numLeaderCard = in.nextLine();
                 }
+                var = Integer.parseInt(numLeaderCard);
             }
 
             if(this.playerLeaderCards[var] != null) {
                 if((this.playerLeaderCards[var].checkRequisites(this.playerBoard))) {
                     this.playerLeaderCards[var].activateAbility(this.playerBoard);
                     this.playerBoard.sumVictoryPoints(this.playerLeaderCards[var].getVictoryPoints());
+                    out.println("Played");
+                    this.playerLeaderCards[var].printLeaderCard(out);
                     return true;
                 }
                 else {
@@ -662,7 +667,8 @@ public class Player
                 return false;
             }
         }
-        return false;
+        else
+            return false;
     }
 
     /**
@@ -707,6 +713,7 @@ public class Player
                         out.println("What leader card do you want to discard?:");
                         numLeaderCard = in.nextLine();
                     }
+                    var = Integer.parseInt(numLeaderCard);
                 }
                 if(this.playerLeaderCards[var].isPlayed()) {
                     out.println("You can't discard this card, you have already played it.");
