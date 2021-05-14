@@ -64,15 +64,15 @@ public class Player
 
         this.clientSocket = clientSocket;
         try {
-            this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
+            //this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             //Locking player from inserting input
-            //this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
+            this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
             this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
             out.println("Insert your nickname: ");
             //this.nickname = in.readLine();
-            Scanner turnScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
-            this.nickname = turnScan.nextLine();
+            //Scanner turnScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
+            this.nickname = this.inScan.nextLine();
             out.println("Hi " + this.nickname + ", welcome to Master of Renaissance online! Waiting for the match starting...");
         } catch (Exception e) {
             System.err.println(e.getMessage());

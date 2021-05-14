@@ -22,14 +22,18 @@ public class ServerReceiver implements Runnable {
     @Override
     public void run() {
         try {
+            //Trying to lock client
             while (true) {
                 //User must enter input before 90 seconds
                 //Spostarlo in server
                 //serverSocket.setSoTimeout(90000);
+
                 String serverMessage = in.readLine();
+
                 //Disables timer after input
                 //Spostarlo in server
                 //serverSocket.setSoTimeout(0);
+
                 if (serverMessage == null) break;
                 System.out.println("Received: " + serverMessage);
             }

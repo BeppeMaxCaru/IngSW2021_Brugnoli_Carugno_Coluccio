@@ -31,13 +31,15 @@ public class MultiEchoServer {
     public void startServer() {
         //4 threads for 4 players
         ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
+
         ExecutorService gameExecutor = Executors.newCachedThreadPool();
 
         ServerSocket serverSocket;
         try {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
-            System.err.println(e.getMessage()); // Porta non disponibile
+            System.err.println(e.getMessage());// Porta non disponibile
+            System.out.println("Errore");
             return;
         }
         System.out.println("Server ready for Masters of Renaissance");
@@ -57,7 +59,7 @@ public class MultiEchoServer {
                     System.out.println("Not enough players");
                 }
             }
-        }, 0, 20000);
+        }, 0, 10000);
 
         while (true) {
 
