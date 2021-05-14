@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -74,6 +75,7 @@ public class Player
             //Scanner turnScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
             this.nickname = this.inScan.nextLine();
             out.println("Hi " + this.nickname + ", welcome to Master of Renaissance online! Waiting for the match starting...");
+
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
