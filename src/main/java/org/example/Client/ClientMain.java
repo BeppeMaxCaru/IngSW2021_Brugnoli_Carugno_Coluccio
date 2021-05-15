@@ -19,6 +19,7 @@ public class ClientMain {
 
     public static void main(String[] args) throws IOException {
 
+        //Passarli come paramteri del main
         String hostName = "127.0.0.1";
         int portNumber = 1234;
         String gameMode;
