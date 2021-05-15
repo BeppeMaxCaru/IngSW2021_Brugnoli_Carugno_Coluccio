@@ -144,29 +144,47 @@ public class ClientMain {
             try {
 
                 Socket clientSocket = new Socket(hostName, portNumber);
-                ServerReceiver serverReceiver = new ServerReceiver(clientSocket);
+
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                //BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
 
-                //new Thread(serverReceiver).start();
+                Thread serverReceiver = new Thread(() -> {
+                    try {
+                        while (true) {
 
-                Thread inputTimer = new Thread(serverReceiver);
-                inputTimer.start();
+                            String serverMessage = in.readLine();
 
-                //clientSocket.setSoTimeout(60000);
+                            if (serverMessage == null)
+                                break;
 
-                //THIS WORKS !!!!!!!!!!!!!!!!!!!!
-                while (true) {
-                    //System.out.println("Received: " + in.readLine());
-                    String clientInput = stdIn.readLine();
-                    //Trial
-                    if (clientInput.equals("QUIT")) {
-                        System.out.println("You left the game");
-                        System.out.println("Bye bye");
-                        break;
+                            System.out.println("Received: " + serverMessage);
+                        }
+                    } catch (SocketTimeoutException e) {
+                        System.err.println("You've been expelled for inactivity");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        try {
+                            in.close();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
-                    out.println(clientInput);
+                });
+                serverReceiver.start();
+
+                while (true) {
+
+                        System.out.println("Received: " + in.readLine());
+                        String clientInput = stdIn.readLine();
+                        //Trial
+                        if (clientInput.equals("QUIT")) {
+                            System.out.println("You left the game");
+                            System.out.println("Bye bye");
+                            break;
+                        }
+                        out.println(clientInput);
                 }
 
             } catch (UnknownHostException e) {

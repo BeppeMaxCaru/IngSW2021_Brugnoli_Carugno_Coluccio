@@ -169,7 +169,7 @@ public class GameModel implements Runnable {
                 if (player.getPlayerBoard().getFaithPath().getCrossPosition() == 24
                         || player.getPlayerBoard().getDevelopmentCardsBought() == 7)
                     return true;
-            } else if (player==null) {
+            } else {
                 remainingPlayers = remainingPlayers - 1;
                 if (remainingPlayers==1) return true;
             }
@@ -212,38 +212,39 @@ public class GameModel implements Runnable {
             //turnLock.lock();
             if(this.players[i]!=null) {
                 try {
-                    //turnScan = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
+
+                    this.turnScan = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
 
                     this.players[i].getOutPrintWriter().println("It is your turn");
                     this.players[i].getOutPrintWriter().println();
-                    this.players[i].setStartingPlayerboard(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+                    this.players[i].setStartingPlayerboard(this.turnScan, this.players[i].getOutPrintWriter());
 
                     for(int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++)
                         this.players[i].setPlayerLeaderCard(index,this.leaderCardDeck.drawOneLeaderCard());
                     for(int ind = 0; ind < 2; ind++)
-                        this.players[i].discardLeaderCard(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+                        this.players[i].discardLeaderCard(this.turnScan, this.players[i].getOutPrintWriter());
 
                     this.players[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
                     this.players[i].getOutPrintWriter().println();
 
-
                 } catch (Exception e) {
-                    //System.err.println(e.getMessage());
-                    this.players[i]=null;
+                    System.err.println(e.getMessage());
+
                 }
             }
             //turnLock.unlock();
         }
 
-        //trying to remove do while
-        //do {
-        while (!this.checkEndPlay()) {
-
+        do {
             for (int i=0;i<this.players.length;i++) {
                 if (this.players[i]!=null) {
                     try {
-                        //Provalo al posto di getInScannerReader()
-                        //turnScan = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
+                        this.turnScan = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
+
+                        String buffer;
+                        buffer=this.turnScan.nextLine();
+                        while (!buffer.equals(""))
+                            buffer=this.turnScan.nextLine();
 
                         this.players[i].getOutPrintWriter().println("It's your turn again");
 
@@ -253,10 +254,10 @@ public class GameModel implements Runnable {
                         if (this.players[i].getPlayerLeaderCards()[0] != null) {
                             //for (int i = 0; i < 2; i++) {
                             if (this.players[i].getPlayerLeaderCards()[1] == null && !this.players[i].getPlayerLeaderCards()[0].isPlayed()) {
-                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+                                this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
 
                             } else if (this.players[i].getPlayerLeaderCards()[1] != null && (!this.players[i].getPlayerLeaderCards()[0].isPlayed() || !this.players[i].getPlayerLeaderCards()[1].isPlayed())) {
-                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+                                this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
 
                             } else this.players[i].getOutPrintWriter().println("You have activated all your Leader cards. You can't do a Leader Action.");
 
@@ -271,20 +272,20 @@ public class GameModel implements Runnable {
                         //for (int i = 0; i < 2; i++) {
                         boolean correctAction = true;
                         do {
-                            switch (this.players[i].getAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter())) {
+                            switch (this.players[i].getAction(this.turnScan, this.players[i].getOutPrintWriter())) {
                                 case "0":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = this.players[i].pickLineFromMarket(this.market, this.players, this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+                                    correctAction = this.players[i].pickLineFromMarket(this.market, this.players, this.turnScan, this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                                 case "1":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = this.players[i].buyDevelopmentCard(this.developmentCardsDecksGrid, this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+                                    correctAction = this.players[i].buyDevelopmentCard(this.developmentCardsDecksGrid, this.turnScan, this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                                 case "2":
                                     //startTime = System.currentTimeMillis();
-                                    correctAction = this.players[i].activateProduction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter());
+                                    correctAction = this.players[i].activateProduction(this.turnScan, this.players[i].getOutPrintWriter());
                                     //endTime = System.currentTimeMillis() - startTime;
                                     break;
                             }
@@ -296,12 +297,12 @@ public class GameModel implements Runnable {
                         if (this.players[i].getPlayerLeaderCards()[0] != null) {
                             //for (int i = 0; i < 2; i++) {
                             if (this.players[i].getPlayerLeaderCards()[1] == null && !this.players[i].getPlayerLeaderCards()[0].isPlayed()) {
-                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+                                this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
                             /* startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
                             endTime = System.currentTimeMillis() - startTime; */
                             } else if (this.players[i].getPlayerLeaderCards()[1] != null && (!this.players[i].getPlayerLeaderCards()[0].isPlayed() || !this.players[i].getPlayerLeaderCards()[1].isPlayed())) {
-                                this.players[i].getLeaderAction(this.players[i].getInScannerReader(), this.players[i].getOutPrintWriter()); // Remove with timer
+                                this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
                             /* startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
                             endTime = System.currentTimeMillis() - startTime; */
@@ -317,10 +318,11 @@ public class GameModel implements Runnable {
                         //Player disconesso
                         //System.err.println(e.getMessage());
                         this.players[i] = null;
+
                     }
                 }
             }
-        } //while (!this.checkEndPlay());
+        } while (!this.checkEndPlay());
 
         for (int i=0;i<this.players.length;i++) {
             if (this.players[i]!=null) {
