@@ -6,6 +6,8 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -203,6 +205,8 @@ public class GameModel implements Runnable {
 
     //Method that cycles the players
     public void run() {
+
+        BufferedReader buff = new BufferedReader((new InputStreamReader(System.in)));
 
         //Lock turnLock = new ReentrantLock();
 
