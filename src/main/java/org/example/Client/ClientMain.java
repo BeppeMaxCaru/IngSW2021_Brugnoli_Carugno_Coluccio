@@ -13,9 +13,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
+import java.util.*;
 
 public class ClientMain {
+
+    //Eventuale lista comandi da stampare per aiutare ma non guidare
+    private List<String> commands = Arrays.asList("Play leader card",
+            "Discard leader card");
 
     public static void main(String[] args) throws IOException {
 
@@ -176,7 +180,239 @@ public class ClientMain {
                 });
                 serverReceiver.start();
 
-                while (true) {
+                String action = null;
+                int corrAction = 0;
+                //do
+                while (!(action.equalsIgnoreCase("END TURN")
+                    || action.equalsIgnoreCase("QUIT")) && (corrAction < 1)) {
+                    action = stdIn.readLine();
+                    //Puts in upper case the input
+                    action = action.toUpperCase();
+
+                    //IMPORTANT!!!
+                    //out.println sends a null string that signals stdin error to the controller to
+                    //reset its state at before the action
+                    switch (action) {
+                        case "PLAY LEADER CARD": {
+                            //Sends the command to the controller so it can change state
+                            out.println(action);
+                            //Confirms command reception
+                            //Already received from thread that prints server messages
+                            //System.out.println(in.readLine());
+                            //Starts receiving parameters
+                            String parameter;
+                            parameter = stdIn.readLine();
+                            try {
+                                //Checks if the leader card position exists
+                                int cardPosition = Integer.parseInt(parameter);
+                                //Posso mandare qualunque numero e la validità la verifica il controller
+                                if (cardPosition != 0 || cardPosition != 1) throw new Exception();
+                                out.println(cardPosition);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                //Send null value to reset the controller to
+                                //receive again a new action
+                                out.println();
+                                break;
+                            }
+                        }
+                        case "DISCARD LEADER CARD": {
+                            //Same for play leader card
+                            out.println(action);
+                            //System.out.println(in.readLine());
+                            String parameter = stdIn.readLine();
+                            try {
+                                //Checks if the leader card position exists
+                                int cardPosition = Integer.parseInt(parameter);
+                                if (cardPosition != 0 || cardPosition != 1) throw new Exception();
+                                out.println(cardPosition);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                //Send null value to reset the controller to
+                                //receive again a new action
+                                out.println();
+                                break;
+                            }
+                        }
+                        case "PICK RESOURCES FROM MARKET": {
+                            //Sends action
+                            out.println(action);
+                            //Receives OK
+                            System.out.println(in.readLine());
+
+                            //Receives column or row
+                            String parameter = null;
+                            parameter = stdIn.readLine().toUpperCase();
+                            if (parameter.equalsIgnoreCase("row")
+                                || parameter.equalsIgnoreCase("column")) {
+                                out.println(parameter);
+                                //System.out.println(in.readLine());
+                            } else {
+                                //Resets controller
+                                System.err.println("Not valid parameter");
+                                out.println();
+                                break;
+                            }
+
+                            //Receives index
+                            parameter = stdIn.readLine();
+                            try {
+                                //Checks if the leader card position exists
+                                int index = Integer.parseInt(parameter);
+                                if (index != 0 || index != 1) throw new Exception();
+                                out.println(index);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                //Send null value to reset the controller to
+                                //receive again a new action
+                                out.println();
+                                break;
+                            }
+
+                            //Se va a buon fine fino a qui il comando si passa alla seconda fase dove
+                            //il giocatore distribuisce una ad una le risorse
+                            //Sceglie luogo e se warehouse sceglie anche lo scaffale
+                            //altrimenti leaderCard se le ha??
+
+                            //Come fare?
+
+                            //Le biglie le prende il controller e dopo
+
+
+                            //Questo glielo chiede il controller per ogni biglia pescata
+                            //altrimento al metodo servono tre parametri
+                            //Warehouse/leaderCard choice
+                            //String wlChoice = stdIn.readLine();
+
+                            //Anche questo lo chiede il controller
+                            //verificando se il player ha abilità speciale o no
+                            //If he has 2 whiteMarbleLeaderCards
+                            //String chosenMarble="0";
+
+                            //if(currentPlayer.getPlayerBoard().getResourceMarbles()[0]!=null)
+                                //chosenMarble=stdIn.();
+
+                            //if (this.checkMarketAction(this.gameModel.getPlayers()[i], rcChoice, choice, wlChoice, chosenMarble))
+                                corrAction++;
+                            //break;
+                        }
+                        case "BUY DEVELOPMENT CARD": {
+
+                            out.println(action);
+
+                            String parameter = null;
+                            parameter = stdIn.readLine().toUpperCase();
+                            if (parameter.equalsIgnoreCase("green")
+                                    || parameter.equalsIgnoreCase("yellow")
+                                    || parameter.equalsIgnoreCase("blue")
+                                    || parameter.equalsIgnoreCase("purple")) {
+                                out.println(parameter);
+                                //System.out.println(in.readLine());
+                            } else {
+                                //Resets controller
+                                System.err.println("Not valid parameter");
+                                out.println();
+                                break;
+                            }
+
+                            parameter = stdIn.readLine();
+                            try {
+                                int level = Integer.parseInt(parameter);
+                                if (level<1 || level>3) throw new Exception();
+                                out.println(level);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                out.println();
+                                break;
+                            }
+
+                            //Si prende direttamente dal model nel server
+                            //PlayerBoard grid position
+                            //String position = stdIn.readLine();
+
+                            //From which store do you want to take resources
+                            //String wclChoice = stdIn.readLine();
+                            parameter = null;
+                            while (parameter.equals("STOP")) {
+                                //Keeps asking a place and the number of resources to take from
+                                //that place
+                                parameter = stdIn.readLine();
+                                if (parameter.equalsIgnoreCase("Chest")
+                                    || parameter.equalsIgnoreCase("Warehouse")
+                                    || parameter.equalsIgnoreCase("Leader card")) {
+                                    out.println(parameter);
+                                } else {
+                                    System.err.println("Not valid parameter");
+                                    out.println();
+                                    break;
+                                }
+                                //Receives now quantity
+                                parameter = stdIn.readLine();
+                                try {
+                                    int quantity = Integer.parseInt(parameter);
+                                    if (quantity<0) throw new Exception();
+                                    out.println(quantity);
+                                } catch (Exception e) {
+                                    System.err.println("Not valid parameter");
+                                    out.println();
+                                    break;
+                                }
+                            }
+
+                            parameter = stdIn.readLine();
+                            if (parameter.equalsIgnoreCase("discount")) {
+
+                            } else if (parameter.equalsIgnoreCase("buy")) {
+
+                            } else {
+                                System.err.println("Not valid command");
+                                out.println();
+                                break;
+                            }
+
+
+                            //If he can pay discounted price
+                            //String discountChoice="00";
+
+                            //if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
+                            //    corrAction++;
+                            //break;
+                        }
+                        //Qua ancora non iniziato
+                        case "ACTIVATE PRODUCTION POWER": {
+
+                            String[] activation = new String[6];
+                            String[] fromWhere = new String[6];
+                            String whichInput = null;
+                            String[] whichOutput = new String[3];
+
+                            for(int index=0; index<6; index++)
+                            {
+                                //activation[index]=stdIn.();
+                                //fromWhere[index]=stdIn.();
+                                //if(index==3)
+                                    //whichInput=stdIn.();
+                                //if(index>2)
+                                    //whichOutput[index-3]=stdIn.();
+                            }
+
+                            /*if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
+                                corrAction++;
+                            break;*/
+                        }
+                        default: {
+                            out.println("Not valid action!");
+                            break;
+                        }
+                    }
+                    //Player inserisce quit
+                }//while (!action.equalsIgnoreCase("END TURN") && (corrAction < 1));
+
+                //this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
+                //this.gameModel.getPlayers()[i].getOutPrintWriter().println();
+
+
+                /*while (true) {
 
                         String clientInput = stdIn.readLine();
                         //Trial
@@ -186,7 +422,7 @@ public class ClientMain {
                             break;
                         }
                         out.println(clientInput);
-                }
+                }*/
 
             } catch (UnknownHostException e) {
                 System.err.println("No info about host: " + hostName);

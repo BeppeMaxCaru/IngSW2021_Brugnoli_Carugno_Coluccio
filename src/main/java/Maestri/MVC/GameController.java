@@ -177,6 +177,7 @@ public class GameController implements Runnable {
                                     break;
                                 }
                             }
+                            //Player inserisce quit
                         }while (!action.equalsIgnoreCase("END TURN") && (corrAction < 1));
 
                         this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
@@ -471,11 +472,11 @@ public class GameController implements Runnable {
 
             if(active[index]==1)
             {
-                correctAction=currentPlayer.activateProduction(fromWhere, inputs, outputs);
+                /*correctAction=currentPlayer.activateProduction(fromWhere, inputs, outputs);
                 if(!correctAction)
                     return false;
                 else
-                    numOfActions++;
+                    numOfActions++;*/
             }
 
         }
