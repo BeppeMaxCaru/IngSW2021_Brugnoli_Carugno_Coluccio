@@ -37,7 +37,7 @@ public class ClientMain {
         }
 
         if (gameMode.equals("0")) {
-
+/*
             Player[] players = new Player[2];
             System.out.println("Write your nickname: ");
             PrintWriter output = new PrintWriter(System.out,true);
@@ -135,6 +135,8 @@ public class ClientMain {
                 System.out.println("You have obtained "+players[0].sumAllVictoryPoints()+" victory points!!");
             }
 
+ */
+
         }
         else {
             //Trial Beppe
@@ -176,7 +178,6 @@ public class ClientMain {
 
                 while (true) {
 
-                        System.out.println("Received: " + in.readLine());
                         String clientInput = stdIn.readLine();
                         //Trial
                         if (clientInput.equals("QUIT")) {

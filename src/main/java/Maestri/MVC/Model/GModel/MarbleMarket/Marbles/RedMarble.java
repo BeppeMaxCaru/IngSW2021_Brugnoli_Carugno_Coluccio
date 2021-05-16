@@ -3,9 +3,6 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 /**
  * This red marble produces faithPoints
  */
@@ -17,10 +14,9 @@ public class RedMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out)
+    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble)
     {
         players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
-        out.println("You picked: " + this.getClass());
     }
 
     @Override

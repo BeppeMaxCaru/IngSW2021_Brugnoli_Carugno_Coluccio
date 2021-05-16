@@ -112,30 +112,11 @@ public class Playerboard {
      * Places a development card on the player board
      * @param developmentCard - the development card to place
      */
-    public void placeNewDevelopmentCard(DevelopmentCard developmentCard, Scanner in, PrintWriter out) {
-        out.println("Choose space number where to place new development card (0 to 2): ");
-        out.println();
-        String spaceChoosenFromPlayer = in.nextLine();
-        while (!spaceChoosenFromPlayer.equals("0") && !spaceChoosenFromPlayer.equals("1") && !spaceChoosenFromPlayer.equals("2")) {
-            out.println("Space not existing!");
-            out.println("Choose valid space number where to place new development card: ");
-            spaceChoosenFromPlayer = in.nextLine();
-            out.println();
-        }
-        int var = Integer.parseInt(spaceChoosenFromPlayer);
+    public void placeNewDevelopmentCard(DevelopmentCard developmentCard, int position, PrintWriter out) {
+
         //Checks the chosen space
-        while (!isCardBelowCompatible(var, developmentCard)) {
+        if(!this.isCardBelowCompatible(position, developmentCard)) {
             out.println("Placement not possible!");
-            out.println("Insert new valid place (0 to 2): ");
-            out.println();
-            spaceChoosenFromPlayer = in.nextLine();
-            while (!spaceChoosenFromPlayer.equals("0") && !spaceChoosenFromPlayer.equals("1") && !spaceChoosenFromPlayer.equals("2")) {
-                out.println("Space not existing!");
-                out.println("Choose valid space number where to place new development card: ");
-                spaceChoosenFromPlayer = in.nextLine();
-                out.println();
-            }
-            var = Integer.parseInt(spaceChoosenFromPlayer);
         }
     }
 
@@ -146,43 +127,26 @@ public class Playerboard {
      * @return true if the development card can be placed on top
      */
     public boolean isCardBelowCompatible(int pile, DevelopmentCard developmentCard) {
-        /*for (int i=0;i<3;i++) {
-            if (i==0) {
-                if (this.playerboardDevelopmentCards[i][pile]==null) {
-                    this.playerboardDevelopmentCards[i][pile] = developmentCard;
-                    this.developmentCardsBought = this.developmentCardsBought + 1;
-                    return true;
-                }
-            } else {
-                DevelopmentCard developmentCardToUpgrade = this.playerboardDevelopmentCards[i-1][pile];
-                if (developmentCardToUpgrade.getDevelopmentCardLevel()==(developmentCard.getDevelopmentCardLevel()-1)) {
-                    this.playerboardDevelopmentCards[i][pile] = developmentCard;
-                    this.developmentCardsBought = this.developmentCardsBought + 1;
-                    return true;
-                }
-            }
-        }
-        return false;*/
 
-        int i=0;
-        while((i<3)&&(this.playerboardDevelopmentCards[i][pile]!=null)){
+        int i = 0;
+        while ((i < 3) && (this.playerboardDevelopmentCards[i][pile] != null)) {
             i++;
         }
-        //If the pile is full card can't be inserted
-        if(i==3)
+        //If the pile is full, card can't be inserted
+        if (i == 3)
             return false;
-        else
+        else {
             //If the first available position of the pile isn't compatible with the dev. card level, the card can't be inserted
-            if(developmentCard.getDevelopmentCardLevel()!=i+1)
+            if (developmentCard.getDevelopmentCardLevel() != i + 1)
                 return false;
-        else
-        {
-            //If the pile isn't full and the first available position of the pile is compatible with the dev. card level, the card can be inserted
-            this.playerboardDevelopmentCards[i][pile]=developmentCard;
-            this.developmentCardsBought = this.developmentCardsBought + 1;
-            return true;
+            else
+            {
+                //If the pile isn't full and the first available position of the pile is compatible with the dev. card level, the card can be inserted
+                this.playerboardDevelopmentCards[i][pile]=developmentCard;
+                this.developmentCardsBought = this.developmentCardsBought + 1;
+                return true;
+            }
         }
-
     }
 
     /**
@@ -232,24 +196,16 @@ public class Playerboard {
      * Removes a resource from the warehouse or the chest
      * @param resource - resource to remove
      */
-    public void pickResource(String resource, Scanner in, PrintWriter out) {
-        String fromWhat;
-        String fromWhichWarehouse;
+    public void pickResource(String resource, String fromWhat, PrintWriter out) {
+
         Integer whRes = this.wareHouse.getWarehouseResources().get(resource);
         Integer esRes = this.wareHouse.getWarehouseResources().get("extra" + resource);
         Integer numResources;
         int i = 1;
 
-        out.println("Do you want to pick " + resource + " from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-        fromWhat = in.nextLine();
-        while(!fromWhat.equals("0") && !fromWhat.equals("1")) {
-            out.println("Number not valid!");
-            out.println("Do you want to pick " + resource + " from warehouse or from chest? Write 0 for warehouse or 1 for chest:");
-            fromWhat = in.nextLine();
-        }
 
         while(i > 0) {
-            if (fromWhat.equals("0")) {
+            if (!fromWhat.equals("C")) {
                 numResources = 0;
                 numResources = numResources + whRes;
                 if(esRes!=null)
@@ -260,17 +216,10 @@ public class Playerboard {
                     else if (whRes == 0)
                         this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     else {
-                        out.println("Do you want to pick the " + resource + " from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
-                        fromWhichWarehouse = in.nextLine();
-                        while(!fromWhichWarehouse.equals("0") && !fromWhichWarehouse.equals("1")) {
-                            out.println("Number not valid!");
-                            out.println("Do you want to pick the " + resource + " from standard Warehouse or from extra Warehouse space? Write 0 for Warehouse or 1 for extra space:");
-                            fromWhichWarehouse = in.nextLine();
-                            if (fromWhichWarehouse.equals("0"))
-                                this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                            else
-                                this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
-                        }
+                        if (fromWhat.equals("W"))
+                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
+                        else
+                            this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     }
                     i = 0;
                 }

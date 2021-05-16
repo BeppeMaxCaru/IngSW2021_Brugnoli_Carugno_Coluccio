@@ -1,12 +1,9 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.WareHouse;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * This purple marble produces SERVANTS
@@ -19,22 +16,31 @@ public class PurpleMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
+    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble) {
 
-        Map<String, Integer> whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
+        Map<String, Integer> whResources;
+        whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("SERVANTS");
+        Integer numOfExtraRes = whResources.get("extraSERVANTS");
         boolean discard;
 
-        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SERVANTS", in, out);
         //Calling the Warehouse method for checking the warehouse capacity
-        out.println("You picked: "+this.getClass());
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SERVANTS", wlChoice);
 
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse
-            numOfResources++;
-            whResources.put("SERVANTS", numOfResources);
-            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            if(wlChoice.equals("w"))
+            {
+                numOfResources++;
+                whResources.put("SERVANTS", numOfResources);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            } else {
+                numOfExtraRes++;
+                whResources.put("extraSERVANTS", numOfExtraRes);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            }
+
         }
         else
         {
@@ -50,7 +56,6 @@ public class PurpleMarble extends Marble {
             }
         }
     }
-
     @Override
     public String getColour(){
         return " PURPLE ";

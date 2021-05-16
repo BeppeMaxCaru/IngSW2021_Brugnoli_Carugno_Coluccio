@@ -2,9 +2,6 @@ package Maestri.MVC.Model.GModel.MarbleMarket;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 /**
  * Composes the market
  */
@@ -17,7 +14,7 @@ public class Marble {
      * @param players - players playing the game
      * @param playerNumber - number of the current player
      */
-    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out){}
+    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble){}
 
     public String getColour(){
         return this.colour;

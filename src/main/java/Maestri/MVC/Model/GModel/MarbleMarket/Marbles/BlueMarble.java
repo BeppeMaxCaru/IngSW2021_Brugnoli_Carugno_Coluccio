@@ -3,9 +3,7 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * This blue marble produces SHIELDS
@@ -18,23 +16,31 @@ public class BlueMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
+    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble) {
 
         Map<String, Integer> whResources;
         whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
         Integer numOfResources = whResources.get("SHIELDS");
+        Integer numOfExtraRes = whResources.get("extraSHIELDS");
         boolean discard;
 
-        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SHIELDS", in, out);
         //Calling the Warehouse method for checking the warehouse capacity
-        out.println("You picked: "+this.getClass());
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("SHIELDS", wlChoice);
 
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse
-            numOfResources++;
-            whResources.put("SHIELDS", numOfResources);
-            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            if(wlChoice.equals("w"))
+            {
+                numOfResources++;
+                whResources.put("SHIELDS", numOfResources);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            } else {
+                numOfExtraRes++;
+                whResources.put("extraSHIELDS", numOfExtraRes);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            }
+
         }
         else
         {

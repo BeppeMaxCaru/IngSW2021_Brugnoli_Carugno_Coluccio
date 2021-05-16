@@ -1,12 +1,9 @@
 package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.WareHouse;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintWriter;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * This yellow marble produces COINS
@@ -19,20 +16,31 @@ public class YellowMarble extends Marble {
      * @param playerNumber - number of the current player
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, Scanner in, PrintWriter out) {
+    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble) {
 
-        Integer numOfResources = players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS");
+        Map<String, Integer> whResources;
+        whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
+        Integer numOfResources = whResources.get("COINS");
+        Integer numOfExtraRes = whResources.get("extraCOINS");
         boolean discard;
 
-        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("COINS", in, out);
         //Calling the Warehouse method for checking the warehouse capacity
-        out.println("You picked: " + this.getClass());
+        discard= players[playerNumber].getPlayerBoard().getWareHouse().checkConstraints("COINS", wlChoice);
+
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse
-            numOfResources++;
-            players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources().put("COINS", numOfResources);
-            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources());
+            if(wlChoice.equals("w"))
+            {
+                numOfResources++;
+                whResources.put("COINS", numOfResources);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            } else {
+                numOfExtraRes++;
+                whResources.put("extraCOINS", numOfExtraRes);
+                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
+            }
+
         }
         else
         {
@@ -48,7 +56,6 @@ public class YellowMarble extends Marble {
             }
         }
     }
-
     @Override
     public String getColour(){
         return " YELLOW ";

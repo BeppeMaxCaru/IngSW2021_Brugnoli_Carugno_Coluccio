@@ -193,13 +193,13 @@ public class DevelopmentCard {
      * Removes resources from the player's player board equals to the development card cost
      * @param playerboard - player's player board
      */
-    public void payDevelopmentCard(Playerboard playerboard, Scanner in, PrintWriter out) {
+    public void payDevelopmentCard(Playerboard playerboard, String wclChoice, PrintWriter out) {
 
         //For each cost resource to remove asks the player where to pick it from
         for (String key : this.cost.keySet()) {
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key, in, out);
+                playerboard.pickResource(key, String.valueOf(wclChoice.charAt(i)), out);
             }
         }
     }

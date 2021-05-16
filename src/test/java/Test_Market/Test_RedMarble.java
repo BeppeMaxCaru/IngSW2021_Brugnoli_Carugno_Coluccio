@@ -5,9 +5,6 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.RedMarble;
 import org.junit.jupiter.api.Test;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Test_RedMarble {
@@ -26,7 +23,7 @@ public class Test_RedMarble {
     public void tryDrawMarble1(){
         players[0] = new Player("Beppe");
         Marble marble = new RedMarble();
-        marble.drawMarble(players,0, new Scanner(System.in), new PrintWriter(System.out));
+        marble.drawMarble(players,0);
         assertEquals(1,players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -36,7 +33,7 @@ public class Test_RedMarble {
         players[0] = new Player("Beppe");
         players[1] = new Player("Simo");
         Marble marble = new RedMarble();
-        marble.drawMarble(players,0, new Scanner(System.in), new PrintWriter(System.out));
+        marble.drawMarble(players,0);
         assertEquals(0,players[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 }

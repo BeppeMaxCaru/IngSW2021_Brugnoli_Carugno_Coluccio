@@ -23,7 +23,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Represents the state of game "Maestri del Rinascimento"
  */
-public class GameModel implements Runnable {
+public class GameModel{
 
     int numberOfPlayers;
     private Player[] players = new Player[4];
@@ -49,6 +49,11 @@ public class GameModel implements Runnable {
                 if (!clientsWaiting.isEmpty()) {
                     this.players[i] = clientsWaiting.remove(0);
                     this.players[i].setPlayerNumber(i);
+
+                    //Assign 4 starting random LeaderCards to each player
+                    for(int index = 0; index < this.getPlayers()[i].getPlayerLeaderCards().length; index++)
+                        this.getPlayers()[i].setPlayerLeaderCard(index,this.leaderCardDeck.drawOneLeaderCard());
+
                     this.players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
                     if(i!=0){
                         this.players[i].getOutPrintWriter().println("Wait for other players turn...");
@@ -107,16 +112,17 @@ public class GameModel implements Runnable {
         return this.BlackCrossPawn;
     }
 
-    public void buyDevelopmentCardAction(Scanner in, PrintWriter out) {
-        int index = 0;
-        this.players[index].buyDevelopmentCard(this.developmentCardsDecksGrid, in ,out);
+    public boolean buyDevelopmentCardAction(int index, int column, int l, int p, String wclChoice, String discountChoice) {
+        return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, wclChoice, discountChoice);
         //this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
+    /*
     public void pickResourcesFromMarket(Scanner in, PrintWriter out){
         int index=0;
         this.players[index].pickLineFromMarket(this.market, this.players, in, out);
     }
+     */
 
     public void addClient(Socket clientSocket) {
         try {
