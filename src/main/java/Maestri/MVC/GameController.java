@@ -52,6 +52,7 @@ public class GameController implements Runnable {
                     for (int cards = 0; cards < 2; cards++) {
                         boolean corrAction;
                         do {
+                            // manca controllo su input
                             String action = in.nextLine();
                             corrAction = this.checkDiscardCards(this.gameModel.getPlayers()[i], action);
                         } while (corrAction);
@@ -157,15 +158,21 @@ public class GameController implements Runnable {
                                     String[] fromWhere = new String[6];
                                     String whichInput = null;
                                     String[] whichOutput = new String[3];
+                                    int j = 0;
 
-                                    for(int index=0; index<6; index++)
-                                    {
-                                        activation[index]=in.nextLine();
-                                        fromWhere[index]=in.nextLine();
-                                        if(index==3)
-                                            whichInput=in.nextLine();
-                                        if(index>2)
-                                            whichOutput[index-3]=in.nextLine();
+                                    activation[0] = "*"; // Comandi: p0, p1, p2, b, e0, e1.
+                                    for(int index = 0; index < 6 && !activation[index].equals(" "); index++) {
+                                        activation[index] = in.nextLine(); // Comandi: p0, p1, p2, b, e0, e1.
+                                        fromWhere[index] = in.nextLine(); // Comandi: c, w, e.
+
+                                        // Se attiva il potere di produzione base
+                                        if(activation[index].equals("b"))
+                                            whichInput = in.nextLine();
+                                        // Risorse a scelta
+                                        if(activation[index].equals("b") || activation[index].equals("e0") || activation[index].equals("e1")) {
+                                            whichOutput[j] = in.nextLine();
+                                            j++;
+                                        }
                                     }
 
                                     if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
@@ -422,64 +429,52 @@ public class GameController implements Runnable {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
-        int[] active = new int[6];
-        int[] inputs = new int[2];
-        int[] outputs = new int[3];
+        List<String> activateCards = new ArrayList<>();
+        List<String> fromWhereCards = new ArrayList<>();
+        List<String> inputs = new ArrayList<>();
+        List<String> outputs = new ArrayList<>();
+        int j = 0;
+        boolean correctAction;
+        int numOfActions = 0;
 
-        int numOfActions=0;
 
-
-        for(int index=0; index<6; index++)
-        {
-            if(!activation[index].equals("0") && !activation[index].equals("1"))
-            {
+        for(int index = 0; !activation[index].equals(" "); index++) {
+            if(!activation[index].equals("p0") && !activation[index].equals("p1") && !activation[index].equals("p2") && !activation[index].equals("b") && !activation[index].equals("e0") && !activation[index].equals("e1")) {
                 out.println("Not valid command.");
                 return false;
             }
-            active[index] = Integer.parseInt(activation[index]);
+            activateCards.add(activation[index]);
 
-            if(!fromWhere[index].equalsIgnoreCase("W") && !fromWhere[index].equalsIgnoreCase("C") && !fromWhere[index].equalsIgnoreCase("L"))
+            if(!fromWhere[index].equalsIgnoreCase("w") && !fromWhere[index].equalsIgnoreCase("c") && !fromWhere[index].equalsIgnoreCase("e")) {
+                out.println("Not valid command.");
                 return false;
-
-            if(index==3)
-            {
-                for(int k=0; k<2; k++)
-                {
-
-                    if(!String.valueOf(whichInput.charAt(k)).equals("0") &&
-                            !String.valueOf(whichInput.charAt(k)).equals("1") && !String.valueOf(whichInput.charAt(k)).equals("2") &&
-                            !String.valueOf(whichInput.charAt(k)).equals("3") && !String.valueOf(whichInput.charAt(k)).equals("4"))
-                    {
-                        out.println("Not valid command.");
-                        return false;
-                    }
-                    inputs[k]=Integer.parseInt(whichInput);
-                }
             }
+            fromWhereCards.add(fromWhere[index]);
 
-            if(index>2)
-            {
-                if(!whichOutput[index-3].equals("0") && !whichOutput[index-3].equals("1") && !whichOutput[index-3].equals("2") && !whichOutput[index-3].equals("3") && !whichOutput[index-3].equals("4"))
-                {
+            if(activation[index].equals("b")) {
+                if(!whichInput.equals("COINS") && !whichInput.equals("SHIELDS") && !whichInput.equals("SERVANTS") && !whichInput.equals("STONES") && !whichInput.equals("REDCROSS")) {
                     out.println("Not valid command.");
                     return false;
                 }
-                outputs[index-3]=Integer.parseInt(whichInput);
+                inputs.add(whichInput);
             }
 
-            boolean correctAction;
-
-            if(active[index]==1)
-            {
-                correctAction=currentPlayer.activateProduction(fromWhere, inputs, outputs);
-                if(!correctAction)
+            if(activation[index].equals("b") || activation[index].equals("e0") || activation[index].equals("e1")) {
+                if(!whichOutput[j].equals("COINS") && !whichOutput[j].equals("SHIELDS") && !whichOutput[j].equals("SERVANTS") && !whichOutput[j].equals("STONES") && !whichOutput[j].equals("REDCROSS")) {
+                    out.println("Not valid command.");
                     return false;
-                else
-                    numOfActions++;
+                }
+                outputs.add(whichOutput[j]);
+                j++;
             }
-
         }
+        correctAction = currentPlayer.activateProduction(activateCards, fromWhereCards, inputs, outputs);
+        if(!correctAction)
+            return false;
+        else
+            numOfActions++;
+
         return numOfActions != 0;
     }
 
-    }
+}
