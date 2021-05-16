@@ -258,7 +258,7 @@ public class Player
     /**
      * Activates the production powers on the player's player board
      */
-    public boolean activateProduction(Scanner , PrintWriter out) {
+    public boolean activateProduction(List<String> activateCards, List<String> fromWhereCards, List<String> inputs, List<String> outputs) {
         int i;
         int numResource;
         String numResourceChoice;
