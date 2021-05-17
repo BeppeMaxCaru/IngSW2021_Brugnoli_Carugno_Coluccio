@@ -370,57 +370,77 @@ public class ClientMain {
                                 break;
                             }
 
-                            //From which store do you want to take resources
-                            //String wclChoice = stdIn.readLine();
-                            parameter = null;
-                            while (parameter.equals("STOP")) {
-                                //Keeps asking a place and the number of resources to take from
-                                //that place
-                                parameter = stdIn.readLine();
-                                if (parameter.equalsIgnoreCase("Chest")
-                                    || parameter.equalsIgnoreCase("Warehouse")
-                                    || parameter.equalsIgnoreCase("Leader card")) {
-                                    out.println(parameter);
-                                } else {
-                                    System.err.println("Not valid parameter");
-                                    out.println();
-                                    break;
-                                }
+                            int[] quantity = new int[4];
+                            String[] shelf = new String[4];
 
-                                parameter = stdIn.readLine();
-                                if (parameter.equalsIgnoreCase("coins")
-                                    || parameter.equalsIgnoreCase("stones")
-                                    || parameter.equalsIgnoreCase("servants")
-                                    || parameter.equalsIgnoreCase("shields")) {
-                                    out.println(parameter);
+                            //Correspondence between resources and arrays index
+                            Map<String, Integer> resources = new HashMap<>();
+                            resources.put("COINS", 0);
+                            resources.put("SERVANTS", 1);
+                            resources.put("SHIELDS", 2);
+                            resources.put("STONES", 3);
+
+                            for(int k=0; k<4; k++)
+                            {
+                                quantity[k]=0;
+                                shelf[k]="";
+                            }
+
+                            //Which resource do you want to take
+                            parameter = "";
+                            while (!parameter.equalsIgnoreCase("STOP")) {
+
+                                parameter = stdIn.readLine().toUpperCase();
+                                if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS")) {
+                                    int index = resources.get(parameter);
+
+                                    //Receives now quantity
+                                    parameter = stdIn.readLine();
+                                    try {
+                                        int q = Integer.parseInt(parameter);
+                                        if (q<0) throw new Exception();
+                                        if (q>8) throw new Exception();
+                                        quantity[index]=q;
+                                    } catch (Exception e) {
+                                        System.err.println("Not valid parameter");
+                                        out.println();
+                                        break;
+                                    }
+
+                                    for(int z=0; z<quantity[index]; z++)
+                                    {
+                                        //Keeps asking a place to take from resources
+                                        parameter = stdIn.readLine().toUpperCase();
+                                        if (parameter.equals("CHEST") || parameter.equals("WAREHOUSE") || parameter.equals("LEADER CARD")) {
+                                            shelf[index]=shelf[index] + parameter.charAt(0);
+                                        } else {
+                                            System.err.println("Not valid parameter");
+                                            out.println();
+                                            break;
+                                        }
+                                    }
+
                                 } else {
                                     System.err.println("Not existing resource");
                                     out.println();
                                     break;
                                 }
-
-                                //Receives now quantity
-                                parameter = stdIn.readLine();
-                                try {
-                                    int quantity = Integer.parseInt(parameter);
-                                    if (quantity<0) throw new Exception();
-                                    out.println(quantity);
-                                } catch (Exception e) {
-                                    System.err.println("Not valid parameter");
-                                    out.println();
-                                    break;
-                                }
                             }
 
-                            //Sends STOP to ask for discount and check enough resources selected
-                            out.println(parameter);
+                            for(int z=0; z<4; z++)
+                            {
+                                out.println(quantity[z]);
+                                out.println(shelf[z]);
+                            }
 
                             parameter = stdIn.readLine();
-                            if (parameter.equalsIgnoreCase("discount")) {
+                            try{
 
-                            } else if (parameter.equalsIgnoreCase("buy")) {
+                                int pos = Integer.parseInt(parameter);
+                                if(pos < 0 || pos > 2) throw new Exception();
+                                out.println(pos);
 
-                            } else {
+                            } catch (Exception e) {
                                 System.err.println("Not valid command");
                                 out.println();
                                 break;
@@ -431,7 +451,7 @@ public class ClientMain {
                             //String discountChoice="00";
 
                             //if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
-                            //    corrAction++;
+                            corrAction++;
                             //break;
                         }
                         //Qua ancora non iniziato

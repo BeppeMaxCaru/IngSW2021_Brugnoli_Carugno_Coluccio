@@ -3,7 +3,6 @@ package Maestri.MVC;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -145,39 +144,19 @@ public class GameController implements Runnable {
 
                                     //Second parameter received
                                     //DevCard level
-                                    int level = Integer.parseInt(in.nextLine());
+                                    int level = in.nextInt();
 
-                                    String parameter = null;
-                                    while (!parameter.equalsIgnoreCase("stop") ){
-
-                                        //First is the resource
-                                        parameter = in.nextLine();
-                                        String resource = parameter;
-
-                                        //Second is the deposit
-                                        parameter = in.nextLine();
-                                        String deposit = parameter;
-
-                                        //Third is the quantity
-                                        parameter = in.nextLine();
-                                        int quantity = Integer.parseInt(parameter);
-
-                                        //Serve mappa o oggetto in cui salvare tutte le risorse che gradualmente sceglie player
-                                        //per poi controllare tramite metodo gamemodel che le abboa
-
+                                    int[] quantity = new int[4];
+                                    String[] deposit = new String[4];
+                                    for (int k=0; k<4; k++)
+                                    {
+                                        quantity[k] = in.nextInt();
+                                        deposit[k] = in.nextLine();
                                     }
 
-                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    //Finire qui con sconto NB reattivo non interattivo
-                                    //PlayerBoard grid position
-                                    //String position = in.nextLine();
-                                    //From which store do you want to take resources
-                                    //String wclChoice = in.nextLine();
-                                    //If he can pay discounted price
-                                    String discountChoice="00";
+                                    int position = in.nextInt();
 
-
-                                    if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
+                                    if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, 3 - level, position, quantity, deposit))
                                         corrAction++;
                                     break;
                                 }
@@ -512,94 +491,102 @@ public class GameController implements Runnable {
         }
     }
 
-    public boolean checkBuyDevCard(Player currentPlayer, String colour, String level, String position, String wclChoice, String discountChoice) {
+    public boolean checkBuyDevCard(Player currentPlayer, String colour, int l, int p, int[] quantity, String[] wclChoice) {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
-        int l, p;
+        Map<String, Integer> paidResources = new HashMap<>();
+        paidResources.put("COINS", quantity[0]);
+        paidResources.put("SERVANTS", quantity[1]);
+        paidResources.put("SHIELDS", quantity[2]);
+        paidResources.put("STONES", quantity[3]);
 
-        colour=colour.toUpperCase();
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "SERVANTS");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "STONES");
 
-        if(!this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().containsKey(colour))
-        {
-            out.println("Not valid command.");
-            return false;
+
+
+        int column=this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
+
+        if(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]!=null) {
+
+            //Control on quantity and possibly discounts
+            //If paidResources hashMap isn't equals to cardCost hashMap
+            if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost())) {
+                //Check for discounts
+                if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0] != null && currentPlayer.getPlayerLeaderCards()[0].isPlayed()) {
+                    paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) + 1);
+                    //Check if player has activated only first discount
+                    if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost())) {
+                        if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1] != null && currentPlayer.getPlayerLeaderCards()[1].isPlayed()) {
+                            paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1]) + 1);
+                            //Check if player has activated both first and second discounts
+                            if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost())) {
+                                //Check if player has activated only second discount
+                                paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
+                                if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost())) {
+                                    //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
+                                    out.println("Not valid command.");
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
-        int column;
-        column=this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour);
-
-        if(!level.equals("1") && !level.equals("2") && !level.equals("3"))
+        for(int k=0; k<4; k++)
         {
-            out.println("Not valid command.");
-            return false;
-        } else {
-            l=3 - Integer.parseInt(level);
-        }
-
-        if(!position.equals("0") && !position.equals("1") && !position.equals("2"))
-        {
-            out.println("Not valid command.");
-            return false;
-        } else {
-            p=Integer.parseInt(position);
-        }
-
-
-        if(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]!=null)
-        {
-            int totalCost=0;
-            for(String cost : this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost().keySet())
-                totalCost=totalCost+this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost().get(cost);
-
-            if(wclChoice.length()!=totalCost)
+            int count=0;
+            for (int z=0; z<wclChoice[k].length(); z++)
+            {
+                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
+                    count++;
+            }
+            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count)
             {
                 out.println("Not valid command.");
                 return false;
             }
 
-            //If wlChoice doesn't contain only 'W' and 'L'
-            for(int k=0; k<wclChoice.length(); k++)
+            count=0;
+            for (int z=0; z<wclChoice[k].length(); z++)
             {
-                if(!String.valueOf(wclChoice.charAt(k)).equalsIgnoreCase("W") && !String.valueOf(wclChoice.charAt(k)).equalsIgnoreCase("C") && !String.valueOf(wclChoice.charAt(k)).equalsIgnoreCase("L"))
-                {
-                    out.println("Not valid command.");
-                    return false;
-                }
+                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
+                    count++;
             }
-        }
-
-        int discounts=0;
-        for(int k=0; k<currentPlayer.getPlayerBoard().getDevelopmentCardDiscount().length; k++)
-        {
-            if(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[k]!=null)
-                discounts++;
-            else break;
-        }
-
-        if(discountChoice.length()==discounts)
-        {
-            for (int k=0; k<discounts; k++)
-                if( !String.valueOf(discountChoice.charAt(k)).equals("0") && !String.valueOf(discountChoice.charAt(k)).equals("1") )
-                {
-                    out.println("Not valid command.");
-                    return false;
-                }
-        } else {
-            //Empty string = 00
-            if(discountChoice.isEmpty())
+            if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count)
             {
-                discountChoice="00";
-                discountChoice.substring(0, discounts);
-            }
-            else {
                 out.println("Not valid command.");
                 return false;
             }
+
+            count=0;
+            for (int z=0; z<wclChoice[k].length(); z++)
+            {
+                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
+                    count++;
+            }
+            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(k)) != count)
+            {
+                out.println("Not valid command.");
+                return false;
+            }
+
+        }
+
+        if(!currentPlayer.getPlayerBoard().isCardBelowCompatible(p, this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]))
+        {
+            out.println("Not valid command.");
+            return false;
         }
 
         //Chiamata al metodo del gamemodel, controlli effettuati
-        return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, wclChoice, discountChoice);
+        return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, quantity, wclChoice);
     }
 
 }

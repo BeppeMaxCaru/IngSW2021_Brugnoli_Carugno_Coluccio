@@ -7,7 +7,6 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -17,8 +16,6 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents the state of game "Maestri del Rinascimento"
@@ -113,8 +110,8 @@ public class GameModel{
         return this.BlackCrossPawn;
     }
 
-    public boolean buyDevelopmentCardAction(int index, int column, int l, int p, String wclChoice, String discountChoice) {
-        return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, wclChoice, discountChoice);
+    public boolean buyDevelopmentCardAction(int index, int column, int l, int p, int[] quantity, String[] wclChoice) {
+        return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, quantity, wclChoice);
         //this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
