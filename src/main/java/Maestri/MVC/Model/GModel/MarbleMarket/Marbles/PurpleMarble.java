@@ -14,9 +14,11 @@ public class PurpleMarble extends Marble {
      * If the drawing player has enough space in its warehouse it receives one servant otherwise other players receive one faith point
      * @param players - players playing the game
      * @param playerNumber - number of the current player
+     * @param chosenMarble
+     * @return
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble) {
+    public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble) {
 
         Map<String, Integer> whResources;
         whResources=players[playerNumber].getPlayerBoard().getWareHouse().getWarehouseResources();
@@ -55,6 +57,7 @@ public class PurpleMarble extends Marble {
                     p.getPlayerBoard().getFaithPath().moveCross(1);
             }
         }
+        return false;
     }
     @Override
     public String getColour(){

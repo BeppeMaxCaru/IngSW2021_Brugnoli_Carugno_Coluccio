@@ -181,7 +181,7 @@ public class ClientMain {
                 });
                 serverReceiver.start();
 
-                String action = null;
+                String action = "";
                 int corrAction = 0;
                 //do
                 while (!(action.equalsIgnoreCase("END TURN")
@@ -196,6 +196,7 @@ public class ClientMain {
                     //IMPORTANT!!!
                     //out.println sends a null string that signals stdin error to the controller to
                     //reset its state at before the action
+                    out.flush();
                     switch (action) {
                         case "PLAY LEADER CARD": {
                             //Sends the command to the controller so it can change state
@@ -210,7 +211,7 @@ public class ClientMain {
                                 //Checks if the leader card position exists
                                 int cardPosition = Integer.parseInt(parameter);
                                 //Posso mandare qualunque numero e la validità la verifica il controller
-                                if (cardPosition != 0 || cardPosition != 1) throw new Exception();
+                                if (cardPosition != 0 && cardPosition != 1) throw new Exception();
                                 out.println(cardPosition);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -228,7 +229,7 @@ public class ClientMain {
                             try {
                                 //Checks if the leader card position exists
                                 int cardPosition = Integer.parseInt(parameter);
-                                if (cardPosition != 0 || cardPosition != 1) throw new Exception();
+                                if (cardPosition != 0 && cardPosition != 1) throw new Exception();
                                 out.println(cardPosition);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -247,8 +248,8 @@ public class ClientMain {
                             //Receives column or row
                             String parameter = null;
                             parameter = stdIn.readLine().toUpperCase();
-                            if (parameter.equalsIgnoreCase("row")
-                                || parameter.equalsIgnoreCase("column")) {
+                            if (parameter.equals("ROW")
+                                || parameter.equals("COLUMN")) {
                                 out.println(parameter);
                                 //System.out.println(in.readLine());
                             } else {
@@ -259,12 +260,51 @@ public class ClientMain {
                             }
 
                             //Receives index
-                            parameter = stdIn.readLine();
+                            String par = stdIn.readLine();
                             try {
                                 //Checks if the leader card position exists
-                                int index = Integer.parseInt(parameter);
-                                if (index != 0 || index != 1) throw new Exception();
+                                int index = Integer.parseInt(par);
+                                if (parameter.equalsIgnoreCase("row") && (index < 0 || index > 2)) throw new Exception();
+                                if (parameter.equalsIgnoreCase("column") && (index < 0 || index > 3)) throw new Exception();
                                 out.println(index);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                //Send null value to reset the controller to
+                                //receive again a new action
+                                out.println();
+                                break;
+                            }
+
+                            //Receives index
+                            String wlChoice = stdIn.readLine();
+                            try {
+                                //Checks if player has written only 'w' and 'l' chars
+                                if (wlChoice.length()==0) throw new Exception();
+
+                                for(int k=0; k<wlChoice.length(); k++)
+                                    if(!String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("w") && !String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("l")) throw new Exception();
+
+                                out.println(wlChoice);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                //Send null value to reset the controller to
+                                //receive again a new action
+                                out.println();
+                                break;
+                            }
+
+                            //Receives index
+                            String chosenMarble = stdIn.readLine();
+                            try {
+                                //Checks if player has written only '0', '1' or 'x' chars
+
+                                if(chosenMarble.length()!=0)
+                                    for(int k=0; k<wlChoice.length(); k++)
+                                        if(!String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("0")
+                                                && !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("1")
+                                                && !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("x")) throw new Exception();
+
+                                out.println(chosenMarble);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 //Send null value to reset the controller to
@@ -409,16 +449,18 @@ public class ClientMain {
 
                             j = 0;
                             for(int index = 0; index < 6; index++) {
+
                                 if(!anotherCommand) command = stdIn.readLine(); // Comandi: p0, p1, p2, b, e0, e1, STOP
                                 anotherCommand = false;
-                                if (!command.equals("STOP")) {
+
+                                if (!command.equalsIgnoreCase("STOP")) {
                                     commandsList[index] = command; // lista di comandi, nel check si controlla la loro correttezza
-                                    if (command.equals("p0") || command.equals("p1") || command.equals("p2")) {
-                                        if (command.equals("p0")) {
+                                    if (command.equalsIgnoreCase("p0") || command.equalsIgnoreCase("p1") || command.equalsIgnoreCase("p2")) {
+                                        if (command.equalsIgnoreCase("p0")) {
                                             i = 0;
                                             activation[0] = 1;
                                         }
-                                        else if (command.equals("p1")) {
+                                        else if (command.equalsIgnoreCase("p1")) {
                                             i = 1;
                                             activation[1] = 1;
                                         }
@@ -428,11 +470,11 @@ public class ClientMain {
                                         }
                                         for (int k = 0; k < 2; k++) {
                                             unknownCommand = stdIn.readLine();// Comandi: c, w, e.
-                                            if (unknownCommand.equals("c") || unknownCommand.equals("w") || unknownCommand.equals("e"))
+                                            if (unknownCommand.equalsIgnoreCase("c") || unknownCommand.equalsIgnoreCase("w") || unknownCommand.equalsIgnoreCase("e"))
                                                 fromWhere[i] = fromWhere[i] + unknownCommand;
                                             else {
                                                 command = unknownCommand;
-                                                if (command.equals("p0") || command.equals("p1") || command.equals("p2")) anotherCommand = true;
+                                                if (command.equalsIgnoreCase("p0") || command.equalsIgnoreCase("p1") || command.equalsIgnoreCase("p2")) anotherCommand = true;
                                                 k = 1;
                                             }
                                         }
@@ -440,7 +482,7 @@ public class ClientMain {
 
                                     if (!anotherCommand) {
                                         // Se attiva il potere di produzione base
-                                        if (command.equals("b")) {
+                                        if (command.equalsIgnoreCase("b")) {
                                             for (int k = 0; k < 2; k++) {
                                                 whichInput[k] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
                                                 unknownCommand = stdIn.readLine(); // Comandi: c, w, e.
@@ -449,7 +491,7 @@ public class ClientMain {
                                             activation[3] = 1;
                                         }
                                         // Risorse a scelta
-                                        if (command.equals("b") || command.equals("e0") || command.equals("e1")) {
+                                        if (command.equalsIgnoreCase("b") || command.equalsIgnoreCase("e0") || command.equalsIgnoreCase("e1")) {
                                             whichOutput[j] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
                                             j++;
                                             if (command.equals("e0")) {
@@ -463,7 +505,7 @@ public class ClientMain {
                                     }
                                 }
                             }
-                            if(checkActivateProduction(currentPlayer, commandsList, activation, fromWhere, whichInput, whichOutput))
+                            if(checkActivateProduction(commandsList, activation, fromWhere, whichInput, whichOutput))
                                 corrAction++;
                             break;
                         }
@@ -502,15 +544,13 @@ public class ClientMain {
 
     }
 
-    public static boolean checkActivateProduction(Player currentPlayer, String[] commandList, int[] activation, String[] fromWhere, String[] whichInput, String[] whichOutput) {
+    public static boolean checkActivateProduction(String[] commandList, int[] activation, String[] fromWhere, String[] whichInput, String[] whichOutput) {
 
-        PrintWriter out = currentPlayer.getOutPrintWriter();
+        PrintWriter out = new PrintWriter(System.out);
 
         List<String> inputs = new ArrayList<>();
         List<String> outputs = new ArrayList<>();
-        int j = 0;
-        int extraprodActivate = 0;
-        boolean correctAction;
+        int extraProdActivate = 0;
 
         for(int i = 0; commandList[i] != null; i++) {
             if(!commandList[i].equals("p0") && !commandList[i].equals("p1") && !commandList[i].equals("p2") &&
@@ -538,7 +578,7 @@ public class ClientMain {
                             }
                             inputs.add(whichInput[k]);
                         }
-                        extraprodActivate++;
+                        extraProdActivate++;
                     }
                 }
                 else {
@@ -546,12 +586,12 @@ public class ClientMain {
                         out.println("Not valid command.");
                         return false;
                     }
-                    extraprodActivate++;
+                    extraProdActivate++;
                 }
             }
         }
 
-        for(int k = 0; k < extraprodActivate; k++) {
+        for(int k = 0; k < extraProdActivate; k++) {
             if (!whichOutput[k].equals("COINS") && !whichOutput[k].equals("SHIELDS") && !whichOutput[k].equals("SERVANTS") && !whichOutput[k].equals("STONES") && !whichOutput[k].equals("REDCROSS")) {
                 out.println("Not valid command.");
                 return false;
@@ -559,7 +599,6 @@ public class ClientMain {
             outputs.add(whichOutput[k]);
         }
 
-        correctAction = currentPlayer.activateProduction(activation, fromWhere, inputs, outputs);  // qua chiamo game controller
-        return correctAction;
+        return true;
     }
 }

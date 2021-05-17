@@ -103,7 +103,7 @@ public class GameController implements Runnable {
                                     //gamemodel ed il controllo è più affidabile
 
                                     //You can call the method with right parameters and update the view
-                                    this.checkPlayCards(this.gameModel.getPlayers()[i], choice);
+                                    this.checkPlayCards(this.gameModel.getPlayers()[i], position);
                                     break;
                                 }
                                 case "DISCARD LEADER CARD": {
@@ -111,7 +111,7 @@ public class GameController implements Runnable {
 
                                     int position = Integer.parseInt(in.nextLine());
 
-                                    this.checkDiscardCards(this.gameModel.getPlayers()[i], choice);
+                                    this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
                                     break;
                                 }
                                 case "PICK RESOURCES FROM MARKET": {
@@ -128,10 +128,10 @@ public class GameController implements Runnable {
                                     //Warehouse/leaderCard choice
                                     //Qui bisogna far continuare a scegliere al player per ogni biglia + effetto speciale se disponibile
                                     String wlChoice = in.nextLine();
+
                                     //If he has 2 whiteMarbleLeaderCards
-                                    String chosenMarble="0";
-                                    if(currentPlayer.getPlayerBoard().getResourceMarbles()[0]!=null)
-                                        chosenMarble=in.nextLine();
+                                    String chosenMarble;
+                                    chosenMarble=in.nextLine();
 
                                     if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
                                         corrAction++;
@@ -148,7 +148,7 @@ public class GameController implements Runnable {
                                     int level = Integer.parseInt(in.nextLine());
 
                                     String parameter = null;
-                                    while (!parameter.equalsIgnoreCase("stop") {
+                                    while (!parameter.equalsIgnoreCase("stop") ){
 
                                         //First is the resource
                                         parameter = in.nextLine();
@@ -167,8 +167,6 @@ public class GameController implements Runnable {
 
                                     }
 
-
-
                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                     //Finire qui con sconto NB reattivo non interattivo
                                     //PlayerBoard grid position
@@ -177,6 +175,8 @@ public class GameController implements Runnable {
                                     //String wclChoice = in.nextLine();
                                     //If he can pay discounted price
                                     String discountChoice="00";
+
+
                                     if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
                                         corrAction++;
                                     break;
@@ -434,38 +434,22 @@ public class GameController implements Runnable {
         }
     }*/
 
-    public void checkPlayCards (Player currentPlayer, String choice) {
+    public void checkPlayCards (Player currentPlayer, int c) {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
-        int c;
-
-        if(choice.equals("0") || choice.equals("1"))
-            c = Integer.parseInt(choice);
-        else {
-            out.println("Not valid command.");
-            return;
-        }
 
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
             out.println("Played");
             currentPlayer.getPlayerLeaderCards()[c].printLeaderCard(out);
             currentPlayer.playLeaderCard(c);
         } else
-            out.println("Not valid command.");
+            out.println("Not valid action.");
 
     }
 
-    public boolean checkDiscardCards (Player currentPlayer, String choice){
+    public boolean checkDiscardCards (Player currentPlayer, int c){
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
-        int c;
-
-        if(choice.equals("0") || choice.equals("1") || choice.equals("2") || choice.equals("3"))
-            c = Integer.parseInt(choice);
-        else {
-            out.println("Not valid command.");
-            return false;
-        }
 
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
             out.println("Discarded");
@@ -478,81 +462,54 @@ public class GameController implements Runnable {
         return false;
     }
 
-    public boolean checkMarketAction (Player currentPlayer, String choice, String index, String wlChoice, String chosenMarble)
+    public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c)
     {
         PrintWriter out = currentPlayer.getOutPrintWriter();
-        int c, i;
 
-        //If chosenMarble is correct, it is parsed into integer
-        if(chosenMarble.equals("0") || chosenMarble.equals("1"))
-            c = Integer.parseInt(chosenMarble);
-        else {
-            out.println("Not valid command.");
-            return false;
-        }
-        if (c==1 && currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) {
-            out.println("Not valid command.");
-            return false;
-        }
-
-        //If wlChoice doesn't contain only 'W' and 'L'
-        for(int k=0; k<wlChoice.length(); k++)
-        {
-            if(!String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("W") && !String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("L"))
-            {
+        if(c.contains("1"))
+            if (currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) {
                 out.println("Not valid command.");
                 return false;
             }
-        }
+
+        if(c.contains("0"))
+            if (currentPlayer.getPlayerBoard().getResourceMarbles()[0]==null) {
+                out.println("Not valid command.");
+                return false;
+            }
+
+        if(wlChoice.toUpperCase().contains("L"))
+            for(String keys : currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().keySet())
+                if (!keys.contains("extra")) {
+                    out.println("Not valid command.");
+                    return false;
+                }
 
         //If player picks row
         if(choice.equalsIgnoreCase("R"))
         {
-            if(wlChoice.length()!=4)
-            {
-                if(wlChoice.isEmpty())
-                    wlChoice="WWWW";
-                else {
-                    out.println("Not valid command.");
-                    return false;
+            if(c.length()<4) {
+                StringBuilder cBuilder = new StringBuilder(c);
+                for(int k = cBuilder.length(); k<4; k++)
+                {
+                    cBuilder.append("X");
                 }
+                c = cBuilder.toString();
             }
-
-            if(index.equals("0") || index.equals("1") || index.equals("2"))
-            {
-                i = Integer.parseInt(index);
-                this.gameModel.getMarket().updateRow(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);
-                return true;
-            }
-            else {
-                out.println("Not valid command.");
-                return false;
-            }
+            return this.gameModel.getMarket().updateRow(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);
         }
-        else if(choice.equalsIgnoreCase("C"))
+        else
         {
-            if(wlChoice.length()!=3)
-            {
-                if(wlChoice.isEmpty())
-                    wlChoice="WWW";
-                else {
-                    out.println("Not valid command.");
-                    return false;
+            if(c.length()<3) {
+                StringBuilder cBuilder = new StringBuilder(c);
+                for(int k = cBuilder.length(); k<3; k++)
+                {
+                    cBuilder.append("X");
                 }
+                c = cBuilder.toString();
             }
-
-            if(index.equals("0") || index.equals("1") || index.equals("2") || index.equals("3"))
-            {
-                i = Integer.parseInt(index);
-                this.gameModel.getMarket().updateRow(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);
-                return true;
-            }
-            else {
-                out.println("Not valid command.");
-                return false;
-            }
+            return this.gameModel.getMarket().updateColumn(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);
         }
-        return false;
     }
 
     public boolean checkBuyDevCard(Player currentPlayer, String colour, String level, String position, String wclChoice, String discountChoice) {

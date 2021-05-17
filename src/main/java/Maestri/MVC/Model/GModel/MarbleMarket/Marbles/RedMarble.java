@@ -12,11 +12,14 @@ public class RedMarble extends Marble {
      * Moves the current player's red cross one cell forward in the faith path
      * @param players - players playing the game
      * @param playerNumber - number of the current player
+     * @param chosenMarble
+     * @return
      */
     @Override
-    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble)
+    public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble)
     {
         players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
+        return false;
     }
 
     @Override

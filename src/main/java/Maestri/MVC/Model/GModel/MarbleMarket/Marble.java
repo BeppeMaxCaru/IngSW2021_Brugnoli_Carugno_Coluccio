@@ -13,8 +13,11 @@ public class Marble {
      * Generates one resource for the player that draws it
      * @param players - players playing the game
      * @param playerNumber - number of the current player
+     * @param chosenMarble
      */
-    public void drawMarble(Player[] players, int playerNumber, String wlChoice, int chosenMarble){}
+    public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble){
+        return false;
+    }
 
     public String getColour(){
         return this.colour;
