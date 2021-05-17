@@ -205,18 +205,18 @@ public class Playerboard {
 
 
         while(i > 0) {
-            if (!fromWhat.equals("C")) {
+            if (!fromWhat.equals("c")) {
                 numResources = 0;
                 numResources = numResources + whRes;
-                if(esRes!=null)
-                    numResources=numResources + esRes;
+                if(esRes != null)
+                    numResources = numResources + esRes;
                 if (numResources != 0) {
                     if ((whRes != 0) && (esRes == null || esRes == 0))
                             this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
                     else if (whRes == 0)
                         this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
                     else {
-                        if (fromWhat.equals("W"))
+                        if (fromWhat.equals("w"))
                             this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
                         else
                             this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
@@ -225,7 +225,7 @@ public class Playerboard {
                 }
                 else {
                     out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
-                    fromWhat = "1";
+                    fromWhat = "c";
                 }
             }
             else {
@@ -236,17 +236,18 @@ public class Playerboard {
                 }
                 else {
                     out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
-                    fromWhat = "0";
+                    fromWhat = "w";
                 }
             }
         }
     }
 
+    // Metodo inutile
     /**
      * Activates the basic production power of the player board
      * @return a list with the first two resources to discard and the third one to receive
      */
-    public List<String> activateBasicProductionPower(Scanner in, PrintWriter out) {
+    /* public List<String> activateBasicProductionPower(Scanner in, PrintWriter out) {
         String resourceOutputNum;
         int i;
         String resourceInputNum;
@@ -305,7 +306,7 @@ public class Playerboard {
         }
 
         return resourceChoice;
-    }
+    } */
 
     //For testing
     /**
