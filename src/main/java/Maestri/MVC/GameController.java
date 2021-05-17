@@ -181,27 +181,42 @@ public class GameController implements Runnable {
                                         corrAction++;
                                     break;
                                 }
-                                case "ACTIVATE PRODUCTION POWER": {
+                                /*case "ACTIVATE PRODUCTION POWER": {
 
                                     String[] activation = new String[6];
                                     String[] fromWhere = new String[6];
-                                    String whichInput = null;
+                                    String[] whichInput = new String[2];
                                     String[] whichOutput = new String[3];
+                                    int j;
 
-                                    for(int index=0; index<6; index++)
-                                    {
-                                        activation[index]=in.nextLine();
-                                        fromWhere[index]=in.nextLine();
-                                        if(index==3)
-                                            whichInput=in.nextLine();
-                                        if(index>2)
-                                            whichOutput[index-3]=in.nextLine();
+                                    activation[0] = "*"; // Comandi: p0, p1, p2, b, e0, e1.
+                                    for(int index = 0; index < 6 && !activation[index].equals(" "); index++) {
+                                        activation[index] = in.nextLine(); // Comandi: p0, p1, p2, b, e0, e1.
+                                        if(activation[index].equals("p0") || activation[index].equals("p1") || activation[index].equals("p2")) {
+                                            if(activation[index].equals("p0")) j = 0;
+                                            else if(activation[index].equals("p1")) j = 1;
+                                            else j = 2;
+                                            for (i = 0; currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
+                                            for(int k = currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().size(); k > 0; k--){
+                                                fromWhere[index] = in.nextLine(); // Comandi: c, w, e.
+                                            }
+                                        }
+
+                                        // Se attiva il potere di produzione base
+                                        if(activation[index].equals("b"))
+                                            for(int k = 0; k < 2; k++) {
+                                                whichInput[k] = in.nextLine();
+                                            }
+                                        // Risorse a scelta
+                                        if(activation[index].equals("b") || activation[index].equals("e0") || activation[index].equals("e1")) {
+                                            whichOutput[j] = in.nextLine();
+                                            j++;
+                                        }
                                     }
-
                                     if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
                                         corrAction++;
                                     break;
-                                }
+                                } */
                                 default: {
                                     out.println("Not valid action!");
                                     break;
@@ -630,68 +645,4 @@ public class GameController implements Runnable {
         return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, wclChoice, discountChoice);
     }
 
-    public boolean checkActivateProduction(Player currentPlayer, String[] activation, String[] fromWhere, String whichInput, String[] whichOutput) {
-
-        PrintWriter out = currentPlayer.getOutPrintWriter();
-
-        int[] active = new int[6];
-        int[] inputs = new int[2];
-        int[] outputs = new int[3];
-
-        int numOfActions=0;
-
-
-        for(int index=0; index<6; index++)
-        {
-            if(!activation[index].equals("0") && !activation[index].equals("1"))
-            {
-                out.println("Not valid command.");
-                return false;
-            }
-            active[index] = Integer.parseInt(activation[index]);
-
-            if(!fromWhere[index].equalsIgnoreCase("W") && !fromWhere[index].equalsIgnoreCase("C") && !fromWhere[index].equalsIgnoreCase("L"))
-                return false;
-
-            if(index==3)
-            {
-                for(int k=0; k<2; k++)
-                {
-
-                    if(!String.valueOf(whichInput.charAt(k)).equals("0") &&
-                            !String.valueOf(whichInput.charAt(k)).equals("1") && !String.valueOf(whichInput.charAt(k)).equals("2") &&
-                            !String.valueOf(whichInput.charAt(k)).equals("3") && !String.valueOf(whichInput.charAt(k)).equals("4"))
-                    {
-                        out.println("Not valid command.");
-                        return false;
-                    }
-                    inputs[k]=Integer.parseInt(whichInput);
-                }
-            }
-
-            if(index>2)
-            {
-                if(!whichOutput[index-3].equals("0") && !whichOutput[index-3].equals("1") && !whichOutput[index-3].equals("2") && !whichOutput[index-3].equals("3") && !whichOutput[index-3].equals("4"))
-                {
-                    out.println("Not valid command.");
-                    return false;
-                }
-                outputs[index-3]=Integer.parseInt(whichInput);
-            }
-
-            boolean correctAction;
-
-            if(active[index]==1)
-            {
-                /*correctAction=currentPlayer.activateProduction(fromWhere, inputs, outputs);
-                if(!correctAction)
-                    return false;
-                else
-                    numOfActions++;*/
-            }
-
-        }
-        return numOfActions != 0;
-    }
-
-    }
+}

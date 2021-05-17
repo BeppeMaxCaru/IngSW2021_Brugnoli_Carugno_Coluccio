@@ -258,13 +258,11 @@ public class Player
     /**
      * Activates the production powers on the player's player board
      */
-    public boolean activateProduction(List<String> activateCards, List<String> fromWhereCards, List<String> inputs, List<String> outputs) {
-        int i;
+    public boolean activateProduction(int[] activateCards, String[] fromWhereCards, List<String> inputs, List<String> outputs) {
+        int i, j;
         int numResource;
-        String numResourceChoice;
-        String activateProduction;
-        int numExtraProductionActivate = 0;
         int redCross = 0;
+        int numActivateProductionExtra = 0;
         Map<String, Integer> inputResources = new HashMap<>();
         inputResources.put("COINS", 0);
         inputResources.put("SHIELDS", 0);
@@ -275,19 +273,20 @@ public class Player
         outputResources.put("SHIELDS", 0);
         outputResources.put("SERVANTS", 0);
         outputResources.put("STONES", 0);
+        outputResources.put("REDCROSS", 0);
 
-        for(int j = 0; j < 3; j++) {
-            for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) {
-                out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                out.println("For this:" + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
-                out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
-                activateProduction = in.nextLine();
-                while (!activateProduction.equals("0") && !activateProduction.equals("1")) {
-                    out.println("Number not valid!");
-                    out.println("Do you want to activate this production power?: Write 1 if you want or 0 if you don't:");
-                    activateProduction = in.nextLine();
-                }
-                if (activateProduction.equals("1")) {
+        for(i = 0; !activateCards[i].equals(" "); i++) {
+            switch (activateCards[i]) {
+                case "p0":
+                case "p1":
+                case "p2":
+                    if (activateCards[i].equals("p0")) j = 0;
+                    else if (activateCards[i].equals("p1")) j = 1;
+                    else j = 2;
+                    for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
+                    i--;
+                    out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
+                    out.println("For this: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
                     for (String key : getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet()) {
                         numResource = inputResources.get(key);
                         inputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(key));
@@ -298,63 +297,35 @@ public class Player
                     }
                     // Aggiunta alla conta totale i redCross
                     redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
-                }
-            }
-        }
-
-        // Chiede se vuole attivare il potere di produzione base.
-        out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
-        activateProduction = in.nextLine();
-        while(!activateProduction.equals("0") && !activateProduction.equals("1")) {
-            out.println("Number not valid!");
-            out.println("Do you want to activate also the basic production power?: Write 1 if you want or 0 if you don't:");
-            activateProduction = in.nextLine();
-        }
-        if(activateProduction.equals("1")) {
-            i = 0;
-            //Controllo checkResourcesAvailability
-            for (String s : getPlayerBoard().activateBasicProductionPower(in, out)) {
-                if(i == 2) { // Se siamo alla terza risorsa, che per forza è l'output...
-                    if(s.equals("REDCROSS"))
-                        // Aggiunta alla conta totale i redCross.
-                        redCross = redCross + 1;
-                    else {
-                        numResource = outputResources.get(s);
-                        outputResources.put(s, numResource + 1);
+                    break;
+                case "b":
+                    for (String str : inputs) {
+                        numResource = inputResources.get(str);
+                        inputResources.put(str, numResource + 1);
                     }
-                }
-                else {
-                    numResource = inputResources.get(s);
-                    inputResources.put(s, numResource + 1);
-                }
-                i++;
+                    numActivateProductionExtra++;
+                    break;
+                case "e0":
+                case "e1":
+                    if (activateCards[i].equals("e0")) j = 0;
+                    else j = 1;
+                    if (this.playerBoard.getExtraProductionPowerInput()[j] != null) {
+                        out.println("You activate the extra production power that cost a " + this.playerBoard.getExtraProductionPowerInput()[j]);
+                        numResource = inputResources.get(this.playerBoard.getExtraProductionPowerInput()[j]);
+                        inputResources.put(this.playerBoard.getExtraProductionPowerInput()[j], numResource + 1);
+                        numActivateProductionExtra++;
+                    }
+                    else return false;
+                    break;
             }
-        }
-
-        // Chiede se vuole attivare l'extra production power.
-        i = 0;
-        while(this.playerBoard.getExtraProductionPowerInput()[i] != null) {
-            out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
-            activateProduction = in.nextLine();
-            while(!activateProduction.equals("0") && !activateProduction.equals("1")) {
-                out.println("Number not valid!");
-                out.println("Do you want to activate the extra production power that cost a" + this.playerBoard.getExtraProductionPowerInput()[i] + "?: Write 1 if you want or 0 if you don't:");
-                activateProduction = in.nextLine();
-            }
-            if(activateProduction.equals("1")) {
-                numResource = inputResources.get(this.playerBoard.getExtraProductionPowerInput()[i]);
-                inputResources.put(this.playerBoard.getExtraProductionPowerInput()[i], numResource + 1);
-                numExtraProductionActivate++;
-            }
-            i++;
         }
 
         // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
         if(this.getPlayerBoard().checkResourcesAvailability(inputResources, out)) {
             for(String key: inputResources.keySet()) {
                 numResource = inputResources.get(key);
-                for(int j = 0; j < numResource; j++)
-                    this.playerBoard.pickResource(key, in, out);
+                for(j = 0; j < numResource; j++)
+                    this.playerBoard.pickResource(key, fromWhereCards, out);
             }
         }
         else {
@@ -363,44 +334,22 @@ public class Player
         }
 
         // Scelta delle n risorse di extra production power e inserimento in outputResources
-        while(numExtraProductionActivate > 0) {
-            out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
-            numResourceChoice = in.nextLine();
-            while(!numResourceChoice.equals("0") && !numResourceChoice.equals("1") && !numResourceChoice.equals("2") && !numResourceChoice.equals("3") && !numResourceChoice.equals("4")) {
-                out.println("Number not valid!");
-                out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
-                numResourceChoice = in.nextLine();
+        while(numActivateProductionExtra > 0) {
+            for (String str : outputs) {
+                numResource = outputResources.get(str);
+                outputResources.put(str, numResource + 1);
             }
-
-            switch (numResourceChoice) {
-                case "0":
-                    outputResources.put("COINS", outputResources.get("COINS") + 1);
-                    break;
-                case "1":
-                    outputResources.put("SHIELDS", outputResources.get("SHIELDS") + 1);
-                    break;
-                case "2":
-                    outputResources.put("SERVANTS", outputResources.get("SERVANTS") + 1);
-                    break;
-                case "3":
-                    outputResources.put("STONES", outputResources.get("STONES") + 1);
-                    break;
-                default:
-                    redCross = redCross + 1;
-                    break;
-            }
-
-            redCross = redCross + 1;
-            numExtraProductionActivate--;
+            numActivateProductionExtra--;
         }
 
-        //Adds output resources to the chest
+        // Adds output resources to the chest
         for(String key : outputResources.keySet()) {
             numResource = getPlayerBoard().getChest().getChestResources().get(key);
-            getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
+            if(key.equals("REDCROSS") && numResource != 0) redCross = redCross + numResource;
+            else getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
         }
 
-        //RedCross
+        // RedCross
         getPlayerBoard().getFaithPath().moveCross(redCross);
 
         return true;

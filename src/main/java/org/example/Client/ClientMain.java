@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -396,24 +397,75 @@ public class ClientMain {
                         //Qua ancora non iniziato
                         case "ACTIVATE PRODUCTION POWER": {
 
-                            String[] activation = new String[6];
+                            int[] activation = {0, 0, 0, 0, 0, 0};
+                            String [] commandsList = new String[6];
                             String[] fromWhere = new String[6];
-                            String whichInput = null;
+                            String[] whichInput = new String[2];
                             String[] whichOutput = new String[3];
+                            String unknownCommand;
+                            String command = null;
+                            int j, i;
+                            boolean anotherCommand = false;
 
-                            for(int index=0; index<6; index++)
-                            {
-                                //activation[index]=stdIn.();
-                                //fromWhere[index]=stdIn.();
-                                //if(index==3)
-                                    //whichInput=stdIn.();
-                                //if(index>2)
-                                    //whichOutput[index-3]=stdIn.();
+                            j = 0;
+                            for(int index = 0; index < 6; index++) {
+                                if(!anotherCommand) command = stdIn.readLine(); // Comandi: p0, p1, p2, b, e0, e1, STOP
+                                anotherCommand = false;
+                                if (!command.equals("STOP")) {
+                                    commandsList[index] = command; // lista di comandi, nel check si controlla la loro correttezza
+                                    if (command.equals("p0") || command.equals("p1") || command.equals("p2")) {
+                                        if (command.equals("p0")) {
+                                            i = 0;
+                                            activation[0] = 1;
+                                        }
+                                        else if (command.equals("p1")) {
+                                            i = 1;
+                                            activation[1] = 1;
+                                        }
+                                        else {
+                                            i = 2;
+                                            activation[2] = 1;
+                                        }
+                                        for (int k = 0; k < 2; k++) {
+                                            unknownCommand = stdIn.readLine();// Comandi: c, w, e.
+                                            if (unknownCommand.equals("c") || unknownCommand.equals("w") || unknownCommand.equals("e"))
+                                                fromWhere[i] = fromWhere[i] + unknownCommand;
+                                            else {
+                                                command = unknownCommand;
+                                                if (command.equals("p0") || command.equals("p1") || command.equals("p2")) anotherCommand = true;
+                                                k = 1;
+                                            }
+                                        }
+                                    }
+
+                                    if (!anotherCommand) {
+                                        // Se attiva il potere di produzione base
+                                        if (command.equals("b")) {
+                                            for (int k = 0; k < 2; k++) {
+                                                whichInput[k] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
+                                                unknownCommand = stdIn.readLine(); // Comandi: c, w, e.
+                                                fromWhere[3] = fromWhere[index] + unknownCommand;
+                                            }
+                                            activation[3] = 1;
+                                        }
+                                        // Risorse a scelta
+                                        if (command.equals("b") || command.equals("e0") || command.equals("e1")) {
+                                            whichOutput[j] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
+                                            j++;
+                                            if (command.equals("e0")) {
+                                                fromWhere[4] = stdIn.readLine();// Comandi: c, w, e.
+                                                activation[4] = 1;
+                                            } else if (command.equals("e1")) {
+                                                fromWhere[5] = stdIn.readLine();// Comandi: c, w, e.
+                                                activation[5] = 1;
+                                            }
+                                        }
+                                    }
+                                }
                             }
-
-                            /*if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
+                            if(checkActivateProduction(currentPlayer, commandsList, activation, fromWhere, whichInput, whichOutput))
                                 corrAction++;
-                            break;*/
+                            break;
                         }
                         default: {
                             out.println("Not valid action!");
@@ -448,5 +500,66 @@ public class ClientMain {
             }
         }
 
+    }
+
+    public static boolean checkActivateProduction(Player currentPlayer, String[] commandList, int[] activation, String[] fromWhere, String[] whichInput, String[] whichOutput) {
+
+        PrintWriter out = currentPlayer.getOutPrintWriter();
+
+        List<String> inputs = new ArrayList<>();
+        List<String> outputs = new ArrayList<>();
+        int j = 0;
+        int extraprodActivate = 0;
+        boolean correctAction;
+
+        for(int i = 0; commandList[i] != null; i++) {
+            if(!commandList[i].equals("p0") && !commandList[i].equals("p1") && !commandList[i].equals("p2") &&
+                    !commandList[i].equals("b") && !commandList[i].equals("e0") && !commandList[i].equals("e1")) {
+                out.println("Not valid command.");
+                return false;
+            }
+        }
+
+
+        for(int index = 0; index < 6; index++) {
+            if(activation[index] == 1) {
+                if(index == 0 || index == 1 || index == 2 || index == 3) {
+                    for(int i = 0; i < fromWhere[index].length(); i++) {
+                        if(fromWhere[index].charAt(i) != 'c' && fromWhere[index].charAt(i) != 'w' && fromWhere[index].charAt(i) != 'e') {
+                            out.println("Not valid command.");
+                            return false;
+                        }
+                    }
+                    if(index == 3) {
+                        for(int k = 0; k < 2; k++) {
+                            if (!whichInput[k].equals("COINS") && !whichInput[k].equals("SHIELDS") && !whichInput[k].equals("SERVANTS") && !whichInput[k].equals("STONES") && !whichInput[k].equals("REDCROSS")) {
+                                out.println("Not valid command.");
+                                return false;
+                            }
+                            inputs.add(whichInput[k]);
+                        }
+                        extraprodActivate++;
+                    }
+                }
+                else {
+                    if(!fromWhere[index].equals("c") && !fromWhere[index].equals("w") && !fromWhere[index].equals("e")) {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+                    extraprodActivate++;
+                }
+            }
+        }
+
+        for(int k = 0; k < extraprodActivate; k++) {
+            if (!whichOutput[k].equals("COINS") && !whichOutput[k].equals("SHIELDS") && !whichOutput[k].equals("SERVANTS") && !whichOutput[k].equals("STONES") && !whichOutput[k].equals("REDCROSS")) {
+                out.println("Not valid command.");
+                return false;
+            }
+            outputs.add(whichOutput[k]);
+        }
+
+        correctAction = currentPlayer.activateProduction(activation, fromWhere, inputs, outputs);  // qua chiamo game controller
+        return correctAction;
     }
 }
