@@ -1,5 +1,6 @@
 package org.example.Server;
 
+import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
@@ -50,7 +51,7 @@ public class MultiEchoServer {
             public void run() {
                 try {
                     if (clients.isEmpty() || clients.size()<2) throw new Exception();
-                    GameModel newGame = new GameModel(clients);
+                    GameController newGame = new GameController(clients);
                     gameExecutor.execute(newGame);
                     //Debug
                     System.out.println("New game started");

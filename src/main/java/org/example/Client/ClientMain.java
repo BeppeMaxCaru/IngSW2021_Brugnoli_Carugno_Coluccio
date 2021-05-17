@@ -156,6 +156,8 @@ public class ClientMain {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
 
+                //Forse non serve più
+                // :(
                 Thread serverReceiver = new Thread(() -> {
                     try {
                         while (true) {
@@ -181,11 +183,13 @@ public class ClientMain {
                 });
                 serverReceiver.start();
 
-                String action = "";
-                int corrAction = 0;
+                String action = null;
+                int mainAction = 0;
                 //do
                 while (!(action.equalsIgnoreCase("END TURN")
-                    || action.equalsIgnoreCase("QUIT")) && (corrAction < 1)) {
+                        || action.equalsIgnoreCase("QUIT")))
+                        //&& (mainAction < 1))
+                                                {
                     action = stdIn.readLine();
                     //Puts in upper case the input
                     action = action.toUpperCase();
@@ -197,6 +201,7 @@ public class ClientMain {
                     //out.println sends a null string that signals stdin error to the controller to
                     //reset its state at before the action
                     out.flush();
+                    //out.println();
                     switch (action) {
                         case "PLAY LEADER CARD": {
                             //Sends the command to the controller so it can change state
@@ -240,6 +245,12 @@ public class ClientMain {
                             }
                         }
                         case "PICK RESOURCES FROM MARKET": {
+
+                            if (mainAction == 1) {
+                                System.err.println("Action already done");
+                                break;
+                            }
+
                             //Sends action
                             out.println(action);
                             //Receives OK
@@ -247,7 +258,8 @@ public class ClientMain {
 
                             //Receives column or row
                             String parameter = null;
-                            parameter = stdIn.readLine().toUpperCase();
+                            parameter = stdIn.readLine();
+                            parameter = parameter.toUpperCase();
                             if (parameter.equals("ROW")
                                 || parameter.equals("COLUMN")) {
                                 out.println(parameter);
@@ -275,14 +287,14 @@ public class ClientMain {
                                 break;
                             }
 
-                            //Receives index
+                            //Receives deposit
                             String wlChoice = stdIn.readLine();
                             try {
                                 //Checks if player has written only 'w' and 'l' chars
                                 if (wlChoice.length()==0) throw new Exception();
 
                                 for(int k=0; k<wlChoice.length(); k++)
-                                    if(!String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("w") && !String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("l")) throw new Exception();
+                                    if(!String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("w") || !String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("l")) throw new Exception();
 
                                 out.println(wlChoice);
                             } catch (Exception e) {
@@ -293,7 +305,7 @@ public class ClientMain {
                                 break;
                             }
 
-                            //Receives index
+                            //Receives position of leader cards to activate to receive a resource from a white marble
                             String chosenMarble = stdIn.readLine();
                             try {
                                 //Checks if player has written only '0', '1' or 'x' chars
@@ -301,8 +313,8 @@ public class ClientMain {
                                 if(chosenMarble.length()!=0)
                                     for(int k=0; k<wlChoice.length(); k++)
                                         if(!String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("0")
-                                                && !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("1")
-                                                && !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("x")) throw new Exception();
+                                                || !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("1")
+                                                || !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("x")) throw new Exception();
 
                                 out.println(chosenMarble);
                             } catch (Exception e) {
@@ -337,15 +349,23 @@ public class ClientMain {
                                 //chosenMarble=stdIn.();
 
                             //if (this.checkMarketAction(this.gameModel.getPlayers()[i], rcChoice, choice, wlChoice, chosenMarble))
-                                corrAction++;
+                                mainAction++;
                             //break;
                         }
+                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        //Check discount mechanic
                         case "BUY DEVELOPMENT CARD": {
+
+                            if (mainAction == 1) {
+                                System.err.println("Action already done");
+                                break;
+                            }
 
                             out.println(action);
 
                             String parameter = null;
-                            parameter = stdIn.readLine().toUpperCase();
+                            parameter = stdIn.readLine();
+                            parameter = parameter.toUpperCase();
                             if (parameter.equalsIgnoreCase("green")
                                     || parameter.equalsIgnoreCase("yellow")
                                     || parameter.equalsIgnoreCase("blue")
@@ -370,6 +390,7 @@ public class ClientMain {
                                 break;
                             }
 
+                            //Check
                             int[] quantity = new int[4];
                             String[] shelf = new String[4];
 
@@ -383,11 +404,13 @@ public class ClientMain {
                             for(int k=0; k<4; k++)
                             {
                                 quantity[k]=0;
-                                shelf[k]="";
+                                shelf[k]=null;
                             }
 
+
+
                             //Which resource do you want to take
-                            parameter = "";
+                            parameter = null;
                             while (!parameter.equalsIgnoreCase("STOP")) {
 
                                 parameter = stdIn.readLine().toUpperCase();
@@ -433,6 +456,7 @@ public class ClientMain {
                                 out.println(shelf[z]);
                             }
 
+                            //Position where to place the card on the playerboard
                             parameter = stdIn.readLine();
                             try{
 
@@ -446,19 +470,24 @@ public class ClientMain {
                                 break;
                             }
 
-
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             //If he can pay discounted price
                             //String discountChoice="00";
 
                             //if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
-                            corrAction++;
+                            mainAction++;
                             //break;
                         }
                         //Qua ancora non iniziato
                         case "ACTIVATE PRODUCTION POWER": {
 
+                            if (mainAction == 1) {
+                                System.err.println("Action already done");
+                                break;
+                            }
+
                             int[] activation = {0, 0, 0, 0, 0, 0};
-                            String [] commandsList = new String[6];
+                            String[] commandsList = new String[6];
                             String[] fromWhere = new String[6];
                             String[] whichInput = new String[2];
                             String[] whichOutput = new String[3];
@@ -526,7 +555,7 @@ public class ClientMain {
                                 }
                             }
                             if(checkActivateProduction(commandsList, activation, fromWhere, whichInput, whichOutput))
-                                corrAction++;
+                                mainAction++;
                             break;
                         }
                         default: {
