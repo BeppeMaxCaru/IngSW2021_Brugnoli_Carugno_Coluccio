@@ -3,6 +3,7 @@ package Maestri.MVC;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -15,7 +16,217 @@ public class GameController implements Runnable {
 
     }
 
+    @Override
     public void run() {
+        System.out.println("New game started");
+
+        for (int i=0;i < this.gameModel.getPlayers().length; i++) {
+            if (this.gameModel.getPlayers()[i] != null) {
+                try {
+                    Player currentPlayer = this.gameModel.getPlayers()[i];
+
+                    Scanner in = currentPlayer.getInScannerReader();
+                    PrintWriter out = currentPlayer.getOutPrintWriter();
+
+                    out.println("It's your first turn");
+
+                    out.println();
+
+                    //Set starting PlayerBoard
+                    Map<Integer, Integer> startingResources = new HashMap<>();
+                    startingResources.put(0, 0);
+                    startingResources.put(1, 1);
+                    startingResources.put(2, 1);
+                    startingResources.put(3, 2);
+
+                    int numChosenResources = startingResources.get(i);
+                    while (numChosenResources > 0) {
+                        out.println("Choose your initial resources");
+                        String resource = in.nextLine();
+                        while (!resource.equals("COINS") && !resource.equals("SHIELDS") && !resource.equals("SERVANTS") && !resource.equals("STONES")) {
+                            out.println("Not existing resource");
+                            resource = in.nextLine();
+                        }
+                        currentPlayer.setStartingPlayerboard(resource);
+                        numChosenResources--;
+                    }
+
+                    out.println("Waiting for other players setup");
+
+                } catch (Exception e) {
+                    //Sets current player to disconnected
+                    this.gameModel.setPlayer(null, i);
+                }
+            }
+        }
+
+        //Now starts receiving command
+        //Stops automatic setup like in first turn
+        while (!this.gameModel.checkEndPlay()) {
+
+            for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
+                if (this.gameModel.getPlayers()[i] != null) {
+                    try {
+                        Player currentPlayer = this.gameModel.getPlayers()[i];
+
+                        Scanner in = currentPlayer.getInScannerReader();
+                        PrintWriter out = currentPlayer.getOutPrintWriter();
+
+                        out.println("It's your turn");
+
+                        //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
+                        //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
+
+
+                        this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
+                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
+                        this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
+                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
+                        this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
+
+                        String action;
+                        int corrAction;
+                        do{
+                            //FIrst receives the action
+                            action = in.nextLine();
+                            corrAction = 0;
+
+                            switch (action.toUpperCase()) {
+                                case "PLAY LEADER CARD": {
+                                    //If the action received is this keeps saving parameter until it has all of them
+                                    //Otherwise if it receives null before all the parameters are received doesn't call the method but reset the state to waiting action
+
+                                    //First and only parameter is always an int that is the position of the leader card (see client main action flow)
+                                    //The fact that's an int is already checked in client
+                                    int position = Integer.parseInt(in.nextLine());
+                                    //Si può controllare qui che int di position sia valido siccome è qui che si trova il
+                                    //gamemodel ed il controllo è più affidabile
+
+                                    //You can call the method with right parameters and update the view
+                                    this.checkPlayCards(this.gameModel.getPlayers()[i], choice);
+                                    break;
+                                }
+                                case "DISCARD LEADER CARD": {
+                                    //See PLAY LEADER CARD
+
+                                    int position = Integer.parseInt(in.nextLine());
+
+                                    this.checkDiscardCards(this.gameModel.getPlayers()[i], choice);
+                                    break;
+                                }
+                                case "PICK RESOURCES FROM MARKET": {
+
+                                    //Row/column choice
+                                    //First parameter is always either row or column (chek in client)
+                                    String rowOrColumnChoice = in.nextLine();
+
+                                    //Row/column index
+                                    //Second parameter is always an int
+                                    int index = Integer.parseInt(in.nextLine());
+
+                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    //Warehouse/leaderCard choice
+                                    //Qui bisogna far continuare a scegliere al player per ogni biglia + effetto speciale se disponibile
+                                    String wlChoice = in.nextLine();
+                                    //If he has 2 whiteMarbleLeaderCards
+                                    String chosenMarble="0";
+                                    if(currentPlayer.getPlayerBoard().getResourceMarbles()[0]!=null)
+                                        chosenMarble=in.nextLine();
+
+                                    if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
+                                        corrAction++;
+                                    break;
+                                }
+                                case "BUY DEVELOPMENT CARD": {
+
+                                    //First parameter received
+                                    //DevCard colour
+                                    String colour = in.nextLine();
+
+                                    //Second parameter received
+                                    //DevCard level
+                                    int level = Integer.parseInt(in.nextLine());
+
+                                    String parameter = null;
+                                    while (!parameter.equalsIgnoreCase("stop") {
+
+                                        //First is the resource
+                                        parameter = in.nextLine();
+                                        String resource = parameter;
+
+                                        //Second is the deposit
+                                        parameter = in.nextLine();
+                                        String deposit = parameter;
+
+                                        //Third is the quantity
+                                        parameter = in.nextLine();
+                                        int quantity = Integer.parseInt(parameter);
+
+                                        //Serve mappa o oggetto in cui salvare tutte le risorse che gradualmente sceglie player
+                                        //per poi controllare tramite metodo gamemodel che le abboa
+
+                                    }
+
+
+
+                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    //Finire qui con sconto NB reattivo non interattivo
+                                    //PlayerBoard grid position
+                                    //String position = in.nextLine();
+                                    //From which store do you want to take resources
+                                    //String wclChoice = in.nextLine();
+                                    //If he can pay discounted price
+                                    String discountChoice="00";
+                                    if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
+                                        corrAction++;
+                                    break;
+                                }
+                                case "ACTIVATE PRODUCTION POWER": {
+
+                                    String[] activation = new String[6];
+                                    String[] fromWhere = new String[6];
+                                    String whichInput = null;
+                                    String[] whichOutput = new String[3];
+
+                                    for(int index=0; index<6; index++)
+                                    {
+                                        activation[index]=in.nextLine();
+                                        fromWhere[index]=in.nextLine();
+                                        if(index==3)
+                                            whichInput=in.nextLine();
+                                        if(index>2)
+                                            whichOutput[index-3]=in.nextLine();
+                                    }
+
+                                    if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
+                                        corrAction++;
+                                    break;
+                                }
+                                default: {
+                                    out.println("Not valid action!");
+                                    break;
+                                }
+                            }
+                            //Player inserisce quit
+                        }while (!action.equalsIgnoreCase("END TURN") && (corrAction < 1));
+
+                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
+                        this.gameModel.getPlayers()[i].getOutPrintWriter().println();
+
+                    } catch (Exception e) {
+                        //Player disconesso
+                        //System.err.println(e.getMessage());
+                        this.gameModel.getPlayers()[i] = null;
+
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    /*public void run() {
 
         System.out.println("This is the new game");
 
@@ -206,7 +417,7 @@ public class GameController implements Runnable {
                 }
             }
         }
-    }
+    }*/
 
     public void checkPlayCards (Player currentPlayer, String choice) {
 

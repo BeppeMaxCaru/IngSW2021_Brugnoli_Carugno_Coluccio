@@ -189,6 +189,9 @@ public class ClientMain {
                     //Puts in upper case the input
                     action = action.toUpperCase();
 
+                    //Posso inviare il nickname del player qunado inserisce un comando per vedere se è il suo turno
+                    //altrimenti lo ignoro
+
                     //IMPORTANT!!!
                     //out.println sends a null string that signals stdin error to the controller to
                     //reset its state at before the action
@@ -238,7 +241,7 @@ public class ClientMain {
                             //Sends action
                             out.println(action);
                             //Receives OK
-                            System.out.println(in.readLine());
+                            //System.out.println(in.readLine());
 
                             //Receives column or row
                             String parameter = null;
@@ -248,7 +251,7 @@ public class ClientMain {
                                 out.println(parameter);
                                 //System.out.println(in.readLine());
                             } else {
-                                //Resets controller
+                                //Resets action
                                 System.err.println("Not valid parameter");
                                 out.println();
                                 break;
@@ -326,10 +329,6 @@ public class ClientMain {
                                 break;
                             }
 
-                            //Si prende direttamente dal model nel server
-                            //PlayerBoard grid position
-                            //String position = stdIn.readLine();
-
                             //From which store do you want to take resources
                             //String wclChoice = stdIn.readLine();
                             parameter = null;
@@ -346,6 +345,19 @@ public class ClientMain {
                                     out.println();
                                     break;
                                 }
+
+                                parameter = stdIn.readLine();
+                                if (parameter.equalsIgnoreCase("coins")
+                                    || parameter.equalsIgnoreCase("stones")
+                                    || parameter.equalsIgnoreCase("servants")
+                                    || parameter.equalsIgnoreCase("shields")) {
+                                    out.println(parameter);
+                                } else {
+                                    System.err.println("Not existing resource");
+                                    out.println();
+                                    break;
+                                }
+
                                 //Receives now quantity
                                 parameter = stdIn.readLine();
                                 try {
@@ -358,6 +370,9 @@ public class ClientMain {
                                     break;
                                 }
                             }
+
+                            //Sends STOP to ask for discount and check enough resources selected
+                            out.println(parameter);
 
                             parameter = stdIn.readLine();
                             if (parameter.equalsIgnoreCase("discount")) {

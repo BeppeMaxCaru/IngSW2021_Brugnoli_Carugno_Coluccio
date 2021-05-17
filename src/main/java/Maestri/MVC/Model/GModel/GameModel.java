@@ -28,6 +28,7 @@ public class GameModel{
     int numberOfPlayers;
     private Player[] players = new Player[4];
     int currentPlayer = 0;
+    Player currentPlayerToPlay = null;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private LeaderCardDeck leaderCardDeck;
     private Market market;
