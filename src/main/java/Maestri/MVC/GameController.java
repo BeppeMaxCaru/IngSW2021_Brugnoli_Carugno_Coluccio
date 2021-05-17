@@ -507,8 +507,6 @@ public class GameController implements Runnable {
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
-
-
         int column=this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
 
         if(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]!=null) {
@@ -586,7 +584,7 @@ public class GameController implements Runnable {
         }
 
         //Chiamata al metodo del gamemodel, controlli effettuati
-        return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, quantity, wclChoice);
+        return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, wclChoice);
     }
 
 }

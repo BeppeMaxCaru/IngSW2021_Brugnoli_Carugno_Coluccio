@@ -4,16 +4,12 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Represents a player with all its information
@@ -202,56 +198,22 @@ public class Player
      * @param developmentCardsDecksGrid - developments cards available to buy
      * @return true if the player buys a card successfully
      */
-    public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, int column, int level, int position, String wclChoice, String discountChoice) {
+    public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, int column, int level, int position, String[] wclChoice) {
 
-        //Check if selected pile is empty
-        if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0] == null) {
-            out.println("Empty development cards pile!");
-            return false;
-        }
-
-        //Asks player if he wants to activate discount perks
-        Map<String, Integer> developmentCardCost = developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost();
-        Integer resourceCost;
-        //Checks the discounts that the player has available
-        if(this.playerBoard.getDevelopmentCardDiscount()[0] != null){
-            for(String res : this.playerBoard.getDevelopmentCardDiscount()) {
-                resourceCost = developmentCardCost.get(res);
-                if(resourceCost != 0) {
-                    String input;
-                    int pos=0;
-                    input=String.valueOf(discountChoice.charAt(pos));
-                    if(input.equals("1")) developmentCardCost.put(res, resourceCost-1);
-                }
-            }
-        }
-
-        //Checks if the player has enough resources to buy the new development card
-        if (this.getPlayerBoard().checkResourcesAvailability(developmentCardCost, out)) {
-            //Checks if the player can place the new development card on his board
-            if (developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(this.playerBoard, out)) {
-                //Removes the resources from the player who bought the development card
-                //according to the development card cost
-                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, wclChoice, out);
-                //Ask the player where to place the new development card on his board
-                this.playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0], position, out);
-                //Updates the player victory points by adding to them the
-                //victory points obtained from the new development card
-                this.playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
-                //Removes the development card from the grid by removing it
-                //from the deck where it was bought
-                List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]));
-                reducedDeck.remove(0);
-                developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
-                return true;
-            } else if (!developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].checkPlayerboardDevelopmentCardsCompatibility(playerBoard, out)) {
-                return false;
-            }
-        } else
-            return false;
-        //Returns false if the player wasn't able to buy the development card
-        return false;
-        //If buying the card isn't a possible action or is denied and player has to choose new action and start all over
+        //Removes the resources from the player who bought the development card
+        //according to the development card cost
+        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, wclChoice, out);
+        //Ask the player where to place the new development card on his board
+        this.playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0], position, out);
+        //Updates the player victory points by adding to them the
+        //victory points obtained from the new development card
+        this.playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
+        //Removes the development card from the grid by removing it
+        //from the deck where it was bought
+        List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]));
+        reducedDeck.remove(0);
+        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+        return true;
     }
 
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

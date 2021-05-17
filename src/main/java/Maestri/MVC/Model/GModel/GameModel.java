@@ -110,8 +110,8 @@ public class GameModel{
         return this.BlackCrossPawn;
     }
 
-    public boolean buyDevelopmentCardAction(int index, int column, int l, int p, int[] quantity, String[] wclChoice) {
-        return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, quantity, wclChoice);
+    public boolean buyDevelopmentCardAction(int index, int column, int l, int p, String[] wclChoice) {
+        return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, wclChoice);
         //this.developmentCardsDecksGrid.buyDevelopmentCard(playerboardToModify);
     }
 
