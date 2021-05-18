@@ -208,6 +208,7 @@ public class GameModel{
     }
 
     //Method that cycles the players
+    /*
     public void run() {
 
         BufferedReader buff = new BufferedReader((new InputStreamReader(System.in)));
@@ -306,14 +307,14 @@ public class GameModel{
                             //for (int i = 0; i < 2; i++) {
                             if (this.players[i].getPlayerLeaderCards()[1] == null && !this.players[i].getPlayerLeaderCards()[0].isPlayed()) {
                                 this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
+                            startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime; */
+                            endTime = System.currentTimeMillis() - startTime;
                             } else if (this.players[i].getPlayerLeaderCards()[1] != null && (!this.players[i].getPlayerLeaderCards()[0].isPlayed() || !this.players[i].getPlayerLeaderCards()[1].isPlayed())) {
                                 this.players[i].getLeaderAction(this.turnScan, this.players[i].getOutPrintWriter()); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
+                            startTime = System.currentTimeMillis();
                             while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime; */
+                            endTime = System.currentTimeMillis() - startTime;
                             }
                             // i = checkStatusPlayer(endTime, i, out);
                             //}
@@ -340,15 +341,17 @@ public class GameModel{
                     this.players[i].getOutPrintWriter().println(this.players[this.checkWinner()].getNickname() + " wins the game with " + this.players[this.checkWinner()].sumAllVictoryPoints() + " victory points");
                     this.players[i].getOutPrintWriter().println("You obtained " + this.players[i].sumAllVictoryPoints() + " victory points");
                     //Simplified
-                    /*for (int pn = 0; pn < this.players.length; pn++)
+                    for (int pn = 0; pn < this.players.length; pn++)
                         if (pn != this.checkWinner())
-                            this.players[i].getOutPrintWriter().println(this.players[pn].getNickname() + " obtained " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");*/
+                            this.players[i].getOutPrintWriter().println(this.players[pn].getNickname() + " obtained " + this.players[pn].sumAllVictoryPoints() + " Victory Points.");
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }
             }
         }
     }
+
+     */
 
     public int checkStatusPlayer(float endTime, int i, PrintWriter out) {
         int maximumTime = 180;

@@ -195,49 +195,32 @@ public class Playerboard {
     /**
      * Removes a resource from the warehouse or the chest
      * @param resource - resource to remove
+     * @param quantity
      */
-    public void pickResource(String resource, String fromWhat, PrintWriter out) {
+    public void pickResource(String resource, String fromWhat, int quantity, PrintWriter out) {
 
         Integer whRes = this.wareHouse.getWarehouseResources().get(resource);
+        Integer chRes = this.chest.getChestResources().get(resource);
         Integer esRes = this.wareHouse.getWarehouseResources().get("extra" + resource);
-        Integer numResources;
-        int i = 1;
 
+        fromWhat = fromWhat.toUpperCase();
 
-        while(i > 0) {
-            if (!fromWhat.equals("c")) {
-                numResources = 0;
-                numResources = numResources + whRes;
-                if(esRes != null)
-                    numResources = numResources + esRes;
-                if (numResources != 0) {
-                    if ((whRes != 0) && (esRes == null || esRes == 0))
-                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                    else if (whRes == 0)
-                        this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
-                    else {
-                        if (fromWhat.equals("w"))
-                            this.wareHouse.getWarehouseResources().put(resource, whRes - 1);
-                        else
-                            this.wareHouse.getWarehouseResources().put("extra" + resource, esRes - 1);
-                    }
-                    i = 0;
-                }
-                else {
-                    out.println("You have run out of" + resource + "in the warehouse, pick the others from the chest:");
-                    fromWhat = "c";
-                }
+        switch(fromWhat)
+        {
+            case "W":
+            {
+                this.wareHouse.getWarehouseResources().put(resource, whRes - quantity);
+                break;
             }
-            else {
-                numResources = this.chest.getChestResources().get(resource);
-                if (numResources != 0) {
-                    this.chest.getChestResources().put(resource, numResources - 1);
-                    i = 0;
-                }
-                else {
-                    out.println("You have run out of" + resource + "in the chest, pick the others from the warehouse:");
-                    fromWhat = "w";
-                }
+            case "C":
+            {
+                this.chest.getChestResources().put(resource, chRes - quantity);
+                break;
+            }
+            case "L":
+            {
+                this.wareHouse.getWarehouseResources().put("extra"+resource, esRes - quantity);
+                break;
             }
         }
     }

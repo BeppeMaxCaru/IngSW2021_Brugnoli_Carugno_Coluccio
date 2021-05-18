@@ -364,7 +364,7 @@ public class ClientMain {
 
                             out.println(action);
 
-                            String parameter = null;
+                            String parameter;
                             parameter = stdIn.readLine();
                             parameter = parameter.toUpperCase();
                             if (parameter.equalsIgnoreCase("green")
@@ -409,7 +409,7 @@ public class ClientMain {
                             }
 
                             //Which resource do you want to take
-                            parameter = null;
+                            parameter = "";
                             while (!parameter.equalsIgnoreCase("STOP")) {
 
                                 parameter = stdIn.readLine().toUpperCase();
@@ -421,7 +421,7 @@ public class ClientMain {
                                     try {
                                         int q = Integer.parseInt(parameter);
                                         if (q<0) throw new Exception();
-                                        if (q>8) throw new Exception();
+                                        if (q>7) throw new Exception();
                                         quantity[index]=q;
                                     } catch (Exception e) {
                                         System.err.println("Not valid parameter");
@@ -469,7 +469,6 @@ public class ClientMain {
                                 break;
                             }
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             //If he can pay discounted price
                             //String discountChoice="00";
 
@@ -554,7 +553,20 @@ public class ClientMain {
                                 }
                             }
                             if(checkActivateProduction(commandsList, activation, fromWhere, whichInput, whichOutput))
+                            {
+                                for(int k=0; k<6; k++)
+                                {
+                                    if(activation[k]==0)
+                                        out.println(0);
+                                    else
+                                    {
+                                        out.println(whichInput[k]);
+                                        if(k>=3)
+                                            out.println(Integer.parseInt(whichOutput[k-3]));
+                                    }
+                                }
                                 mainAction++;
+                            }
                             break;
                         }
                         default: {

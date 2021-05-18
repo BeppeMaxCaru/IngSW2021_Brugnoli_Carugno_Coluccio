@@ -220,96 +220,63 @@ public class Player
     /**
      * Activates the production powers on the player's player board
      */
-    public boolean activateProduction(int[] activateCards, String[] fromWhereCards, List<String> inputs, List<String> outputs) {
-        int i, j, index, num;
-        int numResource;
+    public boolean activateProduction(int[] activateCards, String[] fromWhereCards, int[] whichOutput) {
+        int j;
         int redCross = 0;
-        int numActivateProductionExtra = 0;
-        String fromWhere;
-        List<String> inputResources = new ArrayList<>();
-        Map<String, Integer> inputResourcesAsMap = new HashMap<>();
-        inputResourcesAsMap.put("COINS", 0);
-        inputResourcesAsMap.put("SHIELDS", 0);
-        inputResourcesAsMap.put("SERVANTS", 0);
-        inputResourcesAsMap.put("STONES", 0);
-        inputResourcesAsMap.put("REDCROSS", 0);
-        Map<String, Integer> outputResources = new HashMap<>();
-        outputResources.put("COINS", 0);
-        outputResources.put("SHIELDS", 0);
-        outputResources.put("SERVANTS", 0);
-        outputResources.put("STONES", 0);
-        outputResources.put("REDCROSS", 0);
 
-        for(j = 0; j < 6; j++) {
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "SERVANTS");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "STONES");
+
+        //Pick resources where player has indicated
+        for (j = 0; j < 6; j++) {
             if (activateCards[j] == 1) {
-                if (j == 0 || j == 1 || j == 2) {
-                    for (i = 0; getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
-                    i--;
-                    out.println("This is the resources you have to pay: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput());
-                    out.println("For this: " + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput());
-                    inputResources.addAll(getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet());
-                    for (String key : getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet()) {
-                        numResource = outputResources.get(key);
-                        outputResources.put(key, numResource + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(key));
+                //Pick resources
+                for (int k = 0; k < fromWhereCards[j].length() - 2; k = k + 3) {
+                    String res = resources.get(Integer.parseInt(String.valueOf(fromWhereCards[j].charAt(k))));
+                    int quantity = Integer.parseInt(String.valueOf(fromWhereCards[j].charAt(k + 1)));
+                    this.playerBoard.pickResource(res, (String.valueOf(fromWhereCards[j].charAt(k + 2))), quantity, out);
+                }
+
+                //Add outputResources
+                if(j<3)
+                {
+                    //Add card production power to chest
+                    int i;
+                    for(i=2; i>0; i--)
+                    {
+                        if(this.playerBoard.getPlayerboardDevelopmentCards()[i][j]!=null)
+                            break;
                     }
-                    // Aggiunta alla conta totale i redCross
-                    redCross = redCross + getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getFaithPoints();
-                } else if (j == 3) {
-                    inputResources.addAll(inputs);
-                    numActivateProductionExtra++;
-                } else {
-                    if(j == 4) index = 0;
-                    else index = 1;
-                    if (this.playerBoard.getExtraProductionPowerInput()[index] != null) {
-                        out.println("You activate the extra production power that cost a " + this.playerBoard.getExtraProductionPowerInput()[index]);
-                        inputResources.add(this.playerBoard.getExtraProductionPowerInput()[index]);
-                        numActivateProductionExtra++;
-                    } else return false;
+                    for(String s : this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardCost().keySet())
+                    {
+                        if(!s.equals("REDCROSS"))
+                        {
+                            redCross = redCross + this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardCost().get(s);
+                        }
+                        else
+                        {
+                            if(this.playerBoard.getChest().getChestResources().get(s)!=null)
+                                this.playerBoard.getChest().getChestResources().put(s, this.playerBoard.getChest().getChestResources().get(s) +  this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardCost().get(s));
+                        }
+                    }
+                }
+                else
+                {
+                    // Add outputResources to the chest
+                    for(int z=0; z<3; z++) {
+                        if(activateCards[3+z]==1)
+                        {
+                            if (whichOutput[z]==4)
+                                redCross++;
+                            else
+                                this.playerBoard.getChest().getChestResources().put(resources.get(whichOutput[z]) , this.playerBoard.getChest().getChestResources().get(resources.get(whichOutput[z])) + 1);
+                        }
+                    }
                 }
             }
-        }
-
-        // Creo una mappa di risorse in input da passare a checkResourcesAvailability
-        for(String key: inputResourcesAsMap.keySet()) {
-            num = 0;
-            for(String str: inputResources) {
-                if(str.equals(key)) num++;
-            }
-            numResource = inputResourcesAsMap.get(key);
-            inputResourcesAsMap.put(key, numResource + num);
-        }
-
-        // Controllo risorse nel chest/warehouse, e se true toglie dal chest/warehouse.
-        if(this.getPlayerBoard().checkResourcesAvailability(inputResourcesAsMap, out)) {
-            i = 0;
-            for(int k = 0; k < fromWhereCards[i].length(); k++) {
-                for(String s: inputResources) {
-                    fromWhere = Character.toString(fromWhereCards[i].charAt(k));
-                    this.playerBoard.pickResource(s, fromWhere, out);
-                    inputResources.remove(0);
-                }
-                i++;
-            }
-        }
-        else {
-            out.println("Not enough resources to activate production!");
-            return false;
-        }
-
-        // Inserimento in outputResources delle risorse a scelta
-        while(numActivateProductionExtra > 0) {
-            for (String str : outputs) {
-                numResource = outputResources.get(str);
-                outputResources.put(str, numResource + 1);
-            }
-            numActivateProductionExtra--;
-        }
-
-        // Add outputResources to the chest
-        for(String key : outputResources.keySet()) {
-            numResource = getPlayerBoard().getChest().getChestResources().get(key);
-            if(key.equals("REDCROSS") && numResource != 0) redCross = redCross + numResource;
-            else getPlayerBoard().getChest().getChestResources().put(key, numResource + outputResources.get(key));
         }
 
         // RedCross

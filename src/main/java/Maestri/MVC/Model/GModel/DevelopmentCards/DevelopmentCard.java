@@ -1,13 +1,10 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
-import Maestri.MVC.Model.GModel.GameModel;
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  * Represents a development card
@@ -205,7 +202,7 @@ public class DevelopmentCard {
         for (String key : this.cost.keySet()) {
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), out);
+                playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1 , out);
             }
         }
     }

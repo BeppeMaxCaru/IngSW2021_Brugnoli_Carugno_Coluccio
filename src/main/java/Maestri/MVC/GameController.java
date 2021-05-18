@@ -160,42 +160,28 @@ public class GameController implements Runnable {
                                         corrAction++;
                                     break;
                                 }
-                                /*case "ACTIVATE PRODUCTION POWER": {
+                                case "ACTIVATE PRODUCTION POWER": {
 
-                                    String[] activation = new String[6];
-                                    String[] fromWhere = new String[6];
+                                    int[] activation = new int[6];
                                     String[] whichInput = new String[2];
-                                    String[] whichOutput = new String[3];
-                                    int j;
+                                    int[] whichOutput = new int[3];
 
-                                    activation[0] = "*"; // Comandi: p0, p1, p2, b, e0, e1.
-                                    for(int index = 0; index < 6 && !activation[index].equals(" "); index++) {
-                                        activation[index] = in.nextLine(); // Comandi: p0, p1, p2, b, e0, e1.
-                                        if(activation[index].equals("p0") || activation[index].equals("p1") || activation[index].equals("p2")) {
-                                            if(activation[index].equals("p0")) j = 0;
-                                            else if(activation[index].equals("p1")) j = 1;
-                                            else j = 2;
-                                            for (i = 0; currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[i][j] != null; i++) ;
-                                            for(int k = currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().size(); k > 0; k--){
-                                                fromWhere[index] = in.nextLine(); // Comandi: c, w, e.
-                                            }
-                                        }
-
-                                        // Se attiva il potere di produzione base
-                                        if(activation[index].equals("b"))
-                                            for(int k = 0; k < 2; k++) {
-                                                whichInput[k] = in.nextLine();
-                                            }
-                                        // Risorse a scelta
-                                        if(activation[index].equals("b") || activation[index].equals("e0") || activation[index].equals("e1")) {
-                                            whichOutput[j] = in.nextLine();
-                                            j++;
+                                    for(int k=0; k<activation.length; k++)
+                                    {
+                                        activation[k]=in.nextInt();
+                                        if(activation[k]==0)
+                                            break;
+                                        else {
+                                            whichInput[k]=in.nextLine();
+                                            if(k>=3)
+                                                whichOutput[k-3]=in.nextInt();
                                         }
                                     }
-                                    if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
+
+                                    if(this.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput))
                                         corrAction++;
                                     break;
-                                } */
+                                }
                                 default: {
                                     out.println("Not valid action!");
                                     break;
@@ -219,6 +205,7 @@ public class GameController implements Runnable {
         }
 
     }
+
 
     /*public void run() {
 
@@ -585,6 +572,147 @@ public class GameController implements Runnable {
 
         //Chiamata al metodo del gamemodel, controlli effettuati
         return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, wclChoice);
+    }
+
+
+    private boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
+
+        PrintWriter out = currentPlayer.getOutPrintWriter();
+
+        Map<String, Integer> paidWarehouseResources = new HashMap<>();
+        paidWarehouseResources.put("COINS", 0);
+        paidWarehouseResources.put("SERVANTS", 0);
+        paidWarehouseResources.put("SHIELDS", 0);
+        paidWarehouseResources.put("STONES", 0);
+
+        Map<String, Integer> paidChestResources = new HashMap<>();
+        paidChestResources.put("COINS", 0);
+        paidChestResources.put("SERVANTS", 0);
+        paidChestResources.put("SHIELDS", 0);
+        paidChestResources.put("STONES", 0);
+
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "SERVANTS");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "STONES");
+
+
+        for(int k=0; k<activation.length; k++)
+        {
+            if(activation[k]==1) {
+
+                int j=2;
+                if (k < 3) {
+
+                    //Check if player has any cards into the indicated position
+                    for (j = 2; j > 0; j--)
+                        if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                            break;
+
+                    if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+
+                    //Check how many resources player has to spend
+                    int totalResources = 0;
+                    for(String keys : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
+                        totalResources=totalResources+currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(keys);
+                    //Confront them with whichInput string: resourceCode - quantity - storage
+                    //If player indicated less resources than that he had to pay, error
+                    if(whichInput.length<totalResources*3)
+                    {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+
+                } else {
+                    if(k!=3)
+                    {
+                        //Check if player has any cards into the indicated position and it is activated
+                        if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
+                            out.println("Not valid command.");
+                            return false;
+                        }
+                    }
+                }
+
+                //Save all resources player has to pay in temporary maps
+                for(int z=0; z<whichInput.length-2; z=z+3) {
+                    switch (String.valueOf(whichInput[z+2]).toUpperCase())
+                    {
+                        case "W":
+                        {
+                            paidWarehouseResources.put(resources.get(Integer.parseInt(whichInput[z])), Integer.parseInt(whichInput[z+1]));
+                            break;
+                        }
+                        case "C":
+                        {
+                            paidChestResources.put(resources.get(Integer.parseInt(whichInput[z])), Integer.parseInt(whichInput[z+1]));
+                            break;
+                        }
+                        case "L":
+                        {
+                            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(Integer.parseInt(whichInput[z])))==null)
+                            {
+                                out.println("Not valid command.");
+                                return false;
+                            }
+                            else
+                                paidWarehouseResources.put("extra"+resources.get(Integer.parseInt(whichInput[z])), Integer.parseInt(whichInput[z+1]));
+                            break;
+                        }
+                    }
+                }
+
+                //Check if player has each correct resource in each correct storage
+
+                for(String keys : paidWarehouseResources.keySet())
+                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys))
+                    {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+                for(String keys : paidChestResources.keySet())
+                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys))
+                    {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+
+                //Check if player inserted all necessary resources to activate the production
+
+                for (String res : paidChestResources.keySet())
+                {
+                    paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
+                    for(String extraRes : paidWarehouseResources.keySet())
+                    {
+                        if(extraRes.contains(res))
+                            paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    }
+                }
+
+                if(k<3)
+                {
+                    for(String res : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
+                    {
+                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(res))
+                        {
+                            out.println("Not valid command");
+                            return false;
+                        }
+                    }
+                } else {
+                        if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1)
+                        {
+                            out.println("Not valid command");
+                            return false;
+                        }
+                }
+            }
+        }
+        return currentPlayer.activateProduction(activation, whichInput, whichOutput);
     }
 
 }
