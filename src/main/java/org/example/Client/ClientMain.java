@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.*;
+import com.google.gson.Gson;
 
 public class ClientMain {
 
@@ -406,8 +407,6 @@ public class ClientMain {
                                 quantity[k]=0;
                                 shelf[k]=null;
                             }
-
-
 
                             //Which resource do you want to take
                             parameter = null;
