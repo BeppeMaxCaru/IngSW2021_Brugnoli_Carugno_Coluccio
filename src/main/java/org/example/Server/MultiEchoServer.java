@@ -31,7 +31,7 @@ public class MultiEchoServer {
 
     public void startServer() {
         //4 threads for 4 players
-        ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
+        //ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
 
         ExecutorService gameExecutor = Executors.newCachedThreadPool();
 
@@ -79,7 +79,8 @@ public class MultiEchoServer {
                 break; // Entrerei qui se serverSocket venisse chiuso
             }
         }
-        clientExecutor.shutdown();
+        //clientExecutor.shutdown();
+        gameExecutor.shutdown();
     }
 
     public void addClients() {
