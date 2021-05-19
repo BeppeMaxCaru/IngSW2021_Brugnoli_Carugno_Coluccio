@@ -159,7 +159,7 @@ public class ClientMain {
 
                 //Forse non serve più
                 // :(
-                Thread serverReceiver = new Thread(() -> {
+                /*Thread serverReceiver = new Thread(() -> {
                     try {
                         while (true) {
 
@@ -182,11 +182,13 @@ public class ClientMain {
                         }
                     }
                 });
-                serverReceiver.start();
+                serverReceiver.start();*/
 
                 String action = null;
                 int mainAction = 0;
                 //do
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Utilizzare shutdwon output per bloccare half write del socket del client al server
                 while (!(action.equalsIgnoreCase("END TURN")
                         || action.equalsIgnoreCase("QUIT")))
                         //&& (mainAction < 1))
@@ -592,6 +594,9 @@ public class ClientMain {
                         }
                         out.println(clientInput);
                 }*/
+
+                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Usare shutdown output per bloccare client
 
             } catch (UnknownHostException e) {
                 System.err.println("No info about host: " + hostName);

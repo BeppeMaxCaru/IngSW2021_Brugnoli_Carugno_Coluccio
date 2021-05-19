@@ -96,7 +96,7 @@ public class Test_WhiteMarbleLeaderCard {
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
-        players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -106,7 +106,7 @@ public class Test_WhiteMarbleLeaderCard {
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
-        players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertNull(players[0].getPlayerLeaderCards()[0]);
     }
 
@@ -121,7 +121,7 @@ public class Test_WhiteMarbleLeaderCard {
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         card.activateAbility(players[0].getPlayerBoard());
-        market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
+        //market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
 
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));

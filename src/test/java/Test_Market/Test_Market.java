@@ -29,7 +29,7 @@ public class Test_Market {
 
         market.printMarket(new PrintWriter(System.out));
 
-        market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
+        //market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS"));
@@ -46,7 +46,7 @@ public class Test_Market {
 
         market.printMarket(new PrintWriter(System.out));
 
-        market.updateRow(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
+        //market.updateRow(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS"));
