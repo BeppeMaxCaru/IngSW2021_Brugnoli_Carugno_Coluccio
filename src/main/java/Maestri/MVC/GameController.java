@@ -26,10 +26,12 @@ public class GameController implements Runnable {
                     //playersToPlay.add(clientsWaiting.remove(0));
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
-                    if(i!=0){
+
+                    /*if(i!=0){
                         players[i].getOutPrintWriter().println("Wait for other players turn...");
                         //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
                     }
+                     */
                 }
             } catch (Exception e) {
                 //If no clients waiting set other players null
@@ -53,27 +55,25 @@ public class GameController implements Runnable {
                     Scanner in = currentPlayer.getInScannerReader();
                     PrintWriter out = currentPlayer.getOutPrintWriter();
 
-                    out.println("It's your first turn");
-
-                    out.println();
+                    if(i!=0)
+                        out.println("It's your first turn");
 
                     //Set starting PlayerBoard
-                    Map<Integer, Integer> startingResources = new HashMap<>();
-                    startingResources.put(0, 0);
-                    startingResources.put(1, 1);
-                    startingResources.put(2, 1);
-                    startingResources.put(3, 2);
+                    Map<Integer, String> startingResources = new HashMap<>();
+                    startingResources.put(0, "0");
+                    startingResources.put(1, "1");
+                    startingResources.put(2, "1");
+                    startingResources.put(3, "2");
 
-                    int numChosenResources = startingResources.get(i);
-                    while (numChosenResources > 0) {
-                        out.println("Choose your initial resources");
-                        String resource = in.nextLine();
-                        while (!resource.equals("COINS") && !resource.equals("SHIELDS") && !resource.equals("SERVANTS") && !resource.equals("STONES")) {
-                            out.println("Not existing resource");
-                            resource = in.nextLine();
-                        }
+                    String numChosenResources = startingResources.get(i);
+                    out.println(numChosenResources);
+                    System.out.println(numChosenResources);
+                    String resource;
+                    int t=Integer.parseInt(numChosenResources);
+                    while (t > 0) {
+                        resource=in.nextLine();
                         currentPlayer.setStartingPlayerboard(resource);
-                        numChosenResources--;
+                        t--;
                     }
 
                     out.println("Waiting for other players setup");
@@ -124,8 +124,6 @@ public class GameController implements Runnable {
                                     //First and only parameter is always an int that is the position of the leader card (see client main action flow)
                                     //The fact that's an int is already checked in client
                                     int position = Integer.parseInt(in.nextLine());
-                                    //Si può controllare qui che int di position sia valido siccome è qui che si trova il
-                                    //gamemodel ed il controllo è più affidabile
 
                                     //You can call the method with right parameters and update the view
                                     this.checkPlayCards(this.gameModel.getPlayers()[i], position);
@@ -159,7 +157,10 @@ public class GameController implements Runnable {
                                     chosenMarble=in.nextLine();
 
                                     if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
+                                    {
+                                        out.println("OK");
                                         corrAction++;
+                                    }
                                     break;
                                 }
                                 case "BUY DEVELOPMENT CARD": {
@@ -183,13 +184,16 @@ public class GameController implements Runnable {
                                     int position = in.nextInt();
 
                                     if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, 3 - level, position, quantity, deposit))
+                                    {
+                                        out.println("OK");
                                         corrAction++;
+                                    }
                                     break;
                                 }
                                 case "ACTIVATE PRODUCTION POWER": {
 
                                     int[] activation = new int[6];
-                                    String[] whichInput = new String[2];
+                                    String[] whichInput = new String[6];
                                     int[] whichOutput = new int[3];
 
                                     for(int k = 0; k < 6; k++) {
@@ -200,8 +204,10 @@ public class GameController implements Runnable {
                                         }
                                     }
 
-                                    if(this.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput))
+                                    if(this.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
+                                        out.println("OK");
                                         corrAction++;
+                                    }
                                     break;
                                 }
                                 default: {
@@ -384,6 +390,7 @@ public class GameController implements Runnable {
 
                                     if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
                                         corrAction++;
+                                    }
                                     break;
                                 }
                                 default: {

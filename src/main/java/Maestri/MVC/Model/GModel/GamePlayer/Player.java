@@ -73,11 +73,6 @@ public class Player
             this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
             this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
-            this.out.println("Insert your nickname: ");
-            //this.nickname = in.readLine();
-            //Scanner turnScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
-            this.nickname = this.inScan.nextLine();
-            this.out.println("Hi " + this.nickname);
             this.out.println("Welcome to Master of Renaissance online!");
             this.out.println("Looking for a game in Florence...");
 
