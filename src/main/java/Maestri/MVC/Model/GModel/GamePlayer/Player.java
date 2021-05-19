@@ -54,27 +54,32 @@ public class Player
      * @param clientSocket
      *
      */
+    //Input Socket clientsocket
     public Player(Socket clientSocket) {
         //this.playerNumber = playerNumber;
         this.playerBoard = new Playerboard();
 
-        if(this.playerNumber > 1)
-            this.playerBoard.getFaithPath().moveCross(1);
+        //if(this.playerNumber > 1)
+        //    this.playerBoard.getFaithPath().moveCross(1);
 
         this.playerLeaderCards = new LeaderCard[4];
 
+
         this.clientSocket = clientSocket;
+        //this.setClientSocket(clientSocket);
         try {
             //this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             //Locking player from inserting input
             this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
             this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
 
-            out.println("Insert your nickname: ");
+            this.out.println("Insert your nickname: ");
             //this.nickname = in.readLine();
             //Scanner turnScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
             this.nickname = this.inScan.nextLine();
-            out.println("Hi " + this.nickname + ", welcome to Master of Renaissance online! Waiting for the match starting...");
+            this.out.println("Hi " + this.nickname);
+            this.out.println("Welcome to Master of Renaissance online!");
+            this.out.println("Looking for a game in Florence...");
 
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -89,6 +94,10 @@ public class Player
 
     public Socket getClientSocket() {
         return this.clientSocket;
+    }
+
+    public void setClientSocket(Socket clientSocket) {
+        this.clientSocket = clientSocket;
     }
 
     /**

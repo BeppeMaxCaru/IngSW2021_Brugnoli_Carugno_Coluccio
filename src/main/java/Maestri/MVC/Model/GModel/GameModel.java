@@ -38,10 +38,10 @@ public class GameModel{
 
     private Scanner turnScan;
 
-    public GameModel(List<Player> clientsWaiting) {
+    public GameModel(Player[] players) {
 
         //Gets until 4 players
-        for (int i=0;i<this.players.length;i++) {
+        /*for (int i=0;i<this.players.length;i++) {
             try {
                 //If there is a player adds it
                 if (!clientsWaiting.isEmpty()) {
@@ -61,12 +61,29 @@ public class GameModel{
                 //If no clients waiting set other players null
                 this.players[i] = null;
             }
-        }
+        }*/
 
-        this.setStartingLeaderCards();
-        this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
-        this.leaderCardDeck = new LeaderCardDeck();
-        this.market = new Market();
+        this.players = players;
+         for (int i=0;i<this.players.length;i++) {
+             try {
+                 for (int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++)
+                     this.players[i].setPlayerLeaderCard(index, this.leaderCardDeck.drawOneLeaderCard());
+
+                 this.players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                 if (i != 0) {
+                     this.players[i].getOutPrintWriter().println("Wait for other players turn...");
+                 }
+
+             } catch (Exception e) {
+                 //If no clients waiting set other players null
+             }
+         }
+
+         this.setStartingLeaderCards();
+         this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
+         this.leaderCardDeck = new LeaderCardDeck();
+         this.market = new Market();
+
     }
 
     public Player[] getPlayers() {

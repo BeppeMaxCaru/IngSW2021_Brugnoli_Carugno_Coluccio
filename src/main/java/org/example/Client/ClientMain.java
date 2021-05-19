@@ -151,7 +151,7 @@ public class ClientMain {
             //Player player = new Player();
             try {
 
-                Socket clientSocket = new Socket(hostName, portNumber);
+                Socket clientSocket = new Socket("127.0.0.1", 1234);
 
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -159,7 +159,7 @@ public class ClientMain {
 
                 //Forse non serve più
                 // :(
-                /*Thread serverReceiver = new Thread(() -> {
+                Thread serverReceiver = new Thread(() -> {
                     try {
                         while (true) {
 
@@ -182,9 +182,12 @@ public class ClientMain {
                         }
                     }
                 });
-                serverReceiver.start();*/
+                serverReceiver.start();
 
-                String action = null;
+                nickName = stdIn.readLine();
+                out.println(nickName);
+
+                String action = "";
                 int mainAction = 0;
                 //do
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

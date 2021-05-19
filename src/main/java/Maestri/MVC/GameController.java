@@ -11,13 +11,39 @@ public class GameController implements Runnable {
     private final GameModel gameModel;
 
     public GameController(List<Player> clientsWaiting) {
-        this.gameModel = new GameModel(clientsWaiting);
+
+        Player[] players = new Player[4];
+
+        List<Player> playersToPlay = new ArrayList<>();
+
+        for (int i=0;i<players.length;i++) {
+            try {
+                //If there is a player adds it
+                if (!clientsWaiting.isEmpty()) {
+                    players[i] = clientsWaiting.remove(0);
+                    players[i].setPlayerNumber(i);
+                    players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                    //playersToPlay.add(clientsWaiting.remove(0));
+                    //playersToPlay.get(0).setPlayerNumber(i);
+                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
+                    if(i!=0){
+                        players[i].getOutPrintWriter().println("Wait for other players turn...");
+                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
+                    }
+                }
+            } catch (Exception e) {
+                //If no clients waiting set other players null
+                players[i] = null;
+            }
+        }
+
+        this.gameModel = new GameModel(players);
 
     }
 
     @Override
     public void run() {
-        System.out.println("New game started");
+        //System.out.println("New game started");
 
         for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
             if (this.gameModel.getPlayers()[i] != null) {

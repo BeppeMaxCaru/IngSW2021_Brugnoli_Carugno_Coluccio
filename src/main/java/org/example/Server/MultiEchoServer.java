@@ -55,9 +55,11 @@ public class MultiEchoServer {
                     gameExecutor.execute(newGame);
                     //Debug
                     System.out.println("New game started");
+                    //System.out.println(clients.size());
                 } catch (Exception e) {
                     //Debug
                     System.out.println("Not enough players");
+                    //System.out.println(clients.size());
                 }
             }
         }, 0, 5000);
@@ -67,6 +69,7 @@ public class MultiEchoServer {
             try {
                 Socket clientSocket = serverSocket.accept();
                 Player newClient = new Player(clientSocket);
+                //newClient.setClientSocket(clientSocket);
                 clients.add(newClient);
 
                 //clientExecutor.execute(newClient);
