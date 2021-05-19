@@ -19,7 +19,7 @@ public class GameController implements Runnable {
     public void run() {
         System.out.println("New game started");
 
-        for (int i=0;i < this.gameModel.getPlayers().length; i++) {
+        for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
             if (this.gameModel.getPlayers()[i] != null) {
                 try {
                     Player currentPlayer = this.gameModel.getPlayers()[i];
@@ -148,7 +148,7 @@ public class GameController implements Runnable {
 
                                     int[] quantity = new int[4];
                                     String[] deposit = new String[4];
-                                    for (int k=0; k<4; k++)
+                                    for (int k = 0; k < 4; k++)
                                     {
                                         quantity[k] = in.nextInt();
                                         deposit[k] = in.nextLine();
@@ -166,15 +166,11 @@ public class GameController implements Runnable {
                                     String[] whichInput = new String[2];
                                     int[] whichOutput = new int[3];
 
-                                    for(int k=0; k<activation.length; k++)
-                                    {
-                                        activation[k]=in.nextInt();
-                                        if(activation[k]==0)
-                                            break;
-                                        else {
-                                            whichInput[k]=in.nextLine();
-                                            if(k>=3)
-                                                whichOutput[k-3]=in.nextInt();
+                                    for(int k = 0; k < 6; k++) {
+                                        activation[k] = in.nextInt();
+                                        if (activation[k] == 1) {
+                                            whichInput[k] = in.nextLine();
+                                            if(k >= 3) whichOutput[k - 3] = in.nextInt();
                                         }
                                     }
 

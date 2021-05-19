@@ -488,12 +488,12 @@ public class ClientMain {
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
-                            String[] fromWhere = new String[6];
-                            String[] whichInput = new String[2];
+                            String[] whichInput = new String[6];
                             String[] whichOutput = new String[3];
                             String unknownCommand;
                             String command = null;
                             int j, i;
+                            String quant;
                             boolean anotherCommand = false;
 
                             j = 0;
@@ -518,9 +518,14 @@ public class ClientMain {
                                             activation[2] = 1;
                                         }
                                         for (int k = 0; k < 2; k++) {
-                                            unknownCommand = stdIn.readLine();// Comandi: c, w, e.
-                                            if (unknownCommand.equalsIgnoreCase("c") || unknownCommand.equalsIgnoreCase("w") || unknownCommand.equalsIgnoreCase("e"))
-                                                fromWhere[i] = fromWhere[i] + unknownCommand;
+                                            unknownCommand = stdIn.readLine(); // Comandi risorsa in input: 0, 1, 2, 3
+                                            if (unknownCommand.equalsIgnoreCase("0") || unknownCommand.equalsIgnoreCase("1") || unknownCommand.equalsIgnoreCase("2") || unknownCommand.equalsIgnoreCase("3")) {
+                                                whichInput[i] = whichInput[i] + unknownCommand;
+                                                quant = stdIn.readLine(); // Comandi quantità: 1, 2
+                                                whichInput[i] = whichInput[i] + quant;
+                                                whichInput[i] = whichInput[i] + stdIn.readLine(); // Comandi from where: c, w, e
+                                                if(quant.equals("2")) k++;
+                                            }
                                             else {
                                                 command = unknownCommand;
                                                 if (command.equalsIgnoreCase("p0") || command.equalsIgnoreCase("p1") || command.equalsIgnoreCase("p2")) anotherCommand = true;
@@ -533,9 +538,11 @@ public class ClientMain {
                                         // Se attiva il potere di produzione base
                                         if (command.equalsIgnoreCase("b")) {
                                             for (int k = 0; k < 2; k++) {
-                                                whichInput[k] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
-                                                unknownCommand = stdIn.readLine(); // Comandi: c, w, e.
-                                                fromWhere[3] = fromWhere[index] + unknownCommand;
+                                                whichInput[3] = whichInput[3] + stdIn.readLine();  // Comandi risorsa in input: 0, 1, 2, 3
+                                                quant = stdIn.readLine(); // Comandi quantità: 1, 2
+                                                whichInput[3] = whichInput[3] + quant;
+                                                whichInput[3] = whichInput[3] + stdIn.readLine(); // Comandi: c, w, e.
+                                                if(quant.equals("2")) k++;
                                             }
                                             activation[3] = 1;
                                         }
@@ -544,17 +551,22 @@ public class ClientMain {
                                             whichOutput[j] = stdIn.readLine(); // Comandi: COINS, SHIELDS...
                                             j++;
                                             if (command.equals("e0")) {
-                                                fromWhere[4] = stdIn.readLine();// Comandi: c, w, e.
+                                                whichInput[4] = whichInput[4] + stdIn.readLine();  // Comandi risorsa in input: 0, 1, 2, 3
+                                                whichInput[4] = whichInput[4] + "1";
+                                                whichInput[4] = whichInput[4] + stdIn.readLine(); // Comandi: c, w, e.
                                                 activation[4] = 1;
-                                            } else if (command.equals("e1")) {
-                                                fromWhere[5] = stdIn.readLine();// Comandi: c, w, e.
+                                            }
+                                            else if (command.equals("e1")) {
+                                                whichInput[5] = whichInput[5] + stdIn.readLine();  // Comandi risorsa in input: 0, 1, 2, 3
+                                                whichInput[5] = whichInput[5] + "1";
+                                                whichInput[5] = whichInput[5] + stdIn.readLine(); // Comandi: c, w, e.
                                                 activation[5] = 1;
                                             }
                                         }
                                     }
                                 }
                             }
-                            if(checkActivateProduction(commandsList, activation, fromWhere, whichInput, whichOutput))
+                            if(checkActivateProduction(commandsList, activation, whichInput, whichOutput))
                             {
                                 for(int k=0; k<6; k++)
                                 {
@@ -609,13 +621,11 @@ public class ClientMain {
 
     }
 
-    public static boolean checkActivateProduction(String[] commandList, int[] activation, String[] fromWhere, String[] whichInput, String[] whichOutput) {
+    public static boolean checkActivateProduction(String[] commandList, int[] activation, String[] whichInput, String[] whichOutput) {
 
         PrintWriter out = new PrintWriter(System.out);
 
-        List<String> inputs = new ArrayList<>();
-        List<String> outputs = new ArrayList<>();
-        int extraProdActivate = 0;
+        int j;
 
         for(int i = 0; commandList[i] != null; i++) {
             if(!commandList[i].equals("p0") && !commandList[i].equals("p1") && !commandList[i].equals("p2") &&
@@ -627,41 +637,33 @@ public class ClientMain {
 
 
         for(int index = 0; index < 6; index++) {
-            if(activation[index] == 1) {
-                if(index == 0 || index == 1 || index == 2 || index == 3) {
-                    for(int i = 0; i < fromWhere[index].length(); i++) {
-                        if(fromWhere[index].charAt(i) != 'c' && fromWhere[index].charAt(i) != 'w' && fromWhere[index].charAt(i) != 'e') {
-                            out.println("Not valid command.");
-                            return false;
-                        }
-                    }
-                    if(index == 3) {
-                        for(int k = 0; k < 2; k++) {
-                            if (!whichInput[k].equals("COINS") && !whichInput[k].equals("SHIELDS") && !whichInput[k].equals("SERVANTS") && !whichInput[k].equals("STONES") && !whichInput[k].equals("REDCROSS")) {
-                                out.println("Not valid command.");
-                                return false;
-                            }
-                            inputs.add(whichInput[k]);
-                        }
-                        extraProdActivate++;
-                    }
-                }
-                else {
-                    if(!fromWhere[index].equals("c") && !fromWhere[index].equals("w") && !fromWhere[index].equals("e")) {
+            if (activation[index] == 1) {
+                j = 0;
+                for (int i = 0; i < whichInput[index].length() / 3; i++) {
+                    if (whichInput[index].charAt(j) != '0' && whichInput[index].charAt(j) != '1' && whichInput[index].charAt(j) != '2' && whichInput[index].charAt(j) != '3') {
                         out.println("Not valid command.");
                         return false;
                     }
-                    extraProdActivate++;
+                    if (whichInput[index].charAt(j + 1) != '1' && whichInput[index].charAt(j + 1) != '2') {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+                    if (whichInput[index].charAt(j + 2) != 'c' && whichInput[index].charAt(j + 2) != 'w' && whichInput[index].charAt(j + 2) != 'e') {
+                        out.println("Not valid command.");
+                        return false;
+                    }
+                    j++;
                 }
             }
         }
 
-        for(int k = 0; k < extraProdActivate; k++) {
-            if (!whichOutput[k].equals("COINS") && !whichOutput[k].equals("SHIELDS") && !whichOutput[k].equals("SERVANTS") && !whichOutput[k].equals("STONES") && !whichOutput[k].equals("REDCROSS")) {
-                out.println("Not valid command.");
-                return false;
+        for (String s : whichOutput) {
+            if (s != null) {
+                if (!s.equals("0") && !s.equals("1") && !s.equals("2") && !s.equals("3") && !s.equals("4")) {
+                    out.println("Not valid command.");
+                    return false;
+                }
             }
-            outputs.add(whichOutput[k]);
         }
 
         return true;
