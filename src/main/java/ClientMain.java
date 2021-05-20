@@ -369,20 +369,10 @@ public class ClientMain {
                                 break;
                             }
 
-                            out.println(action);
-
                             System.out.println("Which card do you want to buy?");
                             System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
-                            String parameter;
-                            parameter = stdIn.readLine();
-                            parameter = parameter.toUpperCase();
-                            if (parameter.equalsIgnoreCase("green")
-                                    || parameter.equalsIgnoreCase("yellow")
-                                    || parameter.equalsIgnoreCase("blue")
-                                    || parameter.equalsIgnoreCase("purple")) {
-                                out.println(parameter);
-                                //System.out.println(in.readLine());
-                            } else {
+                            String colour = stdIn.readLine().toUpperCase();
+                            if (!colour.equals("GREEN") && !colour.equals("YELLOW") && !colour.equals("BLUE") && !colour.equals("PURPLE")) {
                                 //Resets controller
                                 System.err.println("Not valid parameter");
                                 out.println();
@@ -391,15 +381,13 @@ public class ClientMain {
 
                             System.out.println("Which level do you want to buy?");
                             System.out.println("Write the correct number between 1 and 3, if existing in the grid");
-
-                            parameter = stdIn.readLine();
+                            String lev = stdIn.readLine();
+                            int level;
                             try {
-                                int level = Integer.parseInt(parameter);
+                                level = Integer.parseInt(lev);
                                 if (level<1 || level>3) throw new Exception();
-                                out.println(level);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                out.println();
                                 break;
                             }
 
@@ -414,14 +402,13 @@ public class ClientMain {
                             resources.put("SHIELDS", 2);
                             resources.put("STONES", 3);
 
-                            for(int k=0; k<4; k++)
-                            {
+                            for(int k=0; k<4; k++) {
                                 quantity[k]=0;
                                 shelf[k]=null;
                             }
 
                             //Which resource do you want to take
-                            parameter = "";
+                            String parameter = "";
                             while (!parameter.equalsIgnoreCase("STOP")) {
 
                                 System.out.println("Which resource do you want to pick to pay the development card?");
@@ -435,12 +422,11 @@ public class ClientMain {
                                     parameter = stdIn.readLine();
                                     try {
                                         int q = Integer.parseInt(parameter);
-                                        if (q<0) throw new Exception();
-                                        if (q>7) throw new Exception();
+                                        if (q + quantity[index] < 0) throw new Exception();
+                                        if (q + quantity[index] > 7) throw new Exception();
                                         quantity[index]=q;
                                     } catch (Exception e) {
                                         System.err.println("Not valid parameter");
-                                        out.println();
                                         break;
                                     }
 
@@ -454,23 +440,21 @@ public class ClientMain {
                                             shelf[index]=shelf[index] + parameter.charAt(0);
                                         } else {
                                             System.err.println("Not valid parameter");
-                                            out.println();
                                             break;
                                         }
                                     }
 
                                 } else {
                                     System.err.println("Not existing resource");
-                                    out.println();
                                     break;
                                 }
                             }
 
-                            for(int z=0; z<4; z++)
-                            {
-                                out.println(quantity[z]);
-                                out.println(shelf[z]);
-                            }
+                            //Sending Card request
+                            BuyCardMessage buyCard = new BuyCardMessage(colour, level, playerNumber, quantity, shelf);
+                            stream.writeObject(action);
+                            stream.writeObject(buyCard);
+                            stream.close();
 
                             //Position where to place the card on the playerboard
                             System.out.println("In which position of your development card grid do you want to place the bought card?");
@@ -478,14 +462,10 @@ public class ClientMain {
                             System.out.println("Write a correct position between 0 and 2.");
                             parameter = stdIn.readLine();
                             try{
-
                                 int pos = Integer.parseInt(parameter);
-                                if(pos < 0 || pos > 2) throw new Exception();
-                                out.println(pos);
-
+                                if (pos < 0 || pos > 2) throw new Exception();
                             } catch (Exception e) {
                                 System.err.println("Not valid command");
-                                out.println();
                                 break;
                             }
 

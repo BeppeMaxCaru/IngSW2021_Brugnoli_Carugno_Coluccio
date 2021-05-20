@@ -2,6 +2,7 @@ package Maestri.MVC;
 
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Message.BuyCardMessage;
 import Message.DiscardLeaderMessage;
 import Message.MarketResourcesMessage;
 import Message.PlayLeaderMessage;
@@ -130,11 +131,13 @@ public class GameController implements Runnable {
 
                                     PlayLeaderMessage message = (PlayLeaderMessage) stream.readObject();
 
-                                    //First and only parameter is always an int that is the position of the leader card (see client main action flow)
-                                    int position = message.getPlayed();
+                                    if(i == message.getPlayerNumber())
+                                    {
+                                        //First and only parameter is always an int that is the position of the leader card
+                                        int position = message.getPlayed();
 
-                                    if(i==message.getPlayerNumber())
                                         this.checkPlayCards(this.gameModel.getPlayers()[i], position);
+                                    }
                                     else {
                                         out.println("It's not your turn");
                                         break;
@@ -145,10 +148,13 @@ public class GameController implements Runnable {
 
                                     DiscardLeaderMessage message = (DiscardLeaderMessage) stream.readObject();
 
-                                    int position = message.getDiscarded();
-
                                     if(i==message.getPlayerNumber())
+                                    {
+                                        //First and only parameter is always an int that is the position of the leader card
+                                        int position = message.getDiscarded();
+
                                         this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                    }
                                     else {
                                         out.println("It's not your turn");
                                         break;
@@ -159,17 +165,17 @@ public class GameController implements Runnable {
 
                                     MarketResourcesMessage message = (MarketResourcesMessage) stream.readObject();
 
-                                    //Row/column choice
-                                    String rowOrColumnChoice = message.getRowColumnChoice();
-                                    //Row/column index
-                                    int index = message.getIndex();
-                                    //Warehouse/leaderCard choice
-                                    String wlChoice = message.getWarehouseLeaderChoice();
-                                    //If he has 2 whiteMarbleLeaderCards
-                                    String chosenMarble = message.getWhichWhiteMarbleChoice();
-
-                                    if(i== message.getPlayerNumber())
+                                    if(i == message.getPlayerNumber())
                                     {
+                                        //Row/column choice
+                                        String rowOrColumnChoice = message.getRowColumnChoice();
+                                        //Row/column index
+                                        int index = message.getIndex();
+                                        //Warehouse/leaderCard choice
+                                        String wlChoice = message.getWarehouseLeaderChoice();
+                                        //If he has 2 whiteMarbleLeaderCards
+                                        String chosenMarble = message.getWhichWhiteMarbleChoice();
+
                                         if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
                                         {
                                             out.println("OK");
@@ -183,28 +189,31 @@ public class GameController implements Runnable {
                                 }
                                 case "BUY DEVELOPMENT CARD": {
 
-                                    //First parameter received
-                                    //DevCard colour
-                                    String colour = in.nextLine();
+                                    BuyCardMessage message = (BuyCardMessage) stream.readObject();
 
-                                    //Second parameter received
-                                    //DevCard level
-                                    int level = in.nextInt();
-
-                                    int[] quantity = new int[4];
-                                    String[] deposit = new String[4];
-                                    for (int k = 0; k < 4; k++)
+                                    if(i == message.getPlayerNumber())
                                     {
-                                        quantity[k] = in.nextInt();
-                                        deposit[k] = in.nextLine();
-                                    }
+                                        //DevCard colour
+                                        String colour = message.getColour();
+                                        //DevCard level
+                                        int level = 3 - message.getLevel();
+                                        //How much resources does the player spend
+                                        int[] quantity = message.getQuantity();
+                                        //From which shelf does the player pick resources
+                                        String[] deposit = message.getShelf();
 
-                                    int position = in.nextInt();
+                                        //Check correct cards
 
-                                    if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, 3 - level, position, quantity, deposit))
-                                    {
-                                        out.println("OK");
-                                        corrAction++;
+                                        int position = in.nextInt();
+
+                                        if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, quantity, deposit))
+                                        {
+                                            out.println("OK");
+                                            corrAction++;
+                                        }
+                                    } else {
+                                        out.println("It's not your turn");
+                                        break;
                                     }
                                     break;
                                 }
