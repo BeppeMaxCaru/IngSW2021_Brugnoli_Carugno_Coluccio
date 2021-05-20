@@ -1,7 +1,4 @@
-import Message.InputResourceMessage;
-import Message.DiscardLeaderMessage;
-import Message.OutputChoiceResourceMessage;
-import Message.PlayLeaderMessage;
+import Message.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -238,42 +235,31 @@ public class ClientMain {
                     //Puts in upper case the input
                     action = action.toUpperCase();
 
-                    //Posso inviare il nickname del player qunado inserisce un comando per vedere se è il suo turno
-                    //altrimenti lo ignoro
+                    FileOutputStream output = new FileOutputStream("ClientMessage");
+                    ObjectOutputStream stream = new ObjectOutputStream(output);
 
-                    //IMPORTANT!!!
-                    //out.println sends a null string that signals stdin error to the controller to
-                    //reset its state at before the action
-                    out.flush();
                     //out.println();
                     switch (action) {
                         case "PLAY LEADER CARD": {
-                            String parameter;
                             System.out.println("Which card do you want to play?");
                             System.out.println("Write 0 or 1.");
-                            parameter = stdIn.readLine();
+                            String parameter = stdIn.readLine();
                             try {
                                 //Checks if the leader card position exists
                                 int cardPosition = Integer.parseInt(parameter);
-                                //Posso mandare qualunque numero e la validità la verifica il controller
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
-                                FileOutputStream output = new FileOutputStream("ClientMessage");
-                                ObjectOutputStream stream = new ObjectOutputStream(output);
-                                stream.writeObject(action.toUpperCase());
+                                stream.writeObject(action);
                                 stream.writeObject(playLeaderMessage);
                                 stream.close();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                //Send null value to reset the controller to
-                                //receive again a new action
                                 break;
                             }
                         }
                         case "DISCARD LEADER CARD": {
-                            //Same for play leader card
                             System.out.println("Which card do you want to discard?");
                             System.out.println("Write 0 or 1.");
                             String parameter = stdIn.readLine();
@@ -283,16 +269,12 @@ public class ClientMain {
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, cardPosition);
-                                FileOutputStream output = new FileOutputStream("ClientMessage");
-                                ObjectOutputStream stream = new ObjectOutputStream(output);
                                 stream.writeObject(action.toUpperCase());
                                 stream.writeObject(discardLeaderMessage);
                                 stream.close();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                //Send null value to reset the controller to
-                                //receive again a new action
                                 break;
                             }
                         }
@@ -303,25 +285,12 @@ public class ClientMain {
                                 break;
                             }
 
-                            //Sends action
-                            out.println(action);
-                            //Receives OK
-                            //System.out.println(in.readLine());
-
                             //Receives column or row
-                            String parameter;
                             System.out.println("Do you want to pick row resources or column resources?");
                             System.out.println("Write 'ROW' or 'COLUMN'.");
-                            parameter = stdIn.readLine();
-                            parameter = parameter.toUpperCase();
-                            if (parameter.equals("ROW")
-                                || parameter.equals("COLUMN")) {
-                                out.println(parameter.charAt(0));
-                                //System.out.println(in.readLine());
-                            } else {
-                                //Resets action
+                            String parameter = stdIn.readLine().toUpperCase();
+                            if (!parameter.equals("ROW") && !parameter.equals("COLUMN")) {
                                 System.err.println("Not valid parameter");
-                                out.println();
                                 break;
                             }
 
@@ -335,17 +304,14 @@ public class ClientMain {
                                 System.out.println("Write a number between 0 and 3.");
                             }
                             String par = stdIn.readLine();
+                            int index;
                             try {
                                 //Checks if the leader card position exists
-                                int index = Integer.parseInt(par);
+                                index = Integer.parseInt(par);
                                 if (parameter.equals("ROW") && (index < 0 || index > 2)) throw new Exception();
                                 if (parameter.equals("COLUMN") && (index < 0 || index > 3)) throw new Exception();
-                                out.println(index);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                //Send null value to reset the controller to
-                                //receive again a new action
-                                out.println();
                                 break;
                             }
 
@@ -355,20 +321,14 @@ public class ClientMain {
                                 System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
                             else
                                 System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
-                            String wlChoice = stdIn.readLine();
+                            String wlChoice = stdIn.readLine().toUpperCase();
                             try {
                                 //Checks if player has written only 'w' and 'l' chars
                                 if (wlChoice.length()==0) throw new Exception();
-
                                 for(int k=0; k<wlChoice.length(); k++)
-                                    if(!String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("w") || !String.valueOf(wlChoice.charAt(k)).equalsIgnoreCase("l")) throw new Exception();
-
-                                out.println(wlChoice);
+                                    if(!String.valueOf(wlChoice.charAt(k)).equals("W") && !String.valueOf(wlChoice.charAt(k)).equals("L")) throw new Exception();
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                //Send null value to reset the controller to
-                                //receive again a new action
-                                out.println();
                                 break;
                             }
 
@@ -377,25 +337,24 @@ public class ClientMain {
                             System.out.println("if you activated only one white marble leader card, do you want to activate it?");
                             System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
                             System.out.println("Write X if you don't want to activate any leader card effect");
-
-                            String chosenMarble = stdIn.readLine();
+                            String chosenMarble = stdIn.readLine().toUpperCase();
                             try {
                                 //Checks if player has written only '0', '1' or 'x' chars
-
                                 if(chosenMarble.length()!=0)
                                     for(int k=0; k<wlChoice.length(); k++)
-                                        if(!String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("0")
-                                                || !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("1")
-                                                || !String.valueOf(chosenMarble.charAt(k)).equalsIgnoreCase("x")) throw new Exception();
+                                        if(!String.valueOf(chosenMarble.charAt(k)).equals("0")
+                                                && !String.valueOf(chosenMarble.charAt(k)).equals("1")
+                                                && !String.valueOf(chosenMarble.charAt(k)).equals("X")) throw new Exception();
 
-                                out.println(chosenMarble);
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
-                                //Send null value to reset the controller to
-                                //receive again a new action
-                                out.println();
                                 break;
                             }
+
+                            MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(playerNumber, parameter, index, wlChoice, chosenMarble);
+                            stream.writeObject(action);
+                            stream.writeObject(resourcesMessage);
+                            stream.close();
 
                             //If server responds OK, action is correct
                             String correctAction = in.readLine();
@@ -545,7 +504,9 @@ public class ClientMain {
                             /* PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
                             FileOutputStream output = new FileOutputStream("ClientMessage");
                             ObjectOutputStream stream = new ObjectOutputStream(output);
-                            stream.writeObject(action.toUpperCase());
+                            */
+                            stream.writeObject(action);
+                            /*
                             stream.writeObject(playLeaderMessage);
                             stream.close(); */
 
@@ -785,20 +746,14 @@ public class ClientMain {
                                         out.println(0);
                                     else
                                     {
-                                       j = 0;
                                        for(i = 0; i < whichInput[k].length() / 3; i++) {
-                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, whichInput[k].charAt(j), whichInput[k].charAt(j + 1), whichInput[k].charAt(j + 2));
-                                           FileOutputStream output = new FileOutputStream("ClientMessage");
-                                           ObjectOutputStream stream = new ObjectOutputStream(output);
+                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, Character.getNumericValue(whichInput[k].charAt(0)), Character.getNumericValue(whichInput[k].charAt(1)), whichInput[k].charAt(2));
                                            stream.writeObject(inputResourceMessage);
                                            stream.close();
-                                           j++;
                                        }
 
                                        if(k == 3 || k == 4 || k == 5) {
-                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, whichOutput[k]);
-                                           FileOutputStream output = new FileOutputStream("ClientMessage");
-                                           ObjectOutputStream stream = new ObjectOutputStream(output);
+                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, Integer.parseInt(whichOutput[k]));
                                            stream.writeObject(outputChoiceResourceMessage);
                                            stream.close();
                                        }

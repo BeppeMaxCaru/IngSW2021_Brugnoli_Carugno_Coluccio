@@ -3,8 +3,7 @@ package Maestri.MVC;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.DiscardLeaderMessage;
-import Message.InputResourceMessage;
-import Message.OutputChoiceResourceMessage;
+import Message.MarketResourcesMessage;
 import Message.PlayLeaderMessage;
 
 import java.io.FileInputStream;
@@ -128,56 +127,57 @@ public class GameController implements Runnable {
 
                             switch (action.toUpperCase()) {
                                 case "PLAY LEADER CARD": {
-                                    //If the action received is this keeps saving parameter until it has all of them
-                                    //Otherwise if it receives null before all the parameters are received doesn't call the method but reset the state to waiting action
+
+                                    PlayLeaderMessage message = (PlayLeaderMessage) stream.readObject();
 
                                     //First and only parameter is always an int that is the position of the leader card (see client main action flow)
-                                    PlayLeaderMessage message = (PlayLeaderMessage) stream.readObject();
                                     int position = message.getPlayed();
+
                                     if(i==message.getPlayerNumber())
-                                        this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                        this.checkPlayCards(this.gameModel.getPlayers()[i], position);
                                     else {
                                         out.println("It's not your turn");
-                                        return;
+                                        break;
                                     }
                                     break;
                                 }
                                 case "DISCARD LEADER CARD": {
-                                    //See PLAY LEADER CARD
 
                                     DiscardLeaderMessage message = (DiscardLeaderMessage) stream.readObject();
+
                                     int position = message.getDiscarded();
+
                                     if(i==message.getPlayerNumber())
                                         this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
                                     else {
                                         out.println("It's not your turn");
-                                        return;
+                                        break;
                                     }
                                     break;
                                 }
                                 case "PICK RESOURCES FROM MARKET": {
 
+                                    MarketResourcesMessage message = (MarketResourcesMessage) stream.readObject();
+
                                     //Row/column choice
-                                    //First parameter is always either row or column (chek in client)
-                                    String rowOrColumnChoice = in.nextLine();
-
+                                    String rowOrColumnChoice = message.getRowColumnChoice();
                                     //Row/column index
-                                    //Second parameter is always an int
-                                    int index = Integer.parseInt(in.nextLine());
-
-                                    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    int index = message.getIndex();
                                     //Warehouse/leaderCard choice
-                                    //Qui bisogna far continuare a scegliere al player per ogni biglia + effetto speciale se disponibile
-                                    String wlChoice = in.nextLine();
-
+                                    String wlChoice = message.getWarehouseLeaderChoice();
                                     //If he has 2 whiteMarbleLeaderCards
-                                    String chosenMarble;
-                                    chosenMarble=in.nextLine();
+                                    String chosenMarble = message.getWhichWhiteMarbleChoice();
 
-                                    if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
+                                    if(i== message.getPlayerNumber())
                                     {
-                                        out.println("OK");
-                                        corrAction++;
+                                        if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
+                                        {
+                                            out.println("OK");
+                                            corrAction++;
+                                        }
+                                    } else {
+                                        out.println("It's not your turn");
+                                        break;
                                     }
                                     break;
                                 }
@@ -217,12 +217,8 @@ public class GameController implements Runnable {
                                     for(int k = 0; k < 6; k++) {
                                         activation[k] = in.nextInt();
                                         if (activation[k] == 1) {
-                                            InputResourceMessage messageInput = (InputResourceMessage) stream.readObject();
-                                            whichInput[k] = String.valueOf(messageInput.getResource() + messageInput.getQuantity() + messageInput.getStore());
-                                            if(k >= 3) {
-                                                OutputChoiceResourceMessage messageOutput = (OutputChoiceResourceMessage) stream.readObject();
-                                                whichOutput[k - 3] = Integer.parseInt(messageOutput.getResource());
-                                            }
+                                            whichInput[k] = in.nextLine();
+                                            if(k >= 3) whichOutput[k - 3] = in.nextInt();
                                         }
                                     }
 
