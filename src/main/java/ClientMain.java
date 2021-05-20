@@ -324,7 +324,8 @@ public class ClientMain {
                             String wlChoice = stdIn.readLine().toUpperCase();
                             try {
                                 //Checks if player has written only 'w' and 'l' chars
-                                if (wlChoice.length()==0) throw new Exception();
+                                if (parameter.equals("ROW") && wlChoice.length()!=4) throw new Exception();
+                                if (parameter.equals("COLUMN") && wlChoice.length()!=3) throw new Exception();
                                 for(int k=0; k<wlChoice.length(); k++)
                                     if(!String.valueOf(wlChoice.charAt(k)).equals("W") && !String.valueOf(wlChoice.charAt(k)).equals("L")) throw new Exception();
                             } catch (Exception e) {
@@ -345,7 +346,6 @@ public class ClientMain {
                                         if(!String.valueOf(chosenMarble.charAt(k)).equals("0")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("1")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("X")) throw new Exception();
-
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
