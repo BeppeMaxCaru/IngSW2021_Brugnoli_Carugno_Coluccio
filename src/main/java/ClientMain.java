@@ -747,13 +747,13 @@ public class ClientMain {
                                     else
                                     {
                                        for(i = 0; i < whichInput[k].length() / 3; i++) {
-                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, Character.getNumericValue(whichInput[k].charAt(0)), Character.getNumericValue(whichInput[k].charAt(1)), whichInput[k].charAt(2));
+                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, whichInput[k].charAt(0), whichInput[k].charAt(1), whichInput[k].charAt(2));
                                            stream.writeObject(inputResourceMessage);
                                            stream.close();
                                        }
 
                                        if(k == 3 || k == 4 || k == 5) {
-                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, Integer.parseInt(whichOutput[k]));
+                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, whichOutput[k]);
                                            stream.writeObject(outputChoiceResourceMessage);
                                            stream.close();
                                        }
