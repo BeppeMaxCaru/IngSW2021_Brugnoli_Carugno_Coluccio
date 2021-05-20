@@ -2,14 +2,9 @@ package Maestri.MVC;
 
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Message.BuyCardMessage;
-import Message.DiscardLeaderMessage;
-import Message.MarketResourcesMessage;
-import Message.PlayLeaderMessage;
+import Message.*;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class GameController implements Runnable {
@@ -122,6 +117,8 @@ public class GameController implements Runnable {
 
                             FileInputStream input = new FileInputStream("ReceivedMessage");
                             ObjectInputStream stream = new ObjectInputStream(input);
+                            FileOutputStream output = new FileOutputStream("ServerMessage");
+                            ObjectOutputStream serverStream = new ObjectOutputStream(output);
                             action = (String) stream.readObject();
 
                             corrAction = 0;
@@ -195,6 +192,7 @@ public class GameController implements Runnable {
                                     {
                                         //DevCard colour
                                         String colour = message.getColour();
+                                        int column = this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
                                         //DevCard level
                                         int level = 3 - message.getLevel();
                                         //How much resources does the player spend
@@ -202,14 +200,33 @@ public class GameController implements Runnable {
                                         //From which shelf does the player pick resources
                                         String[] deposit = message.getShelf();
 
-                                        //Check correct cards
-
-                                        int position = in.nextInt();
-
-                                        if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, quantity, deposit))
+                                        if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, quantity, deposit))
                                         {
-                                            out.println("OK");
-                                            corrAction++;
+                                            ArrayList<Integer> correctPositions = new ArrayList<>();
+
+                                            for (int pos=0; pos<3; pos++)
+                                                if(currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0]))
+                                                    correctPositions.add(pos);
+
+                                            if (correctPositions.size() == 0)
+                                            {
+                                                serverStream.writeObject(false);
+                                                break;
+                                            }
+                                            else {
+                                                serverStream.writeObject(true);
+
+                                                ServerCardAvailabilityMessage availabilityMessage = new ServerCardAvailabilityMessage(correctPositions);
+                                                serverStream.writeObject(availabilityMessage);
+                                                serverStream.close();
+
+                                                DevCardPositionMessage positionMessage = (DevCardPositionMessage) stream.readObject();
+
+                                                if(this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit)) {
+                                                    serverStream.writeObject(true);
+                                                    corrAction++;
+                                                } else serverStream.writeObject(false);
+                                            }
                                         }
                                     } else {
                                         out.println("It's not your turn");
@@ -260,201 +277,6 @@ public class GameController implements Runnable {
         }
 
     }
-
-
-    /*public void run() {
-
-        System.out.println("This is the new game");
-
-        for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-            //turnLock.lock();
-            if (this.gameModel.getPlayers()[i] != null) {
-                try {
-                    Player currentPlayer = this.gameModel.getPlayers()[i];
-
-                    Scanner in = currentPlayer.getInScannerReader();
-                    PrintWriter out = currentPlayer.getOutPrintWriter();
-
-                    out.println("It is your first turn");
-                    out.println();
-
-                    //Set starting PlayerBoard
-                    Map<Integer, Integer> startingResources = new HashMap<>();
-                    startingResources.put(0, 0);
-                    startingResources.put(1, 1);
-                    startingResources.put(2, 1);
-                    startingResources.put(3, 2);
-
-                    int numChosenResources = startingResources.get(i);
-                    while (numChosenResources > 0) {
-                        String resource = in.nextLine();
-                        while (!resource.equals("COINS") && !resource.equals("SHIELDS") && !resource.equals("SERVANTS") && !resource.equals("STONES")) {
-                            out.println("Not valid command.");
-                            resource = in.nextLine();
-                        }
-                        currentPlayer.setStartingPlayerboard(resource);
-                        numChosenResources--;
-                    }
-
-                    for (int cards = 0; cards < 2; cards++) {
-                        boolean corrAction;
-                        do {
-                            String action = in.nextLine();
-                            corrAction = this.checkDiscardCards(this.gameModel.getPlayers()[i], action);
-                        } while (corrAction);
-                    }
-
-                    currentPlayer.getOutPrintWriter().println("Your turn has ended. Wait for other players...");
-                    currentPlayer.getOutPrintWriter().println();
-
-
-                } catch (Exception e) {
-                    this.gameModel.getPlayers()[i] = null;
-                    System.err.println(e.getMessage());
-                }
-            }
-        }
-
-
-        while (!this.gameModel.checkEndPlay()) {
-
-
-            for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-                if (this.gameModel.getPlayers()[i] != null) {
-                    try {
-                        Player currentPlayer = this.gameModel.getPlayers()[i];
-
-                        Scanner in = currentPlayer.getInScannerReader();
-                        PrintWriter out = currentPlayer.getOutPrintWriter();
-
-                        out.println("It's your turn again");
-
-                        //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
-                        //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
-
-
-                        this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
-                        this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
-                        this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
-
-                        String action;
-                        int corrAction;
-                        do{
-                            action = in.nextLine();
-                            corrAction = 0;
-
-                            switch (action.toUpperCase()) {
-                                case "PLAY LEADER CARD": {
-                                    String choice = in.nextLine();
-                                    this.checkPlayCards(this.gameModel.getPlayers()[i], choice);
-                                    break;
-                                }
-                                case "DISCARD LEADER CARD": {
-                                    String choice = in.nextLine();
-                                    this.checkDiscardCards(this.gameModel.getPlayers()[i], choice);
-                                    break;
-                                }
-                                case "PICK RESOURCES FROM MARKET": {
-
-                                    //Row/column choice
-                                    String rcChoice = in.nextLine();
-
-                                    //Row/column index
-                                    String choice = in.nextLine();
-
-                                    //Warehouse/leaderCard choice
-                                    String wlChoice = in.nextLine();
-
-                                    //If he has 2 whiteMarbleLeaderCards
-                                    String chosenMarble="0";
-
-                                    if(currentPlayer.getPlayerBoard().getResourceMarbles()[0]!=null)
-                                        chosenMarble=in.nextLine();
-
-                                    if (this.checkMarketAction(this.gameModel.getPlayers()[i], rcChoice, choice, wlChoice, chosenMarble))
-                                        corrAction++;
-                                    break;
-                                }
-                                case "BUY DEVELOPMENT CARD": {
-
-                                    //DevCard colour
-                                    String colour = in.nextLine();
-
-                                    //DevCard level
-                                    String level = in.nextLine();
-
-                                    //PlayerBoard grid position
-                                    String position = in.nextLine();
-
-                                    //From which store do you want to take resources
-                                    String wclChoice = in.nextLine();
-
-                                    //If he can pay discounted price
-                                    String discountChoice="00";
-
-                                    if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, position, wclChoice, discountChoice))
-                                        corrAction++;
-                                    break;
-                                }
-                                case "ACTIVATE PRODUCTION POWER": {
-
-                                    String[] activation = new String[6];
-                                    String[] fromWhere = new String[6];
-                                    String whichInput = null;
-                                    String[] whichOutput = new String[3];
-
-                                    for(int index=0; index<6; index++)
-                                    {
-                                        activation[index]=in.nextLine();
-                                        fromWhere[index]=in.nextLine();
-                                        if(index==3)
-                                            whichInput=in.nextLine();
-                                        if(index>2)
-                                            whichOutput[index-3]=in.nextLine();
-                                    }
-
-                                    if(this.checkActivateProduction(currentPlayer, activation, fromWhere, whichInput, whichOutput))
-                                        corrAction++;
-                                    }
-                                    break;
-                                }
-                                default: {
-                                    out.println("Not valid action!");
-                                    break;
-                                }
-                            }
-                            //Player inserisce quit
-                        }while (!action.equalsIgnoreCase("END TURN") && (corrAction < 1));
-
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println();
-
-                    } catch (Exception e) {
-                        //Player disconesso
-                        //System.err.println(e.getMessage());
-                        this.gameModel.getPlayers()[i] = null;
-
-                    }
-                }
-            }
-
-
-            for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-                if (this.gameModel.getPlayers()[i] != null) {
-                    try {
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("Game over!");
-                        //There is a winner
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println(this.gameModel.getPlayers()[this.gameModel.checkWinner()].getNickname() + " wins the game with " + this.gameModel.getPlayers()[this.gameModel.checkWinner()].sumAllVictoryPoints() + " victory points");
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("You obtained " + this.gameModel.getPlayers()[i].sumAllVictoryPoints() + " victory points");
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                    }
-                }
-            }
-        }
-    }*/
 
     public void checkPlayCards (Player currentPlayer, int c) {
 
@@ -534,7 +356,7 @@ public class GameController implements Runnable {
         }
     }
 
-    public boolean checkBuyDevCard(Player currentPlayer, String colour, int l, int p, int[] quantity, String[] wclChoice) {
+    public boolean checkBuyDevCard(Player currentPlayer, String colour, int l, int[] quantity, String[] wclChoice) {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
@@ -550,9 +372,9 @@ public class GameController implements Runnable {
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
-        int column=this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
+        int column = this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
 
-        if(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]!=null) {
+        if (this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0] != null) {
 
             //Control on quantity and possibly discounts
             //If paidResources hashMap isn't equals to cardCost hashMap
@@ -580,56 +402,40 @@ public class GameController implements Runnable {
             }
         }
 
-        for(int k=0; k<4; k++)
-        {
-            int count=0;
-            for (int z=0; z<wclChoice[k].length(); z++)
-            {
-                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
+        for (int k = 0; k < 4; k++) {
+            int count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
                     count++;
             }
-            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count)
-            {
+            if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count) {
                 out.println("Not valid command.");
                 return false;
             }
 
-            count=0;
-            for (int z=0; z<wclChoice[k].length(); z++)
-            {
-                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
                     count++;
             }
-            if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count)
-            {
+            if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count) {
                 out.println("Not valid command.");
                 return false;
             }
 
-            count=0;
-            for (int z=0; z<wclChoice[k].length(); z++)
-            {
-                if(String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
                     count++;
             }
-            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(k)) != count)
-            {
+            if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
                 out.println("Not valid command.");
                 return false;
             }
 
         }
-
-        if(!currentPlayer.getPlayerBoard().isCardBelowCompatible(p, this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0]))
-        {
-            out.println("Not valid command.");
-            return false;
-        }
-
-        //Chiamata al metodo del gamemodel, controlli effettuati
-        return this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, l, p, wclChoice);
+        return true;
     }
-
 
     private boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
 

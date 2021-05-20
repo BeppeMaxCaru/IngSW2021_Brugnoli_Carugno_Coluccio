@@ -151,6 +151,9 @@ public class ClientMain {
 
                     FileOutputStream output = new FileOutputStream("ClientMessage");
                     ObjectOutputStream stream = new ObjectOutputStream(output);
+                    FileInputStream inputStream = new FileInputStream("ReceivedMessage");
+                    ObjectInputStream clientStream = new ObjectInputStream(inputStream);
+
 
                     //out.println();
                     switch (action) {
@@ -370,24 +373,40 @@ public class ClientMain {
                             stream.writeObject(buyCard);
                             stream.close();
 
-                            //Position where to place the card on the playerboard
-                            System.out.println("In which position of your development card grid do you want to place the bought card?");
-                            System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
-                            System.out.println("Write a correct position between 0 and 2.");
-                            parameter = stdIn.readLine();
-                            try{
-                                int pos = Integer.parseInt(parameter);
-                                if (pos < 0 || pos > 2) throw new Exception();
-                            } catch (Exception e) {
-                                System.err.println("Not valid command");
-                                break;
-                            }
+                            int pos;
+                            try {
+                                ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) clientStream.readObject();
+
+                                System.out.println("In which position of your development card grid do you want to place the bought card?");
+                                System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
+                                System.out.println("Write a correct position between 0 and 2.");
+                                parameter = stdIn.readLine();
+                                pos = Integer.parseInt(parameter);
+                                while (!serverMessage.getCardPositions().contains(pos)) {
+                                    System.out.println("Not valid position.");
+                                    //Position where to place the card on the playerboard
+                                    System.out.println("In which position of your development card grid do you want to place the bought card?");
+                                    System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
+                                    System.out.println("Write a correct position between 0 and 2.");
+                                    parameter = stdIn.readLine();
+                                    pos = Integer.parseInt(parameter);
+                                }
+
+
+                            //Sending card position
+                            DevCardPositionMessage positionMessage = new DevCardPositionMessage(playerNumber, pos);
+                            stream.writeObject(positionMessage);
+                            stream.close();
 
                             //If server responds OK, action is correct
                             String correctAction = in.readLine();
                             if(correctAction.equals("OK"))
                                 mainAction++;
+                            } catch (ClassNotFoundException e) {
+                                e.printStackTrace();
+                            }
                         }
+
                         case "ACTIVATE PRODUCTION POWER": {
 
                             if (mainAction == 1) {
