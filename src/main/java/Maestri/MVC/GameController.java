@@ -133,11 +133,12 @@ public class GameController implements Runnable {
                                         //First and only parameter is always an int that is the position of the leader card
                                         int position = message.getPlayed();
 
-                                        this.checkPlayCards(this.gameModel.getPlayers()[i], position);
+                                        if (this.checkPlayCards(this.gameModel.getPlayers()[i], position))
+                                            serverStream.writeObject(true);
+                                        else serverStream.writeObject(false);
                                     }
                                     else {
-                                        out.println("It's not your turn");
-                                        break;
+                                        serverStream.writeObject(false);
                                     }
                                     break;
                                 }
@@ -150,11 +151,12 @@ public class GameController implements Runnable {
                                         //First and only parameter is always an int that is the position of the leader card
                                         int position = message.getDiscarded();
 
-                                        this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                        if (this.checkDiscardCards(this.gameModel.getPlayers()[i], position))
+                                            serverStream.writeObject(true);
+                                        else serverStream.writeObject(false);
                                     }
                                     else {
-                                        out.println("It's not your turn");
-                                        break;
+                                        serverStream.writeObject(false);
                                     }
                                     break;
                                 }
@@ -175,12 +177,13 @@ public class GameController implements Runnable {
 
                                         if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
                                         {
-                                            out.println("OK");
+                                            serverStream.writeObject(true);
                                             corrAction++;
+                                        } else {
+                                            serverStream.writeObject(false);
                                         }
                                     } else {
-                                        out.println("It's not your turn");
-                                        break;
+                                        serverStream.writeObject(false);
                                     }
                                     break;
                                 }
@@ -211,7 +214,6 @@ public class GameController implements Runnable {
                                             if (correctPositions.size() == 0)
                                             {
                                                 serverStream.writeObject(false);
-                                                break;
                                             }
                                             else {
                                                 serverStream.writeObject(true);
@@ -222,15 +224,18 @@ public class GameController implements Runnable {
 
                                                 DevCardPositionMessage positionMessage = (DevCardPositionMessage) stream.readObject();
 
-                                                if(this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit)) {
+                                                if (this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit)) {
                                                     serverStream.writeObject(true);
                                                     corrAction++;
-                                                } else serverStream.writeObject(false);
+                                                } else {
+                                                    serverStream.writeObject(false);
+                                                }
                                             }
+                                        } else {
+                                            serverStream.writeObject(false);
                                         }
                                     } else {
-                                        out.println("It's not your turn");
-                                        break;
+                                        serverStream.writeObject(false);
                                     }
                                     break;
                                 }
@@ -249,8 +254,10 @@ public class GameController implements Runnable {
                                     }
 
                                     if(this.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
-                                        out.println("OK");
+                                        serverStream.writeObject(true);
                                         corrAction++;
+                                    } else {
+                                        serverStream.writeObject(false);
                                     }
                                     break;
                                 }
@@ -278,7 +285,7 @@ public class GameController implements Runnable {
 
     }
 
-    public void checkPlayCards (Player currentPlayer, int c) {
+    public boolean checkPlayCards (Player currentPlayer, int c) {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
@@ -286,8 +293,9 @@ public class GameController implements Runnable {
             out.println("Played");
             currentPlayer.getPlayerLeaderCards()[c].printLeaderCard(out);
             currentPlayer.playLeaderCard(c);
-        } else
-            out.println("Not valid action.");
+        } else return false;
+
+        return currentPlayer.playLeaderCard(c);
 
     }
 
@@ -299,11 +307,9 @@ public class GameController implements Runnable {
             out.println("Discarded");
             currentPlayer.getPlayerLeaderCards()[c].printLeaderCard(out);
             currentPlayer.discardLeaderCard(c);
-            return true;
-        } else
-            out.println("Not valid command.");
+        } else return false;
 
-        return false;
+        return currentPlayer.discardLeaderCard(c);
     }
 
     public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c)
@@ -311,23 +317,14 @@ public class GameController implements Runnable {
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
         if(c.contains("1"))
-            if (currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) {
-                out.println("Not valid command.");
-                return false;
-            }
+            if (currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) return false;
 
         if(c.contains("0"))
-            if (currentPlayer.getPlayerBoard().getResourceMarbles()[0]==null) {
-                out.println("Not valid command.");
-                return false;
-            }
+            if (currentPlayer.getPlayerBoard().getResourceMarbles()[0]==null) return false;
 
         if(wlChoice.toUpperCase().contains("L"))
             for(String keys : currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().keySet())
-                if (!keys.contains("extra")) {
-                    out.println("Not valid command.");
-                    return false;
-                }
+                if (!keys.contains("extra")) return false;
 
         //If player picks row
         if(choice.equalsIgnoreCase("R"))
@@ -335,9 +332,7 @@ public class GameController implements Runnable {
             if(c.length()<4) {
                 StringBuilder cBuilder = new StringBuilder(c);
                 for(int k = cBuilder.length(); k<4; k++)
-                {
                     cBuilder.append("X");
-                }
                 c = cBuilder.toString();
             }
             return this.gameModel.getMarket().updateRow(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);
@@ -347,9 +342,7 @@ public class GameController implements Runnable {
             if(c.length()<3) {
                 StringBuilder cBuilder = new StringBuilder(c);
                 for(int k = cBuilder.length(); k<3; k++)
-                {
                     cBuilder.append("X");
-                }
                 c = cBuilder.toString();
             }
             return this.gameModel.getMarket().updateColumn(i, this.gameModel.getPlayers(), currentPlayer.getPlayerNumber(), wlChoice, c);

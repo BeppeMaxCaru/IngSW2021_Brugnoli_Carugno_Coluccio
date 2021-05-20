@@ -171,10 +171,13 @@ public class ClientMain {
                                 stream.writeObject(playLeaderMessage);
                                 stream.close();
 
+                                boolean serverResponse = (boolean) clientStream.readObject();
+
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
                             }
+                            break;
                         }
                         case "DISCARD LEADER CARD": {
                             System.out.println("Which card do you want to discard?");
@@ -190,10 +193,13 @@ public class ClientMain {
                                 stream.writeObject(discardLeaderMessage);
                                 stream.close();
 
+                                boolean serverResponse = (boolean) clientStream.readObject();
+
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
                             }
+                            break;
                         }
                         case "PICK RESOURCES FROM MARKET": {
 
@@ -274,9 +280,17 @@ public class ClientMain {
                             stream.close();
 
                             //If server responds OK, action is correct
-                            String correctAction = in.readLine();
-                            if(correctAction.equals("OK"))
-                                mainAction++;
+                            try {
+                                boolean serverResponse = (boolean) clientStream.readObject();
+                                if(serverResponse)
+                                    mainAction++;
+                                else System.out.println("Not valid action.");
+                            } catch (Exception e){
+                                System.err.println("Not valid parameter");
+                                break;
+                            }
+                            break;
+
                         }
 
                         case "BUY DEVELOPMENT CARD": {
@@ -399,12 +413,15 @@ public class ClientMain {
                             stream.close();
 
                             //If server responds OK, action is correct
-                            String correctAction = in.readLine();
-                            if(correctAction.equals("OK"))
+                            boolean serverResponse = (boolean) clientStream.readObject();
+                            if(serverResponse)
                                 mainAction++;
+                            else System.out.println("Not valid action.");
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
+                                break;
                             }
+                            break;
                         }
 
                         case "ACTIVATE PRODUCTION POWER": {
@@ -439,8 +456,6 @@ public class ClientMain {
                             resources.put(1, "SERVANTS");
                             resources.put(2, "SHIELDS");
                             resources.put(3, "STONES");
-
-
 
                             j = 0;
                             for(int index = 0; index < 6; index++) {
@@ -672,14 +687,21 @@ public class ClientMain {
                                        }
                                     }
                                 }
-                            }
+                            } else break;
                             //If server responds OK, action is correct
-                            String correctAction = in.readLine();
-                            if(correctAction.equals("OK"))
-                                mainAction++;
+                            try {
+                                boolean serverResponse = (boolean) clientStream.readObject();
+                                if(serverResponse)
+                                    mainAction++;
+                                else System.out.println("Not valid action.");
+                            } catch (Exception e){
+                                System.err.println("Not valid parameter");
+                                break;
+                            }
+                            break;
                         }
                         default: {
-                            out.println("Not valid action!");
+                            System.out.println("Not valid action!");
                             break;
                         }
                     }
@@ -705,7 +727,7 @@ public class ClientMain {
         for(int i = 0; commandList[i] != null; i++) {
             if(!commandList[i].equals("p0") && !commandList[i].equals("p1") && !commandList[i].equals("p2") &&
                     !commandList[i].equals("b") && !commandList[i].equals("e0") && !commandList[i].equals("e1")) {
-                out.println("Not valid command.");
+                System.out.println("Not valid command.");
                 return false;
             }
         }
@@ -716,15 +738,15 @@ public class ClientMain {
                 j = 0;
                 for (int i = 0; i < whichInput[index].length() / 3; i++) {
                     if (whichInput[index].charAt(j) != '0' && whichInput[index].charAt(j) != '1' && whichInput[index].charAt(j) != '2' && whichInput[index].charAt(j) != '3') {
-                        out.println("Not valid command.");
+                        System.out.println("Not valid command.");
                         return false;
                     }
                     if (whichInput[index].charAt(j + 1) != '1' && whichInput[index].charAt(j + 1) != '2') {
-                        out.println("Not valid command.");
+                        System.out.println("Not valid command.");
                         return false;
                     }
                     if (whichInput[index].charAt(j + 2) != 'c' && whichInput[index].charAt(j + 2) != 'w' && whichInput[index].charAt(j + 2) != 'e') {
-                        out.println("Not valid command.");
+                        System.out.println("Not valid command.");
                         return false;
                     }
                     j++;
@@ -735,7 +757,7 @@ public class ClientMain {
         for (String s : whichOutput) {
             if (s != null) {
                 if (!s.equals("0") && !s.equals("1") && !s.equals("2") && !s.equals("3") && !s.equals("4")) {
-                    out.println("Not valid command.");
+                    System.out.println("Not valid command.");
                     return false;
                 }
             }
