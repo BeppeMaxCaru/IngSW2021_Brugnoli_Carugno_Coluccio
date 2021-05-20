@@ -1,3 +1,5 @@
+package Communication;
+
 import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
