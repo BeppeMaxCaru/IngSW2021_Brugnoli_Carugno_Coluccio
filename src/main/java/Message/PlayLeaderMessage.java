@@ -3,6 +3,7 @@ package Message;
 import java.io.Serializable;
 
 public class PlayLeaderMessage implements Serializable {
+
     private final int playerNumber;
     private final int played;
 

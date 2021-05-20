@@ -1,4 +1,6 @@
+import Message.InputResourceMessage;
 import Message.DiscardLeaderMessage;
+import Message.OutputChoiceResourceMessage;
 import Message.PlayLeaderMessage;
 
 import java.io.*;
@@ -540,6 +542,13 @@ public class ClientMain {
                                 break;
                             }
 
+                            /* PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
+                            FileOutputStream output = new FileOutputStream("ClientMessage");
+                            ObjectOutputStream stream = new ObjectOutputStream(output);
+                            stream.writeObject(action.toUpperCase());
+                            stream.writeObject(playLeaderMessage);
+                            stream.close(); */
+
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
                             String[] whichInput = new String[6];
@@ -556,6 +565,8 @@ public class ClientMain {
                             resources.put(1, "SERVANTS");
                             resources.put(2, "SHIELDS");
                             resources.put(3, "STONES");
+
+
 
                             j = 0;
                             for(int index = 0; index < 6; index++) {
@@ -594,8 +605,8 @@ public class ClientMain {
                                         }
                                         for (int k = 0; k < 2; k++) {
                                             System.out.println("Which input resource do you want to spend?");
-                                            for(int z=0; z<4; z++)
-                                                System.out.println("Write "+z+" for "+resources.get(z));
+                                            for(int z = 0; z < 4; z++)
+                                                System.out.println("Write "+ z +" for "+ resources.get(z));
                                             unknownCommand = stdIn.readLine(); // Comandi risorsa in input: 0, 1, 2, 3
                                             if (unknownCommand.equals("0") || unknownCommand.equals("1") || unknownCommand.equals("2") || unknownCommand.equals("3")) {
                                                 whichInput[i] = whichInput[i] + unknownCommand;
@@ -618,8 +629,6 @@ public class ClientMain {
                                                     }
                                                     whichInput[i] = whichInput[i] + quant;
                                                 }
-                                                else
-                                                    out.println("Not valid command.");
 
                                                 if(quant.equals("1"))
                                                     System.out.println("From which store do you want to pick this resource?");
@@ -630,13 +639,6 @@ public class ClientMain {
                                                 System.out.println("Write 'l' if you want to pick resources from your extra space leader card, if it's available");
 
                                                 whichInput[i] = whichInput[i] + stdIn.readLine().toUpperCase(); // Comandi from where: c, w, l
-                                                if(!String.valueOf(whichInput[i].charAt(whichInput[i].length()-1)).equals("C") &&
-                                                        !String.valueOf(whichInput[i].charAt(whichInput[i].length()-1)).equals("W") &&
-                                                        !String.valueOf(whichInput[i].charAt(whichInput[i].length()-1)).equals("L"))
-                                                {
-                                                    System.out.println("Not valid command.");
-                                                    break;
-                                                }
                                                 if(quant.equals("2")) k++;
                                             }
                                             else {
@@ -663,14 +665,11 @@ public class ClientMain {
                                             for (int k = 0; k < 2; k++) {
 
                                                 System.out.println("Which input resource do you want to spend?");
-                                                for(int z=0; z<4; z++)
-                                                    System.out.println("Write "+z+" for "+resources.get(z));
+                                                for(int z = 0; z < 4; z++)
+                                                    System.out.println("Write "+ z +" for "+ resources.get(z));
                                                 unknownCommand = stdIn.readLine(); // Comandi risorsa in input: 0, 1, 2, 3
-
                                                 if (unknownCommand.equalsIgnoreCase("0") || unknownCommand.equalsIgnoreCase("1") || unknownCommand.equalsIgnoreCase("2") || unknownCommand.equalsIgnoreCase("3")) {
-
                                                     whichInput[3] = whichInput[3] + unknownCommand;
-
                                                     System.out.println("How much of them do you want to pick?");
                                                     quant = stdIn.readLine(); // Comandi quantità: 1, 2
                                                     if(quant.equals("1") || quant.equals("2"))
@@ -690,26 +689,15 @@ public class ClientMain {
                                                         }
                                                         whichInput[3] = whichInput[3] + quant;
                                                     }
-                                                    else
-                                                        out.println("Not valid command.");
 
                                                     if(quant.equals("1"))
                                                         System.out.println("From which store do you want to pick this resource?");
                                                     else
                                                         System.out.println("From which store do you want to pick these resources?");
-
                                                     System.out.println("Write 'w' if you want to pick resources from warehouse");
                                                     System.out.println("Write 'c' if you want to pick resources from chest");
                                                     System.out.println("Write 'l' if you want to pick resources from your extra space leader card, if it's available");
-
                                                     whichInput[3] = whichInput[3] + stdIn.readLine().toUpperCase(); // Comandi from where: c, w, l
-                                                    if(!String.valueOf(whichInput[3].charAt(whichInput[i].length()-1)).equals("C") &&
-                                                            !String.valueOf(whichInput[3].charAt(whichInput[i].length()-1)).equals("W") &&
-                                                            !String.valueOf(whichInput[3].charAt(whichInput[i].length()-1)).equals("L"))
-                                                    {
-                                                        System.out.println("Not valid command.");
-                                                        break;
-                                                    }
                                                     if(quant.equals("2")) k++;
                                                 }
                                                 else {
@@ -741,20 +729,15 @@ public class ClientMain {
                                                     System.out.println("Write 'l' if you want to pick resources from your extra space leader card, if it's available");
 
                                                     String store = stdIn.readLine().toUpperCase(); // Comandi from where: c, w, l
-                                                    if(!store.equals("C") && !store.equals("W") && !store.equals("L"))
-                                                    {
-                                                        System.out.println("Not valid command.");
-                                                        break;
-                                                    }
                                                     whichInput[4] = whichInput[4] + store; // Comandi from where: c, w, l
-                                                    activation[4]=1;
+                                                    activation[4] = 1;
                                                 }
                                             }
-                                            if (command.equals("e1") && activation[5]==0) {
+                                            if (command.equals("e1") && activation[5] == 0) {
 
                                                 System.out.println("Which input resource do you want to spend?");
-                                                for(int z=0; z<4; z++)
-                                                    System.out.println("Write "+z+" for "+resources.get(z));
+                                                for(int z = 0; z < 4; z++)
+                                                    System.out.println("Write "+ z +" for "+ resources.get(z));
 
                                                 unknownCommand = stdIn.readLine(); // Comandi risorsa in input: 0, 1, 2, 3
 
@@ -768,19 +751,14 @@ public class ClientMain {
                                                     System.out.println("Write 'l' if you want to pick resources from your extra space leader card, if it's available");
 
                                                     String store = stdIn.readLine().toUpperCase(); // Comandi from where: c, w, l
-                                                    if(!store.equals("C") && !store.equals("W") && !store.equals("L"))
-                                                    {
-                                                        System.out.println("Not valid command.");
-                                                        break;
-                                                    }
                                                     whichInput[5] = whichInput[5] + store; // Comandi from where: c, w, l
-                                                    activation[5]=1;
+                                                    activation[5] = 1;
                                                 }
                                             }
 
                                             System.out.println("Which output resource do you want to pick?");
-                                            for(int z=0; z<4; z++)
-                                                System.out.println("Write "+z+" for "+resources.get(z));
+                                            for(int z = 0; z < 4; z++)
+                                                System.out.println("Write "+ z +" for "+resources.get(z));
                                             System.out.println("Write 4 for REDCROSS");
 
                                             String com = stdIn.readLine();
@@ -788,37 +766,40 @@ public class ClientMain {
                                             if (com.equals("0") || com.equals("1") || com.equals("2") || com.equals("3") || com.equals("4"))
                                             {
                                                 if(command.equalsIgnoreCase("b"))
-                                                    j=0;
+                                                    j = 0;
                                                 if (command.equalsIgnoreCase("e0"))
-                                                    j=1;
-                                                else j=2;
-                                                whichOutput[j] = whichOutput[j]+com; // Comandi: COINS, SHIELDS...
-                                            }
-                                            else
-                                            {
-                                                out.println("Not valid command");
-                                                break;
+                                                    j = 1;
+                                                else j = 2;
+                                                whichOutput[j] = whichOutput[j] + com; // Comandi: COINS, SHIELDS...
                                             }
 
-                                        }
-                                        else {
-                                            out.println("Not valid command.");
-                                            break;
                                         }
                                     }
                                 }
                             }
                             if(checkActivateProduction(commandsList, activation, whichInput, whichOutput))
                             {
-                                for(int k=0; k<6; k++)
+                                for(int k = 0; k < 6; k++)
                                 {
-                                    if(activation[k]==0)
+                                    if(activation[k] == 0)
                                         out.println(0);
                                     else
                                     {
-                                        out.println(whichInput[k]);
-                                        if(k>=3)
-                                            out.println(Integer.parseInt(whichOutput[k-3]));
+                                       for(i = 0; i < whichInput[k].length() / 3; i++) {
+                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, Character.getNumericValue(whichInput[k].charAt(0)), Character.getNumericValue(whichInput[k].charAt(1)), whichInput[k].charAt(2));
+                                           FileOutputStream output = new FileOutputStream("ClientMessage");
+                                           ObjectOutputStream stream = new ObjectOutputStream(output);
+                                           stream.writeObject(inputResourceMessage);
+                                           stream.close();
+                                       }
+
+                                       if(k == 3 || k == 4 || k == 5) {
+                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, Integer.parseInt(whichOutput[k]));
+                                           FileOutputStream output = new FileOutputStream("ClientMessage");
+                                           ObjectOutputStream stream = new ObjectOutputStream(output);
+                                           stream.writeObject(outputChoiceResourceMessage);
+                                           stream.close();
+                                       }
                                     }
                                 }
                             }
