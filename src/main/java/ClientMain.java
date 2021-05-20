@@ -785,16 +785,18 @@ public class ClientMain {
                                         out.println(0);
                                     else
                                     {
+                                       j = 0;
                                        for(i = 0; i < whichInput[k].length() / 3; i++) {
-                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, Character.getNumericValue(whichInput[k].charAt(0)), Character.getNumericValue(whichInput[k].charAt(1)), whichInput[k].charAt(2));
+                                           InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, whichInput[k].charAt(j), whichInput[k].charAt(j + 1), whichInput[k].charAt(j + 2));
                                            FileOutputStream output = new FileOutputStream("ClientMessage");
                                            ObjectOutputStream stream = new ObjectOutputStream(output);
                                            stream.writeObject(inputResourceMessage);
                                            stream.close();
+                                           j++;
                                        }
 
                                        if(k == 3 || k == 4 || k == 5) {
-                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, Integer.parseInt(whichOutput[k]));
+                                           OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, whichOutput[k]);
                                            FileOutputStream output = new FileOutputStream("ClientMessage");
                                            ObjectOutputStream stream = new ObjectOutputStream(output);
                                            stream.writeObject(outputChoiceResourceMessage);

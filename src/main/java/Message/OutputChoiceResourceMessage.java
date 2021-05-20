@@ -5,13 +5,13 @@ import java.io.Serializable;
 public class OutputChoiceResourceMessage implements Serializable {
 
     private final int playerNumber;
-    private final int resource;
+    private final String resource;
 
-    public OutputChoiceResourceMessage(int playerNumber, int resource) {
+    public OutputChoiceResourceMessage(int playerNumber, String resource) {
         this.playerNumber = playerNumber;
         this.resource = resource;
     }
 
     public int getPlayerNumber() { return playerNumber; }
-    public int getResource() { return resource; }
+    public String getResource() { return resource; }
 }

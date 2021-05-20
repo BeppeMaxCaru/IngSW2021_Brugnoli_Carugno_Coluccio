@@ -5,11 +5,11 @@ import java.io.Serializable;
 public class InputResourceMessage implements Serializable {
 
     private final int playerNumber;
-    private final int resource;
-    private final int quantity;
+    private final char resource;
+    private final char quantity;
     private final char store;
 
-    public InputResourceMessage(int playerNumber, int resource, int quantity, char store) {
+    public InputResourceMessage(int playerNumber, char resource, char quantity, char store) {
         this.playerNumber = playerNumber;
         this.resource = resource;
         this.quantity = quantity;
@@ -17,7 +17,7 @@ public class InputResourceMessage implements Serializable {
     }
 
     public int getPlayerNumber() { return playerNumber; }
-    public int getResource() { return resource; }
-    public int getQuantity() { return quantity; }
+    public char getResource() { return resource; }
+    public char getQuantity() { return quantity; }
     public char getStore() { return store; }
 }

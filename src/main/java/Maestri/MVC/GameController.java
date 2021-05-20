@@ -3,6 +3,8 @@ package Maestri.MVC;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.DiscardLeaderMessage;
+import Message.InputResourceMessage;
+import Message.OutputChoiceResourceMessage;
 import Message.PlayLeaderMessage;
 
 import java.io.FileInputStream;
@@ -215,8 +217,12 @@ public class GameController implements Runnable {
                                     for(int k = 0; k < 6; k++) {
                                         activation[k] = in.nextInt();
                                         if (activation[k] == 1) {
-                                            whichInput[k] = in.nextLine();
-                                            if(k >= 3) whichOutput[k - 3] = in.nextInt();
+                                            InputResourceMessage messageInput = (InputResourceMessage) stream.readObject();
+                                            whichInput[k] = String.valueOf(messageInput.getResource() + messageInput.getQuantity() + messageInput.getStore());
+                                            if(k >= 3) {
+                                                OutputChoiceResourceMessage messageOutput = (OutputChoiceResourceMessage) stream.readObject();
+                                                whichOutput[k - 3] = Integer.parseInt(messageOutput.getResource());
+                                            }
                                         }
                                     }
 
