@@ -1,5 +1,3 @@
-package org.example.Server;
-
 import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
@@ -12,7 +10,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 public class MultiEchoServer {
     //Connection

@@ -2,7 +2,11 @@ package Maestri.MVC;
 
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Message.DiscardLeaderMessage;
+import Message.PlayLeaderMessage;
 
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.*;
 
@@ -113,7 +117,11 @@ public class GameController implements Runnable {
                         int corrAction;
                         do{
                             //FIrst receives the action
-                            action = in.nextLine();
+
+                            FileInputStream input = new FileInputStream("ReceivedMessage");
+                            ObjectInputStream stream = new ObjectInputStream(input);
+                            action = (String) stream.readObject();
+
                             corrAction = 0;
 
                             switch (action.toUpperCase()) {
@@ -122,19 +130,27 @@ public class GameController implements Runnable {
                                     //Otherwise if it receives null before all the parameters are received doesn't call the method but reset the state to waiting action
 
                                     //First and only parameter is always an int that is the position of the leader card (see client main action flow)
-                                    //The fact that's an int is already checked in client
-                                    int position = Integer.parseInt(in.nextLine());
-
-                                    //You can call the method with right parameters and update the view
-                                    this.checkPlayCards(this.gameModel.getPlayers()[i], position);
+                                    PlayLeaderMessage message = (PlayLeaderMessage) stream.readObject();
+                                    int position = message.getPlayed();
+                                    if(i==message.getPlayerNumber())
+                                        this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                    else {
+                                        out.println("It's not your turn");
+                                        return;
+                                    }
                                     break;
                                 }
                                 case "DISCARD LEADER CARD": {
                                     //See PLAY LEADER CARD
 
-                                    int position = Integer.parseInt(in.nextLine());
-
-                                    this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                    DiscardLeaderMessage message = (DiscardLeaderMessage) stream.readObject();
+                                    int position = message.getDiscarded();
+                                    if(i==message.getPlayerNumber())
+                                        this.checkDiscardCards(this.gameModel.getPlayers()[i], position);
+                                    else {
+                                        out.println("It's not your turn");
+                                        return;
+                                    }
                                     break;
                                 }
                                 case "PICK RESOURCES FROM MARKET": {

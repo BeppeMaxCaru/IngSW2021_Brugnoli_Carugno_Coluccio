@@ -1,21 +1,10 @@
-package org.example.Client;
+import Message.DiscardLeaderMessage;
+import Message.PlayLeaderMessage;
 
-import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
-import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
-import Maestri.MVC.Model.GModel.MarbleMarket.Market;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.lang.reflect.Array;
+import java.io.*;
 import java.net.Socket;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.*;
-import com.google.gson.Gson;
 
 public class ClientMain {
 
@@ -23,7 +12,7 @@ public class ClientMain {
     private List<String> commands = Arrays.asList("Play leader card",
             "Discard leader card");
 
-    public static void main(String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
 
         //Passarli come paramteri del main
         String hostName = "127.0.0.1";
@@ -157,6 +146,8 @@ public class ClientMain {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
 
+                int playerNumber;
+
                 //Forse non serve più
                 // :(
                 /*
@@ -207,6 +198,7 @@ public class ClientMain {
                     message = in.readLine();
                     System.out.println(message);
                 }
+                playerNumber = Integer.parseInt(String.valueOf(message.charAt(message.length() - 1)));
 
                 String numChosenResources = in.readLine();
                 System.out.println(numChosenResources);
@@ -254,12 +246,6 @@ public class ClientMain {
                     //out.println();
                     switch (action) {
                         case "PLAY LEADER CARD": {
-                            //Sends the command to the controller so it can change state
-                            out.println(action);
-                            //Confirms command reception
-                            //Already received from thread that prints server messages
-                            //System.out.println(in.readLine());
-                            //Starts receiving parameters
                             String parameter;
                             System.out.println("Which card do you want to play?");
                             System.out.println("Write 0 or 1.");
@@ -269,19 +255,23 @@ public class ClientMain {
                                 int cardPosition = Integer.parseInt(parameter);
                                 //Posso mandare qualunque numero e la validità la verifica il controller
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
-                                out.println(cardPosition);
+
+                                PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
+                                FileOutputStream output = new FileOutputStream("ClientMessage");
+                                ObjectOutputStream stream = new ObjectOutputStream(output);
+                                stream.writeObject(action.toUpperCase());
+                                stream.writeObject(playLeaderMessage);
+                                stream.close();
+
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 //Send null value to reset the controller to
                                 //receive again a new action
-                                out.println();
                                 break;
                             }
                         }
                         case "DISCARD LEADER CARD": {
                             //Same for play leader card
-                            out.println(action);
-                            //System.out.println(in.readLine());
                             System.out.println("Which card do you want to discard?");
                             System.out.println("Write 0 or 1.");
                             String parameter = stdIn.readLine();
@@ -289,12 +279,18 @@ public class ClientMain {
                                 //Checks if the leader card position exists
                                 int cardPosition = Integer.parseInt(parameter);
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
-                                out.println(cardPosition);
+
+                                DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, cardPosition);
+                                FileOutputStream output = new FileOutputStream("ClientMessage");
+                                ObjectOutputStream stream = new ObjectOutputStream(output);
+                                stream.writeObject(action.toUpperCase());
+                                stream.writeObject(discardLeaderMessage);
+                                stream.close();
+
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 //Send null value to reset the controller to
                                 //receive again a new action
-                                out.println();
                                 break;
                             }
                         }
