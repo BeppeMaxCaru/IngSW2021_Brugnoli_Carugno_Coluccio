@@ -1,4 +1,4 @@
-package Communication;
+package Communication.ServerSide;
 
 import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GameModel;

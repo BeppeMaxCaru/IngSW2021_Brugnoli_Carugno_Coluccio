@@ -14,7 +14,7 @@ import java.util.*;
 /**
  * Represents a player with all its information
  */
-public class Player
+public class Player implements Runnable
         //implements Runnable
 {
 
@@ -608,5 +608,10 @@ public class Player
             //this.out.println("Thanks for playing");
             //this.out.println("See you next time");
         }
+    }
+
+    @Override
+    public void run() {
+
     }
 }

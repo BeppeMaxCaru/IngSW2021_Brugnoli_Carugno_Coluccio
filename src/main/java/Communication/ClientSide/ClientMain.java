@@ -1,4 +1,4 @@
-package Communication;
+package Communication.ClientSide;
 
 import Message.*;
 
@@ -53,7 +53,6 @@ public class ClientMain {
 
                 //Forse non serve più
                 // :(
-                /*
                 Thread serverReceiver = new Thread(() -> {
                     try {
                         while (true) {
@@ -65,8 +64,6 @@ public class ClientMain {
 
                             System.out.println("Received: " + serverMessage);
                         }
-                    } catch (SocketTimeoutException e) {
-                        System.err.println("You've been expelled for inactivity");
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
@@ -79,7 +76,19 @@ public class ClientMain {
                 });
                 serverReceiver.start();
 
-                 */
+                Thread serverSender = new Thread(() -> {
+                    try {
+                        String clientInput = null;
+
+                        while (!clientInput.equalsIgnoreCase("QUIT")) {
+                            clientInput = stdIn.readLine();
+                            out.println(clientInput);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+                //serverSender.start();
 
                 //Welcome
                 String message = in.readLine();
@@ -95,13 +104,14 @@ public class ClientMain {
 
                 //Match has started
                 message = in.readLine();
-                System.out.println(message);
-                System.out.println(message.charAt(message.length() - 1));
+                //System.out.println(message);
+                //System.out.println(message.charAt(message.length() - 1));
                 if (!String.valueOf(message.charAt(message.length() - 1)).equals("0")) {
                     message = in.readLine();
                     System.out.println(message);
                 }
                 playerNumber = Integer.parseInt(String.valueOf(message.charAt(message.length() - 1)));
+                //playerNumber = Integer.parseInt(message);
 
                 String numChosenResources = in.readLine();
                 System.out.println(numChosenResources);
