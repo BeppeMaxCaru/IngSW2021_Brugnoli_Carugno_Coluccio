@@ -82,14 +82,6 @@ public class MultiEchoServer {
         gameExecutor.shutdown();
     }
 
-    public void addClients() {
-        try {
-
-        } catch (Exception e) {
-
-        }
-    }
-
     public static void main(String[] args) {
         MultiEchoServer echoServer = new MultiEchoServer(1234);
         echoServer.startServer();
