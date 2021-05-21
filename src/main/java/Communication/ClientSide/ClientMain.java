@@ -37,7 +37,6 @@ public class ClientMain {
 
         }
         else {
-            //Trial Beppe
             //Ask nickname before gameMode branch
             //Call player constructor directly on the server?
             //Player player = new Player();
@@ -49,7 +48,96 @@ public class ClientMain {
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
 
-                int playerNumber;
+                FileOutputStream output = new FileOutputStream("ClientMessage");
+                ObjectOutputStream stream = new ObjectOutputStream(output);
+                FileInputStream inputStream = new FileInputStream("ReceivedMessage");
+                ObjectInputStream clientStream = new ObjectInputStream(inputStream);
+
+                //Send nickname
+                //Missing
+
+                //Receive startingMessage with player number and 4 leader cards (Class to be created)
+                ServerStartingMessage startingMessage = (ServerStartingMessage) clientStream.readObject();
+                int playerNumber = startingMessage.getPlayerNumber;
+
+                Map<Integer, Integer> startingResources = new HashMap<>();
+                startingResources.put(0, 0);
+                startingResources.put(1, 1);
+                startingResources.put(2, 1);
+                startingResources.put(3, 2);
+
+                System.out.println("Match has started, your player number is "+playerNumber);
+
+                ArrayList<String> playerStartingResources = new ArrayList<>();
+                String res;
+                for(int resources=0; resources < startingResources.get(playerNumber); resources++)
+                {
+                    System.out.println("Which starting resource do you want to pick?");
+                    res = stdIn.readLine().toUpperCase();
+                    while(!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS"))
+                    {
+                        System.out.println("Choose a correct resource");
+                        System.out.println("Which starting resource do you want to pick?");
+                        res = stdIn.readLine().toUpperCase();
+                    }
+                    playerStartingResources.add(res);
+                }
+
+                //Send player number and starting resources (Class to be created)
+                //Missing
+
+                System.out.println("Which starting leader card do you want to discard?");
+                for (int i=0; i<startingMessage.getLeaderCards.lenght(); i++)
+                {
+                    System.out.println("Write "+i+" for this: ");
+                    startingMessage.getLeaderCards[i].printLeaderCard();
+                }
+                int card=0;
+                try{
+                    card = stdIn.read();
+                    while (card<0 || card>3)
+                    {
+                        System.out.println("Chose a correct card.");
+                        card= stdIn.read();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //Send 2 leaders to be discarded
+
+                DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                stream.writeObject("DISCARD LEADER CARD");
+                stream.writeObject(discardLeaderMessage);
+                stream.close();
+
+                System.out.println("Which starting leader card do you want to discard?");
+                for (int i=0; i<3; i++)
+                {
+                    System.out.println("Write "+i+" for this: ");
+                    startingMessage.getLeaderCards[i].printLeaderCard();
+                }
+                card=0;
+                try{
+                    card = stdIn.read();
+                    while (card<0 || card>2)
+                    {
+                        System.out.println("Chose a correct card.");
+                        card= stdIn.read();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                stream.writeObject("DISCARD LEADER CARD");
+                stream.writeObject(discardLeaderMessage);
+                stream.close();
+
+
+
+
+
 
                 new ServerReceiver(clientSocket, this).start();
 
@@ -92,46 +180,6 @@ public class ClientMain {
                 });
                 serverSender.start();
 
-                //Welcome
-                String message = in.readLine();
-                System.out.println(message);
-                //Looking for a match
-                message = in.readLine();
-                System.out.println(message);
-
-                /*
-                nickName = stdIn.readLine();
-                out.println(nickName);
-                 */
-
-                //Match has started
-                message = in.readLine();
-                //System.out.println(message);
-                //System.out.println(message.charAt(message.length() - 1));
-                if (!String.valueOf(message.charAt(message.length() - 1)).equals("0")) {
-                    message = in.readLine();
-                    System.out.println(message);
-                }
-                playerNumber = Integer.parseInt(String.valueOf(message.charAt(message.length() - 1)));
-                //playerNumber = Integer.parseInt(message);
-
-                String numChosenResources = in.readLine();
-                System.out.println(numChosenResources);
-                String chosenRes;
-                int t = Integer.parseInt(numChosenResources);
-
-                if (t != 0)
-                    while (t > 0) {
-                        System.out.println("Choose your initial resources: do you want COINS, STONES, SERVANTS or SHIELDS?");
-                        chosenRes = in.readLine().toUpperCase();
-                        while (!chosenRes.equals("COINS") && !chosenRes.equals("SHIELDS") && !chosenRes.equals("SERVANTS") && !chosenRes.equals("STONES")) {
-                            System.out.println(chosenRes);
-                            System.out.println("Not existing resource");
-                            chosenRes = in.readLine().toUpperCase();
-                        }
-                        out.println(chosenRes);
-                        t--;
-                    }
 
                 String action = "";
                 int mainAction = 0;
@@ -150,11 +198,6 @@ public class ClientMain {
                     action = stdIn.readLine();
                     //Puts in upper case the input
                     action = action.toUpperCase();
-
-                    FileOutputStream output = new FileOutputStream("ClientMessage");
-                    ObjectOutputStream stream = new ObjectOutputStream(output);
-                    FileInputStream inputStream = new FileInputStream("ReceivedMessage");
-                    ObjectInputStream clientStream = new ObjectInputStream(inputStream);
 
 
                     //out.println();
@@ -433,14 +476,7 @@ public class ClientMain {
                                 break;
                             }
 
-                            /* PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
-                            FileOutputStream output = new FileOutputStream("ClientMessage");
-                            ObjectOutputStream stream = new ObjectOutputStream(output);
-                            */
                             stream.writeObject(action);
-                            /*
-                            stream.writeObject(playLeaderMessage);
-                            stream.close(); */
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
@@ -715,6 +751,8 @@ public class ClientMain {
             } catch (IOException e) {
                 System.err.println("Couldn't get I/O for connection to hostname: " + hostName);
                 System.exit(1);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 
