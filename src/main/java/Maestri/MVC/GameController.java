@@ -187,7 +187,6 @@ public class GameController implements Runnable {
                         //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
                         //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
 
-
                         this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
                         this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
                         this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
