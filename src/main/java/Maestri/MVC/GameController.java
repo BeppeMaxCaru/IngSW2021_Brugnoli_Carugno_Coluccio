@@ -10,9 +10,53 @@ import java.util.*;
 
 public class GameController implements Runnable {
 
+    //update
     private final GameModel gameModel;
 
-    public GameController(List<Player> clientsWaiting) {
+    //Margara
+    public GameController(List<PlayerThread> queueFIFO) {
+
+        Player[] players = new Player[4];
+
+        //Non serve più ordine dei player almeno nel controller
+        //Meglio tenere l'ordine!
+        Set<PlayerThread> playerThreads = new HashSet<>();
+        PlayerThread[] playersPlaying = new PlayerThread[4];
+
+        List<Player> playersToPlay = new ArrayList<>();
+
+        //Chat version
+        for (int i=0;i<4;i++) {
+            try {
+                //If there is a player adds it
+                if (!queueFIFO.isEmpty()) {
+                    playersPlaying[i] = queueFIFO.remove(0);
+                    playersPlaying[i].setPlayerThreadNumber(i);
+                    playersPlaying[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                    //playersToPlay.add(clientsWaiting.remove(0));
+                    //playersToPlay.get(0).setPlayerNumber(i);
+                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
+
+                    if(i!=0){
+                        playersPlaying[i].getOutPrintWriter().println("Wait for other players turn...");
+                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
+                    }
+
+                }
+            } catch (Exception e) {
+                //If no clients waiting set other players null
+                playersPlaying[i] = null;
+            }
+        }
+
+        //Cosa passo al gameModel?? Player o PLayerThread o si può rimuovere del tutto e gestire l'ordine tramite controller?
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //this.gameModel = new GameModel(playersPlaying);
+
+    }
+
+    //Old
+    /*public GameController(List<Player> clientsWaiting) {
 
         Player[] players = new Player[4];
 
@@ -21,7 +65,8 @@ public class GameController implements Runnable {
 
         List<Player> playersToPlay = new ArrayList<>();
 
-        for (int i=0;i<players.length;i++) {
+        //Chat version
+        for (int i=0;i<4;i++) {
             try {
                 //If there is a player adds it
                 if (!clientsWaiting.isEmpty()) {
@@ -32,11 +77,11 @@ public class GameController implements Runnable {
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
 
-                    /*if(i!=0){
+                    if(i!=0){
                         players[i].getOutPrintWriter().println("Wait for other players turn...");
                         //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
                     }
-                     */
+
                 }
             } catch (Exception e) {
                 //If no clients waiting set other players null
@@ -46,7 +91,35 @@ public class GameController implements Runnable {
 
         this.gameModel = new GameModel(players);
 
-    }
+    }*/
+
+        //Old version
+        /*for (int i=0;i<players.length;i++) {
+            try {
+                //If there is a player adds it
+                if (!clientsWaiting.isEmpty()) {
+                    players[i] = clientsWaiting.remove(0);
+                    players[i].setPlayerNumber(i);
+                    players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                    //playersToPlay.add(clientsWaiting.remove(0));
+                    //playersToPlay.get(0).setPlayerNumber(i);
+                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
+
+                    if(i!=0){
+                        players[i].getOutPrintWriter().println("Wait for other players turn...");
+                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
+                    }
+
+                }
+            } catch (Exception e) {
+                //If no clients waiting set other players null
+                players[i] = null;
+            }
+        }
+
+        this.gameModel = new GameModel(players);
+
+    }*/
 
     @Override
     public void run() {

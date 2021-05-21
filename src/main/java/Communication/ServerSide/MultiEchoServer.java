@@ -28,6 +28,9 @@ public class MultiEchoServer {
     //GameModel
     private GameModel game;
 
+    //Chat
+    private ArrayList<PlayerThread> queueFIFO = new ArrayList<>();
+
     public void startServer() {
         //4 threads for 4 players
         //ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
@@ -50,8 +53,16 @@ public class MultiEchoServer {
             public void run() {
                 try {
                     if (clients.isEmpty() || clients.size()<2) throw new Exception();
-                    GameController newGame = new GameController(clients);
-                    gameExecutor.execute(newGame);
+
+                    //Margara
+                    GameController gameController = new GameController(queueFIFO);
+                    //Aggiornare
+                    //gameExecutor.execute(newGame);
+
+
+                    //Old
+                    //GameController newGame = new GameController(clients);
+                    //gameExecutor.execute(newGame);
                     //Debug
                     System.out.println("New game started");
                     //System.out.println(clients.size());
@@ -68,14 +79,15 @@ public class MultiEchoServer {
             try {
                 Socket playerSocket = serverSocket.accept();
                 //Il Player adesso diventa PlayerThread
+                //Viene creato
                 PlayerThread newPlayer = new PlayerThread(playerSocket);
+                //Viene aggiunto alla lista di attesa
+                queueFIFO.add(newPlayer);
 
+                //Old version
                 Player newClient = new Player(playerSocket);
                 //newClient.setClientSocket(clientSocket);
-
-
                 clients.add(newClient);
-
                 //clientExecutor.execute(newClient);
                 //newClient.setName();
             } catch(IOException e) {
