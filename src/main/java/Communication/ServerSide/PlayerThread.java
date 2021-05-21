@@ -28,10 +28,10 @@ public class PlayerThread implements Runnable {
             this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
 
             //Chiedi username
-            outPrintWriter.println("Insert your nickname: ");
+            this.outPrintWriter.println("Insert your nickname: ");
             this.nickName = inScanner.nextLine();
-            outPrintWriter.println("Welcome to Masters of Renaissance online!");
-            outPrintWriter.println("Looking for a game in Florence...");
+            this.outPrintWriter.println("Welcome to Masters of Renaissance online!");
+            this.outPrintWriter.println("Looking for a game in Florence...");
 
         } catch (Exception e) {
             e.printStackTrace();

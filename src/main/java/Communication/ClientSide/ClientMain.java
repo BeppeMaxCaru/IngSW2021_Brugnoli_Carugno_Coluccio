@@ -13,7 +13,7 @@ public class ClientMain {
     private List<String> commands = Arrays.asList("Play leader card",
             "Discard leader card");
 
-    public static void main (String[] args) throws IOException {
+    public void main(String[] args) throws IOException {
 
         //Passarli come paramteri del main
         String hostName = "127.0.0.1";
@@ -51,6 +51,8 @@ public class ClientMain {
 
                 int playerNumber;
 
+                new ServerReceiver(clientSocket, this).start();
+
                 //Forse non serve più
                 // :(
                 Thread serverReceiver = new Thread(() -> {
@@ -78,7 +80,7 @@ public class ClientMain {
 
                 Thread serverSender = new Thread(() -> {
                     try {
-                        String clientInput = null;
+                        String clientInput = "";
 
                         while (!clientInput.equalsIgnoreCase("QUIT")) {
                             clientInput = stdIn.readLine();
@@ -88,7 +90,7 @@ public class ClientMain {
                         e.printStackTrace();
                     }
                 });
-                //serverSender.start();
+                serverSender.start();
 
                 //Welcome
                 String message = in.readLine();

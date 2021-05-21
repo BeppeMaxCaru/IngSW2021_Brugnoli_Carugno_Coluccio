@@ -32,6 +32,7 @@ public class GameController implements Runnable {
                 if (!queueFIFO.isEmpty()) {
                     playersPlaying[i] = queueFIFO.remove(0);
                     playersPlaying[i].setPlayerThreadNumber(i);
+                    playersPlaying[i].run();
                     playersPlaying[i].getOutPrintWriter().println("Match has started, your player number is " + i);
                     //playersToPlay.add(clientsWaiting.remove(0));
                     //playersToPlay.get(0).setPlayerNumber(i);

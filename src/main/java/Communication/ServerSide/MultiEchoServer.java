@@ -52,10 +52,17 @@ public class MultiEchoServer {
             @Override
             public void run() {
                 try {
-                    if (clients.isEmpty() || clients.size()<2) throw new Exception();
+
+                    //Margara
+                    if (queueFIFO.isEmpty() || queueFIFO.size()<2) throw new Exception();
+
+                    //Old
+                    //if (clients.isEmpty() || clients.size()<2) throw new Exception();
 
                     //Margara
                     GameController gameController = new GameController(queueFIFO);
+                    gameExecutor.execute(gameController);
+
                     //Aggiornare
                     //gameExecutor.execute(newGame);
 
