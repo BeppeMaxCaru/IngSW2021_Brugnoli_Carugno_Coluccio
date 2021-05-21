@@ -11,7 +11,7 @@ public class Test_PlayerBoard {
 
     @Test
     public void isCardBelowCompatibleTrial(){
-        players[0]=new Player("Ali");
+        players[0]=new Player("Ali", 0);
         DevelopmentCard card1 = new DevelopmentCard("BLUE", 1);
         DevelopmentCard card2 = new DevelopmentCard("YELLOW", 2);
         DevelopmentCard card3 = new DevelopmentCard("GREEN", 3);

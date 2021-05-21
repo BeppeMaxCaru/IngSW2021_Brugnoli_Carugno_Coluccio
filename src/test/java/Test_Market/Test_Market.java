@@ -25,7 +25,7 @@ public class Test_Market {
 
     @Test
     public void test_updateColumn(){
-        players[0]= new Player("Simo");
+        players[0] = new Player("Beppe", 0);
 
         market.printMarket(new PrintWriter(System.out));
 
@@ -42,7 +42,7 @@ public class Test_Market {
 
     @Test
     public void test_updateRow(){
-        players[0]= new Player("Simo");
+        players[0]= new Player("Simo", 0);
 
         market.printMarket(new PrintWriter(System.out));
 

@@ -29,7 +29,7 @@ public class Test_YellowMarble {
     @Test
     public void tryDrawMarble1() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
         //marble.drawMarble(players,0);
         assertEquals(1,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
    }
@@ -38,7 +38,7 @@ public class Test_YellowMarble {
     @Test
     public void tryDrawMarble2() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
@@ -49,8 +49,8 @@ public class Test_YellowMarble {
     @Test
     public void tryDrawMarble3() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
-        players[1] = new Player("Simo");
+        players[0] = new Player("Beppe", 0);
+        players[1] = new Player("Simo", 1);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
@@ -61,8 +61,8 @@ public class Test_YellowMarble {
     @Test
     public void tryDiscardResource1() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
-        players[1] = new Player("Simo");
+        players[0] = new Player("Beppe", 0);
+        players[1] = new Player("Simo", 1);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
@@ -74,8 +74,8 @@ public class Test_YellowMarble {
     @Test
     public void tryDiscardResource2() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
-        players[1] = new Player("Simo");
+        players[0] = new Player("Beppe", 0);
+        players[1] = new Player("Simo", 1);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
@@ -87,8 +87,8 @@ public class Test_YellowMarble {
     @Test
     public void tryDiscardResource3() {
         Marble marble = new YellowMarble();
-        players[0] = new Player("Beppe");
-        players[1] = new Player("Simo");
+        players[0] = new Player("Beppe", 0);
+        players[1] = new Player("Simo", 1);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);
         //marble.drawMarble(players,0);

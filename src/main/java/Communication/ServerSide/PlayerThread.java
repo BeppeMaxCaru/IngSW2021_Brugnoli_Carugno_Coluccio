@@ -38,6 +38,14 @@ public class PlayerThread implements Runnable {
         }
     }
 
+    public String getNickName() {
+        return this.nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
     public int getPlayerThreadNumber() {
         return this.playerThreadNumber;
     }

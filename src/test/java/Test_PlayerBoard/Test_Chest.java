@@ -11,9 +11,9 @@ public class Test_Chest {
 
     @Test
     public void chestConstructor() {
-        players[0] = new Player("Beppe");
-        players[1] = new Player("Ali");
-        players[2] = new Player("Simo");
+        players[0] = new Player("Beppe", 0);
+        players[1] = new Player("Ali", 1);
+        players[2] = new Player("Simo", 2);
 
         assertEquals(players[0].getPlayerBoard().getChest().getChestResources(), players[1].getPlayerBoard().getChest().getChestResources());
         assertEquals(players[0].getPlayerBoard().getChest().getChestResources(), players[2].getPlayerBoard().getChest().getChestResources());

@@ -85,9 +85,9 @@ public class MultiEchoServer {
                 queueFIFO.add(newPlayer);
 
                 //Old version
-                Player newClient = new Player(playerSocket);
+                //Player newClient = new Player(playerSocket);
                 //newClient.setClientSocket(clientSocket);
-                clients.add(newClient);
+                //clients.add(newClient);
                 //clientExecutor.execute(newClient);
                 //newClient.setName();
             } catch(IOException e) {

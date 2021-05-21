@@ -18,7 +18,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_creation() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         assertEquals(WhiteMarbleResourceLeaderCard.class, card.getClass());
@@ -26,7 +26,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_constraints1(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
@@ -50,7 +50,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_constraints2(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
@@ -74,7 +74,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_array() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
@@ -83,7 +83,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_array2() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
@@ -92,7 +92,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_discard1() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
@@ -102,7 +102,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_discard2() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         players[0].getPlayerLeaderCards()[0]=card;
@@ -112,7 +112,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_activation1(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         Market market = new Market();
         for (int i = 0; i < 3; i++) {
@@ -131,7 +131,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_activation2(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         card.activateAbility(players[0].getPlayerBoard());
@@ -141,7 +141,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_activation3(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble());
         card.activateAbility(players[0].getPlayerBoard());
@@ -151,7 +151,7 @@ public class Test_WhiteMarbleLeaderCard {
 
     @Test
     public void try_activation4(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         assertNull(players[0].getPlayerBoard().getResourceMarbles()[0]);
     }

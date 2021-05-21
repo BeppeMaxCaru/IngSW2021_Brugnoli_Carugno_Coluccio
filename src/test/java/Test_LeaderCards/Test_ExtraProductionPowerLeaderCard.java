@@ -17,7 +17,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_creation() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         assertEquals(ExtraProductionPowerLeaderCard.class, card.getClass());
@@ -25,7 +25,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_constraints1(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
@@ -44,7 +44,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_constraints2(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
@@ -63,7 +63,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_array() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -72,7 +72,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_array2() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -81,7 +81,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_discard1() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -91,7 +91,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_discard2() {
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         players[0].getPlayerLeaderCards()[0]=card;
@@ -101,7 +101,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_activation1(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         assertNull(players[0].getPlayerBoard().getExtraProductionPowerInput()[0]);
 
@@ -109,7 +109,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_activation2(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         card.activateAbility(players[0].getPlayerBoard());
@@ -119,7 +119,7 @@ public class Test_ExtraProductionPowerLeaderCard {
 
     @Test
     public void try_activation3(){
-        players[0] = new Player("Beppe");
+        players[0] = new Player("Beppe", 0);
 
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2), "SHIELDS");
         card.activateAbility(players[0].getPlayerBoard());

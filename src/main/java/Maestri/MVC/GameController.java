@@ -37,6 +37,9 @@ public class GameController implements Runnable {
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
 
+                    //Creates only the data of the player in the gamemodel
+                    players[i] = new Player(playersPlaying[i].getNickName(), i);
+
                     if(i!=0){
                         playersPlaying[i].getOutPrintWriter().println("Wait for other players turn...");
                         //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
@@ -51,7 +54,11 @@ public class GameController implements Runnable {
 
         //Cosa passo al gameModel?? Player o PLayerThread o si può rimuovere del tutto e gestire l'ordine tramite controller?
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Must update constructor
         //this.gameModel = new GameModel(playersPlaying);
+
+        //Temporary solution
+        this.gameModel = new GameModel(players);
 
     }
 

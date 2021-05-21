@@ -54,8 +54,11 @@ public class Player implements Runnable
      * @param clientSocket
      *
      */
+
+
+    //OLD Version that was active from gameModel now we save only the state, no actions
     //Input Socket clientsocket
-    public Player(Socket clientSocket) {
+    /*public Player(Socket clientSocket) {
         //this.playerNumber = playerNumber;
         this.playerBoard = new Playerboard();
 
@@ -79,11 +82,15 @@ public class Player implements Runnable
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
-    }
+    }*/
 
-    public Player(String nickname){
+    public Player(String nickname, int playerNumber){
         this.nickname=nickname;
         this.playerBoard=new Playerboard();
+        this.playerNumber = playerNumber;
+        if(this.playerNumber > 1) {
+            this.playerBoard.getFaithPath().moveCross(1);
+        }
         this.playerLeaderCards=new LeaderCard[4];
     }
 
