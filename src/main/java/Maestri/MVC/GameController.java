@@ -140,28 +140,35 @@ public class GameController implements Runnable {
                     Scanner in = currentPlayer.getInScannerReader();
                     PrintWriter out = currentPlayer.getOutPrintWriter();
 
-                    if(i!=0)
-                        out.println("It's your first turn");
-
                     //Set starting PlayerBoard
-                    Map<Integer, String> startingResources = new HashMap<>();
-                    startingResources.put(0, "0");
-                    startingResources.put(1, "1");
-                    startingResources.put(2, "1");
-                    startingResources.put(3, "2");
+                    Map<Integer, Integer> startingResources = new HashMap<>();
+                    startingResources.put(0, 0);
+                    startingResources.put(1, 1);
+                    startingResources.put(2, 1);
+                    startingResources.put(3, 2);
 
-                    String numChosenResources = startingResources.get(i);
-                    out.println(numChosenResources);
-                    System.out.println(numChosenResources);
+                    //Receive nickname
+                    //Update model
+                    //Missing
+
+                    //Send player number and 4 leader cards (Class to be created)
+                    //Missing
+
+                    //Receive player number and chosen resource(s)
+                    //Update model
+                    //Missing
+                    int t = startingResources.get(i);
                     String resource;
-                    int t=Integer.parseInt(numChosenResources);
                     while (t > 0) {
                         resource=in.nextLine();
                         currentPlayer.setStartingPlayerboard(resource);
                         t--;
                     }
 
-                    out.println("Waiting for other players setup");
+
+                    //Receive 2 leader cards to be discarded
+                    //Update model
+                    //Missing
 
                 } catch (Exception e) {
                     //Sets current player to disconnected
