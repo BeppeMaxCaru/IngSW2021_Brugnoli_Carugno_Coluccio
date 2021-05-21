@@ -66,9 +66,14 @@ public class MultiEchoServer {
         while (true) {
 
             try {
-                Socket clientSocket = serverSocket.accept();
-                Player newClient = new Player(clientSocket);
+                Socket playerSocket = serverSocket.accept();
+                //Il Player adesso diventa PlayerThread
+                PlayerThread newPlayer = new PlayerThread(playerSocket);
+
+                Player newClient = new Player(playerSocket);
                 //newClient.setClientSocket(clientSocket);
+
+
                 clients.add(newClient);
 
                 //clientExecutor.execute(newClient);

@@ -1,5 +1,6 @@
 package Maestri.MVC;
 
+import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
@@ -14,6 +15,9 @@ public class GameController implements Runnable {
     public GameController(List<Player> clientsWaiting) {
 
         Player[] players = new Player[4];
+
+        //Non serve più ordine dei player almeno nel controller
+        Set<PlayerThread> playerThreads = new HashSet<>();
 
         List<Player> playersToPlay = new ArrayList<>();
 
