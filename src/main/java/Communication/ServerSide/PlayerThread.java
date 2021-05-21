@@ -26,6 +26,7 @@ public class PlayerThread implements Runnable {
             this.playerSocket = clientSocket;
             this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
             this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
+            //this.gameController = gameController;
 
             //Chiedi username
             this.outPrintWriter.println("Insert your nickname: ");
@@ -57,6 +58,8 @@ public class PlayerThread implements Runnable {
     public void setCurrentPlayerNickname(String currentPlayerNickname) {
         this.currentPlayerNickname = currentPlayerNickname;
     }
+
+
 
     public Scanner getInScanner() {
         return this.inScanner;

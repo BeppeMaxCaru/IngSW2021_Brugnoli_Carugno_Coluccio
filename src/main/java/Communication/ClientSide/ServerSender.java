@@ -38,6 +38,8 @@ public class ServerSender extends Thread {
         String message;
 
         do {
+            //Creazione messaggi da inviare va qua
+            //Switch su classe da creare in base all'azione inserita
             message = stdIn.nextLine();
             out.println(message);
         } while (!message.equalsIgnoreCase("quit"));

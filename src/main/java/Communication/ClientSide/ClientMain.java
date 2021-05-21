@@ -58,7 +58,7 @@ public class ClientMain {
 
                 //Receive startingMessage with player number and 4 leader cards (Class to be created)
                 ServerStartingMessage startingMessage = (ServerStartingMessage) clientStream.readObject();
-                int playerNumber = startingMessage.getPlayerNumber;
+                int playerNumber = startingMessage.getPlayerNumber();
 
                 Map<Integer, Integer> startingResources = new HashMap<>();
                 startingResources.put(0, 0);
@@ -87,10 +87,10 @@ public class ClientMain {
                 //Missing
 
                 System.out.println("Which starting leader card do you want to discard?");
-                for (int i=0; i<startingMessage.getLeaderCards.lenght(); i++)
+                for (int i=0; i<startingMessage.getLeaderCards().length; i++)
                 {
                     System.out.println("Write "+i+" for this: ");
-                    startingMessage.getLeaderCards[i].printLeaderCard();
+                    startingMessage.getLeaderCards()[i].printLeaderCard(out);
                 }
                 int card=0;
                 try{
@@ -106,16 +106,16 @@ public class ClientMain {
 
                 //Send 2 leaders to be discarded
 
-                DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
                 stream.writeObject("DISCARD LEADER CARD");
-                stream.writeObject(discardLeaderMessage);
+                stream.writeObject(firstDiscardLeaderMessage);
                 stream.close();
 
                 System.out.println("Which starting leader card do you want to discard?");
                 for (int i=0; i<3; i++)
                 {
                     System.out.println("Write "+i+" for this: ");
-                    startingMessage.getLeaderCards[i].printLeaderCard();
+                    startingMessage.getLeaderCards()[i].printLeaderCard(out);
                 }
                 card=0;
                 try{
@@ -129,9 +129,9 @@ public class ClientMain {
                     e.printStackTrace();
                 }
 
-                discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
                 stream.writeObject("DISCARD LEADER CARD");
-                stream.writeObject(discardLeaderMessage);
+                stream.writeObject(firstDiscardLeaderMessage);
                 stream.close();
 
 
@@ -233,9 +233,9 @@ public class ClientMain {
                                 int cardPosition = Integer.parseInt(parameter);
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
-                                DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, cardPosition);
+                                DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, cardPosition);
                                 stream.writeObject(action.toUpperCase());
-                                stream.writeObject(discardLeaderMessage);
+                                stream.writeObject(normalDiscardLeaderMessage);
                                 stream.close();
 
                                 boolean serverResponse = (boolean) clientStream.readObject();

@@ -87,6 +87,7 @@ public class MultiEchoServer {
                 Socket playerSocket = serverSocket.accept();
                 //Il Player adesso diventa PlayerThread
                 //Viene creato
+
                 PlayerThread newPlayer = new PlayerThread(playerSocket);
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);

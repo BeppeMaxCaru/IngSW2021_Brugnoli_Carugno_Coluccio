@@ -34,6 +34,8 @@ public class GameController implements Runnable {
                     playersPlaying[i].setPlayerThreadNumber(i);
                     playersPlaying[i].run();
                     playersPlaying[i].getOutPrintWriter().println("Match has started, your player number is " + i);
+                    //Check this
+                    playersPlaying[i].setGameController(this);
                     //playersToPlay.add(clientsWaiting.remove(0));
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
