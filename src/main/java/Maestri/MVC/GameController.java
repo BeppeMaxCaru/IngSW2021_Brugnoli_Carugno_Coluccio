@@ -330,10 +330,13 @@ public class GameController implements Runnable {
                                     int[] whichOutput = new int[3];
 
                                     for(int k = 0; k < 6; k++) {
-                                        activation[k] = in.nextInt();
                                         if (activation[k] == 1) {
-                                            whichInput[k] = in.nextLine();
-                                            if(k >= 3) whichOutput[k - 3] = in.nextInt();
+                                            InputResourceMessage messageInput = (InputResourceMessage) stream.readObject();
+                                            whichInput[k] = String.valueOf(messageInput.getResource() + messageInput.getQuantity() + messageInput.getStore());
+                                            if(k >= 3) {
+                                                OutputChoiceResourceMessage messageOutput = (OutputChoiceResourceMessage) stream.readObject();
+                                                whichOutput[k - 3] = Integer.parseInt(messageOutput.getResource());
+                                            }
                                         }
                                     }
 
@@ -346,7 +349,7 @@ public class GameController implements Runnable {
                                     break;
                                 }
                                 default: {
-                                    out.println("Not valid action!");
+                                    serverStream.writeObject(false);
                                     break;
                                 }
                             }
@@ -388,12 +391,9 @@ public class GameController implements Runnable {
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
-            out.println("Discarded");
-            currentPlayer.getPlayerLeaderCards()[c].printLeaderCard(out);
-            currentPlayer.discardLeaderCard(c);
+            return currentPlayer.discardLeaderCard(c);
         } else return false;
 
-        return currentPlayer.discardLeaderCard(c);
     }
 
     public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c)
@@ -469,7 +469,6 @@ public class GameController implements Runnable {
                                 paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
                                 if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0].getDevelopmentCardCost())) {
                                     //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
-                                    out.println("Not valid command.");
                                     return false;
                                 }
                             }
@@ -486,7 +485,6 @@ public class GameController implements Runnable {
                     count++;
             }
             if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count) {
-                out.println("Not valid command.");
                 return false;
             }
 
@@ -496,7 +494,6 @@ public class GameController implements Runnable {
                     count++;
             }
             if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count) {
-                out.println("Not valid command.");
                 return false;
             }
 
@@ -506,7 +503,6 @@ public class GameController implements Runnable {
                     count++;
             }
             if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
-                out.println("Not valid command.");
                 return false;
             }
 
@@ -550,7 +546,6 @@ public class GameController implements Runnable {
                             break;
 
                     if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
-                        out.println("Not valid command.");
                         return false;
                     }
 
@@ -560,18 +555,12 @@ public class GameController implements Runnable {
                         totalResources=totalResources+currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(keys);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
-                    if(whichInput.length<totalResources*3)
-                    {
-                        out.println("Not valid command.");
-                        return false;
-                    }
+                    if(whichInput.length<totalResources*3) return false;
 
                 } else {
-                    if(k!=3)
-                    {
+                    if(k != 3) {
                         //Check if player has any cards into the indicated position and it is activated
                         if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
-                            out.println("Not valid command.");
                             return false;
                         }
                     }
@@ -579,23 +568,17 @@ public class GameController implements Runnable {
 
                 //Save all resources player has to pay in temporary maps
                 for(int z=0; z<whichInput.length-2; z=z+3) {
-                    switch (String.valueOf(whichInput[z+2]).toUpperCase())
-                    {
-                        case "W":
-                        {
+                    switch (String.valueOf(whichInput[z+2]).toUpperCase()) {
+                        case "W": {
                             paidWarehouseResources.put(resources.get(Integer.parseInt(whichInput[z])), Integer.parseInt(whichInput[z+1]));
                             break;
                         }
-                        case "C":
-                        {
+                        case "C": {
                             paidChestResources.put(resources.get(Integer.parseInt(whichInput[z])), Integer.parseInt(whichInput[z+1]));
                             break;
                         }
-                        case "L":
-                        {
-                            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(Integer.parseInt(whichInput[z])))==null)
-                            {
-                                out.println("Not valid command.");
+                        case "L": {
+                            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(Integer.parseInt(whichInput[z])))==null) {
                                 return false;
                             }
                             else
@@ -608,15 +591,11 @@ public class GameController implements Runnable {
                 //Check if player has each correct resource in each correct storage
 
                 for(String keys : paidWarehouseResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys))
-                    {
-                        out.println("Not valid command.");
+                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
                         return false;
                     }
                 for(String keys : paidChestResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys))
-                    {
-                        out.println("Not valid command.");
+                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys)) {
                         return false;
                     }
 
@@ -636,16 +615,12 @@ public class GameController implements Runnable {
                 {
                     for(String res : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
                     {
-                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(res))
-                        {
-                            out.println("Not valid command");
+                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(res)) {
                             return false;
                         }
                     }
                 } else {
-                        if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1)
-                        {
-                            out.println("Not valid command");
+                        if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
                             return false;
                         }
                 }

@@ -431,14 +431,7 @@ public class ClientMain {
                                 break;
                             }
 
-                            /* PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
-                            FileOutputStream output = new FileOutputStream("ClientMessage");
-                            ObjectOutputStream stream = new ObjectOutputStream(output);
-                            */
                             stream.writeObject(action);
-                            /*
-                            stream.writeObject(playLeaderMessage);
-                            stream.close(); */
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
