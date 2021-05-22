@@ -58,16 +58,25 @@ public class ClientMain {
             //Player player = new Player();
             try {
 
+                //
                 Socket clientSocket = new Socket("127.0.0.1", 1234);
+                //Socket clientSocket = new Socket(hostName, port);
+
 
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
+                //Scanner stdIn = new Scanner(System.in);
+
+                //System.out.println("OK");
 
                 FileOutputStream output = new FileOutputStream("ClientMessage");
                 ObjectOutputStream stream = new ObjectOutputStream(output);
                 FileInputStream inputStream = new FileInputStream("ReceivedMessage");
                 ObjectInputStream clientStream = new ObjectInputStream(inputStream);
+
+                System.out.println("OK");
+
 
                 //Send nickname
                 //Missing
@@ -159,7 +168,7 @@ public class ClientMain {
 
                 //Forse non serve più
                 // :(
-                Thread serverReceiver = new Thread(() -> {
+                /*Thread serverReceiver = new Thread(() -> {
                     try {
                         while (true) {
 
@@ -180,7 +189,7 @@ public class ClientMain {
                         }
                     }
                 });
-                serverReceiver.start();
+                serverReceiver.start();*/
 
                 Thread serverSender = new Thread(() -> {
                     try {
