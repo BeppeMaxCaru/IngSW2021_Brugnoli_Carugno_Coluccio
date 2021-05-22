@@ -36,6 +36,9 @@ public class GameController implements Runnable {
                     playersPlaying[i].getOutPrintWriter().println("Match has started, your player number is " + i);
                     //Check this
                     playersPlaying[i].setGameController(this);
+
+
+                    //Old
                     //playersToPlay.add(clientsWaiting.remove(0));
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
@@ -64,72 +67,6 @@ public class GameController implements Runnable {
         this.gameModel = new GameModel(players);
 
     }
-
-    //Old
-    /*public GameController(List<Player> clientsWaiting) {
-
-        Player[] players = new Player[4];
-
-        //Non serve più ordine dei player almeno nel controller
-        Set<PlayerThread> playerThreads = new HashSet<>();
-
-        List<Player> playersToPlay = new ArrayList<>();
-
-        //Chat version
-        for (int i=0;i<4;i++) {
-            try {
-                //If there is a player adds it
-                if (!clientsWaiting.isEmpty()) {
-                    players[i] = clientsWaiting.remove(0);
-                    players[i].setPlayerNumber(i);
-                    players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
-                    //playersToPlay.add(clientsWaiting.remove(0));
-                    //playersToPlay.get(0).setPlayerNumber(i);
-                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
-
-                    if(i!=0){
-                        players[i].getOutPrintWriter().println("Wait for other players turn...");
-                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
-                    }
-
-                }
-            } catch (Exception e) {
-                //If no clients waiting set other players null
-                players[i] = null;
-            }
-        }
-
-        this.gameModel = new GameModel(players);
-
-    }*/
-
-        //Old version
-        /*for (int i=0;i<players.length;i++) {
-            try {
-                //If there is a player adds it
-                if (!clientsWaiting.isEmpty()) {
-                    players[i] = clientsWaiting.remove(0);
-                    players[i].setPlayerNumber(i);
-                    players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
-                    //playersToPlay.add(clientsWaiting.remove(0));
-                    //playersToPlay.get(0).setPlayerNumber(i);
-                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
-
-                    if(i!=0){
-                        players[i].getOutPrintWriter().println("Wait for other players turn...");
-                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
-                    }
-
-                }
-            } catch (Exception e) {
-                //If no clients waiting set other players null
-                players[i] = null;
-            }
-        }
-
-        this.gameModel = new GameModel(players);
-
-    }*/
 
     @Override
     public void run() {

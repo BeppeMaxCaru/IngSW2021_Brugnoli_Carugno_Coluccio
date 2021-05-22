@@ -59,8 +59,6 @@ public class PlayerThread implements Runnable {
         this.currentPlayerNickname = currentPlayerNickname;
     }
 
-
-
     public Scanner getInScanner() {
         return this.inScanner;
     }
