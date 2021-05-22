@@ -9,15 +9,31 @@ import java.util.*;
 
 public class ClientMain {
 
+    private String hostName;
+    private int port;
+
     //Eventuale lista comandi da stampare per aiutare ma non guidare
-    private List<String> commands = Arrays.asList("Play leader card",
-            "Discard leader card");
+    private List<String> commands = Arrays.asList("Play leader card", "Discard leader card");
 
-    public void main(String[] args) throws IOException {
+    public ClientMain(String hostname, int port) {
+         this.hostName = hostname;
+         this.port = port;
+    }
 
-        //Passarli come paramteri del main
-        String hostName = "127.0.0.1";
-        int portNumber = 1234;
+    public static void main(String[] args) {
+        if (args.length < 2) return;
+
+        String hostname = args[0];
+        int port = Integer.parseInt(args[1]);
+
+        //ClientMain client = new ClientMain( "127.0.0.1", 1234);
+        ClientMain client = new ClientMain(hostname, port);
+        client.Execute();
+    }
+
+    public void Execute() {
+
+        //Passarli come parametri del main
         String gameMode;
         String nickName;
         Scanner input = new Scanner(System.in);
