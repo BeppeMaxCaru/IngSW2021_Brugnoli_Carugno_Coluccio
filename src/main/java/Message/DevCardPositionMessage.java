@@ -1,6 +1,8 @@
 package Message;
 
-public class DevCardPositionMessage {
+import java.io.Serializable;
+
+public class DevCardPositionMessage implements Serializable {
 
     private final int playerNumber;
     private final int cardPosition;

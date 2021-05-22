@@ -2,7 +2,9 @@ package Message;
 
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 
-public class ServerStartingMessage {
+import java.io.Serializable;
+
+public class ServerStartingMessage implements Serializable {
 
     //public int getPlayerNumber;
     private int playerNumber;

@@ -62,7 +62,7 @@ public class ClientMain {
                 Socket clientSocket = new Socket("127.0.0.1", 1234);
                 //Socket clientSocket = new Socket(hostName, port);
 
-
+                //Usare objectInputStream ed objectInputStream
                 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 BufferedReader stdIn = new BufferedReader((new InputStreamReader(System.in)));
@@ -70,10 +70,22 @@ public class ClientMain {
 
                 //System.out.println("OK");
 
-                FileOutputStream output = new FileOutputStream("ClientMessage");
-                ObjectOutputStream stream = new ObjectOutputStream(output);
-                FileInputStream inputStream = new FileInputStream("ReceivedMessage");
-                ObjectInputStream clientStream = new ObjectInputStream(inputStream);
+                //In teoria non serve
+                //Puoi usare semplicemente il metodo write d
+                //FileOutputStream output = new FileOutputStream("ClientMessage");
+                //Simo
+                //ObjectOutputStream sender = new ObjectOutputStream(output);
+                //Correct
+                ObjectOutputStream sender = new ObjectOutputStream(clientSocket.getOutputStream());
+                //
+                //FileInputStream inputStream = new FileInputStream("ReceivedMessage");
+                //Simo
+                //ObjectInputStream receiver = new ObjectInputStream(inputStream);
+                ObjectInputStream receiver = new ObjectInputStream(clientSocket.getInputStream());
+
+                //Simo prova con questi nuovi sender e receivers
+                //ObjectInputStream receiver = new ObjectInputStream(clientSocket.getInputStream());
+                //ObjectOutputStream sender = new ObjectOutputStream(clientSocket.getOutputStream());
 
                 System.out.println("OK");
 
@@ -82,7 +94,7 @@ public class ClientMain {
                 //Missing
 
                 //Receive startingMessage with player number and 4 leader cards (Class to be created)
-                ServerStartingMessage startingMessage = (ServerStartingMessage) clientStream.readObject();
+                ServerStartingMessage startingMessage = (ServerStartingMessage) receiver.readObject();
                 int playerNumber = startingMessage.getPlayerNumber();
 
                 Map<Integer, Integer> startingResources = new HashMap<>();
@@ -91,7 +103,7 @@ public class ClientMain {
                 startingResources.put(2, 1);
                 startingResources.put(3, 2);
 
-                System.out.println("Match has started, your player number is "+playerNumber);
+                System.out.println("Match has started, your player number is " + playerNumber);
 
                 ArrayList<String> playerStartingResources = new ArrayList<>();
                 String res;
@@ -116,6 +128,8 @@ public class ClientMain {
                 {
                     System.out.println("Write "+i+" for this: ");
                     startingMessage.getLeaderCards()[i].printLeaderCard(out);
+                    //Diventa così
+                    //sender.writeObject(startingMessage);
                 }
                 int card=0;
                 try{
@@ -132,14 +146,20 @@ public class ClientMain {
                 //Send 2 leaders to be discarded
 
                 DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
-                stream.writeObject("DISCARD LEADER CARD");
-                stream.writeObject(firstDiscardLeaderMessage);
-                stream.close();
+                //Devi togliere del tutto l'invio della stringa
+                //Tanto sai già che tipo di messaggio ricevi tramite instanceOf
+                sender.writeObject("DISCARD LEADER CARD");
+                sender.writeObject(firstDiscardLeaderMessage);
+                //Conviene chiamare la close solo a fine partita mai durante
+                //Close chiude la connessione TCP ed è oprazione dispendiosa
+                //Va fatto quindi solo alla fine della partita, mai durante tranne in caso di disconnessione
+                sender.close();
 
                 System.out.println("Which starting leader card do you want to discard?");
                 for (int i=0; i<3; i++)
                 {
-                    System.out.println("Write "+i+" for this: ");
+                    System.out.println("Write " + i + " for this: ");
+                    //??
                     startingMessage.getLeaderCards()[i].printLeaderCard(out);
                 }
                 card=0;
@@ -155,15 +175,14 @@ public class ClientMain {
                 }
 
                 firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
-                stream.writeObject("DISCARD LEADER CARD");
-                stream.writeObject(firstDiscardLeaderMessage);
-                stream.close();
+                sender.writeObject("DISCARD LEADER CARD");
+                sender.writeObject(firstDiscardLeaderMessage);
+                sender.close();
 
 
 
 
-
-
+                //Lancia questo thread
                 new ServerReceiver(clientSocket, this).start();
 
                 //Forse non serve più
@@ -191,6 +210,10 @@ public class ClientMain {
                 });
                 serverReceiver.start();*/
 
+                //Sposta creazione e invio di messaggi in serverSender
+                //Poi commenta questo thread qui
+                //E infine lancia il nuovo thread così
+                //new ServerSender(clientSocket, this).start()
                 Thread serverSender = new Thread(() -> {
                     try {
                         String clientInput = "";
@@ -237,11 +260,13 @@ public class ClientMain {
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(playerNumber, cardPosition);
-                                stream.writeObject(action);
-                                stream.writeObject(playLeaderMessage);
-                                stream.close();
+                                sender.writeObject(action);
+                                sender.writeObject(playLeaderMessage);
+                                sender.close();
 
-                                boolean serverResponse = (boolean) clientStream.readObject();
+                                //La parte di ricezione puoi adesso metterla tutte in serverReiver
+                                //Dove continua a decapsulare i messaggi che riceve e stamparli su CLI
+                                boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -259,11 +284,11 @@ public class ClientMain {
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, cardPosition);
-                                stream.writeObject(action.toUpperCase());
-                                stream.writeObject(normalDiscardLeaderMessage);
-                                stream.close();
+                                sender.writeObject(action.toUpperCase());
+                                sender.writeObject(normalDiscardLeaderMessage);
+                                sender.close();
 
-                                boolean serverResponse = (boolean) clientStream.readObject();
+                                boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -345,13 +370,18 @@ public class ClientMain {
                             }
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(playerNumber, parameter, index, wlChoice, chosenMarble);
-                            stream.writeObject(action);
-                            stream.writeObject(resourcesMessage);
-                            stream.close();
+                            sender.writeObject(action);
+                            sender.writeObject(resourcesMessage);
+                            sender.close();
 
                             //If server responds OK, action is correct
                             try {
-                                boolean serverResponse = (boolean) clientStream.readObject();
+                                boolean serverResponse = (boolean) receiver.readObject();
+                                //Adesso è necessario che sia il playerThread a tenere conto che
+                                //che l'azione principale è già stata fatta
+                                //quindi il contatore va si PlayerThread e va incrementato dopo
+                                //aver inviato messaggio di ok
+                                //se arriva nuovo messaggio di azione principale si dice no
                                 if(serverResponse)
                                     mainAction++;
                                 else System.out.println("Not valid action.");
@@ -453,13 +483,13 @@ public class ClientMain {
 
                             //Sending Card request
                             BuyCardMessage buyCard = new BuyCardMessage(colour, level, playerNumber, quantity, shelf);
-                            stream.writeObject(action);
-                            stream.writeObject(buyCard);
-                            stream.close();
+                            sender.writeObject(action);
+                            sender.writeObject(buyCard);
+                            sender.close();
 
                             int pos;
                             try {
-                                ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) clientStream.readObject();
+                                ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) receiver.readObject();
 
                                 System.out.println("In which position of your development card grid do you want to place the bought card?");
                                 System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
@@ -479,11 +509,11 @@ public class ClientMain {
 
                             //Sending card position
                             DevCardPositionMessage positionMessage = new DevCardPositionMessage(playerNumber, pos);
-                            stream.writeObject(positionMessage);
-                            stream.close();
+                            sender.writeObject(positionMessage);
+                            sender.close();
 
                             //If server responds OK, action is correct
-                            boolean serverResponse = (boolean) clientStream.readObject();
+                            boolean serverResponse = (boolean) receiver.readObject();
                             if(serverResponse)
                                 mainAction++;
                             else System.out.println("Not valid action.");
@@ -501,7 +531,7 @@ public class ClientMain {
                                 break;
                             }
 
-                            stream.writeObject(action);
+                            sender.writeObject(action);
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
@@ -739,21 +769,21 @@ public class ClientMain {
                                     {
                                        for(i = 0; i < whichInput[k].length() / 3; i++) {
                                            InputResourceMessage inputResourceMessage = new InputResourceMessage(playerNumber, whichInput[k].charAt(0), whichInput[k].charAt(1), whichInput[k].charAt(2));
-                                           stream.writeObject(inputResourceMessage);
-                                           stream.close();
+                                           sender.writeObject(inputResourceMessage);
+                                           sender.close();
                                        }
 
                                        if(k == 3 || k == 4 || k == 5) {
                                            OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(playerNumber, whichOutput[k]);
-                                           stream.writeObject(outputChoiceResourceMessage);
-                                           stream.close();
+                                           sender.writeObject(outputChoiceResourceMessage);
+                                           sender.close();
                                        }
                                     }
                                 }
                             } else break;
                             //If server responds OK, action is correct
                             try {
-                                boolean serverResponse = (boolean) clientStream.readObject();
+                                boolean serverResponse = (boolean) receiver.readObject();
                                 if(serverResponse)
                                     mainAction++;
                                 else System.out.println("Not valid action.");

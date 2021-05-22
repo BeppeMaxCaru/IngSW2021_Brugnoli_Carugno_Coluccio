@@ -2,7 +2,7 @@ package Message;
 
 import java.io.Serializable;
 
-public class DiscardLeaderMessage implements Serializable{
+public class DiscardLeaderMessage implements Serializable {
 
     private final int playerNumber;
     private final int discarded;
