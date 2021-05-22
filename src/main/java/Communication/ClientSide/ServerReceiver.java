@@ -3,6 +3,7 @@ package Communication.ClientSide;
 import Communication.ServerSide.PlayerThread;
 
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -12,25 +13,25 @@ public class ServerReceiver extends Thread {
     private PlayerThread playerThread;
     private Scanner in;
 
-    public ServerReceiver(Socket socket, ClientMain clientMain) {
-        this.socket = socket;
-        this.playerThread = playerThread;
+    private ClientMain clientMain;
 
-        try {
-            this.in = new Scanner(new InputStreamReader(this.socket.getInputStream()));
-        } catch (Exception e) {
-            System.out.println("Input not working");
-            e.printStackTrace();
-        }
+    private ObjectInputStream receiver;
+
+    public ServerReceiver(ClientMain clientMain, Socket socket, ObjectInputStream receiver) {
+        this.clientMain = clientMain;
+        this.socket = socket;
+        this.receiver = receiver;
     }
 
     @Override
     public void run() {
+        //Keeps receiving messages and current player actions
         while (true) {
+            //Switch with different messages to send
             try {
                 String message = this.in.nextLine();
             } catch (Exception e) {
-                System.out.println("Error 404");
+                System.err.println("Server receiver error");
                 e.printStackTrace();
                 break;
             }

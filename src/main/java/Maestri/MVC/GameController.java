@@ -606,4 +606,7 @@ public class GameController implements Runnable {
         }
     }
 
+    public GameModel getGameModel() {
+        return this.gameModel;
+    }
 }

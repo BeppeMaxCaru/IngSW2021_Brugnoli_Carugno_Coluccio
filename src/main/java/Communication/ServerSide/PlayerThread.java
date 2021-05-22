@@ -1,9 +1,9 @@
 package Communication.ServerSide;
 
 import Maestri.MVC.GameController;
+import Message.*;
 
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -18,16 +18,25 @@ public class PlayerThread implements Runnable {
     private Scanner inScanner;
     private PrintWriter outPrintWriter;
 
+    private ObjectInputStream receiver;
+    private ObjectOutputStream sender;
+
     //The controller for this player
     private GameController gameController;
 
+    //Il game controller va assegnato con setter siccome creato prima
     public PlayerThread(Socket clientSocket) {
         try {
             this.playerSocket = clientSocket;
-            this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
-            this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
+
+            this.receiver = new ObjectInputStream(clientSocket.getInputStream());
+            this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
+
+            //this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
+            //this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
             //this.gameController = gameController;
 
+            //Va fatto con oggetti
             //Chiedi username
             this.outPrintWriter.println("Insert your nickname: ");
             this.nickName = inScanner.nextLine();
@@ -36,6 +45,9 @@ public class PlayerThread implements Runnable {
 
         } catch (Exception e) {
             e.printStackTrace();
+            //Thread not working
+            //Null this player
+            return;
         }
     }
 
@@ -82,15 +94,91 @@ public class PlayerThread implements Runnable {
     @Override
     public void run() {
 
-        try {
-            this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
-            this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
+        //SWITCH THAT READS MESSAGES AND SENDS RESPONSED/DOES ACTIONS
 
-            this.outPrintWriter.println("New game started");
+        //SYNC PHASE
+        try {
+            NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
+            this.nickName = nicknameMessage.getNickname();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Check this
+        try {
+            ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
+                    this.playerThreadNumber,
+                    this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards());
+            sender.writeObject(serverStartingMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //Errore
+        }
+
+        try {
+            StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
+            //Checks
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) receiver.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) receiver.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //QUI INIZIA LA FASE ASINCRONA
+        //
+        //SOPRA HO INIZIATO LA FASE SINCRONA
+        //
+        //VANNO MESSI I CONTROLLI, CHIAMATI E METODI, ECC
+        //
+        //QUA SOTTO C'è IL CICLO CON SWITCH FINCHè UNO NON VINCE
+        //
+        //
+
+        while (true) {
+
+            /*try {
+
+                Object object = receiver.readObject();
+                //Ci
+                switch (receiver.readObject()) {
+                    case (object):
+                        break;
+                    case (object instanceof DiscardLeaderMessage):
+                        break;
+                    case (object instanceof MarketResourcesMessage):
+                        break;
+                    case (object instanceof BuyCardMessage):
+                        break;
+                    case ()
+                }
+            } catch (Exception e) {
+                break;
+            }*/
+            break;
+        }
+
+
+        //Async phase can start!!!
+        try {
+            //this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
+            //this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
+
+            //this.outPrintWriter.println("New game started");
 
             String clientMessage = "";
 
             while (!clientMessage.equalsIgnoreCase("quit")) {
+
 
                 clientMessage = this.inScanner.nextLine();
 
@@ -107,6 +195,7 @@ public class PlayerThread implements Runnable {
 
         } catch (Exception e) {
             //Non funziona connessione client
+            //Disconnect current player
         }
     }
 }

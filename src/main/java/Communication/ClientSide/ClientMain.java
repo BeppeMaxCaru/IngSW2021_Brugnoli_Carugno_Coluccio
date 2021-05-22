@@ -12,12 +12,22 @@ public class ClientMain {
     private String hostName;
     private int port;
 
+    //Test
+    private String nickname;
+    private Scanner consoleInput = new Scanner(System.in);
+
     //Eventuale lista comandi da stampare per aiutare ma non guidare
     private List<String> commands = Arrays.asList("Play leader card", "Discard leader card");
 
     public ClientMain(String hostname, int port) {
          this.hostName = hostname;
          this.port = port;
+
+         //Test
+         //this.consoleInput = new Scanner(System.in);
+         //System.out.println("Welcome to Master of Renaissance!");
+         //System.out.println("Insert your nickname");
+         //this.consoleInput.nextLine();
     }
 
     public static void main(String[] args) {
@@ -36,30 +46,201 @@ public class ClientMain {
         //Passarli come parametri del main
         String gameMode;
         String nickName;
-        Scanner input = new Scanner(System.in);
+        Scanner consoleInput = new Scanner(System.in);
 
         // Game mode
         System.out.println("Welcome to Masters of Renaissance!");
+
+        //Test
+        System.out.println("Insert your nickname");
+        this.nickname = this.consoleInput.nextLine();
+
         System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-        gameMode = input.nextLine();
+        gameMode = consoleInput.nextLine();
         while (!gameMode.equals("0") && !gameMode.equals("1")) {
             System.out.println("Number not valid!");
             System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-            gameMode = input.nextLine();
+            gameMode = consoleInput.nextLine();
         }
 
         if (gameMode.equals("0")) {
-
 
         }
         else {
             //Ask nickname before gameMode branch
             //Call player constructor directly on the server?
             //Player player = new Player();
+
+            Socket clientSocket;
+            ObjectOutputStream sender;
+            ObjectInputStream receiver;
+
+            //Starts connection
+            //This should be the final client
+            //Extremely simple! :)
+            try {
+                clientSocket = new Socket(this.hostName, this.port);
+                sender = new ObjectOutputStream(clientSocket.getOutputStream());
+                receiver = new ObjectInputStream(clientSocket.getInputStream());
+
+                System.out.println("Loading...");
+                System.out.println("Hi " + this.nickname + "!");
+                System.out.println("Welcome to Master of Renaissance online!");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Connection failed");
+                //Sono i return che garantiscono l'inizializzazione degli oggetti
+                //permettedno di splittare un grosso try block in pezzi più piccoli
+                return;
+            }
+
+            //Commento non c'entra nulla
+            //Per controllare inattività o disconnesione si può provare setSocketTimeout
+            //sulla socket del playerThread e vedere se non arriva data dopo tot tempo
+
+            //1
+            //Send nickname message
+            try {
+                NicknameMessage nicknameMessage = new NicknameMessage(this.nickname);
+                sender.writeObject(nicknameMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Connection failed");
+                return;
+            }
+
+            //2 + 3 + 4
+            //Receives and sends starting resources message
+            try {
+
+                //Decapsulates first message
+                ServerStartingMessage startingMessage = (ServerStartingMessage) receiver.readObject();
+                int playerNumber = startingMessage.getPlayerNumber();
+
+                //1
+                //Asks starting resources
+                Map<Integer, Integer> startingResources = new HashMap<>();
+                startingResources.put(0, 0);
+                startingResources.put(1, 1);
+                startingResources.put(2, 1);
+                startingResources.put(3, 2);
+
+                System.out.println("Match has started, your player number is " + playerNumber);
+
+                ArrayList<String> playerStartingResources = new ArrayList<>();
+                String res;
+                for(int resources=0; resources < startingResources.get(playerNumber); resources++)
+                {
+                    System.out.println("Which starting resource do you want to pick?");
+                    res = consoleInput.nextLine().toUpperCase();
+                    while(!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS"))
+                    {
+                        System.out.println("Choose a correct resource");
+                        System.out.println("Which starting resource do you want to pick?");
+                        res = consoleInput.nextLine().toUpperCase();
+                    }
+                    playerStartingResources.add(res);
+                }
+
+                //Send player number and starting resources (Class to be created)
+                //Missing
+
+                //2A
+                //Sends first starting excess leader card to discard
+                System.out.println("Which starting leader card do you want to discard?");
+                for (int i=0; i<startingMessage.getLeaderCards().length; i++)
+                {
+                    System.out.println("Write "+ i +" for this: ");
+                    //Out non si utilizza più
+                    //PrintWriter scrive file non oggetti e quindi non è più adatto
+                    //startingMessage.getLeaderCards()[i].printLeaderCard(out);
+                    //Diventa così
+                    //sender.writeObject(startingMessage);
+                }
+                int card=0;
+                try{
+                    card = consoleInput.nextInt();
+                    while (card<0 || card>3)
+                    {
+                        System.out.println("Chose a correct card.");
+                        card= consoleInput.nextInt();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //2B
+                //Sends second starting excess leader card to discard
+                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                //Devi togliere del tutto l'invio della stringa
+                //Tanto sai già che tipo di messaggio ricevi tramite instanceOf
+                sender.writeObject(firstDiscardLeaderMessage);
+
+                System.out.println("Which starting leader card do you want to discard?");
+                for (int i=0; i<3; i++)
+                {
+                    System.out.println("Write " + i + " for this: ");
+                    //Out non si utilizza più
+                    //PrintWriter scrive file non oggetti e quindi non è più adatto
+                    //startingMessage.getLeaderCards()[i].printLeaderCard(out);
+                }
+                card=0;
+                try{
+                    card = consoleInput.nextInt();
+                    while (card<0 || card>2)
+                    {
+                        System.out.println("Chose a correct card.");
+                        card= consoleInput.nextInt();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                sender.writeObject(firstDiscardLeaderMessage);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Initial resources setting failed");
+                //clientSocket.close();
+            }
+
+            //4
+            //Starts async phase
+            new ServerReceiver(this, clientSocket, receiver).start();
+            new ServerSender(this, clientSocket, sender).start();
+
+            //Try catch + switch + while with !"quit"
+            //Put it into ServerSender?
+            try {
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Disconnected");
+            }
+
+            //SIMO LA TUA VERSIONE STA QUA SOTTO
+            //
+            //L'HAI FATTA CORRETTA NEL SENSO CHE ALL'INIZIO CLIENT E PLAYERTHREAD SONO
+            //SINCRONIZZATI PER GESTIRE LA PARTE DI SETUP DEL GIOCO
+            //
+            //SOLO DOPO LA PARTE INIZIALE LANCI I THREAD E GLI FORNISCI LIBERTà
+            //
+            //HO FATTO IL NUOVO PROTOCOLLO ALL'INCIRCA E L'HO MANDATO SUL GRUPPO
+            //
+            //QUI SOPRA HO CORRETTO CIò CHE SERVE PER MANDARE E RICEVERE OGGETTI
+            //PRINTWRITER E BUFFEREDREADER ERANO SBAGLIATI
+            //ADESSO SI USANO OBJECTINPUTSTREAM E OBJECTOUTPUTSTREAM RENDENDO LE CLASSI
+            //CON L'INTERFACCIA SERIALIZABLE E POI I METODI WRITEOBJECT E READOBJECT
+            //SONO DISPONIBILI IN AUTOMATICO E VANNO USATI QUELLI
+
+
+
             try {
 
                 //
-                Socket clientSocket = new Socket("127.0.0.1", 1234);
+                clientSocket = new Socket(this.hostName, this.port);
                 //Socket clientSocket = new Socket(hostName, port);
 
                 //Usare objectInputStream ed objectInputStream
@@ -76,23 +257,40 @@ public class ClientMain {
                 //Simo
                 //ObjectOutputStream sender = new ObjectOutputStream(output);
                 //Correct
-                ObjectOutputStream sender = new ObjectOutputStream(clientSocket.getOutputStream());
+                sender = new ObjectOutputStream(clientSocket.getOutputStream());
                 //
                 //FileInputStream inputStream = new FileInputStream("ReceivedMessage");
                 //Simo
                 //ObjectInputStream receiver = new ObjectInputStream(inputStream);
-                ObjectInputStream receiver = new ObjectInputStream(clientSocket.getInputStream());
+                receiver = new ObjectInputStream(clientSocket.getInputStream());
 
                 //Simo prova con questi nuovi sender e receivers
                 //ObjectInputStream receiver = new ObjectInputStream(clientSocket.getInputStream());
                 //ObjectOutputStream sender = new ObjectOutputStream(clientSocket.getOutputStream());
 
-                System.out.println("OK");
+                //System.out.println("OK");
 
+                //ClientMain e PlayerThread restano sincronizzati solo
+                //all'inizio per le operazioni preliminari cioè:
+                //invio nickname
+                //ricezione messaggio per scelta risorse iniziali
+                //invio messaggio risorse iniziali
+                //scarto carte leader iniziali
+                //Poi si lanciano i thread i player fanno quello che vogliono
 
+                //1
                 //Send nickname
+                try {
+                    NicknameMessage nicknameMessage = new NicknameMessage(this.nickname);
+                    sender.writeObject(nicknameMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("Nickname not sent");
+                    return;
+                }
                 //Missing
 
+                //2 + 3 + 4
                 //Receive startingMessage with player number and 4 leader cards (Class to be created)
                 ServerStartingMessage startingMessage = (ServerStartingMessage) receiver.readObject();
                 int playerNumber = startingMessage.getPlayerNumber();
@@ -126,7 +324,9 @@ public class ClientMain {
                 System.out.println("Which starting leader card do you want to discard?");
                 for (int i=0; i<startingMessage.getLeaderCards().length; i++)
                 {
-                    System.out.println("Write "+i+" for this: ");
+                    System.out.println("Write "+ i +" for this: ");
+                    //Out non si utilizza più
+                    //PrintWriter scrive file non oggetti e quindi non è più adatto
                     startingMessage.getLeaderCards()[i].printLeaderCard(out);
                     //Diventa così
                     //sender.writeObject(startingMessage);
@@ -145,11 +345,11 @@ public class ClientMain {
 
                 //Send 2 leaders to be discarded
 
-                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
                 //Devi togliere del tutto l'invio della stringa
                 //Tanto sai già che tipo di messaggio ricevi tramite instanceOf
                 sender.writeObject("DISCARD LEADER CARD");
-                sender.writeObject(firstDiscardLeaderMessage);
+                sender.writeObject(discardLeaderMessage);
                 //Conviene chiamare la close solo a fine partita mai durante
                 //Close chiude la connessione TCP ed è oprazione dispendiosa
                 //Va fatto quindi solo alla fine della partita, mai durante tranne in caso di disconnessione
@@ -159,7 +359,8 @@ public class ClientMain {
                 for (int i=0; i<3; i++)
                 {
                     System.out.println("Write " + i + " for this: ");
-                    //??
+                    //Out non si utilizza più
+                    //PrintWriter scrive file non oggetti e quindi non è più adatto
                     startingMessage.getLeaderCards()[i].printLeaderCard(out);
                 }
                 card=0;
@@ -174,16 +375,16 @@ public class ClientMain {
                     e.printStackTrace();
                 }
 
-                firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
-                sender.writeObject("DISCARD LEADER CARD");
-                sender.writeObject(firstDiscardLeaderMessage);
+                discardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                //sender.writeObject("DISCARD LEADER CARD");
+                sender.writeObject(discardLeaderMessage);
                 sender.close();
 
 
 
 
                 //Lancia questo thread
-                new ServerReceiver(clientSocket, this).start();
+                new ServerReceiver(this, clientSocket, receiver).start();
 
                 //Forse non serve più
                 // :(
@@ -859,5 +1060,13 @@ public class ClientMain {
         }
 
         return true;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public Scanner getConsoleInput() {
+        return this.consoleInput;
     }
 }
