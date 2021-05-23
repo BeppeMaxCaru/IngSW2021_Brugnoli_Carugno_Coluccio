@@ -1,16 +1,14 @@
 package Communication.ClientSide;
 
-import Communication.ServerSide.PlayerThread;
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
+import Message.MessageSent.DiscardLeaderMessage;
+import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class ServerSender extends Thread {
     private Socket socket;
@@ -316,15 +314,29 @@ public class ServerSender extends Thread {
                                             break;
                                         }
                                     }
-
                                 } else {
                                     System.err.println("Not existing resource");
                                     break;
                                 }
+
+                            }
+
+                            int pos;
+
+                            System.out.println("In which position of your development card grid do you want to place the bought card?");
+                            System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
+                            System.out.println("Write a correct position between 0 and 2.");
+                            parameter = this.clientMain.getConsoleInput().nextLine();
+
+                            try {
+                                pos = Integer.parseInt(parameter);
+                            } catch (Exception e) {
+                                System.out.println("Not valid position");
+                                break;
                             }
 
                             //Sending Card request
-                            BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf);
+                            BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
                             sender.writeObject(buyCard);
                             //GUARDA SU
                             //sender.close();
@@ -340,8 +352,12 @@ public class ServerSender extends Thread {
                             //DIRETTAMENTE DA Lì E POI SI AGGIUNGE IN PLAYERTHREAD INSTANCE OF
                             //PER QUESTO SECONDO MESSAGGIO
                             //
+                            //DUNQUE FAI COSì:
+                            //METTI GIà DENTRO LA POSIZIONE DELLA CARTA NEL PRIMO MESSAGGIO
+                            //DEL CONTROLLO SE NE OCCUPA SEMPRE IL PLAYERTHREAD SENZA AVER BISOGNO
+                            //DI UN SECONDO MESSAGGIO
 
-                            int pos;
+                            /*int pos;
                             try {
                                 //GUARDA SU
                                 ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) receiver.readObject();
@@ -370,14 +386,14 @@ public class ServerSender extends Thread {
 
                                 //NE TIENE CONTO PLAYERTHREAD
                                 //If server responds OK, action is correct
-                                /*boolean serverResponse = (boolean) receiver.readObject();
+                                boolean serverResponse = (boolean) receiver.readObject();
                                 if (serverResponse)
                                     mainAction++;
-                                else System.out.println("Not valid action.");*/
+                                else System.out.println("Not valid action.");
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
                                 break;
-                            }
+                            }*/
                             break;
                         }
 

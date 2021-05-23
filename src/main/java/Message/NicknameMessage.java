@@ -3,7 +3,7 @@ package Message;
 import java.io.Serializable;
 import java.util.Scanner;
 
-public class NicknameMessage implements Serializable {
+public class NicknameMessage extends Message implements Serializable {
 
     private String nickname;
 

@@ -2,7 +2,7 @@ package Message;
 
 import java.io.Serializable;
 
-public class MarketResourcesMessage implements Serializable {
+public class MarketResourcesMessage extends Message implements Serializable {
     private final int playerNumber;
     private final String rowColumnChoice;
     private final int index;

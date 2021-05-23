@@ -4,7 +4,7 @@ import java.io.PrintWriter;
 import java.io.Serializable;
 import Maestri.MVC.Model.GModel.GameModel;
 
-public class TurnMessage implements Serializable {
+public class TurnMessage extends Message implements Serializable {
 
     private final int playerNumber;
     GameModel gameModel;

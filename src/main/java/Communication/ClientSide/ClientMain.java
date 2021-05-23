@@ -1,10 +1,10 @@
 package Communication.ClientSide;
 
 import Message.*;
+import Message.MessageSent.DiscardLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.*;
 
 public class ClientMain {

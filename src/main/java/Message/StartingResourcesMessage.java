@@ -1,8 +1,9 @@
 package Message;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class StartingResourcesMessage {
+public class StartingResourcesMessage extends Message implements Serializable {
 
     private int playerNumber;
     private ArrayList<String> startingRes = new ArrayList<>();

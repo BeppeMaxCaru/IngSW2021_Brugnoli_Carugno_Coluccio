@@ -4,6 +4,9 @@ import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 import Message.MessageReceived.ActionOutcomeMessage;
+import Message.MessageSent.DiscardLeaderMessage;
+import Message.MessageSent.EndTurnMessage;
+import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
@@ -26,6 +29,8 @@ public class PlayerThread implements Runnable {
 
     //The controller for this player
     private GameController gameController;
+
+    private boolean mainAction = false;
 
     //Il game controller va assegnato con setter siccome creato prima
     public PlayerThread(Socket clientSocket) {
@@ -158,17 +163,39 @@ public class PlayerThread implements Runnable {
 
             Object object = null;
 
+            //SIMO DEVI CORREGERE I CONTROLLI SUL CURRENTPLAYER
+            //
+            //OGNI VOLTA CHE RIENTRI NEL CICLO WHILE VERIFICHI SE IL PLAYER SEGNATO COME
+            //CORRENTE DAL GAMEMODEL COINCIDE CON QUELLO ASSEGNATO A QUESTO
+            //THREAD E SE NON COINCIDONO INVII SUBITO OUTCOME(FALSE)
+            //SE COINCIDONO LO FAI PROSEGUIRE
+            //
+            //IL CONTROLLO NELLE AZIONI è QUESTO:
+            //
+            //if (this.gameController.getCurrentPlayerNumber == this.playerThreadNumber) OK
+            //SE FALSE INVII OUTCOME(FALSE)
+            //
+            //CONTROLLA I CONTROLLI
+
+
+
             //Receive object
+            //Check current player here
             try {
                 object = receiver.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            //Controllare var ausiliaria
+            //Controlla main action
+            //int mainAction = 0;
+            //boolean mainAction = false;
+
             //Check currentPlayer
             //if (this.currentPlayerNumber == playMessage.getPlayerNumber())
             //PlayLeaderMessage
-            if (object instanceof  PlayLeaderMessage) {
+            if (object instanceof PlayLeaderMessage) {
                 try {
                     PlayLeaderMessage playLeaderMessage = (PlayLeaderMessage) object;
                     if(this.currentPlayerNumber == playLeaderMessage.getPlayerNumber()) {
@@ -209,7 +236,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof MarketResourcesMessage) {
                 try {
                     MarketResourcesMessage marketResourcesMessage = (MarketResourcesMessage) object;
-                    if(this.currentPlayerNumber == marketResourcesMessage.getPlayerNumber()) {
+                    if(this.currentPlayerNumber == marketResourcesMessage.getPlayerNumber() && !this.mainAction) {
 
                         //Row/column choice
                         String rowOrColumnChoice = marketResourcesMessage.getRowColumnChoice();
@@ -220,8 +247,10 @@ public class PlayerThread implements Runnable {
                         //If he has 2 whiteMarbleLeaderCards
                         String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
 
-                        if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble))
+                        if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
                             this.sender.writeObject(new ActionOutcomeMessage(true));
+                            this.mainAction = true;
+                        }
                         else this.sender.writeObject(new ActionOutcomeMessage(false));
 
                     } else this.sender.writeObject(new ActionOutcomeMessage(false));
@@ -230,12 +259,22 @@ public class PlayerThread implements Runnable {
                 }
             }
 
+            //BISOGNA RENDERLO UN MESSAGGIO UNICO
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+
+
             //BUY DEVELOPMENT CARD
             if (object instanceof BuyCardMessage) {
                 try {
                     BuyCardMessage buyCardMessage = (BuyCardMessage) object;
 
-                    if (this.currentPlayerNumber == buyCardMessage.getPlayerNumber()) {
+                    if (this.currentPlayerNumber == buyCardMessage.getPlayerNumber() && !this.mainAction) {
 
                         //DevCard colour
                         String colour = buyCardMessage.getColour();
@@ -248,7 +287,32 @@ public class PlayerThread implements Runnable {
                         String[] deposit = buyCardMessage.getShelf();
 
                         if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
-                            ArrayList<Integer> correctPositions = new ArrayList<>();
+
+                            int pos = buyCardMessage.getPlayerboardPosition();
+
+                            if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
+                                if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                    this.sender.writeObject(new ActionOutcomeMessage(true));
+                                    this.mainAction = true;
+                                } else {
+                                    this.sender.writeObject(new ActionOutcomeMessage(false));
+                                }
+                            } else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                            /*if (!currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
+                                this.sender.writeObject(new ActionOutcomeMessage(false));
+                                break;
+                            }
+
+                            if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                this.sender.writeObject(new ActionOutcomeMessage(true));
+                                mainAction++;
+                            } else {
+                                this.sender.writeObject(new ActionOutcomeMessage(false));
+                            }*/
+
+                            //Old
+                            /*ArrayList<Integer> correctPositions = new ArrayList<>();
 
                             for (int pos = 0; pos < 3; pos++)
                                 if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0]))
@@ -269,12 +333,11 @@ public class PlayerThread implements Runnable {
 
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit))
                                     this.sender.writeObject(new ActionOutcomeMessage(true));
-                                else this.sender.writeObject(new ActionOutcomeMessage(false));
-                            }
+                                else this.sender.writeObject(new ActionOutcomeMessage(false));*/
+                            } else this.sender.writeObject(new ActionOutcomeMessage(false));
                         } else this.sender.writeObject(new ActionOutcomeMessage(false));
-
-                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
-                } catch (Exception e) {
+                    } //else this.sender.writeObject(new ActionOutcomeMessage(false));
+                 catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -284,7 +347,7 @@ public class PlayerThread implements Runnable {
                 try {
                     InputResourceMessage inputResourceMessage = (InputResourceMessage) object;
 
-                    if (this.currentPlayerNumber == inputResourceMessage.getPlayerNumber()) {
+                    if (this.currentPlayerNumber == inputResourceMessage.getPlayerNumber() && !this.mainAction) {
 
                         int[] activation = new int[6];
                         String[] whichInput = new String[6];
@@ -301,14 +364,22 @@ public class PlayerThread implements Runnable {
                             } else activation[k] = 0;
                         }
 
-                        if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput))
+                        if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.writeObject(new ActionOutcomeMessage(true));
+                            this.mainAction = true;
+                        }
                         else this.sender.writeObject(new ActionOutcomeMessage(false));
 
                     } else this.sender.writeObject(new ActionOutcomeMessage(false));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+
+            if (object instanceof EndTurnMessage) {
+                this.mainAction = false;
+                //Salva come giocatore corrente nel gamecontroller/gamemodel
+                //il giocatore successivo a questo per abilitarlo e bloccare questo
             }
 
             //BISOGNA GESTIRE ATTENTAMENTE IL BREAK E LA SEQUENZA DI OPERAZIONI CHE CAUSA

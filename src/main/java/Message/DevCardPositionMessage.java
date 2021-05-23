@@ -2,7 +2,7 @@ package Message;
 
 import java.io.Serializable;
 
-public class DevCardPositionMessage implements Serializable {
+public class DevCardPositionMessage extends Message implements Serializable {
 
     private final int playerNumber;
     private final int cardPosition;

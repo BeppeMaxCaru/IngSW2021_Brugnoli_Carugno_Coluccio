@@ -2,7 +2,7 @@ package Message;
 
 import java.io.Serializable;
 
-public class InputResourceMessage implements Serializable {
+public class InputResourceMessage extends Message implements Serializable {
 
     private final int playerNumber;
     private final String inputs;

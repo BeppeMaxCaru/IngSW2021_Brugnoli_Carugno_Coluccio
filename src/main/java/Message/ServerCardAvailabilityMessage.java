@@ -3,7 +3,7 @@ package Message;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ServerCardAvailabilityMessage implements Serializable {
+public class ServerCardAvailabilityMessage extends Message implements Serializable {
 
     private final ArrayList<Integer> cardPositions;
 

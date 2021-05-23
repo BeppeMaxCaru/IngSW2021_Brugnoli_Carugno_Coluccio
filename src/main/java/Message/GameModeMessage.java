@@ -2,7 +2,7 @@ package Message;
 
 import java.io.Serializable;
 
-public class GameModeMessage implements Serializable {
+public class GameModeMessage extends Message implements Serializable {
 
     private int gameMode;
 

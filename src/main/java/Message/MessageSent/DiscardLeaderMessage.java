@@ -1,8 +1,10 @@
-package Message;
+package Message.MessageSent;
+
+import Message.Message;
 
 import java.io.Serializable;
 
-public class DiscardLeaderMessage implements Serializable {
+public class DiscardLeaderMessage extends Message implements Serializable {
 
     private final int playerNumber;
     private final int discarded;
