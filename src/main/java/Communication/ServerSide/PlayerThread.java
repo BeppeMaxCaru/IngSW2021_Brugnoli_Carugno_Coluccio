@@ -3,6 +3,7 @@ package Communication.ServerSide;
 import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
+import Message.MessageReceived.ActionOutcomeMessage;
 
 import java.io.*;
 import java.net.Socket;
@@ -149,11 +150,180 @@ public class PlayerThread implements Runnable {
         //
         //QUA SOTTO C'è IL CICLO CON SWITCH FINCHè UNO NON VINCE
         //
-        //
+        //BISOGNA ANCORA GESTIRE IL BREAK
+
+        //ASYNC PHASE
 
         while (true) {
 
+            Object object = null;
+
+            //Receive object
             try {
+                object = receiver.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //Check currentPlayer
+            //if (this.currentPlayerNumber == playMessage.getPlayerNumber())
+            //PlayLeaderMessage
+            if (object instanceof  PlayLeaderMessage) {
+                try {
+                    PlayLeaderMessage playLeaderMessage = (PlayLeaderMessage) object;
+                    if(this.currentPlayerNumber == playLeaderMessage.getPlayerNumber()) {
+
+                        //First and only parameter is always an int that is the position of the leader card
+                        int position = playLeaderMessage.getPlayed();
+
+                        if (this.gameController.checkPlayCards(currentPlayer, position))
+                            this.sender.writeObject(new ActionOutcomeMessage(true));
+                        else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //DISCARD LEADER MESSAGE
+            if (object instanceof DiscardLeaderMessage) {
+                try {
+                    DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) object;
+                    if(this.currentPlayerNumber == discardLeaderMessage.getPlayerNumber()) {
+
+                        //First and only parameter is always an int that is the position of the leader card
+                        int position = discardLeaderMessage.getDiscarded();
+
+                        if (this.gameController.checkDiscardCards(currentPlayer, position))
+                            this.sender.writeObject(new ActionOutcomeMessage(true));
+                        else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //MARKET RESOURCE MESSAGE
+            if (object instanceof MarketResourcesMessage) {
+                try {
+                    MarketResourcesMessage marketResourcesMessage = (MarketResourcesMessage) object;
+                    if(this.currentPlayerNumber == marketResourcesMessage.getPlayerNumber()) {
+
+                        //Row/column choice
+                        String rowOrColumnChoice = marketResourcesMessage.getRowColumnChoice();
+                        //Row/column index
+                        int index = marketResourcesMessage.getIndex();
+                        //Warehouse/leaderCard choice
+                        String wlChoice = marketResourcesMessage.getWarehouseLeaderChoice();
+                        //If he has 2 whiteMarbleLeaderCards
+                        String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
+
+                        if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble))
+                            this.sender.writeObject(new ActionOutcomeMessage(true));
+                        else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //BUY DEVELOPMENT CARD
+            if (object instanceof BuyCardMessage) {
+                try {
+                    BuyCardMessage buyCardMessage = (BuyCardMessage) object;
+
+                    if (this.currentPlayerNumber == buyCardMessage.getPlayerNumber()) {
+
+                        //DevCard colour
+                        String colour = buyCardMessage.getColour();
+                        int column = this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
+                        //DevCard level
+                        int level = 3 - buyCardMessage.getLevel();
+                        //How much resources does the player spend
+                        int[] quantity = buyCardMessage.getQuantity();
+                        //From which shelf does the player pick resources
+                        String[] deposit = buyCardMessage.getShelf();
+
+                        if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
+                            ArrayList<Integer> correctPositions = new ArrayList<>();
+
+                            for (int pos = 0; pos < 3; pos++)
+                                if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0]))
+                                    correctPositions.add(pos);
+
+                            if (correctPositions.size() == 0)
+                                this.sender.writeObject(new ActionOutcomeMessage(false));
+                            else {
+                                this.sender.writeObject(new ActionOutcomeMessage(true));
+
+                                //METTILO GIà IN SENDER!!!!!!
+
+                                ServerCardAvailabilityMessage availabilityMessage = new ServerCardAvailabilityMessage(correctPositions);
+                                this.sender.writeObject(availabilityMessage);
+                                this.sender.close();
+
+                                DevCardPositionMessage positionMessage = (DevCardPositionMessage) this.receiver.readObject();
+
+                                if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit))
+                                    this.sender.writeObject(new ActionOutcomeMessage(true));
+                                else this.sender.writeObject(new ActionOutcomeMessage(false));
+                            }
+                        } else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //INPUT RESOURCE MESSAGE FOR PRODUCTION
+            if (object instanceof InputResourceMessage) {
+                try {
+                    InputResourceMessage inputResourceMessage = (InputResourceMessage) object;
+
+                    if (this.currentPlayerNumber == inputResourceMessage.getPlayerNumber()) {
+
+                        int[] activation = new int[6];
+                        String[] whichInput = new String[6];
+                        int[] whichOutput = new int[3];
+
+                        for (int k = 0; k < 6; k++) {
+                            if (inputResourceMessage.getInputs() != null) {
+                                activation[k] = 1;
+                                whichInput[k] = inputResourceMessage.getInputs();
+                                if (k >= 3) {
+                                    OutputChoiceResourceMessage messageOutput = (OutputChoiceResourceMessage) this.receiver.readObject();
+                                    whichOutput[k - 3] = Integer.parseInt(messageOutput.getResource());
+                                }
+                            } else activation[k] = 0;
+                        }
+
+                        if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput))
+                            this.sender.writeObject(new ActionOutcomeMessage(true));
+                        else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //BISOGNA GESTIRE ATTENTAMENTE IL BREAK E LA SEQUENZA DI OPERAZIONI CHE CAUSA
+            //
+            //CONTROLLATE CHE HO RICOPIATO CORRETTAMENTE I FALSE E I TRUE
+            //IN ACTIONOUTCOMEMESSAGE
+            //
+            //
+            //
+            //
+            //
+
+
+
+            /*try {
 
                 Object object = receiver.readObject();
                 //Ci
@@ -163,6 +333,9 @@ public class PlayerThread implements Runnable {
                 BuyCardMessage buyMessage;
                 InputResourceMessage activationMessage;
 
+                int mainAction = 0;
+
+                //PLAY LEADER MESSAGE
                 if (object instanceof PlayLeaderMessage) {
 
                     playMessage = (PlayLeaderMessage) object;
@@ -178,6 +351,7 @@ public class PlayerThread implements Runnable {
                     } else this.sender.writeObject(false);
                 }
 
+                //DISCARD LEADER MESSAGE
                 if (object instanceof DiscardLeaderMessage) {
 
                     discardMessage = (DiscardLeaderMessage) object;
@@ -193,6 +367,7 @@ public class PlayerThread implements Runnable {
                     } else this.sender.writeObject(false);
                 }
 
+                //MARKET RESOURCE
                 if (object instanceof MarketResourcesMessage) {
 
                     marketMessage = (MarketResourcesMessage) object;
@@ -214,6 +389,7 @@ public class PlayerThread implements Runnable {
                     } else this.sender.writeObject(false);
                 }
 
+                //BUY DEVELOPMENT CARD
                 if (object instanceof BuyCardMessage) {
 
                     buyMessage = (BuyCardMessage) object;
@@ -258,6 +434,7 @@ public class PlayerThread implements Runnable {
                     } else this.sender.writeObject(false);
                 }
 
+                //INPUT RESOURCE MESSAGE FOR PRODUCTION
                 if (object instanceof InputResourceMessage) {
 
                     activationMessage = (InputResourceMessage) object;
@@ -288,39 +465,9 @@ public class PlayerThread implements Runnable {
 
             } catch (Exception e) {
                 break;
-            }
-            break;
-        }
-
-
-        //Async phase can start!!!
-        try {
-            //this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
-            //this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
-
-            //this.outPrintWriter.println("New game started");
-
-            String clientMessage = "";
-
-            while (!clientMessage.equalsIgnoreCase("quit")) {
-
-
-                clientMessage = this.inScanner.nextLine();
-
-                //controlla se il comando ha all'inizio il nome del giocatore corrente o di un altro giocatore
-
-                //If (message.getPlayer != currentPlayer) out.println("Not your turn);
-                //Else
-                //Switch sui messaggi ricevuti se è il suo turno altrimenti bloccato da controllo sopra
-                //Dopo azione corretta uso il metodo BROADCAST del gameController e stampo a tutti la modifica avvenuta
-
-                //Switch comandi
-
-            }
-
-        } catch (Exception e) {
-            //Non funziona connessione client
-            //Disconnect current player
+            }*/
+            //break;
         }
     }
+
 }

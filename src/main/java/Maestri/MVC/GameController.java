@@ -66,6 +66,17 @@ public class GameController implements Runnable {
 
     }
 
+    //QUESTO RUN VA SISTEMATO SICCOME è ANCORA LA VECCHIA VERSIONE
+    //
+    //BISOGNA CAPIRE SE SERVA LANCIARLO OPPURE NO, CIOè SE DEVE PER FORZA ESSERE UN THREAD
+    //
+    //
+    //
+    //
+    //
+    //
+    //
+
     @Override
     public void run() {
         //System.out.println("New game started");

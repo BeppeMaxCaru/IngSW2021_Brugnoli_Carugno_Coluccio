@@ -53,6 +53,7 @@ public class ServerSender extends Thread {
 
             try {
 
+                //Il conteggio è mantenuto nel playerThread
                 int mainAction = 0;
                 //do
                 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,11 +82,30 @@ public class ServerSender extends Thread {
 
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
                                 sender.writeObject(playLeaderMessage);
-                                sender.close();
+
+                                //SICCOME APERTURA E CHIUSURA DI STREAM SONO OPERAZIONI DISPENDIOSI
+                                //VIENE FATTA SOLO A FINE PARTITA
+                                //NON DOPO OGNI MESSAGGIO
+                                //
+                                //
+                                //
+                                //sender.close();
 
                                 //La parte di ricezione puoi adesso metterla tutte in serverReiver
                                 //Dove continua a decapsulare i messaggi che riceve e stamparli su CLI
-                                boolean serverResponse = (boolean) receiver.readObject();
+
+                                //NON HAI PIù BISOGNO DI RICEVERE I MEX DI RISPOSTA QUI
+                                //
+                                //SE AZIONE PRINCIPALE VIENE INVIATA ED ESEGUITA SI POTRà MANDARE UN NUOVO MESSAGGIO
+                                //MA IL MESSAGGIO VERRà SCARTATO SUBITO SICCOME è IL PLAYER THREAD CHE TIENE
+                                //CONTO SE AZIONE PRINCIPALE è STATA GIà FATTA O NO
+                                //
+                                //DEVE ESSERE UN OGGETTO NON UN BOOLEANO
+                                //SERVE UNA CLASSE MESSAGGIO VALIDO E UNA MESSAGGIO NON VALIDO
+                                //OPPURE UNA SOLO CON ESITO
+                                //
+
+                                //boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -104,9 +124,12 @@ public class ServerSender extends Thread {
 
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
                                 sender.writeObject(normalDiscardLeaderMessage);
-                                sender.close();
 
-                                boolean serverResponse = (boolean) receiver.readObject();
+                                //GUARDA SU
+                                //sender.close();
+
+                                //GUARDA SU
+                                //boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -190,10 +213,13 @@ public class ServerSender extends Thread {
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
                             sender.writeObject(resourcesMessage);
-                            sender.close();
 
+                            //GUARDA SU
+                            //sender.close();
+
+                            //GUARDA SU
                             //If server responds OK, action is correct
-                            try {
+                            /*try {
                                 boolean serverResponse = (boolean) receiver.readObject();
                                 //Adesso è necessario che sia il playerThread a tenere conto che
                                 //che l'azione principale è già stata fatta
@@ -207,7 +233,7 @@ public class ServerSender extends Thread {
                                 System.err.println("Not valid parameter");
                                 break;
                             }
-                            break;
+                            break;*/
 
                         }
 
@@ -300,10 +326,24 @@ public class ServerSender extends Thread {
                             //Sending Card request
                             BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf);
                             sender.writeObject(buyCard);
-                            sender.close();
+                            //GUARDA SU
+                            //sender.close();
+
+                            //O SI TOGLIE DEL TUTTO SERVERRECEIVER
+                            //OPPURE SI MANDA IL MESSAGGIO CON TUTTE LE INFORMAZIONI GIà DENTRO
+                            //
+                            //IN ALTERNATIVA SE PER QUESTO MESSAGGIO è NECESSARIA LA SYNC
+                            //PUOI SPOSTARE QUESTA PARTE QUI IN SERVERRECEIVER
+                            //
+                            //SE VIENE RICEVUTO UN MESSAGGIO CHE HA BISOGNO DI UN FOLLOWUP
+                            //LO SI CREA DIRETTAMENTE IN SERVER RECEIVER E LO SI RIMANDA
+                            //DIRETTAMENTE DA Lì E POI SI AGGIUNGE IN PLAYERTHREAD INSTANCE OF
+                            //PER QUESTO SECONDO MESSAGGIO
+                            //
 
                             int pos;
                             try {
+                                //GUARDA SU
                                 ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) receiver.readObject();
 
                                 System.out.println("In which position of your development card grid do you want to place the bought card?");
@@ -325,13 +365,15 @@ public class ServerSender extends Thread {
                                 //Sending card position
                                 DevCardPositionMessage positionMessage = new DevCardPositionMessage(this.clientMain.getPlayerNumber(), pos);
                                 sender.writeObject(positionMessage);
-                                sender.close();
+                                //GUARDA SU
+                                //sender.close();
 
+                                //NE TIENE CONTO PLAYERTHREAD
                                 //If server responds OK, action is correct
-                                boolean serverResponse = (boolean) receiver.readObject();
+                                /*boolean serverResponse = (boolean) receiver.readObject();
                                 if (serverResponse)
                                     mainAction++;
-                                else System.out.println("Not valid action.");
+                                else System.out.println("Not valid action.");*/
                             } catch (ClassNotFoundException e) {
                                 e.printStackTrace();
                                 break;
@@ -579,8 +621,10 @@ public class ServerSender extends Thread {
                                     }
                                 }
                             } else break;
+
+                            //Va in server receiver
                             //If server responds OK, action is correct
-                            try {
+                            /*try {
                                 boolean serverResponse = (boolean) receiver.readObject();
                                 if (serverResponse)
                                     mainAction++;
@@ -588,7 +632,7 @@ public class ServerSender extends Thread {
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
-                            }
+                            }*/
                             break;
                         }
                         default: {
