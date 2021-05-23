@@ -7,8 +7,8 @@ import java.io.Serializable;
 public class ServerStartingMessage implements Serializable {
 
     //public int getPlayerNumber;
-    private int playerNumber;
-    private LeaderCard[] leaderCards = new LeaderCard[4];
+    private final int playerNumber;
+    private final LeaderCard[] leaderCards;
 
     public ServerStartingMessage (int playerNumber, LeaderCard[] leaderCards) {
         this.playerNumber = playerNumber;

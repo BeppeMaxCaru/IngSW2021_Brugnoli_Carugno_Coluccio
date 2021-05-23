@@ -33,17 +33,15 @@ public class GameController implements Runnable {
                     playersPlaying[i] = queueFIFO.remove(0);
                     playersPlaying[i].setPlayerThreadNumber(i);
                     playersPlaying[i].run();
-                    playersPlaying[i].getOutPrintWriter().println("Match has started, your player number is " + i);
                     //Check this
                     playersPlaying[i].setGameController(this);
-
 
                     //Old
                     //playersToPlay.add(clientsWaiting.remove(0));
                     //playersToPlay.get(0).setPlayerNumber(i);
                     //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
 
-                    //Creates only the data of the player in the gamemodel
+                    //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
 
                     if(i!=0){
@@ -74,46 +72,7 @@ public class GameController implements Runnable {
 
         for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
             if (this.gameModel.getPlayers()[i] != null) {
-                try {
-                    Player currentPlayer = this.gameModel.getPlayers()[i];
 
-                    Scanner in = currentPlayer.getInScannerReader();
-                    PrintWriter out = currentPlayer.getOutPrintWriter();
-
-                    //Set starting PlayerBoard
-                    Map<Integer, Integer> startingResources = new HashMap<>();
-                    startingResources.put(0, 0);
-                    startingResources.put(1, 1);
-                    startingResources.put(2, 1);
-                    startingResources.put(3, 2);
-
-                    //Receive nickname
-                    //Update model
-                    //Missing
-
-                    //Send player number and 4 leader cards (Class to be created)
-                    //Missing
-
-                    //Receive player number and chosen resource(s)
-                    //Update model
-                    //Missing
-                    int t = startingResources.get(i);
-                    String resource;
-                    while (t > 0) {
-                        resource=in.nextLine();
-                        currentPlayer.setStartingPlayerboard(resource);
-                        t--;
-                    }
-
-
-                    //Receive 2 leader cards to be discarded
-                    //Update model
-                    //Missing
-
-                } catch (Exception e) {
-                    //Sets current player to disconnected
-                    this.gameModel.setPlayer(null, i);
-                }
             }
         }
 
@@ -140,167 +99,7 @@ public class GameController implements Runnable {
                         this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
                         this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
 
-                        String action;
-                        int corrAction;
-                        do{
-                            //FIrst receives the action
 
-                            FileInputStream input = new FileInputStream("ReceivedMessage");
-                            ObjectInputStream stream = new ObjectInputStream(input);
-                            FileOutputStream output = new FileOutputStream("ServerMessage");
-                            ObjectOutputStream serverStream = new ObjectOutputStream(output);
-                            action = (String) stream.readObject();
-
-                            corrAction = 0;
-
-                            switch (action.toUpperCase()) {
-                                case "PLAY LEADER CARD": {
-
-                                    PlayLeaderMessage message = (PlayLeaderMessage) stream.readObject();
-
-                                    if(i == message.getPlayerNumber())
-                                    {
-                                        //First and only parameter is always an int that is the position of the leader card
-                                        int position = message.getPlayed();
-
-                                        if (this.checkPlayCards(this.gameModel.getPlayers()[i], position))
-                                            serverStream.writeObject(true);
-                                        else serverStream.writeObject(false);
-                                    }
-                                    else {
-                                        serverStream.writeObject(false);
-                                    }
-                                    break;
-                                }
-                                case "DISCARD LEADER CARD": {
-
-                                    DiscardLeaderMessage message = (DiscardLeaderMessage) stream.readObject();
-
-                                    if(i==message.getPlayerNumber())
-                                    {
-                                        //First and only parameter is always an int that is the position of the leader card
-                                        int position = message.getDiscarded();
-
-                                        if (this.checkDiscardCards(this.gameModel.getPlayers()[i], position))
-                                            serverStream.writeObject(true);
-                                        else serverStream.writeObject(false);
-                                    }
-                                    else {
-                                        serverStream.writeObject(false);
-                                    }
-                                    break;
-                                }
-                                case "PICK RESOURCES FROM MARKET": {
-
-                                    MarketResourcesMessage message = (MarketResourcesMessage) stream.readObject();
-
-                                    if(i == message.getPlayerNumber())
-                                    {
-                                        //Row/column choice
-                                        String rowOrColumnChoice = message.getRowColumnChoice();
-                                        //Row/column index
-                                        int index = message.getIndex();
-                                        //Warehouse/leaderCard choice
-                                        String wlChoice = message.getWarehouseLeaderChoice();
-                                        //If he has 2 whiteMarbleLeaderCards
-                                        String chosenMarble = message.getWhichWhiteMarbleChoice();
-
-                                        if (this.checkMarketAction(this.gameModel.getPlayers()[i], rowOrColumnChoice, index, wlChoice, chosenMarble))
-                                        {
-                                            serverStream.writeObject(true);
-                                            corrAction++;
-                                        } else {
-                                            serverStream.writeObject(false);
-                                        }
-                                    } else {
-                                        serverStream.writeObject(false);
-                                    }
-                                    break;
-                                }
-                                case "BUY DEVELOPMENT CARD": {
-
-                                    BuyCardMessage message = (BuyCardMessage) stream.readObject();
-
-                                    if(i == message.getPlayerNumber())
-                                    {
-                                        //DevCard colour
-                                        String colour = message.getColour();
-                                        int column = this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
-                                        //DevCard level
-                                        int level = 3 - message.getLevel();
-                                        //How much resources does the player spend
-                                        int[] quantity = message.getQuantity();
-                                        //From which shelf does the player pick resources
-                                        String[] deposit = message.getShelf();
-
-                                        if(this.checkBuyDevCard(this.gameModel.getPlayers()[i], colour, level, quantity, deposit))
-                                        {
-                                            ArrayList<Integer> correctPositions = new ArrayList<>();
-
-                                            for (int pos=0; pos<3; pos++)
-                                                if(currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0]))
-                                                    correctPositions.add(pos);
-
-                                            if (correctPositions.size() == 0)
-                                            {
-                                                serverStream.writeObject(false);
-                                            }
-                                            else {
-                                                serverStream.writeObject(true);
-
-                                                ServerCardAvailabilityMessage availabilityMessage = new ServerCardAvailabilityMessage(correctPositions);
-                                                serverStream.writeObject(availabilityMessage);
-                                                serverStream.close();
-
-                                                DevCardPositionMessage positionMessage = (DevCardPositionMessage) stream.readObject();
-
-                                                if (this.gameModel.buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, positionMessage.getCardPosition(), deposit)) {
-                                                    serverStream.writeObject(true);
-                                                    corrAction++;
-                                                } else {
-                                                    serverStream.writeObject(false);
-                                                }
-                                            }
-                                        } else {
-                                            serverStream.writeObject(false);
-                                        }
-                                    } else {
-                                        serverStream.writeObject(false);
-                                    }
-                                    break;
-                                }
-                                case "ACTIVATE PRODUCTION POWER": {
-
-                                    int[] activation = new int[6];
-                                    String[] whichInput = new String[6];
-                                    int[] whichOutput = new int[3];
-
-                                    for(int k = 0; k < 6; k++) {
-                                        if (activation[k] == 1) {
-                                            InputResourceMessage messageInput = (InputResourceMessage) stream.readObject();
-                                            whichInput[k] = String.valueOf(messageInput.getResource() + messageInput.getQuantity() + messageInput.getStore());
-                                            if(k >= 3) {
-                                                OutputChoiceResourceMessage messageOutput = (OutputChoiceResourceMessage) stream.readObject();
-                                                whichOutput[k - 3] = Integer.parseInt(messageOutput.getResource());
-                                            }
-                                        }
-                                    }
-
-                                    if(this.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
-                                        serverStream.writeObject(true);
-                                        corrAction++;
-                                    } else {
-                                        serverStream.writeObject(false);
-                                    }
-                                    break;
-                                }
-                                default: {
-                                    serverStream.writeObject(false);
-                                    break;
-                                }
-                            }
-                            //Player inserisce quit
-                        }while (!action.equalsIgnoreCase("END TURN") && (corrAction < 1));
 
                         this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
                         this.gameModel.getPlayers()[i].getOutPrintWriter().println();
@@ -456,7 +255,7 @@ public class GameController implements Runnable {
         return true;
     }
 
-    private boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
+    public boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
 
         PrintWriter out = currentPlayer.getOutPrintWriter();
 
