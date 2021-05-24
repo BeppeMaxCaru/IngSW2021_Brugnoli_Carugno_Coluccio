@@ -322,27 +322,6 @@ public class GameController{
         return currentPlayer.activateProduction(activation, whichInput, whichOutput);
     }
 
-    public void broadcastMarketChange (GameModel gameModel) {
-
-        for (Player player : this.gameModel.getPlayers()) {
-            try {
-                this.gameModel.getMarket().printMarket(player.getOutPrintWriter());
-            } catch (Exception e) {
-                //Player è null
-            }
-        }
-    }
-
-    public void broadcastGridChange (GameModel gameModel) {
-        for (Player player : this.gameModel.getPlayers()) {
-            try {
-                this.gameModel.getDevelopmentCardsDecksGrid().printGrid(player.getOutPrintWriter());
-            } catch (Exception e) {
-                //Player è null
-            }
-        }
-    }
-
     public void removePlayer (String nickname, GameModel gameModel) {
         for (Player player : this.gameModel.getPlayers()) {
             try {

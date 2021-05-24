@@ -191,7 +191,7 @@ public class DevelopmentCard implements Serializable {
      * Removes resources from the player's player board equals to the development card cost
      * @param playerboard - player's player board
      */
-    public void payDevelopmentCard(Playerboard playerboard, String[] wclChoice, PrintWriter out) {
+    public void payDevelopmentCard(Playerboard playerboard, String[] wclChoice) {
 
         Map<String, Integer> resources = new HashMap<>();
         resources.put("COINS", 0);
@@ -203,7 +203,7 @@ public class DevelopmentCard implements Serializable {
         for (String key : this.cost.keySet()) {
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1 , out);
+                playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);
             }
         }
     }

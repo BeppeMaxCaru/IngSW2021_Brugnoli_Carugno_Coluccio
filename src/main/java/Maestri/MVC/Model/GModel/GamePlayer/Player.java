@@ -5,8 +5,6 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
@@ -14,24 +12,23 @@ import java.util.*;
 /**
  * Represents a player with all its information
  */
-public class Player implements Runnable
-        //implements Runnable
+public class Player
 {
 
     /**
      * Name that the player chooses to join the game
      */
-    private String nickname;
+    private final String nickname;
 
     /**
      * Order in which the player joined the game
      */
-    private Integer playerNumber;
+    private final Integer playerNumber;
 
     /**
      * Player board that the player is using to play the game
      */
-    private Playerboard playerBoard;
+    private final Playerboard playerBoard;
 
     /**
      * Leader cards that the player has available
@@ -45,44 +42,12 @@ public class Player implements Runnable
 
     private Socket clientSocket;
 
-    private BufferedReader in;
-    private Scanner inScan;
-    private PrintWriter out;
 
     /**
      * Initializes a new player
      *
      *
      */
-
-
-    //OLD Version that was active from gameModel now we save only the state, no actions
-    //Input Socket clientsocket
-    /*public Player(Socket clientSocket) {
-        //this.playerNumber = playerNumber;
-        this.playerBoard = new Playerboard();
-
-        //if(this.playerNumber > 1)
-        //    this.playerBoard.getFaithPath().moveCross(1);
-
-        this.playerLeaderCards = new LeaderCard[4];
-
-
-        this.clientSocket = clientSocket;
-        //this.setClientSocket(clientSocket);
-        try {
-            //this.in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
-            //Locking player from inserting input
-            this.inScan = new Scanner(new InputStreamReader(this.clientSocket.getInputStream()));
-            this.out = new PrintWriter(this.clientSocket.getOutputStream(), true);
-
-            this.out.println("Welcome to Master of Renaissance online!");
-            this.out.println("Looking for a game in Florence...");
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }*/
 
     public Player(String nickname, int playerNumber){
         this.nickname=nickname;
@@ -102,14 +67,6 @@ public class Player implements Runnable
         this.clientSocket = clientSocket;
     }
 
-    /**
-     * Asks and sets the player's nickname
-     */
-    public void chooseNickname(Scanner in, PrintWriter out) {
-
-        out.println("Choose your nickname to join the game: ");
-        this.nickname = in.next();
-    }
 
     public String getNickname(){
         return this.nickname;
@@ -123,13 +80,6 @@ public class Player implements Runnable
         return this.playerNumber;
     }
 
-    /**
-     * Sets the player's number
-     * @param number - the player's number
-     */
-    public void setPlayerNumber(Integer number) {
-        this.playerNumber = number;
-    }
 
     /**
      * Returns the player's board
@@ -156,18 +106,6 @@ public class Player implements Runnable
         this.playerLeaderCards[index] = leaderCard;
     }
 
-    public BufferedReader getInBufferedReader() {
-        return this.in;
-    }
-
-    public Scanner getInScannerReader() {
-        return this.inScan;
-    }
-
-    public PrintWriter getOutPrintWriter() {
-        return this.out;
-    }
-
     /**
      * Sets to the player its starting board depending on its number
      */
@@ -177,7 +115,6 @@ public class Player implements Runnable
 
         resourceNumWarehouse = getPlayerBoard().getWareHouse().getWarehouseResources().get(resource);
         getPlayerBoard().getWareHouse().getWarehouseResources().put(resource, resourceNumWarehouse + 1);
-
     }
 
     /**
@@ -213,9 +150,9 @@ public class Player implements Runnable
 
         //Removes the resources from the player who bought the development card
         //according to the development card cost
-        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, wclChoice, out);
+        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, wclChoice);
         //Ask the player where to place the new development card on his board
-        this.playerBoard.placeNewDevelopmentCard(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0], position, out);
+        this.playerBoard.isCardBelowCompatible(position, developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
         //Updates the player victory points by adding to them the
         //victory points obtained from the new development card
         this.playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
@@ -227,7 +164,7 @@ public class Player implements Runnable
         return true;
     }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     /**
      * Activates the production powers on the player's player board
      */
@@ -248,7 +185,7 @@ public class Player implements Runnable
                 for (int k = 0; k < fromWhereCards[j].length() - 2; k = k + 3) {
                     String res = resources.get(Integer.parseInt(String.valueOf(fromWhereCards[j].charAt(k))));
                     int quantity = Integer.parseInt(String.valueOf(fromWhereCards[j].charAt(k + 1)));
-                    this.playerBoard.pickResource(res, (String.valueOf(fromWhereCards[j].charAt(k + 2))), quantity, out);
+                    this.playerBoard.pickResource(res, (String.valueOf(fromWhereCards[j].charAt(k + 2))), quantity);
                 }
 
                 //Add outputResources
@@ -297,52 +234,6 @@ public class Player implements Runnable
     }
 
     /**
-     * Asks the player to perform a leader action
-     */
-    /*
-    public boolean getLeaderAction(Scanner in, PrintWriter out) {
-        String leaderActionNum;
-        String leaderNum;
-        boolean correctLeaderAction = false;
-        int attempts = 0;
-
-        out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
-        leaderActionNum = in.nextLine();
-        while (!leaderActionNum.equals("0") && !leaderActionNum.equals("1")) {
-            out.println("Number not valid!");
-            out.println("Do you want to do a leader action?: Write 1 if you want or 0 if you don't:");
-            leaderActionNum = in.nextLine();
-        }
-
-        if (leaderActionNum.equals("0"))
-            return true;
-
-        out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
-        leaderNum = in.nextLine();
-        while (!leaderNum.equals("0") && !leaderNum.equals("1")) {
-            out.println("Number not valid!");
-            out.println("Which leader action do you want to play? Write 1 if you want to play a card, write 0 if you want to discard a card");
-            leaderNum = in.nextLine();
-        }
-
-        while (!correctLeaderAction && attempts < 2) {
-            if(leaderNum.equals("1")) {
-                correctLeaderAction = this.playLeaderCard(in, out);
-                attempts++;
-            }
-            else {
-                correctLeaderAction = this.discardLeaderCard(in, out);
-                attempts++;
-                this.getPlayerBoard().getFaithPath().moveCross(1);
-            }
-        }
-
-        return true;
-    }
-
-     */
-
-    /**
      * Plays a leader card
      */
     public boolean playLeaderCard(int var) {
@@ -358,8 +249,6 @@ public class Player implements Runnable
      */
     public boolean discardLeaderCard(int var) {
 
-        //Rimozione carta leader dal deck
-        //this.playerLeaderCards[numLeaderCard].discard(this.playerBoard);
         List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
         updatedPlayerLeaderCardList.remove(var);
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
@@ -466,159 +355,22 @@ public class Player implements Runnable
 
     }
 
-    /*
-    @Override
-    public void run() {
-
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
-
-            out.println("Welcome " + this.nickname + " to Master of Renaissance online!");
-            out.println("Write QUIT to leave the game anytime you want");
-
-            //Turn
-            while (true) {
-
-                if (this.getPlayerLeaderCards()[0] != null) {
-                    //for (int i = 0; i < 2; i++) {
-                    if (this.getPlayerLeaderCards()[1] == null && !this.getPlayerLeaderCards()[0].isPlayed()) {
-                        this.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime;
-                    } else if (this.getPlayerLeaderCards()[1] != null && (!this.getPlayerLeaderCards()[0].isPlayed() || !this.getPlayerLeaderCards()[1].isPlayed())) {
-                        this.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime;
-                    } else out.println("You have activated all your Leader cards. You can't do a Leader Action.");
-                    // i = checkStatusPlayer(endTime, i, out);
-                    //}
-                } else out.println("You have discarded all your Leader cards. You can't do a Leader Action.");
-
-                //for (int i = 0; i < 2; i++) {
-                boolean correctAction = true;
-                do {
-                    switch (this.getAction(in, out)) {
-                        case "0":
-                            //startTime = System.currentTimeMillis();
-                            correctAction = this.pickLineFromMarket(this.market, this.players, in, out);
-                            //endTime = System.currentTimeMillis() - startTime;
-                            break;
-                        case "1":
-                            //startTime = System.currentTimeMillis();
-                            correctAction = this.buyDevelopmentCard(this.developmentCardsDecksGrid, in, out);
-                            //endTime = System.currentTimeMillis() - startTime;
-                            break;
-                        case "2":
-                            //startTime = System.currentTimeMillis();
-                            correctAction = this.activateProduction(in, out);
-                            //endTime = System.currentTimeMillis() - startTime;
-                            break;
-                    }
-                } while (!correctAction); // Remove with timer
-                //while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !correctAction);
-                //i = checkStatusPlayer(endTime, i, out);
-                //}
-
-                if (this.getPlayerLeaderCards()[0] != null) {
-                    //for (int i = 0; i < 2; i++) {
-                    if (this.getPlayerLeaderCards()[1] == null && !this.getPlayerLeaderCards()[0].isPlayed()) {
-                        this.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime;
-                    } else if (this.getPlayerLeaderCards()[1] != null && (!this.getPlayerLeaderCards()[0].isPlayed() || !this.getPlayerLeaderCards()[1].isPlayed())) {
-                        this.getLeaderAction(in, out); // Remove with timer
-                            /* startTime = System.currentTimeMillis();
-                            while ((System.currentTimeMillis() - startTime) < maximumTime * 1000 && !player.getLeaderAction(in, out)) ;
-                            endTime = System.currentTimeMillis() - startTime;
-                    }
-                    // i = checkStatusPlayer(endTime, i, out);
-                    //}
-                }
-
-
-                if (clientInput.equals("QUIT")) {
-                    out.println("You left the game");
-                    break;
-                }
-                //out.println("Ciao! Inserisci un comando: ");
-                //else out.println(clientInput);
-            }
-
-            in.close();
-
-            out.close();
-            this.clientSocket.close();
-            //this.wait();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            //this.out.println("Lost connection");
-        }
-    }*/
-
     //Closing stream and socket
     public void disconnectClient() {
         try {
-            //this.in.close();
-            //this.out.close();
             this.clientSocket.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            //this.out.println("Thanks for playing");
-            //this.out.println("See you next time");
         }
     }
-
-    /*@Override
-    public void run() {
-        //Lock turnLock = new ReentrantLock();
-        //turnLock.lock();
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(this.clientSocket.getOutputStream(), true);
-
-            //out.println("Write QUIT to leave the game anytime you want");
-            while (true) {
-                //out.println("Inserisci un comando: ");
-                String clientInput = in.readLine();
-                if (clientInput.equals("QUIT")) {
-                    out.println("You left the game");
-                    break;
-                }
-                //out.println("Ciao! Inserisci un comando: ");
-                //else out.println(clientInput);
-            }
-
-            in.close();
-
-            out.close();
-            this.clientSocket.close();
-            //this.wait();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            //this.out.println("Lost connection");
-        }
-        //turnLock.unlock();
-    }*/
 
     //Closing stream and socket
     public void disconnectPlayer() {
         try {
-            //this.in.close();
-            //this.out.close();
             this.clientSocket.close();
         } catch (Exception e) {
             System.err.println(e.getMessage());
-            //this.out.println("Thanks for playing");
-            //this.out.println("See you next time");
         }
     }
 
-    @Override
-    public void run() {
-
-    }
 }

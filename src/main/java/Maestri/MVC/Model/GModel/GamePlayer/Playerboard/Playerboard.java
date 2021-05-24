@@ -108,17 +108,6 @@ public class Playerboard {
         return this.playerboardDevelopmentCards;
     }
 
-    /**
-     * Places a development card on the player board
-     * @param developmentCard - the development card to place
-     */
-    public void placeNewDevelopmentCard(DevelopmentCard developmentCard, int position, PrintWriter out) {
-
-        //Checks the chosen space
-        if(!this.isCardBelowCompatible(position, developmentCard)) {
-            out.println("Placement not possible!");
-        }
-    }
 
     /**
      * Checks that the new development card can be placed on the top of a development card pile
@@ -197,7 +186,7 @@ public class Playerboard {
      * @param resource - resource to remove
      * @param quantity
      */
-    public void pickResource(String resource, String fromWhat, int quantity, PrintWriter out) {
+    public void pickResource(String resource, String fromWhat, int quantity) {
 
         Integer whRes = this.wareHouse.getWarehouseResources().get(resource);
         Integer chRes = this.chest.getChestResources().get(resource);
@@ -225,71 +214,6 @@ public class Playerboard {
         }
     }
 
-    // Metodo inutile
-    /**
-     * Activates the basic production power of the player board
-     * @return a list with the first two resources to discard and the third one to receive
-     */
-    /* public List<String> activateBasicProductionPower(Scanner in, PrintWriter out) {
-        String resourceOutputNum;
-        int i;
-        String resourceInputNum;
-        List<String> resourceChoice = new ArrayList<>();
-
-        // Two input
-        for (i = 0; i < 2; i++) {
-            out.println("Choose one resource for pay: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
-            resourceInputNum = in.nextLine();
-            while(!resourceInputNum.equals("0") && !resourceInputNum.equals("1") && !resourceInputNum.equals("2") && !resourceInputNum.equals("3")) {
-                out.println("Number not valid!");
-                out.println("Choose one resource to pay: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES");
-                resourceInputNum = in.nextLine();
-            }
-            switch (resourceInputNum) {
-                case "0":
-                    resourceChoice.add("COINS");
-                    break;
-                case "1":
-                    resourceChoice.add("SHIELDS");
-                    break;
-                case "2":
-                    resourceChoice.add("SERVANTS");
-                    break;
-                case "3":
-                    resourceChoice.add("STONES");
-                    break;
-            }
-        }
-
-
-        // output
-        out.println("Choose one resource to pick: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
-        resourceOutputNum = in.nextLine();
-        while(!resourceOutputNum.equals("0") && !resourceOutputNum.equals("1") && !resourceOutputNum.equals("2") && !resourceOutputNum.equals("3")) {
-            out.println("Choose one resource: Write 0 for COINS, 1 for SHIELDS, 2 for SERVANTS, 3 for STONES, 4 for REDCROSS");
-            resourceOutputNum = in.nextLine();
-        }
-
-        switch (resourceOutputNum) {
-            case "0":
-                resourceChoice.add("COINS");
-                break;
-            case "1":
-                resourceChoice.add("SHIELDS");
-                break;
-            case "2":
-                resourceChoice.add("SERVANTS");
-                break;
-            case "3":
-                resourceChoice.add("STONES");
-                break;
-            default:
-                resourceChoice.add("REDCROSS");
-                break;
-        }
-
-        return resourceChoice;
-    } */
 
     //For testing
     /**
