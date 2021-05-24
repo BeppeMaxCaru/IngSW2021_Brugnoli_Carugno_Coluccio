@@ -5,6 +5,7 @@ import Message.Message;
 import Message.MessageReceived.ActionOutcomeMessage;
 import Message.MessageReceived.GameOverMessage;
 import Message.MessageReceived.QuitMessage;
+import Message.MessageReceived.UpdateClientMarket;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -57,6 +58,15 @@ public class ServerReceiver extends Thread {
                     e.printStackTrace();
                 }
 
+            }
+
+            if (object instanceof UpdateClientMarket) {
+                try {
+                    UpdateClientMarket updateClientMarket = (UpdateClientMarket) object;
+                    this.clientMain.setMarket(updateClientMarket.getMarket());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             if (object instanceof GameOverMessage) {

@@ -4,6 +4,7 @@ import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 import Message.MessageReceived.ActionOutcomeMessage;
+import Message.MessageReceived.UpdateClientMarket;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
@@ -86,6 +87,10 @@ public class PlayerThread implements Runnable {
         this.gameController = gameController;
     }
 
+    public ObjectOutputStream getSender() {
+        return this.sender;
+    }
+
     @Override
     public void run() {
 
@@ -103,6 +108,15 @@ public class PlayerThread implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("No nickname");
+        }
+
+        //FIRST MESSAGE TO SETUP CLIENT MARKET, GRID, ECC
+        try {
+            UpdateClientMarket updateClientMarket = new UpdateClientMarket(this.gameController.getGameModel().getMarket());
+            this.sender.writeObject(updateClientMarket);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Non vengono inizializzati mercato e grid in client");
         }
 
         try {
@@ -210,6 +224,15 @@ public class PlayerThread implements Runnable {
                         this.mainAction = true;
                     }
                     else this.sender.writeObject(new ActionOutcomeMessage(false));
+
+                    //TEST WITH MARKET IN CLIENT
+                    /*if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
+                        this.sender.writeObject(new UpdateClientMarket(this.gameController.getGameModel().getMarket()));
+                        this.gameController.broadcastMarket();
+                        this.mainAction = true;
+                    }*/
+                    //else this.sender.writeObject(new ActionOutcomeMessage(false));
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

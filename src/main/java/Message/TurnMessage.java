@@ -18,7 +18,7 @@ public class TurnMessage extends Message implements Serializable {
 
     public void printMarket() {
         out.println("MARKET GRID:");
-        gameModel.getMarket().printMarket(out);
+        gameModel.getMarket().printMarket();
     }
 
     public void printGrid() {

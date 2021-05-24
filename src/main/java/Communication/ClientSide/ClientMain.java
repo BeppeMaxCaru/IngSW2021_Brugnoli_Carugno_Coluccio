@@ -1,6 +1,9 @@
 package Communication.ClientSide;
 
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.*;
+import Message.MessageReceived.UpdateClientMarket;
 import Message.MessageSent.DiscardLeaderMessage;
 
 import java.io.*;
@@ -16,6 +19,9 @@ public class ClientMain {
     private String nickname;
     private Scanner consoleInput = new Scanner(System.in);
     private int playerNumber;
+
+    //TEST MEX MARKET
+    private Market market;
 
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
@@ -62,6 +68,9 @@ public class ClientMain {
             ObjectOutputStream sender;
             ObjectInputStream receiver;
 
+            Market market;
+            DevelopmentCardsDecksGrid developmentCardsDecksGrid;
+
             //Starts connection
             try {
                 clientSocket = new Socket(this.hostName, this.port);
@@ -89,6 +98,14 @@ public class ClientMain {
                 e.printStackTrace();
                 System.err.println("Connection failed");
                 return;
+            }
+
+            try {
+                UpdateClientMarket updateClientMarket = (UpdateClientMarket) receiver.readObject();
+                this.market = updateClientMarket.getMarket();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Client non setta market iniziale");
             }
 
             //Receives and sends starting resources message
@@ -186,5 +203,13 @@ public class ClientMain {
         public Scanner getConsoleInput () {
             return this.consoleInput;
         }
+
+    public Market getMarket() {
+        return this.market;
     }
+
+    public void setMarket(Market market) {
+        this.market = market;
+    }
+}
 

@@ -88,6 +88,8 @@ public class ServerSender extends Thread {
                                 break;
                             }
 
+                            this.clientMain.getMarket().printMarket();
+
                             //Receives column or row
                             System.out.println("Do you want to pick row resources or column resources?");
                             System.out.println("Write 'ROW' or 'COLUMN'.");

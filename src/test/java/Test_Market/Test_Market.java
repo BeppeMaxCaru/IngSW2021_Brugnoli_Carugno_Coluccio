@@ -20,14 +20,14 @@ public class Test_Market {
 
     @Test
     public void print_arrangement(){
-        market.printMarket(new PrintWriter(System.out));
+        market.printMarket();
     }
 
     @Test
     public void test_updateColumn(){
         players[0] = new Player("Beppe", 0);
 
-        market.printMarket(new PrintWriter(System.out));
+        market.printMarket();
 
         //market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
@@ -36,7 +36,7 @@ public class Test_Market {
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS"));
         System.out.println(players[0].getPlayerBoard().getFaithPath().getCrossPosition());
 
-        market.printMarket(new PrintWriter(System.out));
+        market.printMarket();
 
     }
 
@@ -44,7 +44,7 @@ public class Test_Market {
     public void test_updateRow(){
         players[0]= new Player("Simo", 0);
 
-        market.printMarket(new PrintWriter(System.out));
+        market.printMarket();
 
         //market.updateRow(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
@@ -53,7 +53,7 @@ public class Test_Market {
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS"));
         System.out.println(players[0].getPlayerBoard().getFaithPath().getCrossPosition());
 
-        market.printMarket(new PrintWriter(System.out));
+        market.printMarket();
 
     }
 

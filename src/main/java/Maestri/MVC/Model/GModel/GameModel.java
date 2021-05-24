@@ -72,7 +72,7 @@ public class GameModel{
     /**
      * This method sets each player number, randomly.
      */
-    public void setPlayersNumber() {
+    /*public void setPlayersNumber() {
         List<Integer> numbers = new ArrayList<>(getPlayers().length);
         int j = 0;
 
@@ -92,7 +92,7 @@ public class GameModel{
             }
             j++;
         }
-    }
+    }*/
 
     public void relationWithVatican(int crossPosition) {
         for(int i = 0; i < players.length; i++) {

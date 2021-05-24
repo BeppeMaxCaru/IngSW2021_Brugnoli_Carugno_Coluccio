@@ -4,6 +4,7 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.*;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * Represents the Market game component
  */
-public class Market {
+public class Market implements Serializable {
 
     /**
      * Grid containing 12 marbles
@@ -158,19 +159,19 @@ public class Market {
         return true;
     }
 
-    public void printMarket(PrintWriter out){
+    public void printMarket(){
         for (int i=0; i<this.row; i++){
-            out.print("|");
+            System.out.print("|");
             for (int k=0; k<this.column; k++)
             {
-                out.print(this.marketArrangement[i][k].getColour()+"|");
+                System.out.print(this.marketArrangement[i][k].getColour()+"|");
             }
-            out.print(" ←");
-            out.println();
+            System.out.print(" ←");
+            System.out.println();
         }
-        out.println("    ↑        ↑        ↑        ↑");
-        out.println("excessMarble:"+this.getExcessMarble().getColour());
-        out.println();
+        System.out.println("    ↑        ↑        ↑        ↑");
+        System.out.println("excessMarble:"+this.getExcessMarble().getColour());
+        System.out.println();
     }
 
 

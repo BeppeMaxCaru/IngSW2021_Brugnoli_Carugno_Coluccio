@@ -3,6 +3,7 @@ package Maestri.MVC;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Message.MessageReceived.UpdateClientMarket;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -13,14 +14,16 @@ public class GameController{
     private final GameModel gameModel;
     private int currentPlayerNumber;
 
+    private Set<PlayerThread> playerThreads = new HashSet<>();
+
     public GameController(List<PlayerThread> queueFIFO) {
 
         Player[] players = new Player[4];
 
-        Set<PlayerThread> playerThreads = new HashSet<>();
         PlayerThread[] playersPlaying = new PlayerThread[4];
 
         ExecutorService playerThreadExecutor = Executors.newFixedThreadPool(4);
+        Set<PlayerThread> playerThreads = new HashSet<>();
 
         List<Player> playersToPlay = new ArrayList<>();
 
@@ -53,6 +56,7 @@ public class GameController{
             try {
                 assert playersPlaying[j] != null;
                 playerThreadExecutor.execute(playersPlaying[j]);
+                this.playerThreads.add(playersPlaying[j]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -334,5 +338,19 @@ public class GameController{
 
     public GameModel getGameModel() {
         return this.gameModel;
+    }
+
+    public void broadcastMarket () {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().writeObject(new UpdateClientMarket(this.gameModel.getMarket()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Market broadcast not working");
+            }
+        }
+
     }
 }
