@@ -39,50 +39,14 @@ public class GameModel{
 
     private Scanner turnScan;
 
-    public GameModel(Player[] players) {
-
-        //Gets until 4 players
-        /*for (int i=0;i<this.players.length;i++) {
-            try {
-                //If there is a player adds it
-                if (!clientsWaiting.isEmpty()) {
-                    this.players[i] = clientsWaiting.remove(0);
-                    this.players[i].setPlayerNumber(i);
-
-                    //Assign 4 starting random LeaderCards to each player
-                    for(int index = 0; index < this.getPlayers()[i].getPlayerLeaderCards().length; index++)
-                        this.getPlayers()[i].setPlayerLeaderCard(index,this.leaderCardDeck.drawOneLeaderCard());
-
-                    this.players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
-                    if(i!=0){
-                        this.players[i].getOutPrintWriter().println("Wait for other players turn...");
-                    }
-                }
-            } catch (Exception e) {
-                //If no clients waiting set other players null
-                this.players[i] = null;
-            }
-        }*/
+    public GameModel(Player[] players, int numberOfPlayers) {
 
         this.players = players;
+        this.numberOfPlayers = numberOfPlayers;
         this.leaderCardDeck = new LeaderCardDeck();
-         for (int i=0;i<this.players.length;i++) {
-             try {
-                 for (int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++) {
-                     this.players[i].setPlayerLeaderCard(index, this.leaderCardDeck.drawOneLeaderCard());
-                 }
-                     //this.players[i].setPlayerLeaderCard(index, this.leaderCardDeck.drawOneLeaderCard());
-
-             } catch (Exception e) {
-                 //If no clients waiting set other players null
-                 e.printStackTrace();
-             }
-         }
-
-         this.setStartingLeaderCards();
-         this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
-         this.leaderCardDeck = new LeaderCardDeck();
-         this.market = new Market();
+        this.setStartingLeaderCards();
+        this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
+        this.market = new Market();
 
     }
 
@@ -100,9 +64,9 @@ public class GameModel{
 
 
     public void setStartingLeaderCards() {
-        for (int i=0;i<4;i++) {
-            for (int j=0;j<this.numberOfPlayers;j++) {
-                this.players[j].setPlayerLeaderCard(i, this.leaderCardDeck.drawOneLeaderCard());
+        for (int i=0;i<this.numberOfPlayers;i++) {
+            for (int j=0;j<this.players[i].getPlayerLeaderCards().length;j++) {
+                this.players[i].setPlayerLeaderCard(j, this.leaderCardDeck.drawOneLeaderCard());
             }
         }
     }

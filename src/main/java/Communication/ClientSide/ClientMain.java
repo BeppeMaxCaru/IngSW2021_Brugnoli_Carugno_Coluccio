@@ -5,6 +5,7 @@ import Message.MessageSent.DiscardLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.file.ClosedFileSystemException;
 import java.util.*;
 
 public class ClientMain {
@@ -103,6 +104,7 @@ public class ClientMain {
                 startingResources.put(2, 1);
                 startingResources.put(3, 2);
 
+                System.out.println();
                 System.out.println("Match has started, your player number is " + playerNumber);
 
                 ArrayList<String> playerStartingResources = new ArrayList<>();
@@ -124,6 +126,7 @@ public class ClientMain {
 
                 //Sends first starting excess leader card to discard
                 System.out.println("Which starting leader card do you want to discard?");
+                System.out.println();
                 for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
                     System.out.println("Write " + i + " for this: ");
                     startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
@@ -144,9 +147,11 @@ public class ClientMain {
                 sender.writeObject(firstDiscardLeaderMessage);
 
                 System.out.println("Which starting leader card do you want to discard?");
-                for (int i = 0; i < 3; i++) {
-                    System.out.println("Write " + i + " for this: ");
-                    startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
+                for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
+                    if(i != card) {
+                        System.out.println("Write " + i + " for this: ");
+                        startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
+                    }
                 }
                 card = 0;
                 try {

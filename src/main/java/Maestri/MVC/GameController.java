@@ -31,6 +31,7 @@ public class GameController implements Runnable {
 
         List<Player> playersToPlay = new ArrayList<>();
 
+        int numOfPlayers = 0;
         for (int i=0;i<4;i++) {
             try {
                 //If there is a player adds it
@@ -44,6 +45,7 @@ public class GameController implements Runnable {
 
                     //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
+                    numOfPlayers++;
 
                 }
             } catch (Exception e) {
@@ -53,7 +55,7 @@ public class GameController implements Runnable {
         }
 
         //Temporary solution
-        this.gameModel = new GameModel(players);
+        this.gameModel = new GameModel(players, numOfPlayers);
 
         for (int j=0;j<4;j++) {
             try {
