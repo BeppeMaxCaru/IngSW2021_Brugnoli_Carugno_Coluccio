@@ -3,12 +3,13 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * This purple marble produces SERVANTS
  */
-public class PurpleMarble extends Marble {
+public class PurpleMarble extends Marble implements Serializable {
 
     /**
      * If the drawing player has enough space in its warehouse it receives one servant otherwise other players receive one faith point

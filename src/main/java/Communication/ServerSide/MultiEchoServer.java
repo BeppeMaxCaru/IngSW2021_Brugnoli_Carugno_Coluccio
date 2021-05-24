@@ -61,7 +61,7 @@ public class MultiEchoServer {
 
                     //Margara
                     GameController gameController = new GameController(queueFIFO);
-                    gameExecutor.execute(gameController);
+                    //gameExecutor.execute(gameController);
 
                     //Aggiornare
                     //gameExecutor.execute(newGame);

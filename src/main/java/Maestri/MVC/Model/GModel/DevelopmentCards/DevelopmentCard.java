@@ -3,13 +3,14 @@ package Maestri.MVC.Model.GModel.DevelopmentCards;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Represents a development card
  */
-public class DevelopmentCard {
+public class DevelopmentCard implements Serializable {
     /**
      * Colour of the development card
      */

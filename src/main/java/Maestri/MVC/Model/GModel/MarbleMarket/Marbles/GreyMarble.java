@@ -3,12 +3,13 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * This grey marble produces STONES
  */
-public class GreyMarble extends Marble {
+public class GreyMarble extends Marble implements Serializable {
 
     /**
      * If the drawing player has enough space in its warehouse it receives one stone otherwise other players receive one faith point

@@ -3,11 +3,12 @@ package Maestri.MVC.Model.GModel.LeaderCards;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  * Composes the leader card deck
  */
-public class LeaderCard {
+public class LeaderCard implements Serializable {
 
     /**
      * True if the leader card has been played

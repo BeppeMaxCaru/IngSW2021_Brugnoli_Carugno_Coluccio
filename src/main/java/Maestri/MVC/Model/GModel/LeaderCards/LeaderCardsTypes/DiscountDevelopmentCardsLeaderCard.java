@@ -4,11 +4,12 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  * This leader card allows players to pay development cards 1 resource less than their cost
  */
-public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
+public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Serializable {
 
     /**
      * Colours of the development cards required to play the leader card

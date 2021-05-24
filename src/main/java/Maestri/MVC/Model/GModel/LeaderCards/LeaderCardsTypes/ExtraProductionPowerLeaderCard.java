@@ -5,12 +5,13 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  * These LeaderCards give an extra Production Power to the player
  * He spends a specific resource and he obtains a faithPoint and a Resource to be chosen
  */
-public class ExtraProductionPowerLeaderCard extends LeaderCard {
+public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serializable {
 
     /**
      * Development card required to play the leader card

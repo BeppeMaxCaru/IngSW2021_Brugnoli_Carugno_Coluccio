@@ -5,11 +5,12 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  * This leader card allows players to receive one resource from the white marble
  */
-public class WhiteMarbleResourceLeaderCard extends LeaderCard {
+public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Serializable {
 
     /**
      * Contains the two colours of the development cards required to play the leader card

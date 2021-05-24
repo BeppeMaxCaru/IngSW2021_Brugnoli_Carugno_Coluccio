@@ -3,6 +3,7 @@ package Maestri.MVC.Model.GModel;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
@@ -64,18 +65,17 @@ public class GameModel{
         }*/
 
         this.players = players;
+        this.leaderCardDeck = new LeaderCardDeck();
          for (int i=0;i<this.players.length;i++) {
              try {
-                 for (int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++)
+                 for (int index = 0; index < this.players[i].getPlayerLeaderCards().length; index++) {
                      this.players[i].setPlayerLeaderCard(index, this.leaderCardDeck.drawOneLeaderCard());
-
-                 this.players[i].getOutPrintWriter().println("Match has started, your player number is " + i);
-                 if (i != 0) {
-                     this.players[i].getOutPrintWriter().println("Wait for other players turn...");
                  }
+                     //this.players[i].setPlayerLeaderCard(index, this.leaderCardDeck.drawOneLeaderCard());
 
              } catch (Exception e) {
                  //If no clients waiting set other players null
+                 e.printStackTrace();
              }
          }
 

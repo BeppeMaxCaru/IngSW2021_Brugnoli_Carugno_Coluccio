@@ -3,10 +3,12 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.Serializable;
+
 /**
  * This red marble produces faithPoints
  */
-public class RedMarble extends Marble {
+public class RedMarble extends Marble implements Serializable {
 
     /**
      * Moves the current player's red cross one cell forward in the faith path

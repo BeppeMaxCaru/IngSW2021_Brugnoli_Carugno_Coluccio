@@ -3,6 +3,8 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.Serializable;
+
 /**
  * White marbles has no effects until the related LeaderCard is activated
  */
@@ -10,7 +12,7 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 /**
  * Unlucky white marble that doesn't produce any resource
  */
-public class WhiteMarble extends Marble {
+public class WhiteMarble extends Marble implements Serializable {
 
     /**
      * Checks if the player can still receive a resource instead of nothing thanks to a leader card activated before

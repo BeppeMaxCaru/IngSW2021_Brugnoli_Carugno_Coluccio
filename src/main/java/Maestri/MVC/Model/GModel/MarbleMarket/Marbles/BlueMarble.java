@@ -3,12 +3,13 @@ package Maestri.MVC.Model.GModel.MarbleMarket.Marbles;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * This blue marble produces SHIELDS
  */
-public class BlueMarble extends Marble {
+public class BlueMarble extends Marble implements Serializable {
 
     /**
      * If the drawing player has enough space in its warehouse it receives one shield otherwise other players receive one faith point

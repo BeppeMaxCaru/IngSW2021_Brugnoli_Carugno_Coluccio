@@ -102,15 +102,16 @@ public class PlayerThread implements Runnable {
             System.out.println("Nickname received");
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Niente");
+            System.out.println("No nickname");
         }
 
         try {
             ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
-                    this.playerThreadNumber, currentPlayer.getPlayerLeaderCards());
-            sender.writeObject(serverStartingMessage);
+                    this.playerThreadNumber, this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards());
+            this.sender.writeObject(serverStartingMessage);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("No starting message");
         }
 
 
@@ -143,7 +144,7 @@ public class PlayerThread implements Runnable {
 
         //ASYNC PHASE
 
-        while (true) {
+        while (!this.gameController.getGameModel().checkEndPlay()) {
 
             Message object = null;
 
@@ -294,6 +295,10 @@ public class PlayerThread implements Runnable {
                 //il giocatore successivo a questo per abilitarlo e bloccare questo
             }
         }
+
+        //Inviare messaggio dove si comunica vincitore + punti fatti
+
+
     }
 
 }

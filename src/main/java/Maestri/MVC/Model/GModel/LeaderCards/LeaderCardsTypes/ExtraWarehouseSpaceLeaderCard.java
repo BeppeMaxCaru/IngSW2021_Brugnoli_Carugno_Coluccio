@@ -4,11 +4,12 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
 /**
  * Adds two extra spaces to the warehouse for a resource
  */
-public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
+public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Serializable {
 
     /**
      * Resource cost of the leader card

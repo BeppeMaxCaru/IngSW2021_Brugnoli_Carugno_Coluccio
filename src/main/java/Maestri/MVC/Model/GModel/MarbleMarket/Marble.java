@@ -2,10 +2,12 @@ package Maestri.MVC.Model.GModel.MarbleMarket;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 
+import java.io.Serializable;
+
 /**
  * Composes the market
  */
-public class Marble {
+public class Marble implements Serializable {
 
     private String colour;
 
