@@ -80,6 +80,8 @@ public class PlayerThread implements Runnable {
         return this.inScanner;
     }
 
+    public Socket getPlayerSocket() { return this.playerSocket; }
+
     public void setInScanner(Scanner inScanner) {
         this.inScanner = inScanner;
     }

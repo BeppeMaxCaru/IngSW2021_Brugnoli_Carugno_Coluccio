@@ -4,8 +4,10 @@ import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
+import Message.MessageSent.EndTurnMessage;
 
 import java.io.*;
+import java.net.Socket;
 import java.util.*;
 
 public class GameController implements Runnable {
@@ -14,6 +16,7 @@ public class GameController implements Runnable {
     private final GameModel gameModel;
 
     private Player currentPlayer;
+    PlayerThread[] playersPlaying = new PlayerThread[4];
 
     //Margara
     public GameController(List<PlayerThread> queueFIFO) {
@@ -23,8 +26,6 @@ public class GameController implements Runnable {
         //Non serve più ordine dei player almeno nel controller
         //Meglio tenere l'ordine!
         Set<PlayerThread> playerThreads = new HashSet<>();
-        PlayerThread[] playersPlaying = new PlayerThread[4];
-
         List<Player> playersToPlay = new ArrayList<>();
 
         //Chat version
@@ -65,10 +66,31 @@ public class GameController implements Runnable {
 
     @Override
     public void run() {
-
+        ObjectInputStream receiver;
+        Object object = null;
         this.currentPlayer = this.gameModel.getPlayers()[0];
 
         while (this.getGameModel().checkEndPlay()) {
+            int i = 0;
+            while(i < this.gameModel.getPlayers().length) {
+                this.currentPlayer = this.gameModel.getPlayers()[i];
+                try {
+                    receiver = new ObjectInputStream(playersPlaying[i].getPlayerSocket().getInputStream());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println("Connection failed");
+                    return;
+                }
+
+                try {
+                    object = receiver.readObject();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                if(object instanceof EndTurnMessage) i++;
+                // else ?
+            }
 
         }
 
@@ -88,40 +110,46 @@ public class GameController implements Runnable {
     /*@Override
     public void run() {
         //System.out.println("New game started");
-
-        for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-            if (this.gameModel.getPlayers()[i] != null) {
-
-            }
-        }
+        ObjectInputStream receiver = null;
 
         //Now starts receiving command
         //Stops automatic setup like in first turn
         while (!this.gameModel.checkEndPlay()) {
-
-            for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
+            int i = 0;
+            while(i < this.gameModel.getPlayers().length) {
                 if (this.gameModel.getPlayers()[i] != null) {
                     try {
                         Player currentPlayer = this.gameModel.getPlayers()[i];
+                        Object object = null;
 
-                        Scanner in = currentPlayer.getInScannerReader();
-                        PrintWriter out = currentPlayer.getOutPrintWriter();
+                        //Scanner in = currentPlayer.getInScannerReader();
+                        //PrintWriter out = currentPlayer.getOutPrintWriter();
 
-                        out.println("It's your turn");
+                        //out.println("It's your turn");
 
                         //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
                         //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
 
-                        this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
-                        this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
-                        this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
+                        //this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
+                        //this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
+                        //this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
+                        //this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
+                        //this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
 
 
 
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println();
+                        //this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
+                        //this.gameModel.getPlayers()[i].getOutPrintWriter().println();
+
+                        try {
+                            object = receiver.readObject();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        if(object instanceof EndTurnMessage) i++;
+
+
 
                     } catch (Exception e) {
                         //Player disconesso
