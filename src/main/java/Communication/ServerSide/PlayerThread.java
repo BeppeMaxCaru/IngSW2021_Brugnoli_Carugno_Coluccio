@@ -177,7 +177,7 @@ public class PlayerThread implements Runnable {
             //
             //CONTROLLA I CONTROLLI
 
-
+            //Player currentPlayer = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber];
 
             //Receive object
             //Check current player here

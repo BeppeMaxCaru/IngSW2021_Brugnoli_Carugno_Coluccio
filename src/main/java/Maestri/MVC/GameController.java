@@ -13,6 +13,8 @@ public class GameController implements Runnable {
     //update
     private final GameModel gameModel;
 
+    private Player currentPlayer;
+
     //Margara
     public GameController(List<PlayerThread> queueFIFO) {
 
@@ -44,11 +46,6 @@ public class GameController implements Runnable {
                     //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
 
-                    if(i!=0){
-                        playersPlaying[i].getOutPrintWriter().println("Wait for other players turn...");
-                        //playersToPlay.get(0).getOutPrintWriter().println("Wait for other players turn...");
-                    }
-
                 }
             } catch (Exception e) {
                 //If no clients waiting set other players null
@@ -66,6 +63,17 @@ public class GameController implements Runnable {
 
     }
 
+    @Override
+    public void run() {
+
+        this.currentPlayer = this.gameModel.getPlayers()[0];
+
+        while (this.getGameModel().checkEndPlay()) {
+
+        }
+
+    }
+
     //QUESTO RUN VA SISTEMATO SICCOME è ANCORA LA VECCHIA VERSIONE
     //
     //BISOGNA CAPIRE SE SERVA LANCIARLO OPPURE NO, CIOè SE DEVE PER FORZA ESSERE UN THREAD
@@ -77,7 +85,7 @@ public class GameController implements Runnable {
     //
     //
 
-    @Override
+    /*@Override
     public void run() {
         //System.out.println("New game started");
 
@@ -126,7 +134,7 @@ public class GameController implements Runnable {
 
         }
 
-    }
+    }*/
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
 
