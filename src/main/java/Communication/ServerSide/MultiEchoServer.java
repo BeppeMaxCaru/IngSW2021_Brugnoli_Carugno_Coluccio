@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class MultiEchoServer {
     //Connection
-    private int port;
+    private final int port;
     public MultiEchoServer(int port) {
         this.port = port;
     }
@@ -53,13 +53,8 @@ public class MultiEchoServer {
             public void run() {
                 try {
 
-                    //Margara
                     if (queueFIFO.isEmpty() || queueFIFO.size()<2) throw new Exception();
 
-                    //Old
-                    //if (clients.isEmpty() || clients.size()<2) throw new Exception();
-
-                    //Margara
                     GameController gameController = new GameController(queueFIFO);
                     //gameExecutor.execute(gameController);
 
@@ -72,11 +67,8 @@ public class MultiEchoServer {
                     //gameExecutor.execute(newGame);
                     //Debug
                     System.out.println("New game started");
-                    //System.out.println(clients.size());
                 } catch (Exception e) {
-                    //Debug
                     System.out.println("Not enough players");
-                    //System.out.println(clients.size());
                 }
             }
         }, 0, 5000);
@@ -85,19 +77,14 @@ public class MultiEchoServer {
 
             try {
                 Socket playerSocket = serverSocket.accept();
+
                 //Il Player adesso diventa PlayerThread
                 //Viene creato
-
                 PlayerThread newPlayer = new PlayerThread(playerSocket);
+
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);
 
-                //Old version
-                //Player newClient = new Player(playerSocket);
-                //newClient.setClientSocket(clientSocket);
-                //clients.add(newClient);
-                //clientExecutor.execute(newClient);
-                //newClient.setName();
             } catch(IOException e) {
                 System.out.println("Server failure!");
                 break; // Entrerei qui se serverSocket venisse chiuso

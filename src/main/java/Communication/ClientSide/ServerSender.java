@@ -12,17 +12,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ServerSender extends Thread {
-    private Socket socket;
-    private ClientMain clientMain;
-    private PrintWriter out;
 
-    private ObjectOutputStream sender;
+    private final Socket socket;
+    private final ClientMain clientMain;
+    private final ObjectOutputStream sender;
 
     public ServerSender (ClientMain clientMain, Socket socket, ObjectOutputStream sender) {
         this.socket = socket;
         this.clientMain = clientMain;
         this.sender = sender;
-
     }
 
     @Override
@@ -34,7 +32,6 @@ public class ServerSender extends Thread {
 
             try {
 
-                //Il conteggio è mantenuto nel playerThread
                 int mainAction = 0;
                 while (!(action.equalsIgnoreCase("END TURN") || action.equalsIgnoreCase("QUIT"))) {
 
@@ -293,7 +290,6 @@ public class ServerSender extends Thread {
                             resources.put(2, "SHIELDS");
                             resources.put(3, "STONES");
 
-                            j = 0;
                             for (int index = 0; index < 6; index++) {
 
                                 System.out.println("Which production power do you want to activate?");
@@ -479,8 +475,6 @@ public class ServerSender extends Thread {
                                             String com = this.clientMain.getConsoleInput().nextLine();
 
                                             if (com.equals("0") || com.equals("1") || com.equals("2") || com.equals("3") || com.equals("4")) {
-                                                if (command.equalsIgnoreCase("b"))
-                                                    j = 0;
                                                 if (command.equalsIgnoreCase("e0"))
                                                     j = 1;
                                                 else j = 2;

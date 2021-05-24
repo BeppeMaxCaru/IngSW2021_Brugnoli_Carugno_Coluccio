@@ -136,12 +136,7 @@ public class PlayerThread implements Runnable {
             }
         }
 
-        //QUI INIZIA LA FASE ASINCRONA
-        //SOPRA HO INIZIATO LA FASE SINCRONA
-        //VANNO MESSI I CONTROLLI, CHIAMATI E METODI, ECC
-        //QUA SOTTO C'è IL CICLO CON SWITCH FINCHè UNO NON VINCE
         //BISOGNA ANCORA GESTIRE IL BREAK
-
         //ASYNC PHASE
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
@@ -297,7 +292,6 @@ public class PlayerThread implements Runnable {
         }
 
         //Inviare messaggio dove si comunica vincitore + punti fatti
-
 
     }
 

@@ -1,26 +1,22 @@
 package Communication.ClientSide;
 
 import Communication.ServerSide.PlayerThread;
-import Maestri.MVC.GameController;
+import Message.Message;
 import Message.MessageReceived.ActionOutcomeMessage;
 import Message.MessageReceived.GameOverMessage;
 import Message.MessageReceived.QuitMessage;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class ServerReceiver extends Thread {
 
     private Socket socket;
     private PlayerThread playerThread;
-    private Scanner in;
 
     private ClientMain clientMain;
 
-    private ObjectInputStream receiver;
+    private final ObjectInputStream receiver;
 
     public ServerReceiver(ClientMain clientMain, Socket socket, ObjectInputStream receiver) {
         this.clientMain = clientMain;
@@ -35,28 +31,12 @@ public class ServerReceiver extends Thread {
         //ASYNC PHASE
         while (true) {
 
-            //Switch with different messages to receive
-            //and prints results
+            //Switch with different messages to receive and prints results
 
-
-            //
-            //SIMO USA TANTI TRY CATCH PICCOLI INVECE DI UNO GROSSO
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-
-
-            Object object = null;
+            Message object = null;
 
             try {
-                object = receiver.readObject();
+                object = (Message) receiver.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -87,10 +67,8 @@ public class ServerReceiver extends Thread {
                     System.out.println("You made " + gameOverMessage.getWinner() + " victory points");
 
                     //SHUT BOTH THREAD AND STREAM
-                    //
-                    //
-                    //
-                    //
+                    receiver.close();
+                    this.interrupt();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -105,10 +83,8 @@ public class ServerReceiver extends Thread {
                     System.out.println(quitMessage.getQuitMessage());
 
                     //SHUT BOTH THREAD AND STREAM
-                    //
-                    //
-                    //
-                    //
+                    receiver.close();
+                    this.interrupt();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -116,17 +92,8 @@ public class ServerReceiver extends Thread {
 
             }
 
-            //
             //QUA SOTTO SI POSSONO INSERIRE MESSAGGI CHE AGGIORNANO
             //MERCATO E GRIGLIA
-            //
-            //
-            //
-            //
-            //
-            //
-            //
-            //
 
         }
     }

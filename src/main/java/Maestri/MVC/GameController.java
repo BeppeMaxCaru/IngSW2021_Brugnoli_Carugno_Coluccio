@@ -3,23 +3,16 @@ package Maestri.MVC;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Message.*;
 
-import java.io.*;
 import java.util.*;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class GameController implements Runnable {
+public class GameController{
 
-    //update
     private final GameModel gameModel;
-
-    private Player currentPlayer;
     private int currentPlayerNumber;
 
-    //Margara
     public GameController(List<PlayerThread> queueFIFO) {
 
         Player[] players = new Player[4];
@@ -54,28 +47,15 @@ public class GameController implements Runnable {
             }
         }
 
-        //Temporary solution
         this.gameModel = new GameModel(players, numOfPlayers);
 
         for (int j=0;j<4;j++) {
             try {
+                assert playersPlaying[j] != null;
                 playerThreadExecutor.execute(playersPlaying[j]);
             } catch (Exception e) {
-                //e.printStackTrace();
-                //System.out.println("No player");
+                e.printStackTrace();
             }
-        }
-
-    }
-
-    @Override
-    public void run() {
-
-        this.currentPlayerNumber = 0;
-
-        //tenere conto del giocatore corrente
-        while (true) {
-            //this.currentPlayerNumber = this.currentPlayerNumber;
         }
 
     }
@@ -84,7 +64,6 @@ public class GameController implements Runnable {
         return this.currentPlayerNumber;
     }
 
-    //Fare metodo
     public void nextCurrentPlayerNumber() {
         //Mettere controllo che ci siano più di un giocatore
         if (this.currentPlayerNumber == 3) this.currentPlayerNumber = 0;
@@ -97,68 +76,6 @@ public class GameController implements Runnable {
             }
         }
     }
-
-    //QUESTO RUN VA SISTEMATO SICCOME è ANCORA LA VECCHIA VERSIONE
-    //
-    //BISOGNA CAPIRE SE SERVA LANCIARLO OPPURE NO, CIOè SE DEVE PER FORZA ESSERE UN THREAD
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-
-    /*@Override
-    public void run() {
-        //System.out.println("New game started");
-
-        for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-            if (this.gameModel.getPlayers()[i] != null) {
-
-            }
-        }
-
-        //Now starts receiving command
-        //Stops automatic setup like in first turn
-        while (!this.gameModel.checkEndPlay()) {
-
-            for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
-                if (this.gameModel.getPlayers()[i] != null) {
-                    try {
-                        Player currentPlayer = this.gameModel.getPlayers()[i];
-
-                        Scanner in = currentPlayer.getInScannerReader();
-                        PrintWriter out = currentPlayer.getOutPrintWriter();
-
-                        out.println("It's your turn");
-
-                        //Scanner in = new Scanner(new InputStreamReader(this.players[i].getClientSocket().getInputStream()));
-                        //PrintWriter out = new PrintWriter(this.players[i].getClientSocket().getOutputStream(), true);
-
-                        this.gameModel.getPlayers()[i].printAll(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("MARKET GRID:");
-                        this.gameModel.getMarket().printMarket(this.gameModel.getPlayers()[i].getOutPrintWriter());
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("DEVELOPMENT CARDS GRID:");
-                        this.gameModel.getDevelopmentCardsDecksGrid().printGrid(this.gameModel.getPlayers()[i].getOutPrintWriter());
-
-
-
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println("Your turn has ended. Wait for other players...");
-                        this.gameModel.getPlayers()[i].getOutPrintWriter().println();
-
-                    } catch (Exception e) {
-                        //Player disconesso
-                        //System.err.println(e.getMessage());
-                        this.gameModel.getPlayers()[i] = null;
-
-                    }
-                }
-            }
-
-        }
-
-    }*/
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
 
