@@ -103,6 +103,8 @@ public class ClientMain {
             //Per controllare inattività o disconnesione si può provare setSocketTimeout
             //sulla socket del playerThread e vedere se non arriva data dopo tot tempo
 
+            //System.out.println("OK");
+
             //1
             //Send nickname message
             try {

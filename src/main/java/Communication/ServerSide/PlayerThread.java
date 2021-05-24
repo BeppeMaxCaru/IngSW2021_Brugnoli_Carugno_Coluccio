@@ -45,8 +45,8 @@ public class PlayerThread implements Runnable {
             //this.gameController = gameController;
 
             //Va fatto con oggetti
-            this.outPrintWriter.println("Welcome to Masters of Renaissance online!");
-            this.outPrintWriter.println("Looking for a game in Florence...");
+            //this.outPrintWriter.println("Welcome to Masters of Renaissance online!");
+            //this.outPrintWriter.println("Looking for a game in Florence...");
 
         } catch (Exception e) {
             e.printStackTrace();
