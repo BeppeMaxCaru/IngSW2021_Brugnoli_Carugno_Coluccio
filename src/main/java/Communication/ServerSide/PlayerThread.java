@@ -19,6 +19,7 @@ public class PlayerThread implements Runnable {
     private int playerThreadNumber;
 
     private int currentPlayerNumber;
+    private int currentPlayerNumber2 = 0;
 
     private Socket playerSocket;
     private Scanner inScanner;
@@ -37,8 +38,9 @@ public class PlayerThread implements Runnable {
         try {
             this.playerSocket = clientSocket;
 
-            this.receiver = new ObjectInputStream(clientSocket.getInputStream());
             this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
+            this.receiver = new ObjectInputStream(clientSocket.getInputStream());
+            //this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
 
             //this.inScanner = new Scanner(new InputStreamReader(this.playerSocket.getInputStream()));
             //this.outPrintWriter = new PrintWriter(this.playerSocket.getOutputStream(), true);
@@ -51,6 +53,7 @@ public class PlayerThread implements Runnable {
         } catch (Exception e) {
             e.printStackTrace();
             //Thread not working
+            System.out.println("Thread not working");
             //Null this player
             return;
         }
@@ -101,33 +104,54 @@ public class PlayerThread implements Runnable {
 
         //SWITCH THAT READS MESSAGES AND SENDS RESPONSED/DOES ACTIONS
 
+        System.out.println("Thread in run");
+
         Player currentPlayer = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber];
+        int currentPlayerNumber = this.gameController.getCurrentPlayerNumber();
 
         //SYNC PHASE
         try {
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
+            System.out.println("Nickname received");
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Niente");
         }
 
         try {
-            ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
-                    this.playerThreadNumber, currentPlayer.getPlayerLeaderCards());
-            sender.writeObject(serverStartingMessage);
+            //Simo
+            //ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
+                    //this.playerThreadNumber, currentPlayer.getPlayerLeaderCards());
+            //Giu
+            ServerStartingMessage serverStartingMessage1 = new ServerStartingMessage(
+                    this.playerThreadNumber,
+                    this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()
+            );
+            //Simo
+            //sender.writeObject(serverStartingMessage);
+            //Giu
+            sender.writeObject(serverStartingMessage1);
         } catch (Exception e) {
             e.printStackTrace();
             //Errore
         }
 
+
         try {
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
-            if(this.currentPlayerNumber == startingResourcesMessage.getPlayerNumber())
+            //Simo
+            /*if(this.currentPlayerNumber == startingResourcesMessage.getPlayerNumber())
             {
                 while (!startingResourcesMessage.getStartingRes().isEmpty())
                     currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
                 this.sender.writeObject(true);
-            } else this.sender.writeObject(false);
+            } else this.sender.writeObject(false);*/
+
+            //Giu
+            while (!startingResourcesMessage.getStartingRes().isEmpty())
+                currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
+            this.sender.writeObject( new ActionOutcomeMessage(true));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,11 +160,17 @@ public class PlayerThread implements Runnable {
         {
             try {
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) receiver.readObject();
-                if(this.currentPlayerNumber == discardLeaderMessage.getPlayerNumber())
+                //Simo
+                /*if(this.currentPlayerNumber == discardLeaderMessage.getPlayerNumber())
                 {
                     currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
                     this.sender.writeObject(true);
-                } else this.sender.writeObject(false);
+                } else this.sender.writeObject(false);*/
+
+                //Giu
+                currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
+                this.sender.writeObject(new ActionOutcomeMessage(true));
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -194,11 +224,17 @@ public class PlayerThread implements Runnable {
 
             //Check currentPlayer
             //if (this.currentPlayerNumber == playMessage.getPlayerNumber())
+
+
             //PlayLeaderMessage
             if (object instanceof PlayLeaderMessage) {
                 try {
                     PlayLeaderMessage playLeaderMessage = (PlayLeaderMessage) object;
-                    if(this.currentPlayerNumber == playLeaderMessage.getPlayerNumber()) {
+                    //Simo
+                    //if(this.currentPlayerNumber == playLeaderMessage.getPlayerNumber()) {
+
+                    //Giu
+                    if(this.gameController.getCurrentPlayerNumber() == playLeaderMessage.getPlayerNumber()) {
 
                         //First and only parameter is always an int that is the position of the leader card
                         int position = playLeaderMessage.getPlayed();
@@ -217,7 +253,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof DiscardLeaderMessage) {
                 try {
                     DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) object;
-                    if(this.currentPlayerNumber == discardLeaderMessage.getPlayerNumber()) {
+                    if(this.gameController.getCurrentPlayerNumber() == discardLeaderMessage.getPlayerNumber()) {
 
                         //First and only parameter is always an int that is the position of the leader card
                         int position = discardLeaderMessage.getDiscarded();

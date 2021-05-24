@@ -7,6 +7,9 @@ import Message.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class GameController implements Runnable {
 
@@ -14,6 +17,7 @@ public class GameController implements Runnable {
     private final GameModel gameModel;
 
     private Player currentPlayer;
+    private int currentPlayerNumber;
 
     //Margara
     public GameController(List<PlayerThread> queueFIFO) {
@@ -25,6 +29,8 @@ public class GameController implements Runnable {
         Set<PlayerThread> playerThreads = new HashSet<>();
         PlayerThread[] playersPlaying = new PlayerThread[4];
 
+        ExecutorService playerThreadExecutor = Executors.newFixedThreadPool(4);
+
         List<Player> playersToPlay = new ArrayList<>();
 
         //Chat version
@@ -34,8 +40,9 @@ public class GameController implements Runnable {
                 if (!queueFIFO.isEmpty()) {
                     playersPlaying[i] = queueFIFO.remove(0);
                     playersPlaying[i].setPlayerThreadNumber(i);
-                    playersPlaying[i].run();
-                    //Check this
+                    //Starts the thread
+                    //playerThreadExecutor.execute(playersPlaying[i]);
+
                     playersPlaying[i].setGameController(this);
 
                     //Old
@@ -61,17 +68,45 @@ public class GameController implements Runnable {
         //Temporary solution
         this.gameModel = new GameModel(players);
 
+        for (int j=0;j<4;j++) {
+            try {
+                playerThreadExecutor.execute(playersPlaying[j]);
+            } catch (Exception e) {
+                //e.printStackTrace();
+                //System.out.println("No player");
+            }
+        }
+
     }
 
     @Override
     public void run() {
 
-        this.currentPlayer = this.gameModel.getPlayers()[0];
+        this.currentPlayerNumber = 0;
 
-        while (this.getGameModel().checkEndPlay()) {
-
+        //tenere conto del giocatore corrente
+        while (true) {
+            //this.currentPlayerNumber = this.currentPlayerNumber;
         }
 
+    }
+
+    public int getCurrentPlayerNumber() {
+        return this.currentPlayerNumber;
+    }
+
+    //Fare metodo
+    public void nextCurrentPlayerNumber() {
+        //Mettere controllo che ci siano più di un giocatore
+        if (this.currentPlayerNumber == 3) this.currentPlayerNumber = 0;
+
+        //Importanet gestire disconnessione
+        for (int i = 0;i<this.gameModel.getPlayers().length;i++) {
+            if (this.gameModel.getPlayers()[i] != null) {
+                this.currentPlayerNumber = i;
+                break;
+            }
+        }
     }
 
     //QUESTO RUN VA SISTEMATO SICCOME è ANCORA LA VECCHIA VERSIONE
