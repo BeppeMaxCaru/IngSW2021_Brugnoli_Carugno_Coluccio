@@ -106,7 +106,7 @@ public class PlayerThread implements Runnable {
 
         //SWITCH THAT READS MESSAGES AND SENDS RESPONSED/DOES ACTIONS
 
-        System.out.println("Thread in run");
+        System.out.println("PlayerThread started");
 
         Player currentPlayer = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber];
         int currentPlayerNumber = this.gameController.getCurrentPlayerNumber();

@@ -151,9 +151,6 @@ public class ClientMain {
                 StartingResourcesMessage resourcesMessage = new StartingResourcesMessage(playerNumber, playerStartingResources);
                 sender.writeObject(resourcesMessage);
 
-                boolean serverResponse = (boolean) receiver.readObject();
-                if(!serverResponse) throw new Exception();
-
                 //2A
                 //Sends first starting excess leader card to discard
                 System.out.println("Which starting leader card do you want to discard?");
@@ -183,9 +180,6 @@ public class ClientMain {
                 //Tanto sai già che tipo di messaggio ricevi tramite instanceOf
                 sender.writeObject(firstDiscardLeaderMessage);
 
-                serverResponse = (boolean) receiver.readObject();
-                if(!serverResponse) throw new Exception();
-
                 System.out.println("Which starting leader card do you want to discard?");
                 for (int i = 0; i < 3; i++) {
                     System.out.println("Write " + i + " for this: ");
@@ -206,8 +200,6 @@ public class ClientMain {
 
                 firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
                 sender.writeObject(firstDiscardLeaderMessage);
-                serverResponse = (boolean) receiver.readObject();
-                if(!serverResponse) throw new Exception();
 
             } catch (Exception e) {
                 e.printStackTrace();
