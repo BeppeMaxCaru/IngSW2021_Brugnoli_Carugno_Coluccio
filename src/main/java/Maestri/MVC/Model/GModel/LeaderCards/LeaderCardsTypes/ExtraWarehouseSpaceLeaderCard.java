@@ -3,7 +3,7 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 /**
  * Adds two extra spaces to the warehouse for a resource
@@ -64,7 +64,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard {
     }
 
     @Override
-    public void printLeaderCard(PrintWriter out) {
+    public void printLeaderCard(PrintStream out) {
         out.println("EXTRA WAREHOUSE SPACE");
         out.println("req: 5 " + this.requisite);
         out.println("Victory Points: " + this.getVictoryPoints());

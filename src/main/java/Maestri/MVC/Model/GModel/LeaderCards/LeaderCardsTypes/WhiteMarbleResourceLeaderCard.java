@@ -4,7 +4,7 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 /**
  * This leader card allows players to receive one resource from the white marble
@@ -93,7 +93,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard {
     }
 
     @Override
-    public void printLeaderCard(PrintWriter out){
+    public void printLeaderCard(PrintStream out){
         out.println("WHITE MARBLE RESOURCE");
         out.println("req: 2 "+this.requisite[0] + " 1 "+this.requisite[1]);
         out.println("Victory Points: "+this.getVictoryPoints());

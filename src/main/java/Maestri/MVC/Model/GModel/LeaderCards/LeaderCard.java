@@ -2,7 +2,7 @@ package Maestri.MVC.Model.GModel.LeaderCards;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 /**
  * Composes the leader card deck
@@ -67,7 +67,7 @@ public class LeaderCard {
     public void activateAbility(Playerboard playerboard) {
     }
 
-    public void printLeaderCard(PrintWriter out){
+    public void printLeaderCard(PrintStream out){
 
     }
 

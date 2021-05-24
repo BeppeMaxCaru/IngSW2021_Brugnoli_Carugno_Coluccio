@@ -3,7 +3,7 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 /**
  * This leader card allows players to pay development cards 1 resource less than their cost
@@ -83,7 +83,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard {
     }
 
     @Override
-    public void printLeaderCard(PrintWriter out){
+    public void printLeaderCard(PrintStream out){
         out.println("DISCOUNT DEVELOPMENT CARD");
         out.println("req: 1 "+this.requisite[0]+" 1 "+this.requisite[1]);
         out.println("Victory Points: "+this.getVictoryPoints());

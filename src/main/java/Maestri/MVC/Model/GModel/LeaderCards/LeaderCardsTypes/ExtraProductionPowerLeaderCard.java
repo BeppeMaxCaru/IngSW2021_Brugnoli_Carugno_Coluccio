@@ -4,7 +4,7 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 
-import java.io.PrintWriter;
+import java.io.PrintStream;
 
 /**
  * These LeaderCards give an extra Production Power to the player
@@ -66,7 +66,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard {
     }
 
     @Override
-    public void printLeaderCard(PrintWriter out){
+    public void printLeaderCard(PrintStream out){
         out.println("EXTRA PRODUCTION POWER");
         out.println("req: 1 "+this.requisite.getDevelopmentCardColour()+" lev.2");
         out.println("Victory Points: "+this.getVictoryPoints());

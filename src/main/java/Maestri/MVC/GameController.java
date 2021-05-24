@@ -24,8 +24,6 @@ public class GameController implements Runnable {
 
         Player[] players = new Player[4];
 
-        //Non serve più ordine dei player almeno nel controller
-        //Meglio tenere l'ordine!
         Set<PlayerThread> playerThreads = new HashSet<>();
         PlayerThread[] playersPlaying = new PlayerThread[4];
 
@@ -33,7 +31,6 @@ public class GameController implements Runnable {
 
         List<Player> playersToPlay = new ArrayList<>();
 
-        //Chat version
         for (int i=0;i<4;i++) {
             try {
                 //If there is a player adds it
@@ -45,11 +42,6 @@ public class GameController implements Runnable {
 
                     playersPlaying[i].setGameController(this);
 
-                    //Old
-                    //playersToPlay.add(clientsWaiting.remove(0));
-                    //playersToPlay.get(0).setPlayerNumber(i);
-                    //playersToPlay.get(i).getOutPrintWriter().println("Match has started, your player number is " + i);
-
                     //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
 
@@ -59,11 +51,6 @@ public class GameController implements Runnable {
                 playersPlaying[i] = null;
             }
         }
-
-        //Cosa passo al gameModel?? Player o PLayerThread o si può rimuovere del tutto e gestire l'ordine tramite controller?
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        //Must update constructor
-        //this.gameModel = new GameModel(playersPlaying);
 
         //Temporary solution
         this.gameModel = new GameModel(players);
@@ -100,7 +87,7 @@ public class GameController implements Runnable {
         //Mettere controllo che ci siano più di un giocatore
         if (this.currentPlayerNumber == 3) this.currentPlayerNumber = 0;
 
-        //Importanet gestire disconnessione
+        //Importante gestire disconnessione
         for (int i = 0;i<this.gameModel.getPlayers().length;i++) {
             if (this.gameModel.getPlayers()[i] != null) {
                 this.currentPlayerNumber = i;
@@ -173,11 +160,7 @@ public class GameController implements Runnable {
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
 
-        PrintWriter out = currentPlayer.getOutPrintWriter();
-
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
-            out.println("Played");
-            currentPlayer.getPlayerLeaderCards()[c].printLeaderCard(out);
             currentPlayer.playLeaderCard(c);
         } else return false;
 
@@ -187,17 +170,13 @@ public class GameController implements Runnable {
 
     public boolean checkDiscardCards (Player currentPlayer, int c){
 
-        PrintWriter out = currentPlayer.getOutPrintWriter();
-
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
             return currentPlayer.discardLeaderCard(c);
         } else return false;
 
     }
 
-    public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c)
-    {
-        PrintWriter out = currentPlayer.getOutPrintWriter();
+    public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c) {
 
         if(c.contains("1"))
             if (currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) return false;
@@ -233,8 +212,6 @@ public class GameController implements Runnable {
     }
 
     public boolean checkBuyDevCard(Player currentPlayer, String colour, int l, int[] quantity, String[] wclChoice) {
-
-        PrintWriter out = currentPlayer.getOutPrintWriter();
 
         Map<String, Integer> paidResources = new HashMap<>();
         paidResources.put("COINS", quantity[0]);
@@ -310,8 +287,6 @@ public class GameController implements Runnable {
     }
 
     public boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
-
-        PrintWriter out = currentPlayer.getOutPrintWriter();
 
         Map<String, Integer> paidWarehouseResources = new HashMap<>();
         paidWarehouseResources.put("COINS", 0);

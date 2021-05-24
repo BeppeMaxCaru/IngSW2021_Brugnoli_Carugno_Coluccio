@@ -1,6 +1,7 @@
 package Communication.ClientSide;
 
 import Message.*;
+import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.PlayLeaderMessage;
 
@@ -27,35 +28,14 @@ public class ServerSender extends Thread {
     @Override
     public void run() {
 
-        //inserire nickname
-        //String nickname = stdIn.nextLine();
-        //this.clientMain.setNickname(nickname);
-        //out.println(nickname);
-
-        //Sends first message with nickname
-        /*try {
-            NicknameMessage nicknameMessage = new NicknameMessage(this.clientMain.getNickname());
-            sender.writeObject(nicknameMessage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Nickname not accepted");
-            return;
-        }*/
-
         String action = "";
         //Keeps sending messages with switch until quit for now
         do {
-            //Creazione messaggi da inviare va qua
-            //Switch su classe da creare in base all'azione inserita
-            //consoleInput = this.clientMain.getConsoleInput().nextLine().toUpperCase();
 
             try {
 
                 //Il conteggio è mantenuto nel playerThread
                 int mainAction = 0;
-                //do
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //Utilizzare shutdwon output per bloccare half write del socket del client al server
                 while (!(action.equalsIgnoreCase("END TURN") || action.equalsIgnoreCase("QUIT"))) {
 
                     System.out.println("Which action do you want to do?");
@@ -67,7 +47,6 @@ public class ServerSender extends Thread {
                     System.out.println("Write 'End turn' at the end of your turn");
                     action = this.clientMain.getConsoleInput().nextLine().toUpperCase();
 
-                    //out.println();
                     switch (action) {
                         case "PLAY LEADER CARD": {
                             System.out.println("Which card do you want to play?");
@@ -80,30 +59,6 @@ public class ServerSender extends Thread {
 
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
                                 sender.writeObject(playLeaderMessage);
-
-                                //SICCOME APERTURA E CHIUSURA DI STREAM SONO OPERAZIONI DISPENDIOSI
-                                //VIENE FATTA SOLO A FINE PARTITA
-                                //NON DOPO OGNI MESSAGGIO
-                                //
-                                //
-                                //
-                                //sender.close();
-
-                                //La parte di ricezione puoi adesso metterla tutte in serverReiver
-                                //Dove continua a decapsulare i messaggi che riceve e stamparli su CLI
-
-                                //NON HAI PIù BISOGNO DI RICEVERE I MEX DI RISPOSTA QUI
-                                //
-                                //SE AZIONE PRINCIPALE VIENE INVIATA ED ESEGUITA SI POTRà MANDARE UN NUOVO MESSAGGIO
-                                //MA IL MESSAGGIO VERRà SCARTATO SUBITO SICCOME è IL PLAYER THREAD CHE TIENE
-                                //CONTO SE AZIONE PRINCIPALE è STATA GIà FATTA O NO
-                                //
-                                //DEVE ESSERE UN OGGETTO NON UN BOOLEANO
-                                //SERVE UNA CLASSE MESSAGGIO VALIDO E UNA MESSAGGIO NON VALIDO
-                                //OPPURE UNA SOLO CON ESITO
-                                //
-
-                                //boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -122,12 +77,6 @@ public class ServerSender extends Thread {
 
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
                                 sender.writeObject(normalDiscardLeaderMessage);
-
-                                //GUARDA SU
-                                //sender.close();
-
-                                //GUARDA SU
-                                //boolean serverResponse = (boolean) receiver.readObject();
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -211,27 +160,6 @@ public class ServerSender extends Thread {
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
                             sender.writeObject(resourcesMessage);
-
-                            //GUARDA SU
-                            //sender.close();
-
-                            //GUARDA SU
-                            //If server responds OK, action is correct
-                            /*try {
-                                boolean serverResponse = (boolean) receiver.readObject();
-                                //Adesso è necessario che sia il playerThread a tenere conto che
-                                //che l'azione principale è già stata fatta
-                                //quindi il contatore va si PlayerThread e va incrementato dopo
-                                //aver inviato messaggio di ok
-                                //se arriva nuovo messaggio di azione principale si dice no
-                                if (serverResponse)
-                                    mainAction++;
-                                else System.out.println("Not valid action.");
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
-                            break;*/
 
                         }
 
@@ -338,62 +266,6 @@ public class ServerSender extends Thread {
                             //Sending Card request
                             BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
                             sender.writeObject(buyCard);
-                            //GUARDA SU
-                            //sender.close();
-
-                            //O SI TOGLIE DEL TUTTO SERVERRECEIVER
-                            //OPPURE SI MANDA IL MESSAGGIO CON TUTTE LE INFORMAZIONI GIà DENTRO
-                            //
-                            //IN ALTERNATIVA SE PER QUESTO MESSAGGIO è NECESSARIA LA SYNC
-                            //PUOI SPOSTARE QUESTA PARTE QUI IN SERVERRECEIVER
-                            //
-                            //SE VIENE RICEVUTO UN MESSAGGIO CHE HA BISOGNO DI UN FOLLOWUP
-                            //LO SI CREA DIRETTAMENTE IN SERVER RECEIVER E LO SI RIMANDA
-                            //DIRETTAMENTE DA Lì E POI SI AGGIUNGE IN PLAYERTHREAD INSTANCE OF
-                            //PER QUESTO SECONDO MESSAGGIO
-                            //
-                            //DUNQUE FAI COSì:
-                            //METTI GIà DENTRO LA POSIZIONE DELLA CARTA NEL PRIMO MESSAGGIO
-                            //DEL CONTROLLO SE NE OCCUPA SEMPRE IL PLAYERTHREAD SENZA AVER BISOGNO
-                            //DI UN SECONDO MESSAGGIO
-
-                            /*int pos;
-                            try {
-                                //GUARDA SU
-                                ServerCardAvailabilityMessage serverMessage = (ServerCardAvailabilityMessage) receiver.readObject();
-
-                                System.out.println("In which position of your development card grid do you want to place the bought card?");
-                                System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
-                                System.out.println("Write a correct position between 0 and 2.");
-                                parameter = this.clientMain.getConsoleInput().nextLine();
-                                pos = Integer.parseInt(parameter);
-                                while (!serverMessage.getCardPositions().contains(pos)) {
-                                    System.out.println("Not valid position.");
-                                    //Position where to place the card on the playerboard
-                                    System.out.println("In which position of your development card grid do you want to place the bought card?");
-                                    System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
-                                    System.out.println("Write a correct position between 0 and 2.");
-                                    parameter = this.clientMain.getConsoleInput().nextLine();
-                                    pos = Integer.parseInt(parameter);
-                                }
-
-
-                                //Sending card position
-                                DevCardPositionMessage positionMessage = new DevCardPositionMessage(this.clientMain.getPlayerNumber(), pos);
-                                sender.writeObject(positionMessage);
-                                //GUARDA SU
-                                //sender.close();
-
-                                //NE TIENE CONTO PLAYERTHREAD
-                                //If server responds OK, action is correct
-                                boolean serverResponse = (boolean) receiver.readObject();
-                                if (serverResponse)
-                                    mainAction++;
-                                else System.out.println("Not valid action.");
-                            } catch (ClassNotFoundException e) {
-                                e.printStackTrace();
-                                break;
-                            }*/
                             break;
                         }
 
@@ -403,8 +275,6 @@ public class ServerSender extends Thread {
                                 System.err.println("Action already done");
                                 break;
                             }
-
-                            sender.writeObject(action);
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
@@ -623,32 +493,18 @@ public class ServerSender extends Thread {
                             }
                             if (checkActivateProduction(commandsList, activation, whichInput, whichOutput)) {
                                 for (int k = 0; k < 6; k++) {
+                                    ActivateProdMessage prodMessage;
                                     if (activation[k] == 0) {
-                                        InputResourceMessage inputResourceMessage = new InputResourceMessage(this.clientMain.getPlayerNumber(), null);
-                                        sender.writeObject(inputResourceMessage);
+                                        prodMessage= new ActivateProdMessage(this.clientMain.getPlayerNumber(), null, null);
                                     } else {
-                                        InputResourceMessage inputResourceMessage = new InputResourceMessage(this.clientMain.getPlayerNumber(), whichInput[k]);
-                                        sender.writeObject(inputResourceMessage);
-                                        if (k == 3 || k == 4 || k == 5) {
-                                            OutputChoiceResourceMessage outputChoiceResourceMessage = new OutputChoiceResourceMessage(this.clientMain.getPlayerNumber(), whichOutput[k]);
-                                            sender.writeObject(outputChoiceResourceMessage);
-                                            sender.close();
-                                        }
+                                        if (k <3) prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], null);
+                                        else prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], whichOutput[3-k]);
                                     }
+                                    sender.writeObject(prodMessage);
+                                    sender.close();
                                 }
                             } else break;
 
-                            //Va in server receiver
-                            //If server responds OK, action is correct
-                            /*try {
-                                boolean serverResponse = (boolean) receiver.readObject();
-                                if (serverResponse)
-                                    mainAction++;
-                                else System.out.println("Not valid action.");
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }*/
                             break;
                         }
                         default: {
@@ -676,10 +532,7 @@ public class ServerSender extends Thread {
         }
     }
 
-    public static boolean checkActivateProduction (String[]commandList,int[] activation, String[] whichInput, String[]
-            whichOutput){
-
-        PrintWriter out = new PrintWriter(System.out);
+    public static boolean checkActivateProduction (String[]commandList,int[] activation, String[] whichInput, String[] whichOutput) {
 
         int j;
 
@@ -690,7 +543,6 @@ public class ServerSender extends Thread {
                 return false;
             }
         }
-
 
         for (int index = 0; index < 6; index++) {
             if (activation[index] == 1) {
