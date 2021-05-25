@@ -248,7 +248,9 @@ public class PlayerThread implements Runnable {
                         //IN MARKET, GRID E ACTIVATE PRODUCTION
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                            this.gameController.broadcastMarket(new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket()));
+                            UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
+                            updateMarket.getMarket().printMarket();
+                            this.gameController.broadcastMarket(updateMarket);
                             this.mainAction = true;
                         }
                     }

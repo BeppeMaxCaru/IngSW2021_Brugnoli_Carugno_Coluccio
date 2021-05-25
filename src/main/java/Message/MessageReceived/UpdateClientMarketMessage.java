@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class UpdateClientMarketMessage extends Message implements Serializable {
 
-    Market market;
+    private final Market market;
 
     public UpdateClientMarketMessage(Market market) {
         this.market = market;

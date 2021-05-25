@@ -37,7 +37,7 @@ public class ServerReceiver extends Thread {
             Message object = null;
 
             try {
-                object = (Message) receiver.readObject();
+                object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -69,6 +69,9 @@ public class ServerReceiver extends Thread {
                 try {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
+                    updateClientMarketMessage.getMarket().printMarket();
+                    this.clientMain.getMarket().printMarket();
+                    System.out.println("Updated market");
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Error in receiver");
@@ -84,7 +87,7 @@ public class ServerReceiver extends Thread {
                     System.out.println("You made " + gameOverMessage.getWinner() + " victory points");
 
                     //SHUT BOTH THREAD AND STREAM
-                    receiver.close();
+                    this.receiver.close();
                     this.interrupt();
 
                 } catch (Exception e) {

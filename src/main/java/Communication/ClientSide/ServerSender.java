@@ -33,9 +33,7 @@ public class ServerSender extends Thread {
 
             try {
 
-                int endTurn = 0;
-                int quit = 0;
-                while (endTurn!=1 && quit!=1) {
+                while (!action.equalsIgnoreCase("END TURN") && !action.equalsIgnoreCase("QUIT")) {
 
                     System.out.println("Which action do you want to do?");
                     System.out.println("Write 'Play leader card'");
@@ -58,7 +56,7 @@ public class ServerSender extends Thread {
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
-                                sender.writeObject(playLeaderMessage);
+                                this.sender.writeObject(playLeaderMessage);
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -77,7 +75,7 @@ public class ServerSender extends Thread {
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
-                                sender.writeObject(normalDiscardLeaderMessage);
+                                this.sender.writeObject(normalDiscardLeaderMessage);
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -158,7 +156,7 @@ public class ServerSender extends Thread {
                             }
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
-                            sender.writeObject(resourcesMessage);
+                            this.sender.writeObject(resourcesMessage);
                             break;
 
                         }
@@ -263,7 +261,7 @@ public class ServerSender extends Thread {
 
                             //Sending Card request
                             BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
-                            sender.writeObject(buyCard);
+                            this.sender.writeObject(buyCard);
                             break;
                         }
 
@@ -491,7 +489,7 @@ public class ServerSender extends Thread {
                                         if (k <3) prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], null);
                                         else prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], whichOutput[3-k]);
                                     }
-                                    sender.writeObject(prodMessage);
+                                    this.sender.writeObject(prodMessage);
                                 }
                             } else break;
 
@@ -499,17 +497,12 @@ public class ServerSender extends Thread {
                         }
                         case "END TURN":
                         {
-                            System.out.println("Your turn has ended");
-                            EndTurnMessage endTurnMessage = new EndTurnMessage(this.clientMain.getPlayerNumber());
-                            sender.writeObject(endTurnMessage);
-                            sender.close();
-                            endTurn++;
+                            System.out.println("Your turn has ended, wait for other players");
                             break;
                         }
                         case "QUIT":
                         {
-                            System.out.println("You quit the game");
-                            quit++;
+                            System.out.println("Your left the Game");
                             break;
                         }
                         default: {

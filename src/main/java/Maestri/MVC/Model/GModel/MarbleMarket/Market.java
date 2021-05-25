@@ -17,7 +17,7 @@ public class Market implements Serializable {
     /**
      * Grid containing 12 marbles
      */
-    private final Marble[][] marketArrangement;
+    private Marble[][] marketArrangement;
     /**
      * 13th excess marble used to shuffle the market after someone draws
      */
@@ -90,6 +90,14 @@ public class Market implements Serializable {
      */
     public Marble getExcessMarble(){
         return excessMarble;
+    }
+
+    public void setExcessMarble(Marble excessMarble) {
+        this.excessMarble = excessMarble;
+    }
+
+    public void setMarketArrangement(Marble[][] marketArrangement) {
+        this.marketArrangement = marketArrangement;
     }
 
     /**
