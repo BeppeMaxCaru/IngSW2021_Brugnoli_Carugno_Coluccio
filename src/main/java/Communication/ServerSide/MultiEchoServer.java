@@ -42,7 +42,7 @@ public class MultiEchoServer {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.err.println(e.getMessage());// Porta non disponibile
-            System.out.println("Errore");
+            System.out.println("Errore sulla porta");
             return;
         }
         System.out.println("Server ready for Masters of Renaissance");

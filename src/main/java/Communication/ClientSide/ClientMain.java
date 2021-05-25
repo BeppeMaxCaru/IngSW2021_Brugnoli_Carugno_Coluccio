@@ -106,6 +106,7 @@ public class ClientMain {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Client non setta market iniziale");
+                return;
             }
 
             //Receives and sends starting resources message
@@ -157,6 +158,8 @@ public class ClientMain {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving setup");
+                    return;
                 }
 
                 //Sends second starting excess leader card to discard
@@ -179,6 +182,8 @@ public class ClientMain {
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Errore in scelta carta");
+                    return;
                 }
 
                 firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);

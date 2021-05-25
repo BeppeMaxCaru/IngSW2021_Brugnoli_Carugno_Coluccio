@@ -136,6 +136,7 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject( new ActionOutcomeMessage(true));
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("No starting resources message");
         }
 
         for(int cards=0; cards<2; cards++)
@@ -147,6 +148,7 @@ public class PlayerThread implements Runnable {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("No discard leader card message");
             }
         }
 
@@ -164,6 +166,8 @@ public class PlayerThread implements Runnable {
                 if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber()) this.sender.writeObject(new ActionOutcomeMessage(false));
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Error in receiving in PlayerThread");
+                break;
             }
 
             //Controllare var ausiliaria
@@ -185,6 +189,8 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 
@@ -202,6 +208,8 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 
@@ -236,6 +244,8 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 
@@ -269,6 +279,8 @@ public class PlayerThread implements Runnable {
 
                     } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 
@@ -303,6 +315,8 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 

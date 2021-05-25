@@ -56,6 +56,8 @@ public class ServerReceiver extends Thread {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
                 }
 
             }
@@ -66,6 +68,8 @@ public class ServerReceiver extends Thread {
                     this.clientMain.setMarket(updateClientMarket.getMarket());
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
                 }
             }
 
@@ -82,6 +86,8 @@ public class ServerReceiver extends Thread {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
                 }
 
             }
@@ -98,6 +104,8 @@ public class ServerReceiver extends Thread {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
                 }
 
             }
