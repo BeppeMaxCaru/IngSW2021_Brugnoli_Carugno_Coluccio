@@ -3,7 +3,6 @@ package Communication.ClientSide;
 import Message.*;
 import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
-import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.*;
@@ -519,6 +518,7 @@ public class ServerSender extends Thread {
                 System.err.println("Couldn't get I/O for connection to host");
                 System.exit(1);
             }
+
 
         } while (!action.equalsIgnoreCase("quit"));
 

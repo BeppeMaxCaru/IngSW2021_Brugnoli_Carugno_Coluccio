@@ -249,7 +249,6 @@ public class PlayerThread implements Runnable {
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
                             UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
-                            updateMarket.getMarket().printMarket();
                             this.gameController.broadcastMarket(updateMarket);
                             this.mainAction = true;
                         }

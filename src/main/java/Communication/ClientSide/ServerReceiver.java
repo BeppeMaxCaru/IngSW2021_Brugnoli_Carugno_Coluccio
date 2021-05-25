@@ -70,7 +70,6 @@ public class ServerReceiver extends Thread {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
                     updateClientMarketMessage.getMarket().printMarket();
-                    this.clientMain.getMarket().printMarket();
                     System.out.println("Updated market");
                 } catch (Exception e) {
                     e.printStackTrace();
