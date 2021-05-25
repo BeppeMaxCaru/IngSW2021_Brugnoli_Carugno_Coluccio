@@ -166,6 +166,8 @@ public class PlayerThread implements Runnable {
         //BISOGNA ANCORA GESTIRE IL BREAK
         //ASYNC PHASE
 
+        //I BROADCAST AVVENGONO SOLO IN QUESTA PHASE
+
         //Aggiornare aggiungendo i broadcast
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
@@ -240,20 +242,27 @@ public class PlayerThread implements Runnable {
                     //If he has 2 whiteMarbleLeaderCards
                     String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
 
+                    //
+                    //Qui invece che outcome vanno messi i broadcast
+                    //
+                    //SIA IN MARKET CHE GRID
+                    //
+                    //
+                    //
+                    //
+
+                    //Old
                     if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
                         this.sender.writeObject(new ActionOutcomeMessage(true));
                         this.mainAction = true;
                     }
                     else this.sender.writeObject(new ActionOutcomeMessage(false));
 
-                    //TEST WITH MARKET IN CLIENT
+                    //TEST BROADCAST
                     /*if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                        this.sender.writeObject(new UpdateClientMarket(this.gameController.getGameModel().getMarket()));
-                        this.gameController.broadcastMarket();
+                        this.gameController.broadcastMarket(new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket()));
                         this.mainAction = true;
                     }*/
-                    //else this.sender.writeObject(new ActionOutcomeMessage(false));
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -277,6 +286,7 @@ public class PlayerThread implements Runnable {
                     //From which shelf does the player pick resources
                     String[] deposit = buyCardMessage.getShelf();
 
+                    //OLD
                     if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
 
                         int pos = buyCardMessage.getPlayerboardPosition();
@@ -290,10 +300,23 @@ public class PlayerThread implements Runnable {
 
                     } else this.sender.writeObject(new ActionOutcomeMessage(false));
 
-                    } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Error in receiving in PlayerThread");
-                    break;
+                    //TEST BROADCAST
+                    /*if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
+
+                        int pos = buyCardMessage.getPlayerboardPosition();
+
+                        if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
+                            if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                this.gameController.broadcastDevCardsGrid(new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid()));
+                                this.mainAction = true;
+                            }
+                        }
+                    }*/
+
+                } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error in receiving in PlayerThread");
+                break;
                 }
             }
 
