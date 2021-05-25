@@ -53,11 +53,12 @@ public class GameController{
 
         this.gameModel = new GameModel(players, numOfPlayers);
 
-        for (int j=0;j<4;j++) {
+        for (int j=0;j<numOfPlayers;j++) {
             try {
-                assert playersPlaying[j] != null;
-                playerThreadExecutor.execute(playersPlaying[j]);
-                this.playerThreads.add(playersPlaying[j]);
+                if(playersPlaying[j]!=null) {
+                    playerThreadExecutor.execute(playersPlaying[j]);
+                    this.playerThreads.add(playersPlaying[j]);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Non c'è player");
@@ -109,12 +110,12 @@ public class GameController{
         if(c.contains("0"))
             if (currentPlayer.getPlayerBoard().getResourceMarbles()[0]==null) return false;
 
-        if(wlChoice.toUpperCase().contains("L"))
+        if(wlChoice.contains("L"))
             for(String keys : currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().keySet())
                 if (!keys.contains("extra")) return false;
 
         //If player picks row
-        if(choice.equalsIgnoreCase("R"))
+        if(choice.equalsIgnoreCase("ROW"))
         {
             if(c.length()<4) {
                 StringBuilder cBuilder = new StringBuilder(c);

@@ -33,7 +33,7 @@ public class PurpleMarble extends Marble implements Serializable {
         if(!discard)
         {
             //If the resource hasn't to be discarded it is increased in warehouse
-            if(wlChoice.equals("w"))
+            if(wlChoice.equals("W"))
             {
                 numOfResources++;
                 whResources.put("SERVANTS", numOfResources);

@@ -42,6 +42,7 @@ public class ServerReceiver extends Thread {
                 e.printStackTrace();
             }
 
+            /*
             if (object instanceof ActionOutcomeMessage) {
 
                 try {
@@ -61,6 +62,8 @@ public class ServerReceiver extends Thread {
                 }
 
             }
+
+             */
 
             if (object instanceof UpdateClientMarketMessage) {
                 try {

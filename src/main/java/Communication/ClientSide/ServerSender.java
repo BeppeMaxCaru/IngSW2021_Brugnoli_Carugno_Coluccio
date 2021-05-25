@@ -3,6 +3,7 @@ package Communication.ClientSide;
 import Message.*;
 import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
+import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.*;
@@ -32,19 +33,21 @@ public class ServerSender extends Thread {
 
             try {
 
-                int mainAction = 0;
-                while (!(action.equalsIgnoreCase("END TURN") || action.equalsIgnoreCase("QUIT"))) {
+                int endTurn = 0;
+                int quit = 0;
+                while (endTurn!=1 && quit!=1) {
 
                     System.out.println("Which action do you want to do?");
                     System.out.println("Write 'Play leader card'");
-                    System.out.println("Write 'Discard leader card");
-                    System.out.println("Write 'Pick resources from market'");
+                    System.out.println("Write 'Discard leader card'");
+                    System.out.println("Write 'pick resources from Market'");
                     System.out.println("Write 'Buy development card'");
                     System.out.println("Write 'Activate production power'");
-                    System.out.println("Write 'End turn' at the end of your turn");
+                    System.out.println("Write 'END TURN' at the end of your turn");
                     action = this.clientMain.getConsoleInput().nextLine().toUpperCase();
 
                     switch (action) {
+                        case "P":
                         case "PLAY LEADER CARD": {
                             System.out.println("Which card do you want to play?");
                             System.out.println("Write 0 or 1.");
@@ -63,6 +66,7 @@ public class ServerSender extends Thread {
                             }
                             break;
                         }
+                        case "D":
                         case "DISCARD LEADER CARD": {
                             System.out.println("Which card do you want to discard?");
                             System.out.println("Write 0 or 1.");
@@ -81,12 +85,8 @@ public class ServerSender extends Thread {
                             }
                             break;
                         }
+                        case "M":
                         case "PICK RESOURCES FROM MARKET": {
-
-                            if (mainAction == 1) {
-                                System.err.println("Action already done");
-                                break;
-                            }
 
                             this.clientMain.getMarket().printMarket();
 
@@ -159,15 +159,12 @@ public class ServerSender extends Thread {
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
                             sender.writeObject(resourcesMessage);
+                            break;
 
                         }
 
+                        case "B":
                         case "BUY DEVELOPMENT CARD": {
-
-                            if (mainAction == 1) {
-                                System.err.println("Action already done");
-                                break;
-                            }
 
                             this.clientMain.getDevelopmentCardsDecksGrid().printGrid();
 
@@ -270,12 +267,8 @@ public class ServerSender extends Thread {
                             break;
                         }
 
+                        case "A":
                         case "ACTIVATE PRODUCTION POWER": {
-
-                            if (mainAction == 1) {
-                                System.err.println("Action already done");
-                                break;
-                            }
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];
@@ -499,10 +492,24 @@ public class ServerSender extends Thread {
                                         else prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], whichOutput[3-k]);
                                     }
                                     sender.writeObject(prodMessage);
-                                    sender.close();
                                 }
                             } else break;
 
+                            break;
+                        }
+                        case "END TURN":
+                        {
+                            System.out.println("Your turn has ended");
+                            EndTurnMessage endTurnMessage = new EndTurnMessage(this.clientMain.getPlayerNumber());
+                            sender.writeObject(endTurnMessage);
+                            sender.close();
+                            endTurn++;
+                            break;
+                        }
+                        case "QUIT":
+                        {
+                            System.out.println("You quit the game");
+                            quit++;
                             break;
                         }
                         default: {

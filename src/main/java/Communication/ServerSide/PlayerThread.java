@@ -172,7 +172,7 @@ public class PlayerThread implements Runnable {
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
 
-            Message object = null;
+            Message object;
 
             //Receive object
             //Check current player here
@@ -233,36 +233,25 @@ public class PlayerThread implements Runnable {
                 try {
                     MarketResourcesMessage marketResourcesMessage = (MarketResourcesMessage) object;
 
-                    //Row/column choice
-                    String rowOrColumnChoice = marketResourcesMessage.getRowColumnChoice();
-                    //Row/column index
-                    int index = marketResourcesMessage.getIndex();
-                    //Warehouse/leaderCard choice
-                    String wlChoice = marketResourcesMessage.getWarehouseLeaderChoice();
-                    //If he has 2 whiteMarbleLeaderCards
-                    String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
+                    if(!this.mainAction)
+                    {
+                        //Row/column choice
+                        String rowOrColumnChoice = marketResourcesMessage.getRowColumnChoice();
+                        //Row/column index
+                        int index = marketResourcesMessage.getIndex();
+                        //Warehouse/leaderCard choice
+                        String wlChoice = marketResourcesMessage.getWarehouseLeaderChoice();
+                        //If he has 2 whiteMarbleLeaderCards
+                        String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
 
-                    //
-                    //Qui invece che outcome vanno messi i broadcast
-                    //
-                    //SIA IN MARKET CHE GRID
-                    //
-                    //
-                    //
-                    //
+                        //Qui invece che outcome vanno messi i broadcast
+                        //IN MARKET, GRID E ACTIVATE PRODUCTION
 
-                    //Old
-                    if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                        this.sender.writeObject(new ActionOutcomeMessage(true));
-                        this.mainAction = true;
+                        if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
+                            this.gameController.broadcastMarket(new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket()));
+                            this.mainAction = true;
+                        }
                     }
-                    else this.sender.writeObject(new ActionOutcomeMessage(false));
-
-                    //TEST BROADCAST
-                    /*if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                        this.gameController.broadcastMarket(new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket()));
-                        this.mainAction = true;
-                    }*/
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -276,42 +265,30 @@ public class PlayerThread implements Runnable {
                 try {
                     BuyCardMessage buyCardMessage = (BuyCardMessage) object;
 
-                    //DevCard colour
-                    String colour = buyCardMessage.getColour();
-                    int column = this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
-                    //DevCard level
-                    int level = 3 - buyCardMessage.getLevel();
-                    //How much resources does the player spend
-                    int[] quantity = buyCardMessage.getQuantity();
-                    //From which shelf does the player pick resources
-                    String[] deposit = buyCardMessage.getShelf();
+                    if(!this.mainAction)
+                    {
+                        //DevCard colour
+                        String colour = buyCardMessage.getColour();
+                        int column = this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
+                        //DevCard level
+                        int level = 3 - buyCardMessage.getLevel();
+                        //How much resources does the player spend
+                        int[] quantity = buyCardMessage.getQuantity();
+                        //From which shelf does the player pick resources
+                        String[] deposit = buyCardMessage.getShelf();
 
-                    //OLD
-                    if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
+                        if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
 
-                        int pos = buyCardMessage.getPlayerboardPosition();
+                            int pos = buyCardMessage.getPlayerboardPosition();
 
-                        if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
-                            if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
-                                this.sender.writeObject(new ActionOutcomeMessage(true));
-                                this.mainAction = true;
-                            } else this.sender.writeObject(new ActionOutcomeMessage(false));
-                        } else this.sender.writeObject(new ActionOutcomeMessage(false));
-
-                    } else this.sender.writeObject(new ActionOutcomeMessage(false));
-
-                    //TEST BROADCAST
-                    /*if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
-
-                        int pos = buyCardMessage.getPlayerboardPosition();
-
-                        if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
-                            if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
-                                this.gameController.broadcastDevCardsGrid(new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid()));
-                                this.mainAction = true;
+                            if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
+                                if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                    this.mainAction = true;
+                                    this.gameController.broadcastDevCardsGrid(new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid()));
+                                }
                             }
                         }
-                    }*/
+                    }
 
                 } catch (Exception e) {
                 e.printStackTrace();
@@ -325,29 +302,35 @@ public class PlayerThread implements Runnable {
                 try {
                     ActivateProdMessage prodMessage = (ActivateProdMessage) object;
 
-                    int[] activation = new int[6];
-                    String[] whichInput = new String[6];
-                    int[] whichOutput = new int[3];
+                    if(!this.mainAction)
+                    {
+                        int[] activation = new int[6];
+                        String[] whichInput = new String[6];
+                        int[] whichOutput = new int[3];
 
-                    for (int k = 0; k < 6; k++) {
-                        if (prodMessage.getInputs() != null) {
-                            activation[k] = 1;
-                            whichInput[k] = prodMessage.getInputs();
-                            if (k >= 3) {
-                                whichOutput[k - 3] = Integer.parseInt(prodMessage.getOutputs());
+                        for (int k = 0; k < 6; k++) {
+                            if (prodMessage.getInputs() != null) {
+                                activation[k] = 1;
+                                whichInput[k] = prodMessage.getInputs();
+                                if (k >= 3) {
+                                    whichOutput[k - 3] = Integer.parseInt(prodMessage.getOutputs());
+                                }
+                            } else {
+                                activation[k] = 0;
+                                whichInput[k] = "";
+                                whichOutput[k] = -1;
                             }
-                        } else {
-                            activation[k] = 0;
-                            whichInput[k] = "";
-                            whichOutput[k] = -1;
                         }
+
+                        if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
+                            this.sender.writeObject(new ActionOutcomeMessage(true));
+                            this.mainAction = true;
+                        }
+                        else this.sender.writeObject(new ActionOutcomeMessage(false));
                     }
 
-                    if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
-                        this.sender.writeObject(new ActionOutcomeMessage(true));
-                        this.mainAction = true;
-                    }
-                    else this.sender.writeObject(new ActionOutcomeMessage(false));
+                    //BROADCAST
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
