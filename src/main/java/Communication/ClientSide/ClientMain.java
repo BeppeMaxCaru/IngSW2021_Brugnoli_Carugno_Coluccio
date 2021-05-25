@@ -3,12 +3,12 @@ package Communication.ClientSide;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.*;
-import Message.MessageReceived.UpdateClientMarket;
+import Message.MessageReceived.UpdateClientDevCardGridMessage;
+import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
-import java.nio.file.ClosedFileSystemException;
 import java.util.*;
 
 public class ClientMain {
@@ -22,6 +22,7 @@ public class ClientMain {
 
     //TEST MEX MARKET
     private Market market;
+    private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
 
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
@@ -101,11 +102,20 @@ public class ClientMain {
             }
 
             try {
-                UpdateClientMarket updateClientMarket = (UpdateClientMarket) receiver.readObject();
-                this.market = updateClientMarket.getMarket();
+                UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) receiver.readObject();
+                this.market = updateClientMarketMessage.getMarket();
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Client non setta market iniziale");
+                return;
+            }
+
+            try {
+                UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) receiver.readObject();
+                this.developmentCardsDecksGrid = updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Client non riesce a settare grid iniziale");
                 return;
             }
 
@@ -215,6 +225,14 @@ public class ClientMain {
 
     public void setMarket(Market market) {
         this.market = market;
+    }
+
+    public DevelopmentCardsDecksGrid getDevelopmentCardsDecksGrid() {
+        return this.developmentCardsDecksGrid;
+    }
+
+    public void setDevelopmentCardsDecksGrid(DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
+        this.developmentCardsDecksGrid = developmentCardsDecksGrid;
     }
 }
 

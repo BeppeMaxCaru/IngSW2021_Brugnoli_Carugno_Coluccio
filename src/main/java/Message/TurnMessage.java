@@ -23,7 +23,7 @@ public class TurnMessage extends Message implements Serializable {
 
     public void printGrid() {
         out.println("DEVELOPMENT CARDS GRID:");
-        gameModel.getDevelopmentCardsDecksGrid().printGrid(out);
+        gameModel.getDevelopmentCardsDecksGrid().printGrid();
     }
 
     public void printResource() {

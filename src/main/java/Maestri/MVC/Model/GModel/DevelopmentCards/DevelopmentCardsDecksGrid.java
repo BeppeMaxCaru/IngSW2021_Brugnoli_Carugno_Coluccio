@@ -1,12 +1,13 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Represents all the development cards of the game
  */
-public class DevelopmentCardsDecksGrid {
+public class DevelopmentCardsDecksGrid implements Serializable {
     /**
      * All the development cards grouped orderly in decks according to their level and colour
      */
@@ -370,41 +371,41 @@ public class DevelopmentCardsDecksGrid {
         }
     }
 
-    public void printGrid(PrintWriter out){
+    public void printGrid(){
 
         for(int row=0; row<3; row++)
         {
             int rowNumber=3-row;
-            out.println("| LEVEL "+rowNumber+" - GREEN       | LEVEL "+rowNumber+" - BLUE        | LEVEL "+rowNumber+" - YELLOW      | LEVEL "+rowNumber+" - PURPLE      |");
+            System.out.println("| LEVEL "+rowNumber+" - GREEN       | LEVEL "+rowNumber+" - BLUE        | LEVEL "+rowNumber+" - YELLOW      | LEVEL "+rowNumber+" - PURPLE      |");
             for(int k=0; k<4; k++){
                 if(this.developmentCardsDecks[row][k][0]!=null)
-                    out.print("| Req: "+this.getDevelopmentCardsDecks()[row][k][0].printCardReq()+" ");
-                else out.print("|                       ");
+                    System.out.print("| Req: "+this.getDevelopmentCardsDecks()[row][k][0].printCardReq()+" ");
+                else System.out.print("|                       ");
             }
-            out.print("|");
-            out.println();
+            System.out.print("|");
+            System.out.println();
 
             for(int k=0; k<4; k++){
                 if(this.developmentCardsDecks[row][k][0]!=null)
-                    out.print("| "+this.getDevelopmentCardsDecks()[row][k][0].printCardProductionPower()+" ");
-                else out.print("|                       ");
+                    System.out.print("| "+this.getDevelopmentCardsDecks()[row][k][0].printCardProductionPower()+" ");
+                else System.out.print("|                       ");
             }
-            out.print("|");
-            out.println();
+            System.out.print("|");
+            System.out.println();
 
             for(int k=0; k<4; k++){
                 if(this.developmentCardsDecks[row][k][0]!=null)
                 {
-                    out.print("| Victory Points: "+this.getDevelopmentCardsDecks()[row][k][0].getVictoryPoints()+"    ");
+                    System.out.print("| Victory Points: "+this.getDevelopmentCardsDecks()[row][k][0].getVictoryPoints()+"    ");
                     if(this.developmentCardsDecks[row][k][0].getVictoryPoints()<10)
-                        out.print(" ");
+                        System.out.print(" ");
                 }
-                else out.print("|                       ");
+                else System.out.print("|                       ");
             }
-            out.print("|");
-            out.println();
+            System.out.print("|");
+            System.out.println();
 
-            out.println();
+            System.out.println();
         }
 
     }

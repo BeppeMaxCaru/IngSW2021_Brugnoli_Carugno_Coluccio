@@ -5,7 +5,7 @@ import Message.Message;
 import Message.MessageReceived.ActionOutcomeMessage;
 import Message.MessageReceived.GameOverMessage;
 import Message.MessageReceived.QuitMessage;
-import Message.MessageReceived.UpdateClientMarket;
+import Message.MessageReceived.UpdateClientMarketMessage;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -62,10 +62,10 @@ public class ServerReceiver extends Thread {
 
             }
 
-            if (object instanceof UpdateClientMarket) {
+            if (object instanceof UpdateClientMarketMessage) {
                 try {
-                    UpdateClientMarket updateClientMarket = (UpdateClientMarket) object;
-                    this.clientMain.setMarket(updateClientMarket.getMarket());
+                    UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
+                    this.clientMain.setMarket(updateClientMarketMessage.getMarket());
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Error in receiver");

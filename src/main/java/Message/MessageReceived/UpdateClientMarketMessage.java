@@ -5,11 +5,11 @@ import Message.Message;
 
 import java.io.Serializable;
 
-public class UpdateClientMarket extends Message implements Serializable {
+public class UpdateClientMarketMessage extends Message implements Serializable {
 
     Market market;
 
-    public UpdateClientMarket(Market market) {
+    public UpdateClientMarketMessage(Market market) {
         this.market = market;
     }
 

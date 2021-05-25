@@ -4,14 +4,14 @@ import Maestri.MVC.GameController;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 import Message.MessageReceived.ActionOutcomeMessage;
-import Message.MessageReceived.UpdateClientMarket;
+import Message.MessageReceived.UpdateClientDevCardGridMessage;
+import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class PlayerThread implements Runnable {
@@ -110,13 +110,24 @@ public class PlayerThread implements Runnable {
             System.out.println("No nickname");
         }
 
-        //FIRST MESSAGE TO SETUP CLIENT MARKET, GRID, ECC
+
+        //in fase sync messaggio singolo in fase async broadcast
+        //FIRST MESSAGE TO SETUP CLIENT MARKET
         try {
-            UpdateClientMarket updateClientMarket = new UpdateClientMarket(this.gameController.getGameModel().getMarket());
-            this.sender.writeObject(updateClientMarket);
+            UpdateClientMarketMessage updateClientMarketMessage = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
+            this.sender.writeObject(updateClientMarketMessage);
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Non vengono inizializzati mercato e grid in client");
+            System.out.println("Non viene broadcastato mercato in PlayerThread");
+        }
+
+        //SECOND MESSAGE TO SETUP CLIENT MARKET
+        try {
+            UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
+            this.sender.writeObject(updateClientDevCardGridMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Non viene broadcastata grid in PlayerThread");
         }
 
         try {
@@ -154,6 +165,8 @@ public class PlayerThread implements Runnable {
 
         //BISOGNA ANCORA GESTIRE IL BREAK
         //ASYNC PHASE
+
+        //Aggiornare aggiungendo i broadcast
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
 

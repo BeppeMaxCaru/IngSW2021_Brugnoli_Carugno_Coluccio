@@ -169,6 +169,8 @@ public class ServerSender extends Thread {
                                 break;
                             }
 
+                            this.clientMain.getDevelopmentCardsDecksGrid().printGrid();
+
                             System.out.println("Which card do you want to buy?");
                             System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
                             String colour = this.clientMain.getConsoleInput().nextLine().toUpperCase();

@@ -3,7 +3,8 @@ package Maestri.MVC;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Message.MessageReceived.UpdateClientMarket;
+import Message.MessageReceived.UpdateClientDevCardGridMessage;
+import Message.MessageReceived.UpdateClientMarketMessage;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -59,6 +60,7 @@ public class GameController{
                 this.playerThreads.add(playersPlaying[j]);
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Non c'è player");
             }
         }
 
@@ -340,17 +342,32 @@ public class GameController{
         return this.gameModel;
     }
 
-    public void broadcastMarket () {
+    public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
 
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {
-                playerThread.getSender().writeObject(new UpdateClientMarket(this.gameModel.getMarket()));
+                playerThread.getSender().writeObject(updateClientMarketMessage);
             } catch (Exception e) {
                 e.printStackTrace();
-                System.err.println("Market broadcast not working");
+                System.err.println("Market broadcast not working for " + playerThread.getNickName());
             }
         }
 
     }
+
+    public void broadcastDevCardsGrid (UpdateClientDevCardGridMessage updateClientDevCardGridMessage) {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().writeObject(updateClientDevCardGridMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Grid broadcast not working for " + playerThread.getNickName());
+            }
+        }
+
+    }
+
 }
