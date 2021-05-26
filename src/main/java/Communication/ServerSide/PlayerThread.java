@@ -153,7 +153,7 @@ public class PlayerThread implements Runnable {
         for(int cards=0; cards<2; cards++)
         {
             try {
-                DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) receiver.readObject();
+                DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
                 this.sender.writeObject(new ActionOutcomeMessage(true));
 
@@ -291,8 +291,9 @@ public class PlayerThread implements Runnable {
 
                             if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                    UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
+                                    this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
                                     this.mainAction = true;
-                                    this.gameController.broadcastDevCardsGrid(new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid()));
                                 }
                             }
                         }

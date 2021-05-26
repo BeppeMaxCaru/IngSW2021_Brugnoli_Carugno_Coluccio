@@ -348,6 +348,7 @@ public class GameController{
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {
+                //Reset avviene a inizio while in playerThread
                 //playerThread.getSender().reset();
                 playerThread.getSender().writeObject(updateClientMarketMessage);
             } catch (Exception e) {

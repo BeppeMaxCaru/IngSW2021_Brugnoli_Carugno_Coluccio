@@ -133,11 +133,11 @@ public class ClientMain {
                 startingResources.put(3, 2);
 
                 System.out.println();
-                System.out.println("Match has started, your player number is " + playerNumber);
+                System.out.println("Match has started, your player number is " + this.playerNumber);
 
                 ArrayList<String> playerStartingResources = new ArrayList<>();
                 String res;
-                for (int resources = 0; resources < startingResources.get(playerNumber); resources++) {
+                for (int resources = 0; resources < startingResources.get(this.playerNumber); resources++) {
                     System.out.println("Which starting resource do you want to pick?");
                     res = consoleInput.nextLine().toUpperCase();
                     while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS")) {
@@ -149,7 +149,7 @@ public class ClientMain {
                 }
 
                 //Send player number and starting resources
-                StartingResourcesMessage resourcesMessage = new StartingResourcesMessage(playerNumber, playerStartingResources);
+                StartingResourcesMessage resourcesMessage = new StartingResourcesMessage(this.playerNumber, playerStartingResources);
                 sender.writeObject(resourcesMessage);
 
                 //Sends first starting excess leader card to discard
@@ -173,7 +173,7 @@ public class ClientMain {
                 }
 
                 //Sends second starting excess leader card to discard
-                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, card);
                 sender.writeObject(firstDiscardLeaderMessage);
 
                 System.out.println("Which starting leader card do you want to discard?");
@@ -186,7 +186,7 @@ public class ClientMain {
                 card = 0;
                 try {
                     card = consoleInput.nextInt();
-                    while (card < 0 || card > 2) {
+                    while (card < 0 || card > 3) {
                         System.out.println("Chose a correct card.");
                         card = consoleInput.nextInt();
                     }
@@ -196,7 +196,7 @@ public class ClientMain {
                     return;
                 }
 
-                firstDiscardLeaderMessage = new DiscardLeaderMessage(playerNumber, card);
+                firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, card);
                 sender.writeObject(firstDiscardLeaderMessage);
 
             } catch (Exception e) {

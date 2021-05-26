@@ -3,10 +3,7 @@ package Communication.ClientSide;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.Message;
-import Message.MessageReceived.ActionOutcomeMessage;
-import Message.MessageReceived.GameOverMessage;
-import Message.MessageReceived.QuitMessage;
-import Message.MessageReceived.UpdateClientMarketMessage;
+import Message.MessageReceived.*;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -75,8 +72,23 @@ public class ServerReceiver extends Thread {
                     //updateClientMarketMessage.getMarket().printMarket();
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
                     //updateClientMarketMessage.getMarket().printMarket();
-                    this.clientMain.getMarket().printMarket();
+                    //this.clientMain.getMarket().printMarket();
                     System.out.println("Updated market");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
+                }
+            }
+
+            if (object instanceof UpdateClientDevCardGridMessage) {
+                try {
+                    UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) object;
+                    //IL MERCATO NON VIENE SERIALIZZATO
+                    //ADESSO SI CONRESET
+                    this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
+                    //updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid().printGrid();
+                    // System.out.println("Updated dev card grid");
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Error in receiver");
