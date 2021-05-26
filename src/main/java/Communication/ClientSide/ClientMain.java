@@ -159,7 +159,7 @@ public class ClientMain {
                     System.out.println("Write " + i + " for this: ");
                     startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
                 }
-                int card = 0;
+                int card;
                 try {
                     card = consoleInput.nextInt();
                     while (card < 0 || card > 3) {
@@ -178,15 +178,18 @@ public class ClientMain {
 
                 System.out.println("Which starting leader card do you want to discard?");
                 for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
-                    if(i != card) {
+                    if(i < card) {
                         System.out.println("Write " + i + " for this: ");
                         startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
+                    } else if (i>card) {
+                        int k=i-1;
+                        System.out.println("Write " + k + " for this: ");
+                        startingMessage.getLeaderCards()[k].printLeaderCard(System.out);
                     }
                 }
-                card = 0;
                 try {
                     card = consoleInput.nextInt();
-                    while (card < 0 || card > 3) {
+                    while (card < 0 || card > 2) {
                         System.out.println("Chose a correct card.");
                         card = consoleInput.nextInt();
                     }
