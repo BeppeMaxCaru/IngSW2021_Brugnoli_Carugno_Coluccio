@@ -1,12 +1,13 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Contains the resources that players receive from the market
  */
-public class WareHouse {
+public class WareHouse implements Serializable {
 
     /**
      * Contains the resources types and their respective quantity

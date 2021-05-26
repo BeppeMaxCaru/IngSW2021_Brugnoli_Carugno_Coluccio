@@ -4,12 +4,13 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Includes all the player's game components
  */
-public class Playerboard {
+public class Playerboard implements Serializable {
 
     /**
      * Number of development cards bought
@@ -271,5 +272,60 @@ public class Playerboard {
         }
         //If true the player has enough resource to buy the card
         return true;
+    }
+
+    public void printAll(){
+        System.out.println("YOUR RESOURCES:");
+        System.out.println("COINS   : "+this.getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("COINS")+" in chest");
+        System.out.println("SERVANTS: "+this.getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("SERVANTS")+" in chest");
+        System.out.println("SHIELDS : "+this.getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("SHIELDS")+" in chest");
+        System.out.println("STONES  : "+this.getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
+                +this.getChest().getChestResources().get("STONES")+" in chest");
+        System.out.println();
+
+        System.out.println("YOUR DEVELOPMENT CARDS: ");
+        this.printPlayerCards();
+        System.out.println();
+        System.out.println("YOUR FAITH PATH POSITION    : "+this.getFaithPath().getCrossPosition());
+
+    }
+
+    public void printPlayerCards()
+    {
+        int[] upper = new int[3];
+
+        for(int col=0; col<3; col++)
+        {
+            int row;
+            for(row=2; row>0; row--)
+                if(this.getPlayerboardDevelopmentCards()[row][col] != null)
+                    break;
+            if(row==-1)
+                row=0;
+            upper[col]=row;
+        }
+
+        for(int k=0; k<3; k++)
+        {
+            if(this.getPlayerboardDevelopmentCards()[upper[k]][k]!=null)
+                System.out.print("| "+this.getPlayerboardDevelopmentCards()[upper[k]][k].printCardProductionPower()+" ");
+            else System.out.print("|                       ");
+        }
+        System.out.print("|");
+        System.out.println();
+
+        for(int k=0; k<3; k++) {
+            if (this.getPlayerboardDevelopmentCards()[upper[k]][k] != null) {
+                System.out.print("| Victory Points: " + this.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() + "    ");
+                if (this.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() < 10)
+                    System.out.print(" ");
+            } else System.out.print("|                       ");
+        }
+        System.out.print("|");
+        System.out.println();
+
     }
 }

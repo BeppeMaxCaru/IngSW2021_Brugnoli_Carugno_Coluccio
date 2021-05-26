@@ -300,61 +300,6 @@ public class Player
         return numResources;
     }
 
-    public void printPlayerCards(PrintWriter out)
-    {
-        int[] upper = new int[3];
-
-        for(int col=0; col<3; col++)
-        {
-            int row;
-            for(row=2; row>0; row--)
-                if(this.playerBoard.getPlayerboardDevelopmentCards()[row][col] != null)
-                    break;
-            if(row==-1)
-                row=0;
-            upper[col]=row;
-        }
-
-        for(int k=0; k<3; k++)
-        {
-            if(this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k]!=null)
-                out.print("| "+this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].printCardProductionPower()+" ");
-            else out.print("|                       ");
-        }
-        out.print("|");
-        out.println();
-
-        for(int k=0; k<3; k++) {
-            if (this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k] != null) {
-                out.print("| Victory Points: " + this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() + "    ");
-                if (this.playerBoard.getPlayerboardDevelopmentCards()[upper[k]][k].getVictoryPoints() < 10)
-                    out.print(" ");
-            } else out.print("|                       ");
-        }
-        out.print("|");
-        out.println();
-
-    }
-
-    public void printAll(PrintWriter out){
-        out.println("YOUR RESOURCES:");
-        out.println("COINS   : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
-                +this.getPlayerBoard().getChest().getChestResources().get("COINS")+" in chest");
-        out.println("SERVANTS: "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
-                +this.getPlayerBoard().getChest().getChestResources().get("SERVANTS")+" in chest");
-        out.println("SHIELDS : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
-                +this.getPlayerBoard().getChest().getChestResources().get("SHIELDS")+" in chest");
-        out.println("STONES  : "+this.getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
-                +this.getPlayerBoard().getChest().getChestResources().get("STONES")+" in chest");
-        out.println();
-
-        out.println("YOUR DEVELOPMENT CARDS: ");
-        this.printPlayerCards(out);
-        out.println();
-        out.println("YOUR FAITH PATH POSITION    : "+this.getPlayerBoard().getFaithPath().getCrossPosition());
-
-    }
-
     //Closing stream and socket
     public void disconnectClient() {
         try {

@@ -1,7 +1,6 @@
 package Communication.ClientSide;
 
 import Communication.ServerSide.PlayerThread;
-import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.Message;
 import Message.MessageReceived.*;
 
@@ -40,19 +39,11 @@ public class ServerReceiver extends Thread {
                 e.printStackTrace();
             }
 
-            /*
-            if (object instanceof ActionOutcomeMessage) {
+
+            if (object instanceof NotYourTurnMessage) {
 
                 try {
-                    ActionOutcomeMessage actionOutcomeMessage = (ActionOutcomeMessage) object;
-                    boolean outcome = actionOutcomeMessage.isActionOutcome();
-
-                    if (outcome) {
-                        System.out.println("Action successfully performed");
-                    } else {
-                        System.out.println("Action not valid");
-                    }
-
+                    System.out.println("It's not your turn.");
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Error in receiver");
@@ -61,7 +52,6 @@ public class ServerReceiver extends Thread {
 
             }
 
-             */
 
             if (object instanceof UpdateClientMarketMessage) {
                 try {
@@ -89,6 +79,30 @@ public class ServerReceiver extends Thread {
                     this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
                     //updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid().printGrid();
                     // System.out.println("Updated dev card grid");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
+                }
+            }
+
+            if (object instanceof UpdateClientLeaderCardsMessage) {
+                try {
+                    UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) object;
+                    this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error in receiver");
+                    break;
+                }
+            }
+
+            if (object instanceof UpdateClientPlayerBoardMessage) {
+                try {
+
+                    UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage) object;
+                    this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     System.out.println("Error in receiver");

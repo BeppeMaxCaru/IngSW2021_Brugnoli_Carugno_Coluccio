@@ -49,7 +49,14 @@ public class ServerSender extends Thread {
                         case "P":
                         case "PLAY LEADER CARD": {
                             System.out.println("Which card do you want to play?");
-                            System.out.println("Write 0 or 1.");
+                            for(int index =0; index<this.clientMain.getLeaderCards().length; index++)
+                            {
+                                if(this.clientMain.getLeaderCards()[index]!=null && !this.clientMain.getLeaderCards()[index].isPlayed())
+                                {
+                                    System.out.println("Write "+index+" for this");
+                                    this.clientMain.getLeaderCards()[index].printLeaderCard();
+                                }
+                            }
                             String parameter = this.clientMain.getConsoleInput().nextLine();
                             try {
                                 //Checks if the leader card position exists
@@ -68,7 +75,14 @@ public class ServerSender extends Thread {
                         case "D":
                         case "DISCARD LEADER CARD": {
                             System.out.println("Which card do you want to discard?");
-                            System.out.println("Write 0 or 1.");
+                            for(int index =0; index<this.clientMain.getLeaderCards().length; index++)
+                            {
+                                if(this.clientMain.getLeaderCards()[index]!=null && !this.clientMain.getLeaderCards()[index].isPlayed())
+                                {
+                                    System.out.println("Write "+index+" for this");
+                                    this.clientMain.getLeaderCards()[index].printLeaderCard();
+                                }
+                            }
                             String parameter = this.clientMain.getConsoleInput().nextLine();
                             try {
                                 //Checks if the leader card position exists
@@ -137,6 +151,12 @@ public class ServerSender extends Thread {
                                 break;
                             }
 
+                            System.out.println("YOUR ACTIVATED LEADER CARDS:");
+                            for(int ind =0; ind<this.clientMain.getLeaderCards().length; ind++)
+                                if(this.clientMain.getLeaderCards()[ind]!=null && this.clientMain.getLeaderCards()[ind].isPlayed())
+                                    this.clientMain.getLeaderCards()[ind].printLeaderCard();
+                            System.out.println();
+
                             //Receives position of leader cards to activate to receive a resource from a white marble
                             System.out.println("If you activated both your white marble resources leader card, which one do you want to activate for each white marble you picked?");
                             System.out.println("if you activated only one white marble leader card, do you want to activate it?");
@@ -165,6 +185,7 @@ public class ServerSender extends Thread {
                         case "B":
                         case "BUY DEVELOPMENT CARD": {
 
+                            this.clientMain.getPlayerboard().printAll();
                             this.clientMain.getDevelopmentCardsDecksGrid().printGrid();
 
                             System.out.println("Which card do you want to buy?");
@@ -208,9 +229,9 @@ public class ServerSender extends Thread {
                             String parameter = "";
                             while (!parameter.equalsIgnoreCase("STOP")) {
 
-                                System.out.println("Which resource do you want to pick to pay the development card?");
+                                System.out.println("Which resource do you want to pick to pay the development card? Write STOP at the end.");
                                 parameter = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                                if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS")) {
+                                if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS") || parameter.equals("STOP")) {
                                     int index = resources.get(parameter);
 
                                     //Receives now quantity
@@ -226,6 +247,13 @@ public class ServerSender extends Thread {
                                         System.err.println("Not valid parameter");
                                         break;
                                     }
+
+                                    //Player available leader cards
+                                    System.out.println("YOUR ACTIVATED LEADER CARDS:");
+                                    for(int ind =0; ind<this.clientMain.getLeaderCards().length; ind++)
+                                        if(this.clientMain.getLeaderCards()[ind]!=null && this.clientMain.getLeaderCards()[ind].isPlayed())
+                                            this.clientMain.getLeaderCards()[ind].printLeaderCard();
+                                    System.out.println();
 
                                     for (int z = 0; z < quantity[index]; z++) {
                                         //Keeps asking a place to take from resources
@@ -268,6 +296,14 @@ public class ServerSender extends Thread {
 
                         case "A":
                         case "ACTIVATE PRODUCTION POWER": {
+
+                            this.clientMain.getPlayerboard().printAll();
+                            System.out.println("YOUR ACTIVATED LEADER CARDS :");
+                            for(int ind =0; ind<this.clientMain.getLeaderCards().length; ind++)
+                                if(this.clientMain.getLeaderCards()[ind]!=null && this.clientMain.getLeaderCards()[ind].isPlayed())
+                                    this.clientMain.getLeaderCards()[ind].printLeaderCard();
+                            System.out.println();
+
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
                             String[] commandsList = new String[6];

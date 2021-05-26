@@ -27,7 +27,7 @@ public class TurnMessage extends Message implements Serializable {
     }
 
     public void printResource() {
-        gameModel.getPlayers()[this.playerNumber].printAll(out);
+        gameModel.getPlayers()[this.playerNumber].getPlayerBoard().printAll();
     }
 
     public int getPlayerNumber() { return this.playerNumber; }

@@ -1,9 +1,11 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
+import java.io.Serializable;
+
 /**
  * Composes the faith path
  */
-public class Cell {
+public class Cell implements Serializable {
 
     /**
      * Victory points of the cell

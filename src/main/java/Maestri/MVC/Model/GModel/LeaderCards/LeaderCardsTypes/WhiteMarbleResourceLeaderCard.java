@@ -4,7 +4,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
-import java.io.PrintStream;
 import java.io.Serializable;
 
 /**
@@ -94,11 +93,11 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
     }
 
     @Override
-    public void printLeaderCard(PrintStream out){
-        out.println("WHITE MARBLE RESOURCE");
-        out.println("req: 2 "+this.requisite[0] + " 1 "+this.requisite[1]);
-        out.println("Victory Points: "+this.getVictoryPoints());
-        out.println("white marble: "+this.whiteMarbleResource.getColour());
-        out.println();
+    public void printLeaderCard(){
+        System.out.println("WHITE MARBLE RESOURCE");
+        System.out.println("req: 2 "+this.requisite[0] + " 1 "+this.requisite[1]);
+        System.out.println("Victory Points: "+this.getVictoryPoints());
+        System.out.println("white marble: "+this.whiteMarbleResource.getColour());
+        System.out.println();
     }
 }

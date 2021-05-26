@@ -3,7 +3,6 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.PrintStream;
 import java.io.Serializable;
 
 /**
@@ -65,11 +64,11 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
     }
 
     @Override
-    public void printLeaderCard(PrintStream out) {
-        out.println("EXTRA WAREHOUSE SPACE");
-        out.println("req: 5 " + this.requisite);
-        out.println("Victory Points: " + this.getVictoryPoints());
-        out.println("extra " + this.resourceSpace);
-        out.println();
+    public void printLeaderCard() {
+        System.out.println("EXTRA WAREHOUSE SPACE");
+        System.out.println("req: 5 " + this.requisite);
+        System.out.println("Victory Points: " + this.getVictoryPoints());
+        System.out.println("extra " + this.resourceSpace);
+        System.out.println();
     }
 }

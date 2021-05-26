@@ -2,7 +2,6 @@ package Maestri.MVC.Model.GModel.LeaderCards;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 
-import java.io.PrintStream;
 import java.io.Serializable;
 
 /**
@@ -68,7 +67,7 @@ public class LeaderCard implements Serializable {
     public void activateAbility(Playerboard playerboard) {
     }
 
-    public void printLeaderCard(PrintStream out){
+    public void printLeaderCard(){
 
     }
 

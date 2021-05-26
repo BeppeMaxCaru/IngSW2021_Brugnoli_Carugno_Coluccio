@@ -329,15 +329,7 @@ public class GameController{
         return currentPlayer.activateProduction(activation, whichInput, whichOutput);
     }
 
-    public void removePlayer (String nickname, GameModel gameModel) {
-        for (Player player : this.gameModel.getPlayers()) {
-            try {
-                if (player.getNickname().equals(nickname)) player = null;
-            } catch (Exception e) {
-                //Skippa
-            }
-        }
-    }
+
 
     public GameModel getGameModel() {
         return this.gameModel;

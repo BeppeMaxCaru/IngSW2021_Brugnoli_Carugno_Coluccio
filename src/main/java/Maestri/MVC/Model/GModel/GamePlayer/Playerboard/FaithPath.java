@@ -1,13 +1,14 @@
 package Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
 
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Represents the player board's path where to move the player's red cross
  */
-public class FaithPath {
+public class FaithPath implements Serializable {
 
     /**
      * Contains all the 25 cells of the path

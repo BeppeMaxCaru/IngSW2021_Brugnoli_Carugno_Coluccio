@@ -1,10 +1,14 @@
 package Communication.ClientSide;
 
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.*;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
+import Message.MessageReceived.UpdateClientLeaderCardsMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
+import Message.MessageReceived.UpdateClientPlayerBoardMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 
 import java.io.*;
@@ -23,6 +27,8 @@ public class ClientMain {
     //TEST MEX MARKET
     private Market market;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
+    private Playerboard playerboard;
+    private LeaderCard[] leaderCards = new LeaderCard[2];
 
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
@@ -139,6 +145,7 @@ public class ClientMain {
                 String res;
                 for (int resources = 0; resources < startingResources.get(this.playerNumber); resources++) {
                     System.out.println("Which starting resource do you want to pick?");
+                    System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
                     res = consoleInput.nextLine().toUpperCase();
                     while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS")) {
                         System.out.println("Choose a correct resource");
@@ -152,12 +159,21 @@ public class ClientMain {
                 StartingResourcesMessage resourcesMessage = new StartingResourcesMessage(this.playerNumber, playerStartingResources);
                 sender.writeObject(resourcesMessage);
 
+                try {
+                    UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) receiver.readObject();
+                    this.playerboard = playerBoardMessage.getPlayerboard();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Error in receiving playerboard");
+                    return;
+                }
+
                 //Sends first starting excess leader card to discard
                 System.out.println("Which starting leader card do you want to discard?");
                 System.out.println();
                 for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
                     System.out.println("Write " + i + " for this: ");
-                    startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
+                    startingMessage.getLeaderCards()[i].printLeaderCard();
                 }
                 int card;
                 try {
@@ -180,11 +196,11 @@ public class ClientMain {
                 for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
                     if(i < card) {
                         System.out.println("Write " + i + " for this: ");
-                        startingMessage.getLeaderCards()[i].printLeaderCard(System.out);
+                        startingMessage.getLeaderCards()[i].printLeaderCard();
                     } else if (i>card) {
                         int k=i-1;
                         System.out.println("Write " + k + " for this: ");
-                        startingMessage.getLeaderCards()[k].printLeaderCard(System.out);
+                        startingMessage.getLeaderCards()[i].printLeaderCard();
                     }
                 }
                 try {
@@ -199,12 +215,22 @@ public class ClientMain {
                     return;
                 }
 
+                sender.reset();
                 firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, card);
                 sender.writeObject(firstDiscardLeaderMessage);
 
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("Initial resources setting failed");
+            }
+
+            try {
+                UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) receiver.readObject();
+                this.leaderCards = leaderCardsMessage.getLeaderCards();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Error in receiving leader cards");
+                return;
             }
 
             //Starts async phase
@@ -236,6 +262,22 @@ public class ClientMain {
 
     public void setDevelopmentCardsDecksGrid(DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
         this.developmentCardsDecksGrid = developmentCardsDecksGrid;
+    }
+
+    public void setPlayerboard(Playerboard playerboard) {
+        this.playerboard = playerboard;
+    }
+
+    public Playerboard getPlayerboard() {
+        return this.playerboard;
+    }
+
+    public void setLeaderCards(LeaderCard[] leaderCards) {
+        this.leaderCards = leaderCards;
+    }
+
+    public LeaderCard[] getLeaderCards() {
+        return this.leaderCards;
     }
 }
 
