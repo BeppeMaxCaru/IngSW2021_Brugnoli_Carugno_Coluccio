@@ -633,10 +633,16 @@ public class ClientMain {
 
                 //
                 actionCountersDeck.drawCounter().activate(actionCountersDeck, localPlayers[0].getPlayerBoard(), this.developmentCardsDecksGrid);
+                System.out.println("LORENZO FAITH POINTS: "+localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition());
 
-            }while(!action.equals("QUIT") || !this.endLocalGame());
+            }while(!action.equals("QUIT") || !this.endLocalGame(localPlayers));
 
-
+            if (!action.equals("QUIT")) {
+                System.out.println("Match has ended.");
+                if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought()==7 || localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition()==24)
+                    System.out.println("You win the Game, with "+localPlayers[0].sumAllVictoryPoints()+" Victory points.");
+                else System.out.println(localPlayers[1].getNickname()+" wins the Game.");
+            }
 
 
         } else {
@@ -847,7 +853,20 @@ public class ClientMain {
         return this.leaderCards;
     }
 
-    public boolean endLocalGame(){
+    public boolean endLocalGame(Player[] localPlayers){
+        for(int k=0; k < 4; k++)
+            if(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[0][k][0]==null)
+                return true;
+
+        if(localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition()==24)
+            return true;
+
+        if(localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition()==24)
+            return true;
+
+        if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought()==7)
+            return true;
+
         return false;
     }
 }
