@@ -208,7 +208,11 @@ public class PlayerThread implements Runnable {
             //Check current player here
             try {
                 object = (Message) this.receiver.readObject();
-                if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber()) this.sender.writeObject(new NotYourTurnMessage());
+                if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber())
+                {
+                    object = new NotYourTurnMessage();
+                    this.sender.writeObject(object);
+                }
             } catch (Exception e) {
                 this.removePlayer();
                 System.out.println("Error in receiving in PlayerThread");
@@ -248,7 +252,6 @@ public class PlayerThread implements Runnable {
 
                     if (this.gameController.checkDiscardCards(currentPlayer, position))
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
-
 
                 } catch (Exception e) {
                     this.removePlayer();
