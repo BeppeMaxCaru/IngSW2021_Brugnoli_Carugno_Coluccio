@@ -33,6 +33,8 @@ public class ServerSender extends Thread {
 
             try {
 
+                this.sender.reset();
+
                 while (!action.equalsIgnoreCase("END TURN") && !action.equalsIgnoreCase("QUIT")) {
 
                     System.out.println("Which action do you want to do?");

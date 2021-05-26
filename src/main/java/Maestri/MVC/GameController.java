@@ -348,6 +348,7 @@ public class GameController{
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {
+                //playerThread.getSender().reset();
                 playerThread.getSender().writeObject(updateClientMarketMessage);
             } catch (Exception e) {
                 e.printStackTrace();

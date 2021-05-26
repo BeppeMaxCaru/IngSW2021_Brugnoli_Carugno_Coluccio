@@ -1,6 +1,7 @@
 package Communication.ClientSide;
 
 import Communication.ServerSide.PlayerThread;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.Message;
 import Message.MessageReceived.ActionOutcomeMessage;
 import Message.MessageReceived.GameOverMessage;
@@ -68,8 +69,12 @@ public class ServerReceiver extends Thread {
             if (object instanceof UpdateClientMarketMessage) {
                 try {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
+                    //IL MERCATO NON VIENE SERIALIZZATO
+                    //Market market = updateClientMarketMessage.getMarket();
+                    //market.printMarket();
+                    //updateClientMarketMessage.getMarket().printMarket();
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
-                    updateClientMarketMessage.getMarket().printMarket();
+                    //updateClientMarketMessage.getMarket().printMarket();
                     this.clientMain.getMarket().printMarket();
                     System.out.println("Updated market");
                 } catch (Exception e) {

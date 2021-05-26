@@ -9,11 +9,12 @@ public class UpdateClientMarketMessage extends Message implements Serializable {
 
     private final Market market;
 
-    public UpdateClientMarketMessage(Market market) {
+    public UpdateClientMarketMessage (Market market) {
         this.market = market;
     }
 
     public Market getMarket() {
         return this.market;
     }
+
 }

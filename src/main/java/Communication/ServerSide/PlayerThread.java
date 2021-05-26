@@ -172,12 +172,19 @@ public class PlayerThread implements Runnable {
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
 
+            try {
+                this.sender.reset();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Reset sender not working");
+            }
+
             Message object;
 
             //Receive object
             //Check current player here
             try {
-                object = (Message) receiver.readObject();
+                object = (Message) this.receiver.readObject();
                 if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber()) this.sender.writeObject(new ActionOutcomeMessage(false));
             } catch (Exception e) {
                 e.printStackTrace();
