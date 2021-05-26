@@ -558,7 +558,7 @@ public class ServerSender extends Thread {
             }
 
 
-        } while (!action.equalsIgnoreCase("quit"));
+        } while (!action.equals("QUIT"));
 
         try {
             this.socket.close();

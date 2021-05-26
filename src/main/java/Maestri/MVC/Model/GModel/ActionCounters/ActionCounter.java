@@ -1,11 +1,7 @@
 package Maestri.MVC.Model.GModel.ActionCounters;
 
-import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
-
-import java.io.PrintWriter;
-import java.util.Scanner;
 
 public class ActionCounter {
 
@@ -30,7 +26,7 @@ public class ActionCounter {
      * @param developmentCardsDecksGrid developmentCardsDecksGrid
      */
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard,
-                         DevelopmentCardsDecksGrid developmentCardsDecksGrid, PrintWriter out) {
+                         DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
 
     }
 

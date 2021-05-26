@@ -249,9 +249,18 @@ public class Player
      */
     public boolean discardLeaderCard(int var) {
 
+        int cards = 0;
+
+        for(int k=0; k<this.playerLeaderCards.length; k++)
+            if(this.playerLeaderCards[k]!=null)
+                cards++;
+
         List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
         updatedPlayerLeaderCardList.remove(var);
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
+
+        if(cards<=2)
+            this.playerBoard.getFaithPath().moveCross(1);
 
         return true;
     }
