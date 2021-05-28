@@ -61,7 +61,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                  <mainClass>Maestri.MVC.AppView</mainClass>
+                  <mainClass>Communication.ClientSide.RenderingView.GUI</mainClass>
                 </configuration>
         </plugin>
         <plugin>
