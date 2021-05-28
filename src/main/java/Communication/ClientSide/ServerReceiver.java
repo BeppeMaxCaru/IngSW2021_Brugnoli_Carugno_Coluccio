@@ -3,6 +3,7 @@ package Communication.ClientSide;
 import Communication.ServerSide.PlayerThread;
 import Message.Message;
 import Message.MessageReceived.*;
+import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -37,6 +38,8 @@ public class ServerReceiver extends Thread {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
+                System.out.println("Error in reception");
+                break;
             }
 
 
@@ -46,12 +49,11 @@ public class ServerReceiver extends Thread {
                     System.out.println("It's not your turn.");
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("Error in receiver");
+                    System.out.println("Error in receiving not your turn");
                     break;
                 }
 
             }
-
 
             if (object instanceof UpdateClientMarketMessage) {
                 try {
@@ -115,11 +117,13 @@ public class ServerReceiver extends Thread {
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
                     System.out.println("The winner is " + gameOverMessage.getWinner());
-                    System.out.println("You made " + gameOverMessage.getWinner() + " victory points");
+                    System.out.println("You made " + gameOverMessage.getVictoryPoints() + " victory points");
 
                     //SHUT BOTH THREAD AND STREAM
-                    this.receiver.close();
-                    this.interrupt();
+                    //this.receiver.close();
+                    //this.interrupt();
+                    //COsì termina il metodo e il thread si chiude in automatico
+                    break;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -136,8 +140,9 @@ public class ServerReceiver extends Thread {
                     System.out.println(quitMessage.getQuitMessage());
 
                     //SHUT BOTH THREAD AND STREAM
-                    receiver.close();
-                    this.interrupt();
+                    //this.receiver.close();
+                    //this.interrupt();
+                    break;
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -147,9 +152,23 @@ public class ServerReceiver extends Thread {
 
             }
 
-            //QUA SOTTO SI POSSONO INSERIRE MESSAGGI CHE AGGIORNANO
-            //MERCATO E GRIGLIA
+            if (object instanceof ServerErrorMessage) {
 
+                System.out.println("Server error");
+                break;
+
+            }
+
+        }
+
+        //In teoria quando chiudo la socket in uno dei due thread anche l'altro dovrebbe ricevere eccezione e quindi chiudersi anche lui
+
+        try {
+            this.receiver.close();
+            this.socket.close();
+        } catch (Exception e) {
+            System.out.println("Closing input stream and socket");
+            //e.printStackTrace();
         }
     }
 }

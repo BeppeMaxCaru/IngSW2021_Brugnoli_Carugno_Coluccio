@@ -7,6 +7,7 @@ import Message.MessageReceived.*;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
+import Message.MessageSent.QuitMessage;
 
 import java.io.*;
 import java.net.Socket;
@@ -104,6 +105,7 @@ public class PlayerThread implements Runnable {
             this.nickName = nicknameMessage.getNickname();
             System.out.println("Nickname received");
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("No nickname");
             return;
@@ -116,6 +118,7 @@ public class PlayerThread implements Runnable {
             UpdateClientMarketMessage updateClientMarketMessage = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
             this.sender.writeObject(updateClientMarketMessage);
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("Non viene broadcastato mercato in PlayerThread");
             return;
@@ -126,6 +129,7 @@ public class PlayerThread implements Runnable {
             UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
             this.sender.writeObject(updateClientDevCardGridMessage);
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("Non viene broadcastata grid in PlayerThread");
             return;
@@ -136,6 +140,7 @@ public class PlayerThread implements Runnable {
                     this.playerThreadNumber, this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards());
             this.sender.writeObject(serverStartingMessage);
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("No starting message");
             return;
@@ -148,6 +153,7 @@ public class PlayerThread implements Runnable {
                 currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
             //this.sender.writeObject( new ActionOutcomeMessage(true));
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("No starting resources message");
             return;
@@ -157,6 +163,7 @@ public class PlayerThread implements Runnable {
             UpdateClientPlayerBoardMessage playerBoardMessage = new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard());
             this.sender.writeObject(playerBoardMessage);
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("Not playerBoard sent");
             return;
@@ -170,6 +177,7 @@ public class PlayerThread implements Runnable {
                 //this.sender.writeObject(new ActionOutcomeMessage(true));
 
             } catch (Exception e) {
+                this.sendErrorMessage();
                 this.removePlayer();
                 System.out.println("No discard leader card message");
                 return;
@@ -181,6 +189,7 @@ public class PlayerThread implements Runnable {
             UpdateClientLeaderCardsMessage leaderCardsMessage = new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards());
             this.sender.writeObject(leaderCardsMessage);
         } catch (Exception e) {
+            this.sendErrorMessage();
             this.removePlayer();
             System.out.println("Not leader cards sent");
             return;
@@ -198,6 +207,7 @@ public class PlayerThread implements Runnable {
             try {
                 this.sender.reset();
             } catch (Exception e) {
+                this.sendErrorMessage();
                 this.removePlayer();
                 System.out.println("Reset sender not working");
             }
@@ -214,6 +224,7 @@ public class PlayerThread implements Runnable {
                     this.sender.writeObject(object);
                 }
             } catch (Exception e) {
+                this.sendErrorMessage();
                 this.removePlayer();
                 System.out.println("Error in receiving in PlayerThread");
                 break;
@@ -236,6 +247,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
 
                 } catch (Exception e) {
+                    this.sendErrorMessage();
                     this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread");
                     break;
@@ -254,6 +266,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
 
                 } catch (Exception e) {
+                    this.sendErrorMessage();
                     this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread");
                     break;
@@ -287,6 +300,7 @@ public class PlayerThread implements Runnable {
                     }
 
                 } catch (Exception e) {
+                    this.sendErrorMessage();
                     this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread");
                     break;
@@ -324,10 +338,11 @@ public class PlayerThread implements Runnable {
                         }
                     }
 
-                } catch (Exception e) { 
+                } catch (Exception e) {
+                    this.sendErrorMessage();
                     this.removePlayer();
-                System.out.println("Error in receiving in PlayerThread");
-                break;
+                    System.out.println("Error in receiving in PlayerThread");
+                    break;
                 }
             }
 
@@ -364,6 +379,7 @@ public class PlayerThread implements Runnable {
 
 
                 } catch (Exception e) {
+                    this.sendErrorMessage();
                     this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread");
                     break;
@@ -376,10 +392,35 @@ public class PlayerThread implements Runnable {
                 //Salva come giocatore corrente nel gamecontroller/gamemodel
                 //il giocatore successivo a questo per abilitarlo e bloccare questo
             }
+
+            if (object instanceof QuitMessage) {
+                this.removePlayer();
+                break;
+            }
+
         }
 
         //Inviare messaggio dove si comunica vincitore + punti fatti
+        try {
+            this.sender.reset();
+            //Ritorna numero player vincitore
+            int winner = this.gameController.getGameModel().checkWinner();
+            //Prende il nickname del vincitore
+            String nicknameWinner = this.gameController.getGameModel().getPlayers()[winner].getNickname();
+            //Punti vittoria di questo giocatore
+            int victoryPoints = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].sumAllVictoryPoints();
+            GameOverMessage gameOverMessage = new GameOverMessage(nicknameWinner, victoryPoints);
+            this.sender.writeObject(gameOverMessage);
+            //this.removePlayer();
+        } catch (Exception e) {
+            this.sendErrorMessage();
+            //e.printStackTrace();
+            this.removePlayer();
+            //System.err.println("Errore in mex game over");
+        }
 
+        //Il thread termina
+        this.removePlayer();
 
     }
 
@@ -390,6 +431,17 @@ public class PlayerThread implements Runnable {
             this.receiver.close();
             this.playerSocket.close();
         } catch (Exception e) {
+            System.out.println("Rimosso giocatore");
+            e.printStackTrace();
+        }
+    }
+
+    public void sendErrorMessage() {
+        try {
+            this.sender.reset();
+            this.sender.writeObject(new ServerErrorMessage());
+        } catch (Exception e) {
+            System.out.println("Error message");
             e.printStackTrace();
         }
     }

@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +28,8 @@ public class MultiEchoServer {
     private ArrayList<GameModel> gamesInProgress = new ArrayList<>();
     //GameModel
     private GameModel game;
+
+    private HashSet<String> playersNicknames = new HashSet<>();
 
     //Chat
     private ArrayList<PlayerThread> queueFIFO = new ArrayList<>();
@@ -58,14 +61,6 @@ public class MultiEchoServer {
                     GameController gameController = new GameController(queueFIFO);
                     //gameExecutor.execute(gameController);
 
-                    //Aggiornare
-                    //gameExecutor.execute(newGame);
-
-
-                    //Old
-                    //GameController newGame = new GameController(clients);
-                    //gameExecutor.execute(newGame);
-                    //Debug
                     System.out.println("New game started");
                 } catch (Exception e) {
                     System.out.println("Not enough players");
@@ -82,6 +77,7 @@ public class MultiEchoServer {
                 //Viene creato
                 PlayerThread newPlayer = new PlayerThread(playerSocket);
 
+                //if
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);
 
