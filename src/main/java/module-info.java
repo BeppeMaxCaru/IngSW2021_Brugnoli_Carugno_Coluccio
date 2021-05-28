@@ -13,5 +13,6 @@ module Maestri.MVC {
     exports Communication.ServerSide;
     exports Message.MessageReceived;
     exports Message.MessageSent;
+    exports Communication.ClientSide.RenderingView;
     //exports;
 }
