@@ -1,4 +1,4 @@
-package Message.MessageReceived;
+package Message.MessageSent;
 
 import Message.Message;
 

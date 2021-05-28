@@ -11,6 +11,7 @@ module Maestri.MVC {
     exports Maestri.MVC.Model.GModel.LeaderCards;
     exports Communication.ClientSide;
     exports Communication.ServerSide;
+    exports Message;
     exports Message.MessageReceived;
     exports Message.MessageSent;
     exports Communication.ClientSide.RenderingView;

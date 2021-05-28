@@ -4,6 +4,7 @@ import Message.*;
 import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.PlayLeaderMessage;
+import Message.MessageSent.QuitMessage;
 
 import java.io.*;
 import java.net.Socket;
@@ -560,11 +561,14 @@ public class ServerSender extends Thread {
 
         } while (!action.equals("QUIT"));
 
+        //In teoria quando chiudo la socket in uno dei due thread anche l'altro dovrebbe ricevere eccezione e quindi chiudersi anche lui
         try {
+            this.sender.writeObject(new QuitMessage());
+            this.sender.close();
             this.socket.close();
         } catch (Exception e) {
-            System.out.println("Error while sending data to the server");
-            e.printStackTrace();
+            System.out.println("Closing output stream and socket");
+            //e.printStackTrace();
         }
     }
 

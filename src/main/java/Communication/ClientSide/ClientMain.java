@@ -829,7 +829,7 @@ public class ClientMain {
                 int card;
                 try {
                     card = consoleInput.nextInt();
-                    while (card < 0 || card > 3) {
+                    while (card < 0 || card > 2) {
                         System.out.println("Chose a correct card.");
                         card = consoleInput.nextInt();
                     }
@@ -888,14 +888,16 @@ public class ClientMain {
             new ServerReceiver(this, clientSocket, receiver).start();
             new ServerSender(this, clientSocket, sender).start();
 
+            //Chiusi i due thread il gioco finisce
+
         }
     }
 
-        public String getNickname () {
+    public String getNickname () {
             return this.nickname;
         }
 
-        public Scanner getConsoleInput () {
+    public Scanner getConsoleInput () {
             return this.consoleInput;
         }
 
@@ -1193,5 +1195,6 @@ public class ClientMain {
         }
         return true;
     }
+
 }
 
