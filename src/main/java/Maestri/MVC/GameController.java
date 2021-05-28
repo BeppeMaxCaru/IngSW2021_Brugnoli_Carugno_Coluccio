@@ -137,7 +137,7 @@ public class GameController{
         }
     }
 
-    public boolean checkBuyDevCard(Player currentPlayer, String colour, int l, int[] quantity, String[] wclChoice) {
+    public boolean checkBuyDevCard(Player currentPlayer, int column, int l, int[] quantity, String[] wclChoice) {
 
         Map<String, Integer> paidResources = new HashMap<>();
         paidResources.put("COINS", quantity[0]);
@@ -150,8 +150,6 @@ public class GameController{
         resources.put(1, "SERVANTS");
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
-
-        int column = this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
 
         if (this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0] != null) {
 

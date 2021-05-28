@@ -334,8 +334,7 @@ public class PlayerThread implements Runnable {
                     if(!this.mainAction)
                     {
                         //DevCard colour
-                        String colour = buyCardMessage.getColour();
-                        int column = this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour.toUpperCase());
+                        int column = buyCardMessage.getColour();
                         //DevCard level
                         int level = 3 - buyCardMessage.getLevel();
                         //How much resources does the player spend
@@ -343,7 +342,7 @@ public class PlayerThread implements Runnable {
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
 
-                        if (this.gameController.checkBuyDevCard(currentPlayer, colour, level, quantity, deposit)) {
+                        if (this.gameController.checkBuyDevCard(currentPlayer, column, level, quantity, deposit)) {
 
                             int pos = buyCardMessage.getPlayerboardPosition();
 

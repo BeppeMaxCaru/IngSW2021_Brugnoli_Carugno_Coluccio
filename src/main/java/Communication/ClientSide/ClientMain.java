@@ -1,5 +1,8 @@
 package Communication.ClientSide;
 
+import Communication.ClientSide.RenderingView.CLI;
+import Communication.ClientSide.RenderingView.GUI;
+import Communication.ClientSide.RenderingView.RenderingView;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
@@ -13,6 +16,7 @@ import Message.MessageReceived.UpdateClientLeaderCardsMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageReceived.UpdateClientPlayerBoardMessage;
 import Message.MessageSent.DiscardLeaderMessage;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
@@ -43,24 +47,23 @@ public class ClientMain {
 
         String hostname = args[0];
         int port = Integer.parseInt(args[1]);
+        RenderingView view = new CLI();
 
         ClientMain client = new ClientMain(hostname, port);
-        client.Execute();
+        client.Execute(view);
     }
 
     public int getPlayerNumber() {
         return playerNumber;
     }
 
-    public void Execute() {
+    public void Execute(RenderingView view) {
 
         String gameMode;
         Scanner consoleInput = new Scanner(System.in);
+        Stage stage = new Stage();
 
-        System.out.println("Welcome to Masters of Renaissance!");
-
-        System.out.println("Insert your nickname");
-        this.nickname = this.consoleInput.nextLine();
+        this.nickname = view.nick(stage);
 
         System.out.println("Write 0 for single-player or 1 for multiplayer: ");
         gameMode = consoleInput.nextLine();
@@ -72,9 +75,7 @@ public class ClientMain {
 
         if (gameMode.equals("0")) {
 
-            System.out.println("Hi " + this.nickname + "!");
-            System.out.println("Welcome to Master of Renaissance single player!");
-            System.out.println();
+            view.welcome(stage, this.nickname);
 
             Player[] localPlayers = new Player[2];
             localPlayers[0] = new Player(this.nickname, 0);
@@ -89,37 +90,9 @@ public class ClientMain {
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
                 localPlayers[0].setPlayerLeaderCard(index, cardsDeck.drawOneLeaderCard());
 
-            System.out.println("Which starting leader cards do you want to discard?");
-            //Discard 2 leader cards
-            for (int index = 0; index < 2; index++)
-            {
-                for (int cards = 0; cards < localPlayers[0].getPlayerLeaderCards().length - index; cards++)
-                {
-                    System.out.println("Write "+cards+" for this:");
-                    localPlayers[0].getPlayerLeaderCards()[cards].printLeaderCard();
-                }
-                String card;
-                try {
-                    card = consoleInput.nextLine();
-                    if(index==0)
-                    {
-                        while (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) {
-                            System.out.println("Chose a correct card.");
-                            card = consoleInput.nextLine();
-                        }
-                    } else {
-                        while (!card.equals("0") && !card.equals("1") && !card.equals("2")) {
-                            System.out.println("Chose a correct card.");
-                            card = consoleInput.nextLine();
-                        }
-                    }
-                    int discard = Integer.parseInt(card);
-                    localPlayers[0].discardLeaderCard(discard);
-                } catch (Exception e) {
-                    System.err.println("Error in setup");
-                    return;
-                }
-            }
+            int[] discard = view.discardStartingLeaders(stage, localPlayers[0].getPlayerLeaderCards());
+            localPlayers[0].discardLeaderCard(discard[0]);
+            localPlayers[0].discardLeaderCard(discard[1]);
 
             int mainAction = 0;
             String action = "";
@@ -423,7 +396,6 @@ public class ClientMain {
                                     System.err.println("Not existing resource");
                                     break;
                                 }
-
                             }
 
                             int pos;
@@ -735,13 +707,10 @@ public class ClientMain {
                 sender = new ObjectOutputStream(clientSocket.getOutputStream());
                 receiver = new ObjectInputStream(clientSocket.getInputStream());
 
-                System.out.println("Loading...");
-                System.out.println("Hi " + this.nickname + "!");
-                System.out.println("Welcome to Master of Renaissance online!");
+                view.welcome(stage, this.nickname);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Connection failed");
+                view.error(e);
                 return;
             }
 
@@ -753,8 +722,7 @@ public class ClientMain {
                 NicknameMessage nicknameMessage = new NicknameMessage(this.nickname);
                 sender.writeObject(nicknameMessage);
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Connection failed");
+                view.error(e);
                 return;
             }
 
@@ -762,8 +730,7 @@ public class ClientMain {
                 UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) receiver.readObject();
                 this.market = updateClientMarketMessage.getMarket();
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Client non setta market iniziale");
+                view.error(e);
                 return;
             }
 
@@ -771,8 +738,7 @@ public class ClientMain {
                 UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) receiver.readObject();
                 this.developmentCardsDecksGrid = updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid();
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Client non riesce a settare grid iniziale");
+                view.error(e);
                 return;
             }
 
@@ -789,20 +755,12 @@ public class ClientMain {
                 startingResources.put(2, 1);
                 startingResources.put(3, 2);
 
-                System.out.println();
-                System.out.println("Match has started, your player number is " + this.playerNumber);
+                view.matchHasStarted(stage, this.getPlayerNumber());
 
                 ArrayList<String> playerStartingResources = new ArrayList<>();
                 String res;
                 for (int resources = 0; resources < startingResources.get(this.playerNumber); resources++) {
-                    System.out.println("Which starting resource do you want to pick?");
-                    System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
-                    res = consoleInput.nextLine().toUpperCase();
-                    while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS")) {
-                        System.out.println("Choose a correct resource");
-                        System.out.println("Which starting resource do you want to pick?");
-                        res = consoleInput.nextLine().toUpperCase();
-                    }
+                    res = view.start(stage);
                     playerStartingResources.add(res);
                 }
 
@@ -814,90 +772,46 @@ public class ClientMain {
                     UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) receiver.readObject();
                     this.playerboard = playerBoardMessage.getPlayerboard();
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Error in receiving playerboard");
+                    view.error(e);
                     return;
                 }
 
                 //Sends first starting excess leader card to discard
-                System.out.println("Which starting leader card do you want to discard?");
-                System.out.println();
-                for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
-                    System.out.println("Write " + i + " for this: ");
-                    startingMessage.getLeaderCards()[i].printLeaderCard();
-                }
-                int card;
-                try {
-                    card = consoleInput.nextInt();
-                    while (card < 0 || card > 2) {
-                        System.out.println("Chose a correct card.");
-                        card = consoleInput.nextInt();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Error in receiving setup");
-                    return;
-                }
+                int[] cards;
+                cards = view.discardStartingLeaders(stage, startingMessage.getLeaderCards());
 
                 //Sends second starting excess leader card to discard
-                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, card);
+                DiscardLeaderMessage firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, cards[0]);
                 sender.writeObject(firstDiscardLeaderMessage);
 
-                System.out.println("Which starting leader card do you want to discard?");
-                for (int i = 0; i < startingMessage.getLeaderCards().length; i++) {
-                    if(i < card) {
-                        System.out.println("Write " + i + " for this: ");
-                        startingMessage.getLeaderCards()[i].printLeaderCard();
-                    } else if (i>card) {
-                        int k=i-1;
-                        System.out.println("Write " + k + " for this: ");
-                        startingMessage.getLeaderCards()[i].printLeaderCard();
-                    }
-                }
-                try {
-                    card = consoleInput.nextInt();
-                    while (card < 0 || card > 2) {
-                        System.out.println("Chose a correct card.");
-                        card = consoleInput.nextInt();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Errore in scelta carta");
-                    return;
-                }
-
                 sender.reset();
-                firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, card);
+                firstDiscardLeaderMessage = new DiscardLeaderMessage(this.playerNumber, cards[1]);
                 sender.writeObject(firstDiscardLeaderMessage);
 
             } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Initial resources setting failed");
+                view.error(e);
             }
 
             try {
                 UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) receiver.readObject();
                 this.leaderCards = leaderCardsMessage.getLeaderCards();
             } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Error in receiving leader cards");
+                view.error(e);
                 return;
             }
 
             //Starts async phase
-            new ServerReceiver(this, clientSocket, receiver).start();
-            new ServerSender(this, clientSocket, sender).start();
-
-            //Chiusi i due thread il gioco finisce
+            new ServerReceiver(this, clientSocket, receiver, view).start();
+            new ServerSender(this, clientSocket, sender, view).start();
 
         }
     }
 
-    public String getNickname () {
+        public String getNickname () {
             return this.nickname;
         }
 
-    public Scanner getConsoleInput () {
+        public Scanner getConsoleInput () {
             return this.consoleInput;
         }
 
@@ -1195,6 +1109,5 @@ public class ClientMain {
         }
         return true;
     }
-
 }
 

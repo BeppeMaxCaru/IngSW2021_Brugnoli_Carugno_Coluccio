@@ -1,14 +1,16 @@
 package Communication.ClientSide;
 
+import Communication.ClientSide.RenderingView.RenderingView;
 import Message.*;
 import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.PlayLeaderMessage;
-import Message.MessageSent.QuitMessage;
+import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,15 +19,19 @@ public class ServerSender extends Thread {
     private final Socket socket;
     private final ClientMain clientMain;
     private final ObjectOutputStream sender;
+    private final RenderingView view;
 
-    public ServerSender (ClientMain clientMain, Socket socket, ObjectOutputStream sender) {
+    public ServerSender (ClientMain clientMain, Socket socket, ObjectOutputStream sender, RenderingView view) {
         this.socket = socket;
         this.clientMain = clientMain;
         this.sender = sender;
+        this.view = view;
     }
 
     @Override
     public void run() {
+
+        Stage stage = new Stage();
 
         String action = "";
         //Keeps sending messages with switch until quit for now
@@ -37,38 +43,18 @@ public class ServerSender extends Thread {
 
                 while (!action.equalsIgnoreCase("END TURN") && !action.equalsIgnoreCase("QUIT")) {
 
-                    System.out.println("Which action do you want to do?");
-                    System.out.println("Write 'Play leader card'");
-                    System.out.println("Write 'Discard leader card'");
-                    System.out.println("Write 'pick resources from Market'");
-                    System.out.println("Write 'Buy development card'");
-                    System.out.println("Write 'Activate production power'");
-                    System.out.println("Write 'END TURN' at the end of your turn");
-                    action = this.clientMain.getConsoleInput().nextLine().toUpperCase();
+                    action = this.view.actionChoice(stage);
 
                     switch (action) {
                         case "P":
                         case "PLAY LEADER CARD": {
-                            System.out.println("Which card do you want to play?");
-                            for(int index =0; index<this.clientMain.getLeaderCards().length; index++)
-                            {
-                                if(this.clientMain.getLeaderCards()[index]!=null && !this.clientMain.getLeaderCards()[index].isPlayed())
-                                {
-                                    System.out.println("Write "+index+" for this");
-                                    this.clientMain.getLeaderCards()[index].printLeaderCard();
-                                }
-                            }
-                            String parameter = this.clientMain.getConsoleInput().nextLine();
+
                             try {
-                                //Checks if the leader card position exists
-                                int cardPosition = Integer.parseInt(parameter);
-                                if (cardPosition != 0 && cardPosition != 1) throw new Exception();
-
-                                PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
+                                int leader = this.view.playLeader(stage, this.clientMain.getLeaderCards());
+                                PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(playLeaderMessage);
-
                             } catch (Exception e) {
-                                System.err.println("Not valid parameter");
+                                this.view.senderError(e);
                                 break;
                             }
                             break;
@@ -86,15 +72,12 @@ public class ServerSender extends Thread {
                             }
                             String parameter = this.clientMain.getConsoleInput().nextLine();
                             try {
-                                //Checks if the leader card position exists
-                                int cardPosition = Integer.parseInt(parameter);
-                                if (cardPosition != 0 && cardPosition != 1) throw new Exception();
-
-                                DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), cardPosition);
+                                int leader = this.view.discardLeader(stage, this.clientMain.getLeaderCards());
+                                DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(normalDiscardLeaderMessage);
 
                             } catch (Exception e) {
-                                System.err.println("Not valid parameter");
+                                this.view.senderError(e);
                                 break;
                             }
                             break;
@@ -102,80 +85,14 @@ public class ServerSender extends Thread {
                         case "M":
                         case "PICK RESOURCES FROM MARKET": {
 
-                            this.clientMain.getMarket().printMarket();
-
-                            //Receives column or row
-                            System.out.println("Do you want to pick row resources or column resources?");
-                            System.out.println("Write 'ROW' or 'COLUMN'.");
-                            String parameter = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                            if (!parameter.equals("ROW") && !parameter.equals("COLUMN")) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
-
-                            //Receives index
-                            if (parameter.equals("ROW")) {
-                                System.out.println("Which row do you want to pick?");
-                                System.out.println("Write a number between 0 and 2.");
-                            } else {
-                                System.out.println("Which column do you want to pick?");
-                                System.out.println("Write a number between 0 and 3.");
-                            }
-                            String par = this.clientMain.getConsoleInput().nextLine();
+                            int[] coordinates = this.view.marketCoordinates(stage, this.clientMain.getMarket());
+                            String parameter;
                             int index;
-                            try {
-                                //Checks if the leader card position exists
-                                index = Integer.parseInt(par);
-                                if (parameter.equals("ROW") && (index < 0 || index > 2)) throw new Exception();
-                                if (parameter.equals("COLUMN") && (index < 0 || index > 3)) throw new Exception();
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
-
-                            //Receives deposit
-                            System.out.println("If you activated your extra warehouse space, where do you want to store your resources?");
-                            if (parameter.equals("ROW"))
-                                System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
-                            else
-                                System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
-                            String wlChoice = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                            try {
-                                //Checks if player has written only 'w' and 'l' chars
-                                if (parameter.equals("ROW") && wlChoice.length() != 4) throw new Exception();
-                                if (parameter.equals("COLUMN") && wlChoice.length() != 3) throw new Exception();
-                                for (int k = 0; k < wlChoice.length(); k++)
-                                    if (!String.valueOf(wlChoice.charAt(k)).equals("W") && !String.valueOf(wlChoice.charAt(k)).equals("L"))
-                                        throw new Exception();
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
-
-                            System.out.println("YOUR ACTIVATED LEADER CARDS:");
-                            for(int ind =0; ind<this.clientMain.getLeaderCards().length; ind++)
-                                if(this.clientMain.getLeaderCards()[ind]!=null && this.clientMain.getLeaderCards()[ind].isPlayed())
-                                    this.clientMain.getLeaderCards()[ind].printLeaderCard();
-                            System.out.println();
-
-                            //Receives position of leader cards to activate to receive a resource from a white marble
-                            System.out.println("If you activated both your white marble resources leader card, which one do you want to activate for each white marble you picked?");
-                            System.out.println("if you activated only one white marble leader card, do you want to activate it?");
-                            System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
-                            System.out.println("Write X if you don't want to activate any leader card effect");
-                            String chosenMarble = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                            try {
-                                //Checks if player has written only '0', '1' or 'x' chars
-                                if (chosenMarble.length() != 0)
-                                    for (int k = 0; k < chosenMarble.length(); k++)
-                                        if (!String.valueOf(chosenMarble.charAt(k)).equals("0")
-                                                && !String.valueOf(chosenMarble.charAt(k)).equals("1")
-                                                && !String.valueOf(chosenMarble.charAt(k)).equals("X"))
-                                            throw new Exception();
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
+                            if(coordinates[0] == 0) parameter = "ROW";
+                            else parameter = "COLUMN";
+                            index = coordinates[1];
+                            String wlChoice = this.view.resourcesDestination(stage, this.clientMain.getLeaderCards(), parameter);
+                            String chosenMarble = this.view.whiteMarbleChoice(stage);
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
                             this.sender.writeObject(resourcesMessage);
@@ -186,111 +103,26 @@ public class ServerSender extends Thread {
                         case "B":
                         case "BUY DEVELOPMENT CARD": {
 
-                            this.clientMain.getPlayerboard().printAll();
-                            this.clientMain.getDevelopmentCardsDecksGrid().printGrid();
+                            int[] coordinates = this.view.developmentCardsGridCoordinates(stage,
+                                    this.clientMain.getDevelopmentCardsDecksGrid(),
+                                    this.clientMain.getPlayerboard());
 
-                            System.out.println("Which card do you want to buy?");
-                            System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
-                            String colour = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                            if (!colour.equals("GREEN") && !colour.equals("YELLOW") && !colour.equals("BLUE") && !colour.equals("PURPLE")) {
-                                //Resets controller
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
-
-                            System.out.println("Which level do you want to buy?");
-                            System.out.println("Write the correct number between 1 and 3, if existing in the grid");
-                            String lev = this.clientMain.getConsoleInput().nextLine();
-                            int level;
-                            try {
-                                level = Integer.parseInt(lev);
-                                if (level < 1 || level > 3) throw new Exception();
-                            } catch (Exception e) {
-                                System.err.println("Not valid parameter");
-                                break;
-                            }
+                            int column = coordinates[0];
+                            int level = coordinates[1];
 
                             //Check
                             int[] quantity = new int[4];
-                            String[] shelf = new String[4];
+                            String[] shelf;
+                            String[][] pickedResources = this.view.payDevelopmentCard(stage, this.clientMain.getLeaderCards());
+                            for(int k = 0; k < quantity.length; k++)
+                                quantity[k] = Integer.parseInt(pickedResources[0][k]);
+                            shelf = pickedResources[1];
 
-                            //Correspondence between resources and arrays index
-                            Map<String, Integer> resources = new HashMap<>();
-                            resources.put("COINS", 0);
-                            resources.put("SERVANTS", 1);
-                            resources.put("SHIELDS", 2);
-                            resources.put("STONES", 3);
-
-                            for (int k = 0; k < 4; k++) {
-                                quantity[k] = 0;
-                                shelf[k] = null;
-                            }
-
-                            //Which resource do you want to take
-                            String parameter = "";
-                            while (!parameter.equalsIgnoreCase("STOP")) {
-
-                                System.out.println("Which resource do you want to pick to pay the development card? Write STOP at the end.");
-                                parameter = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                                if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS") || parameter.equals("STOP")) {
-                                    int index = resources.get(parameter);
-
-                                    //Receives now quantity
-                                    System.out.println("How much " + parameter + " do you want to pick?");
-                                    System.out.println("Write the correct value.");
-                                    parameter = this.clientMain.getConsoleInput().nextLine();
-                                    try {
-                                        int q = Integer.parseInt(parameter);
-                                        if (q + quantity[index] < 0) throw new Exception();
-                                        if (q + quantity[index] > 7) throw new Exception();
-                                        quantity[index] = q;
-                                    } catch (Exception e) {
-                                        System.err.println("Not valid parameter");
-                                        break;
-                                    }
-
-                                    //Player available leader cards
-                                    System.out.println("YOUR ACTIVATED LEADER CARDS:");
-                                    for(int ind =0; ind<this.clientMain.getLeaderCards().length; ind++)
-                                        if(this.clientMain.getLeaderCards()[ind]!=null && this.clientMain.getLeaderCards()[ind].isPlayed())
-                                            this.clientMain.getLeaderCards()[ind].printLeaderCard();
-                                    System.out.println();
-
-                                    for (int z = 0; z < quantity[index]; z++) {
-                                        //Keeps asking a place to take from resources
-                                        System.out.println("From which store do you want to pick this resource?");
-                                        System.out.println("Write WAREHOUSE, CHEST, or LEADER CARD if you activate your extra warehouse space leader card.");
-                                        parameter = this.clientMain.getConsoleInput().nextLine().toUpperCase();
-                                        if (parameter.equals("CHEST") || parameter.equals("WAREHOUSE") || parameter.equals("LEADER CARD")) {
-                                            shelf[index] = shelf[index] + parameter.charAt(0);
-                                        } else {
-                                            System.err.println("Not valid parameter");
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    System.err.println("Not existing resource");
-                                    break;
-                                }
-
-                            }
-
-                            int pos;
-
-                            System.out.println("In which position of your development card grid do you want to place the bought card?");
-                            System.out.println("You can put a level 1 card in an empty position or a level 2/3 card on a level 1/2 card.");
-                            System.out.println("Write a correct position between 0 and 2.");
-                            parameter = this.clientMain.getConsoleInput().nextLine();
-
-                            try {
-                                pos = Integer.parseInt(parameter);
-                            } catch (Exception e) {
-                                System.out.println("Not valid position");
-                                break;
-                            }
+                            int pos = this.view.choosePosition(stage);
 
                             //Sending Card request
-                            BuyCardMessage buyCard = new BuyCardMessage(colour, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
+
+                            BuyCardMessage buyCard = new BuyCardMessage(column, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
                             this.sender.writeObject(buyCard);
                             break;
                         }
@@ -543,10 +375,6 @@ public class ServerSender extends Thread {
                             System.out.println("Your left the Game");
                             break;
                         }
-                        default: {
-                            System.out.println("Not valid action!");
-                            break;
-                        }
                     }
                     //Player inserisce quit
                 }
@@ -558,13 +386,9 @@ public class ServerSender extends Thread {
                 System.exit(1);
             }
 
-
         } while (!action.equals("QUIT"));
 
-        //In teoria quando chiudo la socket in uno dei due thread anche l'altro dovrebbe ricevere eccezione e quindi chiudersi anche lui
         try {
-            this.sender.writeObject(new QuitMessage());
-            this.sender.close();
             this.socket.close();
         } catch (Exception e) {
             System.out.println("Closing output stream and socket");

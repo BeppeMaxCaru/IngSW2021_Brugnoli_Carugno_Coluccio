@@ -5,14 +5,14 @@ import java.io.Serializable;
 public class BuyCardMessage extends Message implements Serializable {
 
     private final int playerNumber;
-    private final String colour;
+    private final int column;
     private final int level;
     private final int[] quantity;
     private final String[] shelf;
     private int playerboardPosition;
 
-    public BuyCardMessage(String col, int lev, int num, int[] q, String[] s, int playerboardPosition){
-        this.colour=col;
+    public BuyCardMessage(int col, int lev, int num, int[] q, String[] s, int playerboardPosition){
+        this.column=col;
         this.level=lev;
         this.playerNumber=num;
         this.quantity=q;
@@ -20,8 +20,8 @@ public class BuyCardMessage extends Message implements Serializable {
         this.playerboardPosition = playerboardPosition;
     }
 
-    public String getColour() {
-        return colour;
+    public int getColour() {
+        return this.column;
     }
 
     public int getLevel() {
