@@ -226,7 +226,7 @@ public class PlayerThread implements Runnable {
             } catch (Exception e) {
                 this.sendErrorMessage();
                 this.removePlayer();
-                System.out.println("Error in comunicating turn");
+                System.out.println("Error in communicating turn");
                 break;
             }
 
