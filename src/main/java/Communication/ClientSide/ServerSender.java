@@ -166,7 +166,7 @@ public class ServerSender extends Thread {
                             try {
                                 //Checks if player has written only '0', '1' or 'x' chars
                                 if (chosenMarble.length() != 0)
-                                    for (int k = 0; k < wlChoice.length(); k++)
+                                    for (int k = 0; k < chosenMarble.length(); k++)
                                         if (!String.valueOf(chosenMarble.charAt(k)).equals("0")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("1")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("X"))

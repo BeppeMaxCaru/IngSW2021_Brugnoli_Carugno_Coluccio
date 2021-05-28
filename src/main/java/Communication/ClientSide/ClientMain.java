@@ -72,6 +72,10 @@ public class ClientMain {
 
         if (gameMode.equals("0")) {
 
+            System.out.println("Hi " + this.nickname + "!");
+            System.out.println("Welcome to Master of Renaissance single player!");
+            System.out.println();
+
             Player[] localPlayers = new Player[2];
             localPlayers[0] = new Player(this.nickname, 0);
             localPlayers[1] = new Player("Lorenzo the Magnificent", 1);
@@ -85,6 +89,7 @@ public class ClientMain {
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
                 localPlayers[0].setPlayerLeaderCard(index, cardsDeck.drawOneLeaderCard());
 
+            System.out.println("Which starting leader cards do you want to discard?");
             //Discard 2 leader cards
             for (int index = 0; index < 2; index++)
             {
@@ -111,13 +116,14 @@ public class ClientMain {
                     int discard = Integer.parseInt(card);
                     localPlayers[0].discardLeaderCard(discard);
                 } catch (Exception e) {
-                    System.out.println("Error in setup");
+                    System.err.println("Error in setup");
                     return;
                 }
             }
 
+            int mainAction = 0;
             String action = "";
-            do {
+            while(!action.equals("QUIT") || !this.endLocalGame(localPlayers)) {
                 while (!action.equals("END TURN") && !action.equals("QUIT")) {
                     System.out.println("Which action do you want to do?");
                     System.out.println("Write 'Play leader card'");
@@ -141,18 +147,27 @@ public class ClientMain {
                                 }
                             }
                             String parameter = this.consoleInput.nextLine();
+                            int cardPosition;
                             try {
                                 //Checks if the leader card position exists
-                                int cardPosition = Integer.parseInt(parameter);
+                                cardPosition = Integer.parseInt(parameter);
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
-
-                                //Missing controller controls
-                                localPlayers[0].playLeaderCard(cardPosition);
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
                             }
+
+                            try {
+                                if(this.checkLocalLeaders(localPlayers[0], cardPosition))
+                                    localPlayers[0].playLeaderCard(cardPosition);
+                                else System.out.println("Not valid action.");
+
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                break;
+                            }
+
                             break;
                         }
                         case "D":
@@ -167,13 +182,22 @@ public class ClientMain {
                                 }
                             }
                             String parameter = this.consoleInput.nextLine();
+                            int cardPosition;
                             try {
                                 //Checks if the leader card position exists
-                                int cardPosition = Integer.parseInt(parameter);
+                                cardPosition = Integer.parseInt(parameter);
                                 if (cardPosition != 0 && cardPosition != 1) throw new Exception();
 
-                                //Missing controller controls
-                                localPlayers[0].discardLeaderCard(cardPosition);
+                            } catch (Exception e) {
+                                System.err.println("Not valid parameter");
+                                break;
+                            }
+
+                            try {
+                                if(this.checkLocalLeaders(localPlayers[0], cardPosition))
+                                    localPlayers[0].discardLeaderCard(cardPosition);
+                                else
+                                    System.err.println("Not valid action.");
 
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
@@ -183,6 +207,11 @@ public class ClientMain {
                         }
                         case "M":
                         case "PICK RESOURCES FROM MARKET": {
+
+                            if(mainAction==1) {
+                                System.err.println("Main action already done. You can only do Leader actions, if available");
+                                break;
+                            }
 
                             this.market.printMarket();
 
@@ -215,6 +244,12 @@ public class ClientMain {
                                 break;
                             }
 
+                            System.out.println("YOUR ACTIVATED LEADER CARDS:");
+                            for(int ind =0; ind<localPlayers[0].getPlayerLeaderCards().length; ind++)
+                                if(localPlayers[0].getPlayerLeaderCards()[ind]!=null && localPlayers[0].getPlayerLeaderCards()[ind].isPlayed())
+                                    localPlayers[0].getPlayerLeaderCards()[ind].printLeaderCard();
+                            System.out.println();
+
                             //Receives deposit
                             System.out.println("If you activated your extra warehouse space, where do you want to store your resources?");
                             if (parameter.equals("ROW"))
@@ -234,12 +269,6 @@ public class ClientMain {
                                 break;
                             }
 
-                            System.out.println("YOUR ACTIVATED LEADER CARDS:");
-                            for(int ind =0; ind<localPlayers[0].getPlayerLeaderCards().length; ind++)
-                                if(localPlayers[0].getPlayerLeaderCards()[ind]!=null && localPlayers[0].getPlayerLeaderCards()[ind].isPlayed())
-                                    localPlayers[0].getPlayerLeaderCards()[ind].printLeaderCard();
-                            System.out.println();
-
                             //Receives position of leader cards to activate to receive a resource from a white marble
                             System.out.println("If you activated both your white marble resources leader card, which one do you want to activate for each white marble you picked?");
                             System.out.println("if you activated only one white marble leader card, do you want to activate it?");
@@ -249,27 +278,63 @@ public class ClientMain {
                             try {
                                 //Checks if player has written only '0', '1' or 'x' chars
                                 if (chosenMarble.length() != 0)
-                                    for (int k = 0; k < wlChoice.length(); k++)
+                                {
+                                    for (int k = 0; k < chosenMarble.length(); k++)
+                                    {
                                         if (!String.valueOf(chosenMarble.charAt(k)).equals("0")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("1")
                                                 && !String.valueOf(chosenMarble.charAt(k)).equals("X"))
                                             throw new Exception();
+                                    }
+                                }
                             } catch (Exception e) {
                                 System.err.println("Not valid parameter");
                                 break;
                             }
 
-                            //Missing controller controls
-                            if (parameter.equals("ROW"))
-                                this.market.updateRow(index, localPlayers, 0, wlChoice, chosenMarble);
-                            else this.market.updateColumn(index, localPlayers, 0, wlChoice, chosenMarble);
+                            //If player picks row
+                            if(parameter.equals("ROW"))
+                            {
+                                if(chosenMarble.length()<4) {
+                                    StringBuilder cBuilder = new StringBuilder(chosenMarble);
+                                    for(int k = cBuilder.length(); k<4; k++)
+                                        cBuilder.append("X");
+                                    chosenMarble = cBuilder.toString();
+                                }
+                            }
+                            else
+                            {
+                                if(chosenMarble.length()<3) {
+                                    StringBuilder cBuilder = new StringBuilder(chosenMarble);
+                                    for(int k = cBuilder.length(); k<3; k++)
+                                        cBuilder.append("X");
+                                    chosenMarble = cBuilder.toString();
+                                }
+                            }
 
+                            try {
+                                if(this.checkLocalMarketAction(localPlayers[0].getPlayerBoard(), wlChoice, chosenMarble)) {
+                                    if (parameter.equals("ROW"))
+                                        this.market.updateRow(index, localPlayers, 0, wlChoice, chosenMarble);
+                                    else this.market.updateColumn(index, localPlayers, 0, wlChoice, chosenMarble);
+                                    mainAction++;
+                                } else
+                                    System.err.println("Not valid action.");
+                            } catch (Exception e) {
+                                System.err.println("Not valid action.");
+                                break;
+                            }
                             break;
 
                         }
 
                         case "B":
                         case "BUY DEVELOPMENT CARD": {
+
+                            if(mainAction==1) {
+                                System.err.println("Main action already done. You can only do Leader actions, if available");
+                                break;
+                            }
 
                             localPlayers[0].getPlayerBoard().printAll();
                             this.getDevelopmentCardsDecksGrid().printGrid();
@@ -371,18 +436,31 @@ public class ClientMain {
                             try {
                                 pos = Integer.parseInt(parameter);
                             } catch (Exception e) {
-                                System.out.println("Not valid position");
+                                System.err.println("Not valid position");
                                 break;
                             }
-
-                            //Missing controller controls
-                            if(localPlayers[0].getPlayerBoard().isCardBelowCompatible(pos, this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][index][0]))
-                                localPlayers[0].buyDevelopmentCard(this.developmentCardsDecksGrid, index, 3 - level, pos, shelf);
+                            try {
+                                if(this.checkLocalBuyCard(localPlayers[0], colour, level, quantity, shelf ))
+                                    if(localPlayers[0].getPlayerBoard().isCardBelowCompatible(pos, this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][index][0]))
+                                    {
+                                        localPlayers[0].buyDevelopmentCard(this.developmentCardsDecksGrid, index, 3 - level, pos, shelf);
+                                        mainAction++;
+                                    } else System.err.println("Not valid action.");
+                                else System.err.println("Not valid action.");
+                            } catch (Exception e) {
+                                System.err.println("Not valid action.");
+                                break;
+                            }
                             break;
                         }
 
                         case "A":
                         case "ACTIVATE PRODUCTION POWER": {
+
+                            if(mainAction==1) {
+                                System.err.println("Main action already done. You can only do Leader actions, if available");
+                                break;
+                            }
 
                             localPlayers[0].getPlayerBoard().printAll();
                             System.out.println("YOUR ACTIVATED LEADER CARDS :");
@@ -455,10 +533,10 @@ public class ClientMain {
                                                 if (quant.equals("1") || quant.equals("2")) {
                                                     if (whichInput[i].length() > 3) {
                                                         if (String.valueOf(whichInput[i].charAt(1)).equals("2")) {
-                                                            System.out.println("Not valid command.");
+                                                            System.err.println("Not valid command.");
                                                             break;
                                                         } else if (String.valueOf(whichInput[i].charAt(1)).equals("1") && quant.equals("2")) {
-                                                            System.out.println("Not valid command.");
+                                                            System.err.println("Not valid command.");
                                                             break;
                                                         }
                                                     }
@@ -488,15 +566,6 @@ public class ClientMain {
                                         // Se attiva il potere di produzione base
                                         if (command.equals("b") && activation[3] == 0) {
 
-                                            /*for (int k = 0; k < 2; k++) {
-                                                whichInput[3] = whichInput[3] + stdIn.readLine();  // Comandi risorsa in input: 0, 1, 2, 3
-                                                quant = stdIn.readLine(); // Comandi quantità: 1, 2
-                                                whichInput[3] = whichInput[3] + quant;
-                                                whichInput[3] = whichInput[3] + stdIn.readLine(); // Comandi: c, w, e.
-                                                if(quant.equals("2")) k++;
-                                            }
-                                             */
-
                                             for (int k = 0; k < 2; k++) {
 
                                                 System.out.println("Which input resource do you want to spend?");
@@ -510,10 +579,10 @@ public class ClientMain {
                                                     if (quant.equals("1") || quant.equals("2")) {
                                                         if (whichInput[3].length() > 3) {
                                                             if (String.valueOf(whichInput[3].charAt(1)).equals("2")) {
-                                                                System.out.println("Not valid command.");
+                                                                System.err.println("Not valid command.");
                                                                 break;
                                                             } else if (String.valueOf(whichInput[3].charAt(1)).equals("1") && quant.equals("2")) {
-                                                                System.out.println("Not valid command.");
+                                                                System.err.println("Not valid command.");
                                                                 break;
                                                             }
                                                         }
@@ -605,45 +674,54 @@ public class ClientMain {
                                 }
                             }
 
-                            //Missing controller and serverSender checkActivateProduction controls
                             int[] outputs = new int[3];
                             for(int k = 0; k<outputs.length; i++)
                                 outputs[k] = Integer.parseInt(whichOutput[k]);
 
-                            localPlayers[0].activateProduction(activation, whichInput, outputs);
-
+                            try {
+                                if (this.checkLocalActivateProd(localPlayers[0], commandsList, activation, whichInput, whichOutput)) {
+                                    localPlayers[0].activateProduction(activation, whichInput, outputs);
+                                    mainAction++;
+                                } else System.err.println("Not valid action.");
+                            } catch (Exception e) {
+                                System.err.println("Not valid action.");
+                                break;
+                            }
                             break;
                         }
                         case "END TURN":
                         {
-                            System.out.println("Your turn has ended.");
+                            if(mainAction==1)
+                            {
+                                System.out.println("Your turn has ended.");
+                                actionCountersDeck.drawCounter().activate(actionCountersDeck, localPlayers[0].getPlayerBoard(), this.developmentCardsDecksGrid);
+                                System.out.println("LORENZO FAITH POINTS: "+localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition());
+                                action = "";
+                                mainAction = 0;
+                            } else {
+                                System.err.println("You have to do a main action before end your turn.");
+                                action = "";
+                            }
+
                             break;
                         }
                         case "QUIT":
                         {
                             System.out.println("Your left the Game");
-                            break;
+                            return;
                         }
                         default: {
-                            System.out.println("Not valid action!");
+                            System.err.println("Not valid action!");
                             break;
                         }
                     }
                 }
-
-                //
-                actionCountersDeck.drawCounter().activate(actionCountersDeck, localPlayers[0].getPlayerBoard(), this.developmentCardsDecksGrid);
-                System.out.println("LORENZO FAITH POINTS: "+localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition());
-
-            }while(!action.equals("QUIT") || !this.endLocalGame(localPlayers));
-
-            if (!action.equals("QUIT")) {
-                System.out.println("Match has ended.");
-                if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought()==7 || localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition()==24)
-                    System.out.println("You win the Game, with "+localPlayers[0].sumAllVictoryPoints()+" Victory points.");
-                else System.out.println(localPlayers[1].getNickname()+" wins the Game.");
             }
 
+            System.out.println("Match has ended.");
+            if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought()==7 || localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition()==24)
+                System.out.println("You win the Game, with "+localPlayers[0].sumAllVictoryPoints()+" Victory points.");
+            else System.out.println(localPlayers[1].getNickname()+" wins the Game.");
 
         } else {
 
@@ -864,10 +942,256 @@ public class ClientMain {
         if(localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition()==24)
             return true;
 
-        if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought()==7)
-            return true;
+        return localPlayers[0].getPlayerBoard().getDevelopmentCardsBought() == 7;
+    }
 
-        return false;
+    public boolean checkLocalLeaders(Player player, int card) {
+        return player.getPlayerLeaderCards()[card] != null && !player.getPlayerLeaderCards()[card].isPlayed();
+    }
+
+    public boolean checkLocalMarketAction(Playerboard board, String wlChoice, String leader) {
+
+        if(leader.contains("1"))
+            if (board.getResourceMarbles()[1]==null) return false;
+
+        if(leader.contains("0"))
+            if (board.getResourceMarbles()[0]==null) return false;
+
+        if(wlChoice.contains("L"))
+            for(String keys : board.getWareHouse().getWarehouseResources().keySet())
+                if (!keys.contains("extra")) return false;
+
+        return true;
+    }
+
+    public boolean checkLocalBuyCard(Player player, String colour, int level, int[] quantity, String[] wclChoice) {
+        Map<String, Integer> paidResources = new HashMap<>();
+        paidResources.put("COINS", quantity[0]);
+        paidResources.put("SERVANTS", quantity[1]);
+        paidResources.put("SHIELDS", quantity[2]);
+        paidResources.put("STONES", quantity[3]);
+
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "SERVANTS");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "STONES");
+
+        int column = this.developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour.toUpperCase());
+
+        if (this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0] != null) {
+
+            //Control on quantity and possibly discounts
+            //If paidResources hashMap isn't equals to cardCost hashMap
+            if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                //Check for discounts
+                if (player.getPlayerBoard().getDevelopmentCardDiscount()[0] != null && player.getPlayerLeaderCards()[0].isPlayed()) {
+                    paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[0]) + 1);
+                    //Check if player has activated only first discount
+                    if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                        if (player.getPlayerBoard().getDevelopmentCardDiscount()[1] != null && player.getPlayerLeaderCards()[1].isPlayed()) {
+                            paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[1], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[1]) + 1);
+                            //Check if player has activated both first and second discounts
+                            if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                                //Check if player has activated only second discount
+                                paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
+                                if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                                    //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int k = 0; k < 4; k++) {
+            int count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
+                    count++;
+            }
+            if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count) {
+                return false;
+            }
+
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
+                    count++;
+            }
+            if (player.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count) {
+                return false;
+            }
+
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
+                    count++;
+            }
+            if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    public boolean checkLocalActivateProd(Player player, String[] list, int[] activate, String[] inputs, String[] outputs) {
+
+        Map<String, Integer> paidWarehouseResources = new HashMap<>();
+        paidWarehouseResources.put("COINS", 0);
+        paidWarehouseResources.put("SERVANTS", 0);
+        paidWarehouseResources.put("SHIELDS", 0);
+        paidWarehouseResources.put("STONES", 0);
+
+        Map<String, Integer> paidChestResources = new HashMap<>();
+        paidChestResources.put("COINS", 0);
+        paidChestResources.put("SERVANTS", 0);
+        paidChestResources.put("SHIELDS", 0);
+        paidChestResources.put("STONES", 0);
+
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "SERVANTS");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "STONES");
+
+        int j;
+
+        for (int i = 0; list[i] != null; i++) {
+            if (!list[i].equals("p0") && !list[i].equals("p1") && !list[i].equals("p2") &&
+                    !list[i].equals("b") && !list[i].equals("e0") && !list[i].equals("e1")) {
+                System.out.println("Not valid command.");
+                return false;
+            }
+        }
+
+        for (int index = 0; index < 6; index++) {
+            if (activate[index] == 1) {
+                j = 0;
+                for (int i = 0; i < inputs[index].length() / 3; i++) {
+                    if (inputs[index].charAt(j) != '0' && inputs[index].charAt(j) != '1' && inputs[index].charAt(j) != '2' && inputs[index].charAt(j) != '3') {
+                        System.out.println("Not valid command.");
+                        return false;
+                    }
+                    if (inputs[index].charAt(j + 1) != '1' && inputs[index].charAt(j + 1) != '2') {
+                        System.out.println("Not valid command.");
+                        return false;
+                    }
+                    if (inputs[index].charAt(j + 2) != 'c' && inputs[index].charAt(j + 2) != 'w' && inputs[index].charAt(j + 2) != 'e') {
+                        System.out.println("Not valid command.");
+                        return false;
+                    }
+                    j++;
+                }
+            }
+        }
+
+        for (String s : outputs) {
+            if (s != null) {
+                if (!s.equals("0") && !s.equals("1") && !s.equals("2") && !s.equals("3") && !s.equals("4")) {
+                    System.out.println("Not valid command.");
+                    return false;
+                }
+            }
+        }
+
+        for(int k=0; k<activate.length; k++)
+        {
+            if(activate[k]==1) {
+
+                j=2;
+                if (k < 3) {
+
+                    //Check if player has any cards into the indicated position
+                    for (j = 2; j > 0; j--)
+                        if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                            break;
+
+                    if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                        return false;
+                    }
+
+                    //Check how many resources player has to spend
+                    int totalResources = 0;
+                    for(String keys : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
+                        totalResources=totalResources+player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(keys);
+                    //Confront them with whichInput string: resourceCode - quantity - storage
+                    //If player indicated less resources than that he had to pay, error
+                    if(inputs.length<totalResources*3) return false;
+
+                } else {
+                    if(k != 3) {
+                        //Check if player has any cards into the indicated position and it is activated
+                        if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !player.getPlayerLeaderCards()[k-4].isPlayed()) {
+                            return false;
+                        }
+                    }
+                }
+
+                //Save all resources player has to pay in temporary maps
+                for(int z=0; z<inputs.length-2; z=z+3) {
+                    switch (String.valueOf(inputs[z+2]).toUpperCase()) {
+                        case "W": {
+                            paidWarehouseResources.put(resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                            break;
+                        }
+                        case "C": {
+                            paidChestResources.put(resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                            break;
+                        }
+                        case "L": {
+                            if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(Integer.parseInt(inputs[z])))==null) {
+                                return false;
+                            }
+                            else
+                                paidWarehouseResources.put("extra"+resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                            break;
+                        }
+                    }
+                }
+
+                //Check if player has each correct resource in each correct storage
+
+                for(String keys : paidWarehouseResources.keySet())
+                    if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
+                        return false;
+                    }
+                for(String keys : paidChestResources.keySet())
+                    if(player.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys)) {
+                        return false;
+                    }
+
+                //Check if player inserted all necessary resources to activate the production
+
+                for (String res : paidChestResources.keySet())
+                {
+                    paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
+                    for(String extraRes : paidWarehouseResources.keySet())
+                    {
+                        if(extraRes.contains(res))
+                            paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    }
+                }
+
+                if(k<3)
+                {
+                    for(String res : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
+                    {
+                        if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(res)) {
+                            return false;
+                        }
+                    }
+                } else {
+                    if (paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
 
