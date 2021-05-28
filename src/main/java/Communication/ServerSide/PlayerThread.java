@@ -30,6 +30,8 @@ public class PlayerThread implements Runnable {
 
     private boolean mainAction = false;
 
+    private int yourTurnMessageCounter = 0;
+
     //Il game controller va assegnato con setter siccome creato prima
     public PlayerThread(Socket clientSocket) {
         try {
@@ -212,6 +214,22 @@ public class PlayerThread implements Runnable {
                 System.out.println("Reset sender not working");
             }
 
+            //Your turn message
+            try {
+                //Non bisogna attendere ricezione di un messaggio per comunicarlo!
+                if (this.gameController.getCurrentPlayerNumber() == this.playerThreadNumber) {
+                    if (this.yourTurnMessageCounter == 0) {
+                        this.sender.writeObject(new YourTurnMessage());
+                        this.yourTurnMessageCounter = 1;
+                    }
+                }
+            } catch (Exception e) {
+                this.sendErrorMessage();
+                this.removePlayer();
+                System.out.println("Error in comunicating turn");
+                break;
+            }
+
             Message object;
 
             //Receive object
@@ -222,6 +240,7 @@ public class PlayerThread implements Runnable {
                 {
                     object = new NotYourTurnMessage();
                     this.sender.writeObject(object);
+                    //this.yourTurnMessageCounter = 1;
                 }
             } catch (Exception e) {
                 this.sendErrorMessage();
@@ -389,6 +408,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof EndTurnMessage) {
                 this.mainAction = false;
                 this.gameController.nextCurrentPlayerNumber();
+                this.yourTurnMessageCounter = 0;
                 //Salva come giocatore corrente nel gamecontroller/gamemodel
                 //il giocatore successivo a questo per abilitarlo e bloccare questo
             }
