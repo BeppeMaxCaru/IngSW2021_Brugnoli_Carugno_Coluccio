@@ -2,13 +2,17 @@ package Communication.ClientSide.RenderingView;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -16,6 +20,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class GUI extends Application {
+
+    String nickname;
 
     public static void main(String[] args) {
        /*
@@ -78,35 +84,96 @@ public class GUI extends Application {
             gc.drawImage( img, 20, x, 100, 100 );
             x+=200;
         }
-    }
-    */
+    } */
+
 
     @Override
     public void start(Stage stage) {
-
-        stage.setTitle("Pick initial resources");
-        Group root = new Group();
-        Canvas canvas = new Canvas(730, 150);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        startingResources(gc);
-
-        root.getChildren().add(canvas);
-        stage.setScene(new Scene(root));
-
-        stage.show();
-
+        nick(stage);
     }
 
-    public void welcome(Stage stage, String nickname) {
-        addLabelByCode(stage, "Loading...\nHi " + nickname + "!\nWelcome to Master of Renaissance online!");
+    //@Override
+    public String nick(Stage stage) {
+        GridPane root = new GridPane();
+        root.setHgap(8);
+        root.setVgap(8);
+        root.setPadding(new Insets(5));
+
+        ColumnConstraints cons1 = new ColumnConstraints();
+        cons1.setHgrow(Priority.NEVER);
+        root.getColumnConstraints().add(cons1);
+
+        ColumnConstraints cons2 = new ColumnConstraints();
+        cons2.setHgrow(Priority.ALWAYS);
+
+        root.getColumnConstraints().addAll(cons1, cons2);
+
+        RowConstraints rcons1 = new RowConstraints();
+        rcons1.setVgrow(Priority.NEVER);
+
+        RowConstraints rcons2 = new RowConstraints();
+        rcons2.setVgrow(Priority.ALWAYS);
+
+        root.getRowConstraints().addAll(rcons1, rcons2);
+
+        Label lbl = new Label("Insert nickname:");
+        TextField field = new TextField();
+        Button okBtn = new Button("Start game");
+
+        okBtn.setOnAction(e -> {
+            multiOrSinglePlayers(stage);
+            //welcome(stage, field.getText());
+        });
+
+        GridPane.setHalignment(okBtn, HPos.RIGHT);
+
+        root.add(lbl, 0, 0);
+        root.add(field, 1, 0, 3, 1);
+        root.add(okBtn, 2, 1);
+
+        Scene scene = new Scene(root, 300, 100);
+
+        stage.setTitle("Choose nickname");
+        stage.setScene(scene);
+        stage.show();
+
+        this.nickname = field.getText();
+
+        return field.getText();
+    }
+
+    public int multiOrSinglePlayers(Stage stage) {
+        GridPane root = new GridPane();
+        ToggleButton button1 = new ToggleButton("Single player");
+        ToggleButton button2 = new ToggleButton("Multi player");
+        root.add(button1, 0, 0);
+        root.add(button2, 0, 1);
+
+        Scene scene = new Scene(root, 300, 100);
+
+        stage.setTitle("Multi Or Single Players?");
+        stage.setScene(scene);
+        stage.show();
+
+        if(button1.isSelected()) return 0;
+        else return 1;
+    }
+
+    public void welcome(Stage stage) {
+        addLabelByCode(stage, "Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
+        LoadWTFOnTimer(stage, "welcome");
     }
 
     public void matchHasStarted(Stage stage, int playerNumber) {
         addLabelByCode(stage, "Match has started, your player number is " + playerNumber);
     }
 
-    public void startingResources(GraphicsContext gc) {
+    public void startingResources(Stage stage) {
+        stage.setTitle("Pick initial resources");
+        Group root = new Group();
+        Canvas canvas = new Canvas(730, 150);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
         String[] resources =  new String[] {
                 "coin.png",
                 "servant.png",
@@ -121,6 +188,10 @@ public class GUI extends Application {
             x+=200;
         }
 
+        root.getChildren().add(canvas);
+        stage.setScene(new Scene(root));
+
+        stage.show();
     }
 
     public void addLabelByCode(Stage stage, String string) {
@@ -131,7 +202,7 @@ public class GUI extends Application {
         stage.show();
     }
 
-    static void LoadWTFOnTimer(Stage stage) {
+    static void LoadWTFOnTimer(Stage stage, String nameMethod) {
         TimerTask task = new TimerTask() {
 
             public void run() {
@@ -139,6 +210,7 @@ public class GUI extends Application {
                 Platform.runLater(() -> {
                     try {
                         System.out.println("loading..");
+
 
                     } catch (Exception e) {
                         System.out.println(e);
@@ -152,5 +224,4 @@ public class GUI extends Application {
         long delay = 5000L;
         timer.schedule(task, delay);
     }
-
 }
