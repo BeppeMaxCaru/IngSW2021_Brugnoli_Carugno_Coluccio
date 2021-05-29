@@ -5,6 +5,7 @@ import Communication.ServerSide.PlayerThread;
 import Message.Message;
 import Message.MessageReceived.*;
 import Message.MessageSent.QuitMessage;
+import javafx.stage.Stage;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -29,6 +30,7 @@ public class ServerReceiver extends Thread {
 
     @Override
     public void run() {
+        Stage stage = null;
         //Keeps receiving messages and current player actions
 
         //ASYNC PHASE
@@ -48,7 +50,7 @@ public class ServerReceiver extends Thread {
             if (object instanceof NotYourTurnMessage) {
 
                 try {
-                    System.out.println("It's not your turn.");
+                    this.view.notYourTurn(stage);
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -60,14 +62,9 @@ public class ServerReceiver extends Thread {
             if (object instanceof UpdateClientMarketMessage) {
                 try {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
-                    //IL MERCATO NON VIENE SERIALIZZATO
-                    //Market market = updateClientMarketMessage.getMarket();
-                    //market.printMarket();
-                    //updateClientMarketMessage.getMarket().printMarket();
+
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
-                    //updateClientMarketMessage.getMarket().printMarket();
-                    //this.clientMain.getMarket().printMarket();
-                    System.out.println("Updated market");
+
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -77,11 +74,9 @@ public class ServerReceiver extends Thread {
             if (object instanceof UpdateClientDevCardGridMessage) {
                 try {
                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) object;
-                    //IL MERCATO NON VIENE SERIALIZZATO
-                    //ADESSO SI CONRESET
+
                     this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
-                    //updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid().printGrid();
-                    // System.out.println("Updated dev card grid");
+
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -114,8 +109,7 @@ public class ServerReceiver extends Thread {
 
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
-                    System.out.println("The winner is " + gameOverMessage.getWinner());
-                    System.out.println("You made " + gameOverMessage.getWinner() + " victory points");
+                    this.view.endMultiplayerGame(stage, gameOverMessage);
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();

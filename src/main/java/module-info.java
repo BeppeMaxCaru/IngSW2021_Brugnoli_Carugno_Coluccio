@@ -9,6 +9,7 @@ module Maestri.MVC {
     exports Maestri.MVC.Model.GModel.GamePlayer.Playerboard;
     exports Maestri.MVC.Model.GModel.DevelopmentCards;
     exports Maestri.MVC.Model.GModel.LeaderCards;
+    exports Maestri.MVC.Model.GModel.ActionCounters;
     exports Communication.ClientSide;
     exports Communication.ServerSide;
     exports Message;

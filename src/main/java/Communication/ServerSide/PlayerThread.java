@@ -336,7 +336,7 @@ public class PlayerThread implements Runnable {
                         //DevCard colour
                         int column = buyCardMessage.getColour();
                         //DevCard level
-                        int level = 3 - buyCardMessage.getLevel();
+                        int level = buyCardMessage.getLevel();
                         //How much resources does the player spend
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources

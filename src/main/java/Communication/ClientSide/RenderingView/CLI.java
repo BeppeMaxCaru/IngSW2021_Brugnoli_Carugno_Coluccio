@@ -1,12 +1,14 @@
 package Communication.ClientSide.RenderingView;
 
+import Maestri.MVC.Model.GModel.ActionCounters.ActionCounter;
+import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
+import Message.MessageReceived.GameOverMessage;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -43,7 +45,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String start(Stage stage){
+    public String startingResource(Stage stage){
         String res;
         Scanner input = new Scanner(System.in);
         System.out.println("Which starting resource do you want to pick?");
@@ -126,8 +128,9 @@ public class CLI implements RenderingView{
         action = input.nextLine().toUpperCase();
 
         while(!action.equals("PLAY LEADER CARD") && !action.equals("DISCARD LEADER CARD") &&
-                !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
-                !action.equals("ACTIVATE PRODUCTION POWER") && !action.equals("END TURN") && !action.equals("QUIT"))
+            !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
+            !action.equals("ACTIVATE PRODUCTION POWER") && !action.equals("END TURN") && !action.equals("QUIT") &&
+            !action.equals("P") && !action.equals("D") && !action.equals("M") && !action.equals("B") && !action.equals("A"))
         {
             System.err.println("Write a correct action.");
             System.out.println("Which action do you want to do?");
@@ -266,11 +269,7 @@ public class CLI implements RenderingView{
         Scanner input = new Scanner(System.in);
         String wlChoice;
 
-        System.out.println("YOUR ACTIVATED LEADER CARDS:");
-        for(int ind =0; ind<cards.length; ind++)
-            if(cards[ind]!=null && cards[ind].isPlayed())
-                this.printLeaderCard(cards[ind]);
-        System.out.println();
+        this.printActivatedLeaderCard(cards);
 
         //Receives deposit
         System.out.println("If you activated your extra warehouse space, where do you want to store your resources?");
@@ -369,7 +368,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String[][] payDevelopmentCard(Stage stage, LeaderCard[] cards) {
+    public String[][] payResources(Stage stage, LeaderCard[] cards) {
         Scanner input = new Scanner(System.in);
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
@@ -388,10 +387,13 @@ public class CLI implements RenderingView{
         String quantity;
         while (!parameter.equalsIgnoreCase("STOP") || res>4) {
 
-            System.out.println("Which resource do you want to pick to pay the development card? Write STOP at the end.");
+            System.out.println("Which resource do you want to pay? Write STOP at the end.");
             parameter = input.nextLine().toUpperCase();
             if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS") || parameter.equals("STOP")) {
                 res++;
+
+                if(parameter.equals("STOP"))
+                    break;
 
                 //Receives now quantity
                 System.out.println("How much " + parameter + " do you want to pick?");
@@ -412,11 +414,8 @@ public class CLI implements RenderingView{
                 }
 
                 //Player available leader cards
-                System.out.println("YOUR ACTIVATED LEADER CARDS:");
-                for(int ind =0; ind<cards.length; ind++)
-                    if(cards[ind]!=null && cards[ind].isPlayed())
-                        this.printLeaderCard(cards[ind]);
-                System.out.println();
+                this.printActivatedLeaderCard(cards);
+
                 String shelf;
                 //Keeps asking a place to take from resources
                 for(int s = 0; s < Integer.parseInt(quantity); s++)
@@ -463,6 +462,14 @@ public class CLI implements RenderingView{
         return position;
     }
 
+    public void printActivatedLeaderCard(LeaderCard[] cards){
+        System.out.println("YOUR ACTIVATED LEADER CARDS:");
+        for (LeaderCard card : cards)
+            if (card != null && card.isPlayed())
+                this.printLeaderCard(card);
+        System.out.println();
+    }
+
     public void printLeaderCard(LeaderCard card){
         card.printLeaderCard();
     }
@@ -499,5 +506,243 @@ public class CLI implements RenderingView{
             }
         }
         return true;
+    }
+
+    @Override
+    public int activationProd(Stage stage, Playerboard playerboard, LeaderCard[] cards, int[] activation) {
+        Scanner input = new Scanner(System.in);
+        String prodPower = "";
+
+        this.printPlayerboard(playerboard);
+        this.printActivatedLeaderCard(cards);
+
+        System.out.println("Which production power do you want to activate?");
+        if (activation[0] == 0)
+            System.out.println("Write p0 if you want to activate the first production of your grid, if it's available");
+        if (activation[1] == 0)
+            System.out.println("Write p1 if you want to activate the second production of your grid, if it's available");
+        if (activation[2] == 0)
+            System.out.println("Write p2 if you want to activate the third production of your grid, if it's available");
+        if (activation[3] == 0)
+            System.out.println("Write b if you want to activate the basic production power");
+        if (activation[4] == 0)
+            System.out.println("Write e0 if you want to activate the first extra production power, if it's available");
+        if (activation[5] == 0)
+            System.out.println("Write e1 if you want to activate the second extra production power, if it's available");
+        System.out.println("Write STOP if you don't want to activate production powers");
+        prodPower = input.nextLine().toUpperCase();
+        while(this.checkProduction(activation, prodPower) != -1){
+            System.err.println("Not valid input.");
+            System.out.println("Write a correct production power code.");
+            prodPower = input.nextLine().toUpperCase();
+        }
+
+        return this.checkProduction(activation, prodPower);
+    }
+
+    public int checkProduction(int[] activation, String prodPower){
+        switch(prodPower){
+            case "PO":
+            {
+                if(activation[0]==0)
+                    return 0;
+                else return -1;
+            }
+            case "P1":
+            {
+                if(activation[1]==0)
+                    return 1;
+                else return -1;
+            }
+            case "P2":
+            {
+                if(activation[2]==0)
+                    return 2;
+                else return -1;
+            }
+            case "B":
+            {
+                if(activation[3]==0)
+                    return 3;
+                else return -1;
+            }
+            case "EO":
+            {
+                if(activation[4]==0)
+                    return 4;
+                else return -1;
+            }
+            case "E1":
+            {
+                if(activation[5]==0)
+                    return 5;
+                else return -1;
+            }
+            case "STOP":
+            {
+                for(int index = 0; index<6 ; index++){
+                    if(activation[index]==1)
+                        return 6;
+                }
+                return -1;
+            }
+            default:
+            {
+                return -1;
+            }
+        }
+    }
+
+    @Override
+    public String inputResourceProd(Stage stage, LeaderCard[] cards) {
+        Scanner input = new Scanner(System.in);
+        StringBuilder whichInput = new StringBuilder();
+        String res;
+
+        do{
+
+            System.out.println("Which input resource do you want to spend?");
+            System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
+            res = input.nextLine().toUpperCase();
+            while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("STOP")) {
+                System.out.println("Choose a correct resource");
+                System.out.println("Which starting resource do you want to pick?");
+                System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
+                res = input.nextLine().toUpperCase();
+            }
+
+            switch (res){
+                case "COINS": {
+                    whichInput.append("0");
+                    break;
+                }
+                case "SERVANTS": {
+                    whichInput.append("1");
+                    break;
+                }
+                case "SHIELDS": {
+                    whichInput.append("2");
+                    break;
+                }
+                case "STONES": {
+                    whichInput.append("3");
+                    break;
+                }
+            }
+
+            System.out.println("How much of them do you want to pick?");
+            String quant = input.nextLine(); // Comandi quantità: 1, 2
+
+            while(!quant.equals("1") && !quant.equals("2")) {
+                System.err.println("Not valid input.");
+                System.out.println("How much of them do you want to pick?");
+                quant = input.nextLine(); // Comandi quantità: 1, 2
+            }
+            whichInput.append(quant);
+
+            this.printActivatedLeaderCard(cards);
+
+            if (quant.equals("1"))
+                System.out.println("From which store do you want to pick this resource?");
+            else
+                System.out.println("From which store do you want to pick these resources?");
+            System.out.println("Write 'WAREHOUSE' if you want to pick resources from warehouse");
+            System.out.println("Write 'CHEST' if you want to pick resources from chest");
+            System.out.println("Write 'LEADER CARD' if you want to pick resources from your extra space leader card, if it's available");
+
+            String shelf = input.nextLine().toUpperCase();
+
+            while(!shelf.equals("WAREHOUSE") && !shelf.equals("CHEST") && !shelf.equals("LEADER CARD") &&
+                    !shelf.equals("W") && !shelf.equals("C") && !shelf.equals("L")) {
+                System.err.println("Not valid input.");
+                if (quant.equals("1"))
+                    System.out.println("From which store do you want to pick this resource?");
+                else
+                    System.out.println("From which store do you want to pick these resources?");
+                shelf = input.nextLine(); // Comandi quantità: 1, 2
+            }
+            whichInput.append(shelf.charAt(0));
+        }while (!res.equals("STOP"));
+
+        return whichInput.toString();
+    }
+
+    @Override
+    public String outputResourceProd(Stage stage) {
+
+        Scanner input = new Scanner(System.in);
+        String res;
+
+        System.out.println("Which output resource do you want to pick?");
+        System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
+        res = input.nextLine().toUpperCase();
+        while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("REDCROSS")) {
+            System.out.println("Choose a correct resource");
+            System.out.println("Which starting resource do you want to pick?");
+            System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
+            res = input.nextLine().toUpperCase();
+        }
+
+        switch (res){
+            case "COINS": {
+                return "0";
+            }
+            case "SERVANTS": {
+                return "1";
+            }
+            case "SHIELDS": {
+                return "2";
+            }
+            case "STONES": {
+                return "3";
+            }
+            default:{
+                return "4";
+            }
+        }
+    }
+
+    @Override
+    public void endTurn(Stage stage) {
+        System.out.println("Your turn has ended, wait for other players");
+    }
+
+    @Override
+    public void quit(Stage stage) {
+        System.out.println("You left the Game");
+    }
+
+    @Override
+    public void notValidAction(Stage stage) {
+        System.err.println("Not valid action");
+    }
+
+    @Override
+    public void lorenzoFaithPoints(Stage stage, int faithPoints) {
+        System.out.println("LORENZO FAITH POINTS: "+faithPoints);
+    }
+
+    @Override
+    public void endLocalGame(Stage stage, int winner, int victoryPoints) {
+        System.out.println("Match has ended.");
+        if(winner==0)
+            System.out.println("You win the Game, with "+victoryPoints+" Victory points.");
+        else System.out.println("Lorenzo the Magnificent wins the Game.");
+    }
+
+    @Override
+    public void drawActionCounter(Stage stage, ActionCountersDeck countersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
+        countersDeck.drawCounter().activate(countersDeck, playerboard, developmentCardsDecksGrid);
+    }
+
+    @Override
+    public void notYourTurn(Stage stage) {
+        System.out.println("It's not your turn.");
+    }
+
+    @Override
+    public void endMultiplayerGame(Stage stage, GameOverMessage message) {
+        System.out.println("The winner is " + message.getWinner());
+        System.out.println("You made " + message.getVictoryPoints() + " victory points");
     }
 }

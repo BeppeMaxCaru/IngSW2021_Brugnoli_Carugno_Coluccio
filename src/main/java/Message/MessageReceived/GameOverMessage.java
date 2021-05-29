@@ -6,8 +6,8 @@ import java.io.Serializable;
 
 public class GameOverMessage extends Message implements Serializable {
 
-    private String winner;
-    private int victoryPoints;
+    private final String winner;
+    private final int victoryPoints;
 
     public GameOverMessage (String winner, int victoryPoints) {
         this.winner = winner;
@@ -18,15 +18,8 @@ public class GameOverMessage extends Message implements Serializable {
         return this.winner;
     }
 
-    public void setWinner(String winner) {
-        this.winner = winner;
-    }
-
     public int getVictoryPoints() {
         return this.victoryPoints;
     }
 
-    /*public void setVictoryPoints(int victoryPoints) {
-        this.victoryPoints = victoryPoints;
-    }*/
 }

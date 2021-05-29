@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class GUI extends Application {
+public class GUI extends Application implements RenderingView {
 
     String nickname;
 
