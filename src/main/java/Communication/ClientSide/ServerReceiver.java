@@ -64,6 +64,7 @@ public class ServerReceiver extends Thread {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
 
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
+                    this.view.setMarket(updateClientMarketMessage.getMarket());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -76,6 +77,7 @@ public class ServerReceiver extends Thread {
                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) object;
 
                     this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
+                    this.view.setDevCardsGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -87,6 +89,7 @@ public class ServerReceiver extends Thread {
                 try {
                     UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) object;
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
+                    this.view.setPlayerLeaders(updateClientLeaderCardsMessage.getLeaderCards());
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -98,6 +101,7 @@ public class ServerReceiver extends Thread {
 
                     UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage) object;
                     this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
+                    this.view.setBoard(updateClientPlayerBoardMessage.getPlayerboard());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -109,7 +113,8 @@ public class ServerReceiver extends Thread {
 
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
-                    this.view.endMultiplayerGame(stage, gameOverMessage);
+                    this.view.setGameOverMsg(gameOverMessage);
+                    this.view.endMultiplayerGame(stage);
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();

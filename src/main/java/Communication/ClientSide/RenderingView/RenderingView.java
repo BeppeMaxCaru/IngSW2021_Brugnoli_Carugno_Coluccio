@@ -1,6 +1,5 @@
 package Communication.ClientSide.RenderingView;
 
-import Maestri.MVC.Model.GModel.ActionCounters.ActionCounter;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
@@ -9,9 +8,11 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public interface RenderingView {
 
-    default void welcome(Stage stage, String nickName){
+    default void welcome(Stage stage){
     }
 
     default void error(Exception e){
@@ -23,18 +24,15 @@ public interface RenderingView {
     default void senderError(Exception e){
     }
 
-    default void matchHasStarted(Stage stage, int playerNumber){
+    default ArrayList<String> startingResource(Stage stage){
+        return null;
     }
 
-    default String startingResource(Stage stage){
-        return "";
-    }
-
-    default int[] discardStartingLeaders(Stage stage, LeaderCard[] cards){
+    default int[] discardStartingLeaders(Stage stage){
         return new int[]{0, 0};
     }
 
-    default String nick(Stage stage){
+    default String nickName(Stage stage){
         return "";
     }
 
@@ -42,19 +40,19 @@ public interface RenderingView {
         return "";
     }
 
-    default int playLeader(Stage stage, LeaderCard[] cards){
+    default int playLeader(Stage stage){
         return 0;
     }
 
-    default int discardLeader(Stage stage, LeaderCard[] cards){
+    default int discardLeader(Stage stage){
         return 0;
     }
 
-    default int[] marketCoordinates(Stage stage, Market market){
+    default int[] marketCoordinates(Stage stage){
         return new int[]{0, 0};
     }
 
-    default String resourcesDestination(Stage stage, LeaderCard[] cards, String parameter){
+    default String resourcesDestination(Stage stage, String parameter){
         return "";
     }
 
@@ -62,11 +60,11 @@ public interface RenderingView {
         return "";
     }
 
-    default int[] developmentCardsGridCoordinates(Stage stage, DevelopmentCardsDecksGrid grid, Playerboard playerboard){
+    default int[] developmentCardsGridCoordinates(Stage stage){
         return new int[]{0, 0};
     }
 
-    default String[][] payResources(Stage stage, LeaderCard[] cards){
+    default String[][] payResources(Stage stage){
         return null;
     }
 
@@ -74,11 +72,11 @@ public interface RenderingView {
         return 0;
     }
 
-    default int activationProd(Stage stage, Playerboard playerboard, LeaderCard[] cards, int[] activation){
+    default int activationProd(Stage stage, int[] activation){
         return 0;
     }
 
-    default String inputResourceProd(Stage stage, LeaderCard[] cards){
+    default String inputResourceProd(Stage stage){
         return "";
     }
 
@@ -95,19 +93,49 @@ public interface RenderingView {
     default void notValidAction(Stage stage){
     }
 
-    default void lorenzoFaithPoints(Stage stage, int faithPoints){
+    default void lorenzoFaithPoints(Stage stage){
     }
 
-    default void endLocalGame(Stage stage, int winner, int victoryPoints){
+    default void endLocalGame(Stage stage){
     }
 
-    default void drawActionCounter(Stage stage, ActionCountersDeck countersDeck, Playerboard playerboard, DevelopmentCardsDecksGrid developmentCardsDecksGrid){
+    default void drawActionCounter(Stage stage){
     }
 
     default void notYourTurn(Stage stage){
     }
 
-    default void endMultiplayerGame(Stage stage, GameOverMessage message){
+    default void endMultiplayerGame(Stage stage){
+    }
+
+    default void setPlayerNumber(int playerNumber) {
+    }
+
+    default void setStartingLeaders(LeaderCard[] leaders){
+    }
+
+    default void setPlayerLeaders(LeaderCard[] leaders){
+    }
+
+    default void setBoard(Playerboard board){
+    }
+
+    default void setMarket(Market market){
+    }
+
+    default void setDevCardsGrid(DevelopmentCardsDecksGrid grid){
+    }
+
+    default void setCountersDeck(ActionCountersDeck deck){
+    }
+
+    default void setLorenzoPlayerBoard(Playerboard board){
+    }
+
+    default void setLocalWinner(int winner){
+    }
+
+    default void setGameOverMsg(GameOverMessage msg){
     }
 
 }

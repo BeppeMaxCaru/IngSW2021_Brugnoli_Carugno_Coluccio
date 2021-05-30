@@ -1,5 +1,11 @@
 package Communication.ClientSide.RenderingView;
 
+import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
+import Message.MessageReceived.GameOverMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -18,14 +24,40 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class GUI extends Application implements RenderingView {
 
     String nickname;
     int playerNumber;
+
+    //Return attributes
+    ArrayList<String> startingRes;
+    int[] startingDiscardedLeaders;
+    String actionChoice;
+    int playLeader;
+    int discardLeader;
+    int[] marketCoordinates;
+    String resourcesDestination;
+    String whiteMarbleChoice;
+    int[] developmentCardsGridCoordinates;
+    String[][] payResources;
+    int choosePosition;
+    int activationProd;
+    String inputResourceProd;
+    String outputResourceProd;
+
+    //Input methods parameters
+    //Initialized by clientMain/serverSender with setters
+    LeaderCard[] startingLeaders;
+    LeaderCard[] playerLeaders;
+    Playerboard playerBoard;
+    Market market;
+    DevelopmentCardsDecksGrid grid;
+    ActionCountersDeck counters;
+    Playerboard lorenzoPlayerBoard;
+    int localWinner;
+    GameOverMessage gameOverMessage;
 
     public static void main(String[] args) {
        /*
@@ -335,5 +367,133 @@ public class GUI extends Application implements RenderingView {
         Timer timer = new Timer("Timer");
         long delay = 1000L;
         timer.schedule(task, delay);
+    }
+
+
+    @Override
+    public String nickName(Stage stage){
+        return nickname;
+    }
+
+    @Override
+    public void setMarket(Market market) {
+        this.market = market;
+    }
+
+    @Override
+    public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
+        this.grid=grid;
+    }
+
+    @Override
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
+    @Override
+    public ArrayList<String> startingResource(Stage stage){
+        return startingRes;
+    }
+
+    @Override
+    public void setStartingLeaders(LeaderCard[] leaders) {
+        this.startingLeaders = leaders;
+    }
+
+    @Override
+    public void setBoard(Playerboard board) {
+        this.playerBoard=board;
+    }
+
+    @Override
+    public int[] discardStartingLeaders(Stage stage){
+        return startingDiscardedLeaders;
+    }
+
+    @Override
+    public void setPlayerLeaders(LeaderCard[] playerLeaders) {
+        this.playerLeaders = playerLeaders;
+    }
+
+    @Override
+    public String actionChoice(Stage stage) {
+        return actionChoice;
+    }
+
+    @Override
+    public int playLeader(Stage stage) {
+        return playLeader;
+    }
+
+    @Override
+    public int discardLeader(Stage stage) {
+        return discardLeader;
+    }
+
+    @Override
+    public int[] marketCoordinates(Stage stage) {
+        return marketCoordinates;
+    }
+
+    @Override
+    public String resourcesDestination(Stage stage, String parameter) {
+        return resourcesDestination;
+    }
+
+    @Override
+    public String whiteMarbleChoice(Stage stage) {
+        return whiteMarbleChoice;
+    }
+
+    @Override
+    public int[] developmentCardsGridCoordinates(Stage stage) {
+        return developmentCardsGridCoordinates;
+    }
+
+    @Override
+    public String[][] payResources(Stage stage) {
+        return payResources;
+    }
+
+    @Override
+    public int choosePosition(Stage stage) {
+        return choosePosition;
+    }
+
+
+    @Override
+    public int activationProd(Stage stage, int[] activation) {
+        return activationProd;
+    }
+
+
+    @Override
+    public String inputResourceProd(Stage stage) {
+        return inputResourceProd;
+    }
+
+    @Override
+    public String outputResourceProd(Stage stage) {
+        return outputResourceProd;
+    }
+
+    @Override
+    public void setLocalWinner(int localWinner) {
+        this.localWinner = localWinner;
+    }
+
+    @Override
+    public void setCountersDeck(ActionCountersDeck deck) {
+        this.counters = deck;
+    }
+
+    @Override
+    public void setLorenzoPlayerBoard(Playerboard board) {
+        this.lorenzoPlayerBoard = board;
+    }
+
+    @Override
+    public void setGameOverMsg(GameOverMessage msg) {
+        this.gameOverMessage = msg;
     }
 }

@@ -46,7 +46,7 @@ public class ServerSender extends Thread {
                         case "PLAY LEADER CARD": {
 
                             try {
-                                int leader = this.view.playLeader(stage, this.clientMain.getLeaderCards());
+                                int leader = this.view.playLeader(stage);
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(playLeaderMessage);
                             } catch (Exception e) {
@@ -59,7 +59,7 @@ public class ServerSender extends Thread {
                         case "DISCARD LEADER CARD": {
 
                             try {
-                                int leader = this.view.discardLeader(stage, this.clientMain.getLeaderCards());
+                                int leader = this.view.discardLeader(stage);
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(normalDiscardLeaderMessage);
 
@@ -72,13 +72,14 @@ public class ServerSender extends Thread {
                         case "M":
                         case "PICK RESOURCES FROM MARKET": {
 
-                            int[] coordinates = this.view.marketCoordinates(stage, this.clientMain.getMarket());
+
+                            int[] coordinates = this.view.marketCoordinates(stage);
                             String parameter;
                             int index;
                             if(coordinates[0] == 0) parameter = "ROW";
                             else parameter = "COLUMN";
                             index = coordinates[1];
-                            String wlChoice = this.view.resourcesDestination(stage, this.clientMain.getLeaderCards(), parameter);
+                            String wlChoice = this.view.resourcesDestination(stage, parameter);
                             String chosenMarble = this.view.whiteMarbleChoice(stage);
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
@@ -88,9 +89,7 @@ public class ServerSender extends Thread {
                         case "B":
                         case "BUY DEVELOPMENT CARD": {
 
-                            int[] coordinates = this.view.developmentCardsGridCoordinates(stage,
-                                    this.clientMain.getDevelopmentCardsDecksGrid(),
-                                    this.clientMain.getPlayerboard());
+                            int[] coordinates = this.view.developmentCardsGridCoordinates(stage);
 
                             int column = coordinates[0];
                             int level = 3 - coordinates[1];
@@ -98,7 +97,7 @@ public class ServerSender extends Thread {
                             //Check
                             int[] quantity = new int[4];
                             String[] shelf;
-                            String[][] pickedResources = this.view.payResources(stage, this.clientMain.getLeaderCards());
+                            String[][] pickedResources = this.view.payResources(stage);
                             for(int k = 0; k < quantity.length; k++)
                                 quantity[k] = Integer.parseInt(pickedResources[0][k]);
                             shelf = pickedResources[1];
@@ -119,10 +118,10 @@ public class ServerSender extends Thread {
                             int stop;
 
                             do{
-                                stop = this.view.activationProd(stage, this.clientMain.getPlayerboard(), this.clientMain.getLeaderCards(), activation);
+                                stop = this.view.activationProd(stage, activation);
                                 if(stop<6){
                                     activation[stop] = 1;
-                                    whichInput[stop] = this.view.inputResourceProd(stage, this.clientMain.getLeaderCards());
+                                    whichInput[stop] = this.view.inputResourceProd(stage);
                                     if(stop>2){
                                         whichOutput[stop-3] = this.view.outputResourceProd(stage);
                                     }
