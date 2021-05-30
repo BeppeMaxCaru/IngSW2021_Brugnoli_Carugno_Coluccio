@@ -17,7 +17,7 @@ public class CLI implements RenderingView{
 
     private String nickname;
     private int playerNumber;
-    private LeaderCard[] startingLeaders;
+    private LeaderCard[] startingLeaders = new LeaderCard[4];
 
     private LeaderCard[] playerLeaders;
     private Playerboard playerBoard;
@@ -39,7 +39,11 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void welcome(Stage stage) {
+    public void setGameStarted() {
+        System.out.println("\nMatch has started, your player number is " + this.playerNumber);
+    }
+
+    public void setClientStarted(){
         System.out.println("Hi " + this.nickname + "!");
         System.out.println("Welcome to Master of Renaissance!");
     }
@@ -58,7 +62,6 @@ public class CLI implements RenderingView{
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
-
 
     @Override
     public ArrayList<String> startingResource(Stage stage){
@@ -428,7 +431,9 @@ public class CLI implements RenderingView{
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
             for(int c=0; c<4; c++)
-                pickedResources[r][c] = "";
+                if(r==0)
+                    pickedResources[r][c] = "0";
+                else pickedResources[r][c] = "";
         int res = 0;
 
         Map<String, Integer> resources = new HashMap<>();
@@ -586,7 +591,7 @@ public class CLI implements RenderingView{
             System.out.println("Write e1 if you want to activate the second extra production power, if it's available");
         System.out.println("Write STOP if you don't want to activate production powers");
         prodPower = input.nextLine().toUpperCase();
-        while(this.checkProduction(activation, prodPower) != -1){
+        while(this.checkProduction(activation, prodPower) == -1){
             System.err.println("Not valid input.");
             System.out.println("Write a correct production power code.");
             prodPower = input.nextLine().toUpperCase();
@@ -635,11 +640,7 @@ public class CLI implements RenderingView{
             }
             case "STOP":
             {
-                for(int index = 0; index<6 ; index++){
-                    if(activation[index]==1)
-                        return 6;
-                }
-                return -1;
+                return 6;
             }
             default:
             {
@@ -820,4 +821,5 @@ public class CLI implements RenderingView{
         System.out.println("The winner is " + this.gameOverMessage.getWinner());
         System.out.println("You made " + this.gameOverMessage.getVictoryPoints() + " victory points");
     }
+
 }

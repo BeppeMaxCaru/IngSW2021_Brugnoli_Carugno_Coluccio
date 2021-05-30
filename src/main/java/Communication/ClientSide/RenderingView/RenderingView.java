@@ -12,9 +12,6 @@ import java.util.ArrayList;
 
 public interface RenderingView {
 
-    default void welcome(Stage stage){
-    }
-
     default void error(Exception e){
     }
 
@@ -136,6 +133,12 @@ public interface RenderingView {
     }
 
     default void setGameOverMsg(GameOverMessage msg){
+    }
+
+    default void setGameStarted(){
+    }
+
+    default void setClientStarted(){
     }
 
 }

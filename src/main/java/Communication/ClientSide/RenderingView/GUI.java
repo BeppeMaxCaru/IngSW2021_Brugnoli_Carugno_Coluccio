@@ -59,6 +59,11 @@ public class GUI extends Application implements RenderingView {
     int localWinner;
     GameOverMessage gameOverMessage;
 
+    //Game/turn handler attributes
+    int clientStarted;
+    int gameStarted;
+
+
     public static void main(String[] args) {
        /*
        start network... per far partire la rete
@@ -129,7 +134,7 @@ public class GUI extends Application implements RenderingView {
         //nick(stage);
     }
 
-    //@Override
+
     public String nick(Stage stage) {
         GridPane root = new GridPane();
         root.setHgap(8);
@@ -495,5 +500,14 @@ public class GUI extends Application implements RenderingView {
     @Override
     public void setGameOverMsg(GameOverMessage msg) {
         this.gameOverMessage = msg;
+    }
+
+    @Override
+    public void setGameStarted() {
+        this.gameStarted = 1;
+    }
+
+    public void setClientStarted(){
+        this.clientStarted=1;
     }
 }

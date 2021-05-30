@@ -34,7 +34,7 @@ public class ClientMain {
     private Market market;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
     private Playerboard playerboard;
-    private LeaderCard[] leaderCards = new LeaderCard[2];
+    private LeaderCard[] leaderCards = new LeaderCard[4];
 
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
@@ -62,6 +62,8 @@ public class ClientMain {
         Scanner consoleInput = new Scanner(System.in);
         Stage stage = null;
 
+        view.setClientStarted();
+
         this.nickname = view.nickName(stage);
 
         System.out.println("Write 0 for single-player or 1 for multiplayer: ");
@@ -74,24 +76,32 @@ public class ClientMain {
 
         if (gameMode.equals("0")) {
 
-            view.welcome(stage);
+            view.setGameStarted();
 
             Player[] localPlayers = new Player[2];
             localPlayers[0] = new Player(this.nickname, 0);
             localPlayers[1] = new Player("Lorenzo the Magnificent", 1);
+            view.setLorenzoPlayerBoard(localPlayers[1].getPlayerBoard());
 
             this.market = new Market();
+            view.setMarket(this.market);
             this.developmentCardsDecksGrid = new DevelopmentCardsDecksGrid();
+            view.setDevCardsGrid(this.developmentCardsDecksGrid);
             LeaderCardDeck cardsDeck = new LeaderCardDeck();
             ActionCountersDeck actionCountersDeck = new ActionCountersDeck();
+            view.setCountersDeck(actionCountersDeck);
 
             //Put 4 leader cards into first player space
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
                 localPlayers[0].setPlayerLeaderCard(index, cardsDeck.drawOneLeaderCard());
+            view.setStartingLeaders(localPlayers[0].getPlayerLeaderCards());
 
             int[] discard = view.discardStartingLeaders(stage);
             localPlayers[0].discardLeaderCard(discard[0]);
             localPlayers[0].discardLeaderCard(discard[1]);
+            view.setPlayerLeaders(localPlayers[0].getPlayerLeaderCards());
+
+            view.setBoard(localPlayers[0].getPlayerBoard());
 
             int mainAction = 0;
             String action;
@@ -112,7 +122,10 @@ public class ClientMain {
 
                         try {
                             if(this.checkLocalLeaders(localPlayers[0], cardPosition))
+                            {
                                 localPlayers[0].playLeaderCard(cardPosition);
+                                view.setPlayerLeaders(localPlayers[0].getPlayerLeaderCards());
+                            }
                             else view.notValidAction(stage);
 
                         } catch (Exception e) {
@@ -137,7 +150,10 @@ public class ClientMain {
 
                         try {
                             if(this.checkLocalLeaders(localPlayers[0], cardPosition))
+                            {
                                 localPlayers[0].discardLeaderCard(cardPosition);
+                                view.setPlayerLeaders(localPlayers[0].getPlayerLeaderCards());
+                            }
                             else
                                 view.notValidAction(stage);
 
@@ -190,6 +206,8 @@ public class ClientMain {
                                     this.market.updateRow(index, localPlayers, 0, wlChoice, chosenMarble);
                                 else this.market.updateColumn(index, localPlayers, 0, wlChoice, chosenMarble);
                                 mainAction++;
+                                view.setMarket(this.market);
+                                view.setBoard(localPlayers[0].getPlayerBoard());
                             } else
                                 view.notValidAction(stage);
                         } catch (Exception e) {
@@ -229,6 +247,8 @@ public class ClientMain {
                                 {
                                     localPlayers[0].buyDevelopmentCard(this.developmentCardsDecksGrid, column, level, pos, shelf);
                                     mainAction++;
+                                    view.setDevCardsGrid(this.developmentCardsDecksGrid);
+                                    view.setBoard(localPlayers[0].getPlayerBoard());
                                 } else view.notValidAction(stage);
                             else view.notValidAction(stage);
                         } catch (Exception e) {
@@ -251,7 +271,7 @@ public class ClientMain {
                         String[] whichOutput = new String[3];
 
                         int stop;
-
+                        int[] outputs = new int[3];
                         do{
                             stop = view.activationProd(stage, activation);
                             if(stop<6){
@@ -260,17 +280,20 @@ public class ClientMain {
                                 if(stop>2){
                                     whichOutput[stop-3] = view.outputResourceProd(stage);
                                 }
+
+                                for(int k = 0; k<outputs.length; k++)
+                                    outputs[k] = Integer.parseInt(whichOutput[k]);
+
                             }
                         } while (stop != 6);
 
-                        int[] outputs = new int[3];
-                        for(int k = 0; k<outputs.length; k++)
-                            outputs[k] = Integer.parseInt(whichOutput[k]);
+
 
                         try {
                             if (this.checkLocalActivateProd(localPlayers[0], activation, whichInput, whichOutput)) {
                                 localPlayers[0].activateProduction(activation, whichInput, outputs);
                                 mainAction++;
+                                view.setBoard(localPlayers[0].getPlayerBoard());
                             } else view.notValidAction(stage);
                         } catch (Exception e) {
                             view.error(e);
@@ -327,7 +350,7 @@ public class ClientMain {
                 receiver = new ObjectInputStream(clientSocket.getInputStream());
 
                 //Print welcome message
-                view.welcome(stage);
+                view.setClientStarted();
 
             } catch (Exception e) {
                 view.error(e);
@@ -373,7 +396,7 @@ public class ClientMain {
                 //Set view attribute playerNumber to be printed
                 view.setPlayerNumber(this.playerNumber);
                 //Print starting match message
-                //view.matchStarted(stage);
+                view.setGameStarted();
 
                 //Receive from input starting resource(s)
                 ArrayList<String> playerStartingResources = view.startingResource(stage);
