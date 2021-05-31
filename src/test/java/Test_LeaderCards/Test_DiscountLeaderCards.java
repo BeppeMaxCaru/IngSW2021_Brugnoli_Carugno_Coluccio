@@ -5,9 +5,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.DiscountDevelopmentCardsLeaderCard;
 import org.junit.jupiter.api.Test;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -32,12 +29,12 @@ public class Test_DiscountLeaderCards {
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                1,1);
+                1,1, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("PURPLE",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                2,5);
+                2,5, null);
 
         DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
@@ -52,12 +49,12 @@ public class Test_DiscountLeaderCards {
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                1,1);
+                1,1, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("YELLOW",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                2,5);
+                2,5, null);
 
         DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");

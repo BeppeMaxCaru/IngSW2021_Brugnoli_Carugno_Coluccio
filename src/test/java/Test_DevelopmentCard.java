@@ -17,7 +17,7 @@ public class Test_DevelopmentCard {
                 1,1,1,1,
                 1,1,1,1,
                 1,1,1,1,
-                2,4);
+                2,4, null);
         //Checks initialization
         assertEquals(testPartialDevelopmentCard.getClass(), testFullDevelopmentCard.getClass());
         //Checks colours
@@ -33,12 +33,12 @@ public class Test_DevelopmentCard {
                 1,1,1,0,
                 2,0,2,0,
                 2,3,2,3,
-                0,1);
+                0,1, null);
         DevelopmentCard developmentCard2 = new DevelopmentCard("RED",1,
                 1,1,1,0,
                 2,0,2,0,
                 2,3,2,3,
-                0,1);
+                0,1, null);
 
         //Checks initialization
         assertEquals(developmentCard1.getClass(), developmentCard2.getClass());
@@ -71,7 +71,7 @@ public class Test_DevelopmentCard {
                 1,1,2,2,
                 1,1,1,1,
                 1,1,1,1,
-                1,2);
+                1,2, null);
 
         assertTrue(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost(), new PrintWriter(System.out)));
         assertTrue(developmentCard.checkPlayerboardDevelopmentCardsCompatibility(playerboard, new PrintWriter(System.out)));
@@ -89,7 +89,7 @@ public class Test_DevelopmentCard {
                 3,2,2,2,
                 1,1,1,1,
                 1,1,1,1,
-                1,2);
+                1,2, null);
 
         assertFalse(playerboard.checkResourcesAvailability(developmentCard.getDevelopmentCardCost(), new PrintWriter(System.out)));
     }

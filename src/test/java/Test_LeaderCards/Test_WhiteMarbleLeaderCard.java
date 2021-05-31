@@ -9,9 +9,6 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marbles.PurpleMarble;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import org.junit.jupiter.api.Test;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 public class Test_WhiteMarbleLeaderCard {
 
     Player[] players = new Player[2];
@@ -33,17 +30,17 @@ public class Test_WhiteMarbleLeaderCard {
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                1,1);
+                1,1, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("PURPLE",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                2,5);
+                2,5, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                1,1);
+                1,1, null);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble(),
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-61-1.jpg");
@@ -58,17 +55,17 @@ public class Test_WhiteMarbleLeaderCard {
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                1,1);
+                1,1, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("YELLOW",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                2,5);
+                2,5, null);
         players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                1,1);
+                1,1, null);
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble(),
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-61-1.jpg");

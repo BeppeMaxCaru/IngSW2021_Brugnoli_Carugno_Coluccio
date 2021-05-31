@@ -1,6 +1,5 @@
 package Maestri.MVC.Model.GModel.DevelopmentCards;
 
-import java.io.PrintWriter;
 import java.io.Serializable;
 import java.util.*;
 
@@ -37,264 +36,264 @@ public class DevelopmentCardsDecksGrid implements Serializable {
                 0,0,0,2,
                 1,0,0,0,
                 0,0,0,0,
-                1,1);
+                1,1, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg");
         this.developmentCardsDecks[2][0][1] = new DevelopmentCard("GREEN",1,
                 0,1,1,1,
                 0,1,0,0,
                 0,0,1,0,
-                0,2);
+                0,2, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-5-1.jpg");
         this.developmentCardsDecks[2][0][2] = new DevelopmentCard("GREEN",1,
                 0,0,0,3,
                 0,0,2,0,
                 1,1,0,1,
-                0,3);
+                0,3, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-9-1.jpg");
         this.developmentCardsDecks[2][0][3] = new DevelopmentCard("GREEN",1,
                 2,0,0,2,
                 0,1,1,0,
                 2,0,0,0,
-                1,4);
+                1,4, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-13-1.jpg");
 
         //Level 2 GREEN
         this.developmentCardsDecks[1][0][0] = new DevelopmentCard("GREEN",2,
                 0,0,0,4,
                 0,1,0,0,
                 0,0,0,0,
-                2,5);
+                2,5, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-17-1.jpg");
         this.developmentCardsDecks[1][0][1] = new DevelopmentCard("GREEN",2,
                 0,0,2,3,
                 0,0,1,1,
                 0,3,0,0,
-                0,6);
+                0,6, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-21-1.jpg");
         this.developmentCardsDecks[1][0][2] = new DevelopmentCard("GREEN",2,
                 0,0,0,5,
                 2,0,0,0,
                 0,2,0,0,
-                2,7);
+                2,7, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-25-1.jpg");
         this.developmentCardsDecks[1][0][3] = new DevelopmentCard("GREEN",2,
                 3,0,0,3,
                 1,0,0,0,
                 0,0,0,2,
-                1,8);
+                1,8, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-29-1.jpg");
 
         //Level 3 GREEN
         this.developmentCardsDecks[0][0][0] = new DevelopmentCard("GREEN",3,
                 0,0,0,6,
                 2,0,0,0,
                 0,3,0,0,
-                2,9);
+                2,9, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-33-1.jpg");
         this.developmentCardsDecks[0][0][1] = new DevelopmentCard("GREEN",3,
                 0,0,2,5,
                 1,0,1,0,
                 0,2,0,2,
-                1,10);
+                1,10, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-37-1.jpg");
         this.developmentCardsDecks[0][0][2] = new DevelopmentCard("GREEN",3,
                 0,0,0,7,
                 0,0,1,0,
                 1,0,0,0,
-                3,11);
+                3,11, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-41-1.jpg");
         this.developmentCardsDecks[0][0][3] = new DevelopmentCard("GREEN",3,
                 4,0,0,4,
                 0,1,0,0,
                 3,0,0,1,
-                0,12);
+                0,12, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-45-1.jpg");
 
         //Level 1 PURPLE
         this.developmentCardsDecks[2][3][0] = new DevelopmentCard("PURPLE",1,
                 0,0,2,0,
                 0,1,0,0,
                 0,0,0,0,
-                1,1);
+                1,1, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-2-1.jpg");
         this.developmentCardsDecks[2][3][1] = new DevelopmentCard("PURPLE",1,
                 1,0,1,1,
                 1,0,0,0,
                 0,0,0,1,
-                0,2);
+                0,2, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-6-1.jpg");
         this.developmentCardsDecks[2][3][2] = new DevelopmentCard("PURPLE",1,
                 0,0,3,0,
                 2,0,0,0,
                 0,1,1,1,
-                0,3);
+                0,3, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-10-1.jpg");
         this.developmentCardsDecks[2][3][3] = new DevelopmentCard("PURPLE",1,
                 0,2,2,0,
                 1,0,0,1,
                 0,2,0,0,
-                1,4);
+                1,4, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-14-1.jpg");
 
         //Level 2 PURPLE
         this.developmentCardsDecks[1][3][0] = new DevelopmentCard("PURPLE",2,
                 0,0,4,0,
                 1,0,0,0,
                 0,0,0,0,
-                2,5);
+                2,5, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-18-1.jpg");
         this.developmentCardsDecks[1][3][1] = new DevelopmentCard("PURPLE",2,
                 2,0,3,0,
                 1,0,1,0,
                 0,0,0,3,
-                0,6);
+                0,6, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-22-1.jpg");
         this.developmentCardsDecks[1][3][2] = new DevelopmentCard("PURPLE",2,
                 0,0,5,0,
                 0,2,0,0,
                 2,0,0,0,
-                2,7);
+                2,7, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-26-1.jpg");
         this.developmentCardsDecks[1][3][3] = new DevelopmentCard("PURPLE",2,
                 0,0,3,3,
                 0,1,0,0,
                 0,0,2,0,
-                1,8);
+                1,8, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-30-1.jpg");
 
         //Level 3 PURPLE
         this.developmentCardsDecks[0][3][0] = new DevelopmentCard("PURPLE",3,
                 0,0,6,0,
                 0,2,0,0,
                 3,0,0,0,
-                2,9);
+                2,9, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-34-1.jpg");
         this.developmentCardsDecks[0][3][1] = new DevelopmentCard("PURPLE",3,
                 2,0,5,2,
                 0,1,0,1,
                 2,0,2,0,
-                1,10);
+                1,10, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-38-1.jpg");
         this.developmentCardsDecks[0][3][2] = new DevelopmentCard("PURPLE",3,
                 0,0,7,0,
                 1,0,0,0,
                 0,1,0,0,
-                3,11);
+                3,11, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-42-1.jpg");
         this.developmentCardsDecks[0][3][3] = new DevelopmentCard("PURPLE",3,
                 0,0,4,4,
                 1,0,0,0,
                 0,3,1,0,
-                0,12);
+                0,12, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-46-1.jpg");
 
         //Level 1 BLUE
         this.developmentCardsDecks[2][1][0] = new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                1,1);
+                1,1, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-3-1.jpg");
         this.developmentCardsDecks[2][1][1] = new DevelopmentCard("BLUE",1,
                 1,1,1,0,
                 0,0,1,0,
                 0,1,0,0,
-                0,2);
+                0,2, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-7-1.jpg");
         this.developmentCardsDecks[2][1][2] = new DevelopmentCard("BLUE",1,
                 3,0,0,0,
                 0,2,0,0,
                 1,0,1,1,
-                0,3);
+                0,3, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-11-1.jpg");
         this.developmentCardsDecks[2][1][3] = new DevelopmentCard("BLUE",1,
                 2,0,2,0,
                 0,1,0,1,
                 0,0,2,0,
-                1,4);
+                1,4, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-15-1.jpg");
 
         //Level 2 BLUE
         this.developmentCardsDecks[1][1][0] = new DevelopmentCard("BLUE",2,
                 4,0,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                2,5);
+                2,5, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-19-1.jpg");
         this.developmentCardsDecks[1][1][1] = new DevelopmentCard("BLUE",2,
                 3,2,0,0,
                 1,1,0,0,
                 0,0,3,0,
-                0,6);
+                0,6, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-23-1.jpg");
         this.developmentCardsDecks[1][1][2] = new DevelopmentCard("BLUE",2,
                 5,0,0,0,
                 0,0,2,0,
                 0,0,0,2,
-                2,7);
+                2,7, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-27-1.jpg");
         this.developmentCardsDecks[1][1][3] = new DevelopmentCard("BLUE",2,
                 3,3,0,0,
                 0,0,1,0,
                 0,2,0,0,
-                1,8);
+                1,8, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-31-1.jpg");
 
         //Level 3 BLUE
         this.developmentCardsDecks[0][1][0] = new DevelopmentCard("BLUE",3,
                 6,0,0,0,
                 0,0,2,0,
                 0,0,0,3,
-                2,9);
+                2,9, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-35-1.jpg");
         this.developmentCardsDecks[0][1][1] = new DevelopmentCard("BLUE",3,
                 5,2,0,0,
                 1,0,0,1,
                 0,2,2,0,
-                1,10);
+                1,10, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-39-1.jpg");
         this.developmentCardsDecks[0][1][2] = new DevelopmentCard("BLUE",3,
                 7,0,0,0,
                 0,1,0,0,
                 0,0,0,1,
-                3,11);
+                3,11, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-43-1.jpg");
         this.developmentCardsDecks[0][1][3] = new DevelopmentCard("BLUE",3,
                 4,4,0,0,
                 0,0,1,0,
                 1,0,0,3,
-                0,12);
+                0,12, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-47-1.jpg");
 
         //Level 1 YELLOW
         this.developmentCardsDecks[2][2][0] = new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
-                1,1);
+                1,1, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-4-1.jpg");
         this.developmentCardsDecks[2][2][1] = new DevelopmentCard("YELLOW",1,
                 1,1,0,1,
                 0,0,0,1,
                 1,0,0,0,
-                0,2);
+                0,2, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-8-1.jpg");
         this.developmentCardsDecks[2][2][2] = new DevelopmentCard("YELLOW",1,
                 0,3,0,0,
                 0,0,0,2,
                 1,1,1,0,
-                0,3);
+                0,3, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-12-1.jpg");
         this.developmentCardsDecks[2][2][3] = new DevelopmentCard("YELLOW",1,
                 0,2,0,2,
                 1,0,1,0,
                 0,0,0,2,
-                1,4);
+                1,4, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-16-1.jpg");
 
         //Level 2 YELLOW
         this.developmentCardsDecks[1][2][0] = new DevelopmentCard("YELLOW",2,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
-                2,5);
+                2,5, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-20-1.jpg");
         this.developmentCardsDecks[1][2][1] = new DevelopmentCard("YELLOW",2,
                 0,3,0,2,
                 0,1,0,1,
                 3,0,0,0,
-                0,6);
+                0,6, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-24-1.jpg");
         this.developmentCardsDecks[1][2][2] = new DevelopmentCard("YELLOW",2,
                 0,5,0,0,
                 0,0,0,2,
                 0,0,2,0,
-                2,7);
+                2,7, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-28-1.jpg");
         this.developmentCardsDecks[1][2][3] = new DevelopmentCard("YELLOW",2,
                 0,3,3,0,
                 0,0,0,1,
                 2,0,0,0,
-                1,8);
+                1,8, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-32-1.jpg");
 
         //Level 3 YELLOW
         this.developmentCardsDecks[0][2][0] = new DevelopmentCard("YELLOW",3,
                 0,6,0,0,
                 0,0,0,2,
                 0,0,3,0,
-                2,9);
+                2,9, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-36-1.jpg");
         this.developmentCardsDecks[0][2][1] = new DevelopmentCard("YELLOW",3,
                 0,5,2,0,
                 0,1,1,0,
                 2,0,0,2,
-                1,10);
+                1,10, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-40-1.jpg");
         this.developmentCardsDecks[0][2][2] = new DevelopmentCard("YELLOW",3,
                 0,7,0,0,
                 0,0,0,1,
                 0,0,1,0,
-                3,11);
+                3,11, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-44-1.jpg");
         this.developmentCardsDecks[0][2][3] = new DevelopmentCard("YELLOW",3,
                 0,4,4,0,
                 0,0,0,1,
                 0,1,3,0,
-                0,12);
+                0,12, "Masters of Renaissance_Cards_FRONT_3mmBleed_1-48-1.jpg");
 
         //Shuffle each development cards deck in the grid
         for (int i=0;i<3;i++) {

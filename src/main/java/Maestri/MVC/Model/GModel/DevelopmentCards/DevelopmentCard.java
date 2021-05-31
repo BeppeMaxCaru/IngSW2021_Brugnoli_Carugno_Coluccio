@@ -40,6 +40,8 @@ public class DevelopmentCard implements Serializable {
      */
     private int victoryPoints;
 
+    private String image;
+
     /**
      * Initializes a partial development card
      * @param colour - colour of the development card
@@ -68,13 +70,14 @@ public class DevelopmentCard implements Serializable {
      * @param shieldsOutput - shields output from the production of the development card
      * @param faithPoints - faith points output from the production of the development card
      * @param victoryPoints - victory points of the development card
+     * @param image
      */
     public DevelopmentCard(String colour, int level,
                            int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
                            int coinsInput, int stonesInput, int servantsInput, int shieldsInput,
                            int coinsOutput, int stonesOutput, int servantsOutput, int shieldsOutput,
                            int faithPoints,
-                           int victoryPoints) {
+                           int victoryPoints, String image) {
 
         this.colour = colour;
         this.level = level;
@@ -99,6 +102,8 @@ public class DevelopmentCard implements Serializable {
 
         this.faithPoints = faithPoints;
         this.victoryPoints = victoryPoints;
+
+        this.image = image;
 
     }
 
@@ -247,6 +252,10 @@ public class DevelopmentCard implements Serializable {
 
         req.append("                     ");
         return req.substring(0,21);
+    }
+
+    public String getImage() {
+        return this.image;
     }
 
 }

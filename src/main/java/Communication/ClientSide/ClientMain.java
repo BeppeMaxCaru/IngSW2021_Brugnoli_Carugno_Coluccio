@@ -62,9 +62,8 @@ public class ClientMain {
         Scanner consoleInput = new Scanner(System.in);
         Stage stage = null;
 
-        view.setClientStarted();
-
         this.nickname = view.nickName(stage);
+        view.setClientStarted();
 
         System.out.println("Write 0 for single-player or 1 for multiplayer: ");
         gameMode = consoleInput.nextLine();
@@ -286,7 +285,6 @@ public class ClientMain {
 
                             }
                         } while (stop != 6);
-
 
 
                         try {
@@ -534,6 +532,12 @@ public class ClientMain {
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
+        if(wclChoice[0].length() + wclChoice[1].length() + wclChoice[2].length() + wclChoice[3].length() == 0)
+            return false;
+
+        if (quantity[0] + quantity[1] + quantity[2] + quantity[3] ==0)
+            return false;
+
         if (this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0] != null) {
 
             //Control on quantity and possibly discounts
@@ -585,8 +589,15 @@ public class ClientMain {
                 if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
                     count++;
             }
-            if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
+
+            if(count>0 && player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) == null)
                 return false;
+
+            if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null)
+            {
+                if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
+                    return false;
+                }
             }
 
         }
@@ -615,6 +626,8 @@ public class ClientMain {
 
         int j;
 
+
+        int activated=0;
         for (int index = 0; index < 6; index++) {
             if (activate[index] == 1) {
                 j = 0;
@@ -630,8 +643,11 @@ public class ClientMain {
                     }
                     j++;
                 }
+                activated++;
             }
         }
+
+        if(activated==0) return false;
 
         for (String s : outputs) {
             if (s != null) {
