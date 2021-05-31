@@ -22,15 +22,18 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
      */
     private final String input;
 
+    private final String image;
+
     /**
      * Initializes this leader card type
      * @param requisite - development card required
      * @param resourceInput - input resource
      */
-    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput) {
+    public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput, String image) {
         super(4);
         this.requisite = requisite;
         this.input=resourceInput;
+        this.image = image;
 
     }
 
@@ -72,6 +75,11 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
         System.out.println("Victory Points: "+this.getVictoryPoints());
         System.out.println("1 "+this.input+" } 1? 1FaithPoint");
         System.out.println();
+    }
+
+    @Override
+    public String getImage() {
+        return this.image;
     }
 }
 

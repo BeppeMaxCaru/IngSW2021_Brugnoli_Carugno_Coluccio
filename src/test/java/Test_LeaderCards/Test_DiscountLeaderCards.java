@@ -19,7 +19,8 @@ public class Test_DiscountLeaderCards {
     public void try_creation() {
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         assertEquals(DiscountDevelopmentCardsLeaderCard.class, card.getClass());
     }
 
@@ -38,7 +39,8 @@ public class Test_DiscountLeaderCards {
                 0,0,0,0,
                 2,5);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         assertFalse(card.checkRequisites(players[0].getPlayerBoard()));
     }
 
@@ -57,7 +59,8 @@ public class Test_DiscountLeaderCards {
                 0,0,0,0,
                 2,5);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         assertTrue(card.checkRequisites(players[0].getPlayerBoard()));
     }
 
@@ -65,7 +68,8 @@ public class Test_DiscountLeaderCards {
     public void try_array() {
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         assertNotNull(players[0].getPlayerLeaderCards()[0]);
     }
@@ -74,7 +78,8 @@ public class Test_DiscountLeaderCards {
     public void try_array2() {
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         assertNull(players[0].getPlayerLeaderCards()[1]);
     }
@@ -83,7 +88,8 @@ public class Test_DiscountLeaderCards {
     public void try_discard1() {
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
@@ -93,7 +99,8 @@ public class Test_DiscountLeaderCards {
     public void try_discard2() {
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertNull(players[0].getPlayerLeaderCards()[0]);
@@ -103,7 +110,8 @@ public class Test_DiscountLeaderCards {
     public void try_activation1(){
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         card.activateAbility(players[0].getPlayerBoard());
 
         assertNotNull(players[0].getPlayerBoard().getDevelopmentCardDiscount()[0]);
@@ -113,7 +121,8 @@ public class Test_DiscountLeaderCards {
     public void try_activation2(){
         players[0] = new Player("Beppe", 0);
 
-        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS");
+        DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         card.activateAbility(players[0].getPlayerBoard());
 
         assertNull(players[0].getPlayerBoard().getDevelopmentCardDiscount()[1]);

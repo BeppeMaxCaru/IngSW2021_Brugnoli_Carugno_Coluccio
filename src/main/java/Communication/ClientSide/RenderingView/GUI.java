@@ -75,67 +75,93 @@ public class GUI extends Application implements RenderingView {
         launch(args);
     }
 
-   /* @Override
-    public void start(Stage stage) {
-        stage.setTitle("Drawing Operations Test");
-        Group root = new Group(); // per raggruppare oggetti
-        Canvas canvas = new Canvas(300, 250); // tela su cui si scrive
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        //drawShapes(gc);
-        drawCards(gc);
-
-        root.getChildren().add(canvas);
-        stage.setScene(new Scene(root));
-        stage.show(); // renderizza
-    }
-
-    /* private void drawShapes(GraphicsContext gc) {
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        gc.strokeLine(40, 10, 10, 40);
-        gc.fillOval(10, 60, 30, 30);
-        gc.strokeOval(60, 60, 30, 30);
-        gc.fillRoundRect(110, 60, 30, 30, 10, 10);
-        gc.strokeRoundRect(160, 60, 30, 30, 10, 10);
-        gc.fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN);
-        gc.fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD);
-        gc.fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND);
-        gc.strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN);
-        gc.strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD);
-        gc.strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND);
-        gc.fillPolygon(new double[]{10, 40, 10, 40}, new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolygon(new double[]{60, 90, 60, 90}, new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolyline(new double[]{110, 140, 110, 140}, new double[]{210, 210, 240, 240}, 4);
-    }
-
-    private void drawCards(GraphicsContext gc) {
-       Image img = new Image("Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg");
-        gc.drawImage( img, 20, 20, 100, 100 );
-
-        String[] cardNames =  new String[] {
-                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-1-1.jpg",
-                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-2-1.jpg"
-        };
-
-        int x = 10;
-        for(String item: cardNames) {
-            Image img = new Image(item);
-            gc.drawImage( img, 20, x, 100, 100 );
-            x+=200;
-        }
-    } */
-
 
     @Override
     public void start(Stage stage) {
-        startingResources(stage);
-        //nick(stage);
+        nickName(stage);
+    }
+
+    public int multiOrSinglePlayers(Stage stage) {
+        GridPane root = new GridPane();
+        int choice;
+        ToggleButton button1 = new ToggleButton("Single player");
+        ToggleButton button2 = new ToggleButton("Multi player");
+        root.add(button1, 0, 0);
+        root.add(button2, 1, 0);
+
+        Scene scene = new Scene(root, 300, 100);
+
+        if(button1.isSelected()) choice = 0;
+        else choice = 1;
+
+        /* button1.setOnAction(e -> {
+            single player welcome
+        }); */
+
+        button2.setOnAction(e -> {
+            welcome(stage);
+        });
+
+        stage.setTitle("Multi Or Single Players?");
+        stage.setScene(scene);
+        stage.show();
+
+        return choice;
+    }
+
+    public void welcome(Stage stage) {
+        addLabelByCode(stage, "Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
+        matchHasStarted(stage, 1); // da togliere
+    }
+
+    public void matchHasStarted(Stage stage, int playerNumber) {
+        // Chiamata dal client? Devo far apparire questo messaggio quando il server si connette alla socket.
+        this.playerNumber = playerNumber;
+        addLabelByCode(stage, "Match has started, your player number is " + this.playerNumber);
+        if(playerNumber != 0) LoadWTFOnTimer(stage, "startingResource");
+        else LoadWTFOnTimer(stage, "discardStartingLeaders");
     }
 
 
-    public String nick(Stage stage) {
+    public void addLabelByCode(Stage stage, String string) {
+        var label = new Label(string);
+        label.setFont(Font.font(32));
+        var scene = new Scene(new StackPane(label), 600, 200);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void LoadWTFOnTimer(Stage stage, String method) {
+        TimerTask task = new TimerTask() {
+
+            public void run() {
+
+                Platform.runLater(() -> {
+                    try {
+                        System.out.println("loading..");
+                        switch(method) {
+                            case "startingResource":
+                                startingResource(stage);
+                            case "discardStartingLeaders":
+                                discardStartingLeaders(stage);
+                        }
+
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                });
+            }
+        };
+
+
+        Timer timer = new Timer("Timer");
+        long delay = 2000L;
+        timer.schedule(task, delay);
+    }
+
+
+    @Override
+    public String nickName(Stage stage){
         GridPane root = new GridPane();
         root.setHgap(8);
         root.setVgap(8);
@@ -180,203 +206,6 @@ public class GUI extends Application implements RenderingView {
         stage.show();
 
         this.nickname = field.getText();
-
-        return field.getText();
-    }
-
-    public int multiOrSinglePlayers(Stage stage) {
-        GridPane root = new GridPane();
-        ToggleButton button1 = new ToggleButton("Single player");
-        ToggleButton button2 = new ToggleButton("Multi player");
-        root.add(button1, 0, 0);
-        root.add(button2, 1, 0);
-
-        Scene scene = new Scene(root, 300, 100);
-
-        /* button1.setOnAction(e -> {
-            single player welcome
-        }); */
-
-        button2.setOnAction(e -> {
-            welcome(stage);
-        });
-
-        stage.setTitle("Multi Or Single Players?");
-        stage.setScene(scene);
-        stage.show();
-
-        if(button1.isSelected()) return 0;
-        else return 1;
-    }
-
-    public void welcome(Stage stage) {
-        addLabelByCode(stage, "Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
-        matchHasStarted(stage, 0); // da togliere
-    }
-
-    public void matchHasStarted(Stage stage, int playerNumber) {
-        // Chiamata dal client? Devo far apparire questo messaggio quando il server si connette alla socket.
-        this.playerNumber = playerNumber;
-        addLabelByCode(stage, "Match has started, your player number is " + this.playerNumber);
-        LoadWTFOnTimer(stage);
-    }
-
-    public String startingResources(Stage stage) {
-        String[] resources =  new String[] {
-                "coin.png",
-                "servant.png",
-                "shield.png",
-                "stone.png"
-        };
-
-/*
-        int x = 10;
-        for(String item: resources) {
-            Image img = new Image(item);
-            ImageView view = new ImageView(img);
-            view.setFitHeight(80);
-            view.setPreserveRatio(true);
-            ToggleButton button = new ToggleButton();
-            button.setTranslateX(x);
-            button.setTranslateY(20);
-            button.setPrefSize(80, 80);
-            button.setGraphic(view);
-            gc.drawImage( img, x, 20, 100, 100 );
-            x+=200;
-        }
-/*
-        //Image coinImg = new Image("coin.png");
-        ToggleButton button = new ToggleButton();
-        coinButton.setGraphic(new ImageView("coin.png"));
-        //Image servantImg = new Image("servant.png");
-        ToggleButton servantButton = new ToggleButton();
-        coinButton.setGraphic(new ImageView("servant.png"));
-
-        //Image shieldImg = new Image("shield.png");
-        ToggleButton shieldButton = new ToggleButton();
-        coinButton.setGraphic(new ImageView("shield.png"));
-
-        //Image stoneImg = new Image("stone.png");
-        ToggleButton stoneButton = new ToggleButton();
-        coinButton.setGraphic(new ImageView( "stone.png"));
-
-
-        root.getChildren().add(canvas);
-        stage.setScene(new Scene(root));
-
-        stage.show();
-
-        /*if(button.isSelected()) {
-            System.out.println("ciao");
-            return "COINS";
-        }*/
-
-        Group root = new Group();
-        //Creating buttons
-        ToggleButton coinButton = new ToggleButton();
-        ToggleButton servantButton = new ToggleButton();
-        ToggleButton shieldButton = new ToggleButton();
-        ToggleButton stoneButton = new ToggleButton();
-
-        int x = 10;
-        for(String item: resources) {
-            //Creating a graphic (image)
-            Image img = new Image(item);
-            ImageView view = new ImageView(img);
-            view.setFitHeight(80);
-            view.setPreserveRatio(true);
-            //Setting the location of the button
-            switch (item) {
-                case "coin.png":
-                    coinButton.setTranslateX(x);
-                    coinButton.setTranslateY(20);
-                    //Setting the size of the button
-                    coinButton.setPrefSize(80, 80);
-                    //Setting a graphic to the button
-                    coinButton.setGraphic(view);
-                    x = x + 200;
-                    root.getChildren().add(coinButton);
-                    break;
-                case "servant.png":
-                    servantButton.setTranslateX(x);
-                    servantButton.setTranslateY(20);
-                    //Setting the size of the button
-                    servantButton.setPrefSize(80, 80);
-                    //Setting a graphic to the button
-                    servantButton.setGraphic(view);
-                    x = x + 200;
-                    root.getChildren().add(servantButton);
-                    break;
-                case "shield.png":
-                    shieldButton.setTranslateX(x);
-                    shieldButton.setTranslateY(20);
-                    //Setting the size of the button
-                    shieldButton.setPrefSize(80, 80);
-                    //Setting a graphic to the button
-                    shieldButton.setGraphic(view);
-                    x = x + 200;
-                    root.getChildren().add(shieldButton);
-                    break;
-                default:
-                    stoneButton.setTranslateX(x);
-                    stoneButton.setTranslateY(20);
-                    //Setting the size of the button
-                    stoneButton.setPrefSize(80, 80);
-                    //Setting a graphic to the button
-                    stoneButton.setGraphic(view);
-                    x = x + 200;
-                    root.getChildren().add(stoneButton);
-                    break;
-            }
-        }
-
-        //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
-        stage.setTitle("Button Graphics");
-        stage.setScene(scene);
-        stage.show();
-
-        if(coinButton.isSelected()) {
-            System.out.println("ciao");
-        }
-
-        return "c";
-    }
-
-    public void addLabelByCode(Stage stage, String string) {
-        var label = new Label(string);
-        label.setFont(Font.font(32));
-        var scene = new Scene(new StackPane(label), 600, 200);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    public void LoadWTFOnTimer(Stage stage) {
-        TimerTask task = new TimerTask() {
-
-            public void run() {
-
-                Platform.runLater(() -> {
-                    try {
-                        System.out.println("loading..");
-                        startingResources(stage);
-
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                });
-            }
-        };
-
-
-        Timer timer = new Timer("Timer");
-        long delay = 1000L;
-        timer.schedule(task, delay);
-    }
-
-
-    @Override
-    public String nickName(Stage stage){
         return nickname;
     }
 
@@ -396,7 +225,105 @@ public class GUI extends Application implements RenderingView {
     }
 
     @Override
-    public ArrayList<String> startingResource(Stage stage){
+    public ArrayList<String> startingResource(Stage stage) {
+        int i;
+        this.startingRes = new ArrayList<>();
+
+        if(this.playerNumber == 1 || this.playerNumber == 2) i = 1;
+        else i = 2;
+
+        for(; i > 0; i--) {
+            String[] resources = new String[]{
+                    "coin.png",
+                    "servant.png",
+                    "shield.png",
+                    "stone.png"
+            };
+
+            Group root = new Group();
+            //Creating buttons
+            ToggleButton coinButton = new ToggleButton();
+            ToggleButton servantButton = new ToggleButton();
+            ToggleButton shieldButton = new ToggleButton();
+            ToggleButton stoneButton = new ToggleButton();
+
+            int x = 10;
+            for (String item : resources) {
+                //Creating a graphic (image)
+                Image img = new Image(item);
+                ImageView view = new ImageView(img);
+                view.setFitHeight(80);
+                view.setPreserveRatio(true);
+                //Setting the location of the button
+                switch (item) {
+                    case "coin.png":
+                        coinButton.setTranslateX(x);
+                        coinButton.setTranslateY(20);
+                        //Setting the size of the button
+                        coinButton.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        coinButton.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(coinButton);
+                        break;
+                    case "servant.png":
+                        servantButton.setTranslateX(x);
+                        servantButton.setTranslateY(20);
+                        //Setting the size of the button
+                        servantButton.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        servantButton.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(servantButton);
+                        break;
+                    case "shield.png":
+                        shieldButton.setTranslateX(x);
+                        shieldButton.setTranslateY(20);
+                        //Setting the size of the button
+                        shieldButton.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        shieldButton.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(shieldButton);
+                        break;
+                    default:
+                        stoneButton.setTranslateX(x);
+                        stoneButton.setTranslateY(20);
+                        //Setting the size of the button
+                        stoneButton.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        stoneButton.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(stoneButton);
+                        break;
+                }
+            }
+
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Pick initial resource");
+            stage.setScene(scene);
+            stage.show();
+
+            coinButton.setOnAction(e -> {
+                this.startingRes.add("COINS");
+            });
+
+            servantButton.setOnAction(e -> {
+                this.startingRes.add("SERVANT");
+            });
+
+            shieldButton.setOnAction(e -> {
+                this.startingRes.add("SCHIELD");
+            });
+
+            stoneButton.setOnAction(e -> {
+                this.startingRes.add("STONE");
+            });
+        }
+
+        LoadWTFOnTimer(stage, "discardStartingLeaders");
+
         return startingRes;
     }
 
@@ -412,6 +339,84 @@ public class GUI extends Application implements RenderingView {
 
     @Override
     public int[] discardStartingLeaders(Stage stage){
+        for(int j = 0; j < 2; j++) {
+            Group root = new Group();
+            //Creating buttons
+            ToggleButton firstLeader = new ToggleButton();
+            ToggleButton secondLeader = new ToggleButton();
+            ToggleButton thirdLeader = new ToggleButton();
+            ToggleButton fourthLeader = new ToggleButton();
+
+            int x = 0;
+            for (int i = 0; i < startingLeaders.length; i++) {
+                //Creating a graphic (image)
+                Image img = new Image(startingLeaders[i].getImage());
+                ImageView view = new ImageView(img);
+                view.setFitHeight(80);
+                view.setPreserveRatio(true);
+                //Setting the location of the button
+                switch (i) {
+                    case 0:
+                        firstLeader.setTranslateX(x);
+                        firstLeader.setTranslateY(20);
+                        //Setting the size of the button
+                        firstLeader.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        firstLeader.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(firstLeader);
+                        break;
+                    case 1:
+                        secondLeader.setTranslateX(x);
+                        secondLeader.setTranslateY(20);
+                        //Setting the size of the button
+                        secondLeader.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        secondLeader.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(secondLeader);
+                        break;
+                    case 2:
+                        thirdLeader.setTranslateX(x);
+                        thirdLeader.setTranslateY(20);
+                        //Setting the size of the button
+                        thirdLeader.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        thirdLeader.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(thirdLeader);
+                        break;
+                    default:
+                        fourthLeader.setTranslateX(x);
+                        fourthLeader.setTranslateY(20);
+                        //Setting the size of the button
+                        fourthLeader.setPrefSize(80, 80);
+                        //Setting a graphic to the button
+                        fourthLeader.setGraphic(view);
+                        x = x + 200;
+                        root.getChildren().add(fourthLeader);
+                        break;
+                }
+            }
+
+            int finalJ = j;
+            firstLeader.setOnAction(e -> {
+                this.startingDiscardedLeaders[finalJ] = 0;
+            });
+
+            secondLeader.setOnAction(e -> {
+                this.startingDiscardedLeaders[finalJ] = 1;
+            });
+
+            thirdLeader.setOnAction(e -> {
+                this.startingDiscardedLeaders[finalJ] = 2;
+            });
+
+            fourthLeader.setOnAction(e -> {
+                this.startingDiscardedLeaders[finalJ] = 3;
+            });
+        }
+
         return startingDiscardedLeaders;
     }
 

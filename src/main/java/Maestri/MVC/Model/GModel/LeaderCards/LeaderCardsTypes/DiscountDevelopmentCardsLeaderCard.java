@@ -2,6 +2,7 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import javafx.scene.image.Image;
 
 import java.io.Serializable;
 
@@ -20,6 +21,8 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
      */
     private final String discount;
 
+    private final String image;
+
     /**
      * Initializes this leader card type
      * @param firstRequiredDevelopmentCard - first development card's colour required
@@ -28,7 +31,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
      */
     public DiscountDevelopmentCardsLeaderCard(String firstRequiredDevelopmentCard,
                                               String secondRequiredDevelopmentCard,
-                                              String resource) {
+                                              String resource, String image) {
         super(2);
 
         //Association of two input required strings to the class attribute
@@ -38,6 +41,8 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
 
         //Association of the input discount string to the class attribute
         this.discount = resource;
+
+        this.image = image;
     }
 
     /**
@@ -89,5 +94,10 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
         System.out.println("Victory Points: "+this.getVictoryPoints());
         System.out.println("Discount -1 "+this.discount);
         System.out.println();
+    }
+
+    @Override
+    public String getImage() {
+        return this.image;
     }
 }

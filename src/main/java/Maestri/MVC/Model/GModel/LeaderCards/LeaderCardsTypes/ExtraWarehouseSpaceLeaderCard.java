@@ -20,18 +20,22 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
      */
     private final String resourceSpace;
 
+    private final String image;
+
     /**
      * Initializes this leader card type
      * @param resourceCost - type of resource to pay to activate the leader card
      * @param resourceSpace - type of the extra resource space
      */
-    public ExtraWarehouseSpaceLeaderCard(String resourceCost, String resourceSpace) {
+    public ExtraWarehouseSpaceLeaderCard(String resourceCost, String resourceSpace, String image) {
         super(3);
 
         //Association of the required resource to the attribute
         this.requisite=resourceCost;
         //Association of the extra space to the attribute
         this.resourceSpace=resourceSpace;
+
+        this.image = image;
     }
 
     /**
@@ -70,5 +74,10 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
         System.out.println("Victory Points: " + this.getVictoryPoints());
         System.out.println("extra " + this.resourceSpace);
         System.out.println();
+    }
+
+    @Override
+    public String getImage() {
+        return this.image;
     }
 }

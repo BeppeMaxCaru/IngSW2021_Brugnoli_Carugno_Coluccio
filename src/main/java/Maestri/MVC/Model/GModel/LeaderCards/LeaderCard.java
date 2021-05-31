@@ -71,4 +71,6 @@ public class LeaderCard implements Serializable {
 
     }
 
+    public String getImage() { return ""; }
+
 }

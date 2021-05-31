@@ -21,6 +21,8 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
      */
     private final Marble whiteMarbleResource;
 
+    private final String image;
+
     /**
      * Initializes this leader card type
      * @param firstRequiredDevelopmentCard - first development card's colour required
@@ -29,13 +31,14 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
      */
     public WhiteMarbleResourceLeaderCard(String firstRequiredDevelopmentCard,
                                          String secondRequiredDevelopmentCard,
-                                         Marble resourceFromWhiteMarble) {
+                                         Marble resourceFromWhiteMarble, String image) {
         super(5);
 
         this.requisite = new String[2];
         this.requisite[0] = firstRequiredDevelopmentCard;
         this.requisite[1] = secondRequiredDevelopmentCard;
         this.whiteMarbleResource= resourceFromWhiteMarble;
+        this.image = image;
     }
 
     /**
@@ -99,5 +102,10 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         System.out.println("Victory Points: "+this.getVictoryPoints());
         System.out.println("white marble: "+this.whiteMarbleResource.getColour());
         System.out.println();
+    }
+
+    @Override
+    public String getImage() {
+        return this.image;
     }
 }

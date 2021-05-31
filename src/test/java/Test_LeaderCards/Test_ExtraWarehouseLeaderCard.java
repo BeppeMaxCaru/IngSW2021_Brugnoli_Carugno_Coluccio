@@ -18,7 +18,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_creation() {
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         assertEquals(ExtraWarehouseSpaceLeaderCard.class, card.getClass());
     }
 
@@ -26,7 +27,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_constraints1(){
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 4);
         assertFalse(card.checkRequisites(players[0].getPlayerBoard()));
     }
@@ -35,7 +37,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_constraints2(){
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 5);
         assertTrue(card.checkRequisites(players[0].getPlayerBoard()));
     }
@@ -44,7 +47,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_constraints3(){
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("COINS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerBoard().getChest().getChestResources().put("COINS", 3);
         players[0].getPlayerBoard().getWareHouse().getWarehouseResources().put("COINS", 2);
         assertTrue(card.checkRequisites(players[0].getPlayerBoard()));
@@ -54,7 +58,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_array() {
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         assertNotNull(players[0].getPlayerLeaderCards()[0]);
     }
@@ -63,7 +68,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_array2() {
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         assertNull(players[0].getPlayerLeaderCards()[1]);
     }
@@ -72,7 +78,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_discard1() {
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
@@ -82,7 +89,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_discard2() {
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
         //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
         assertNull(players[0].getPlayerLeaderCards()[0]);
@@ -99,7 +107,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_activation2(){
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         card.activateAbility(players[0].getPlayerBoard());
         assertNotNull(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("extraSTONES"));
     }
@@ -108,7 +117,8 @@ public class Test_ExtraWarehouseLeaderCard {
     public void try_activation3(){
         players[0] = new Player("Beppe", 0);
 
-        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES");
+        ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
+                "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         card.activateAbility(players[0].getPlayerBoard());
         assertEquals(0,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("extraSTONES"));
     }
