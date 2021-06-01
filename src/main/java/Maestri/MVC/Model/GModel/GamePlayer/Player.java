@@ -238,6 +238,9 @@ public class Player
      */
     public boolean playLeaderCard(int var) {
 
+        if(!this.playerLeaderCards[var].checkRequisites(this.playerBoard))
+            return false;
+
         this.playerLeaderCards[var].activateAbility(this.playerBoard);
         this.playerBoard.sumVictoryPoints(this.playerLeaderCards[var].getVictoryPoints());
 

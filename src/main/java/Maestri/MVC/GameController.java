@@ -87,10 +87,8 @@ public class GameController{
     public boolean checkPlayCards (Player currentPlayer, int c) {
 
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
-            currentPlayer.playLeaderCard(c);
+            return currentPlayer.playLeaderCard(c);
         } else return false;
-
-        return currentPlayer.playLeaderCard(c);
 
     }
 

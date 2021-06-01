@@ -8,19 +8,14 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -63,6 +58,11 @@ public class GUI extends Application implements RenderingView {
     int clientStarted;
     int gameStarted;
 
+    private Stage stage;
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     public static void main(String[] args) {
        /*
@@ -78,10 +78,11 @@ public class GUI extends Application implements RenderingView {
 
     @Override
     public void start(Stage stage) {
-        nickName(stage);
+        this.setStage(stage);
+        nickName();
     }
 
-    public int multiOrSinglePlayers(Stage stage) {
+    public int multiOrSinglePlayers() {
         GridPane root = new GridPane();
         int choice;
         ToggleButton button1 = new ToggleButton("Single player");
@@ -99,39 +100,38 @@ public class GUI extends Application implements RenderingView {
         }); */
 
         button2.setOnAction(e -> {
-            welcome(stage);
+            welcome();
         });
 
-        stage.setTitle("Multi Or Single Players?");
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setTitle("Multi Or Single Players?");
+        this.stage.setScene(scene);
+        this.stage.show();
 
         return choice;
     }
 
-    public void welcome(Stage stage) {
-        addLabelByCode(stage, "Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
-        matchHasStarted(stage, 1); // da togliere
+    public void welcome() {
+        addLabelByCode("Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
+        matchHasStarted(); // da togliere
     }
 
-    public void matchHasStarted(Stage stage, int playerNumber) {
+    public void matchHasStarted() {
         // Chiamata dal client? Devo far apparire questo messaggio quando il server si connette alla socket.
-        this.playerNumber = playerNumber;
-        addLabelByCode(stage, "Match has started, your player number is " + this.playerNumber);
-        if(playerNumber != 0) LoadWTFOnTimer(stage, "startingResource");
-        else LoadWTFOnTimer(stage, "discardStartingLeaders");
+        addLabelByCode("Match has started, your player number is " + this.playerNumber);
+        if(playerNumber != 0) LoadWTFOnTimer("startingResources");
+        else LoadWTFOnTimer("discardStartingLeaders");
     }
 
 
-    public void addLabelByCode(Stage stage, String string) {
+    public void addLabelByCode(String string) {
         var label = new Label(string);
         label.setFont(Font.font(32));
         var scene = new Scene(new StackPane(label), 600, 200);
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setScene(scene);
+        this.stage.show();
     }
 
-    public void LoadWTFOnTimer(Stage stage, String method) {
+    public void LoadWTFOnTimer(String method) {
         TimerTask task = new TimerTask() {
 
             public void run() {
@@ -140,10 +140,10 @@ public class GUI extends Application implements RenderingView {
                     try {
                         System.out.println("loading..");
                         switch(method) {
-                            case "startingResource":
-                                startingResource(stage);
+                            case "startingResources":
+                                startingResources();
                             case "discardStartingLeaders":
-                                discardStartingLeaders(stage);
+                                discardStartingLeaders();
                         }
 
                     } catch (Exception e) {
@@ -161,7 +161,11 @@ public class GUI extends Application implements RenderingView {
 
 
     @Override
-    public String nickName(Stage stage){
+    public String getNickName(){
+        return nickname;
+    }
+
+    public void nickName(){
         GridPane root = new GridPane();
         root.setHgap(8);
         root.setVgap(8);
@@ -189,7 +193,7 @@ public class GUI extends Application implements RenderingView {
         Button okBtn = new Button("Ok");
 
         okBtn.setOnAction(e -> {
-            multiOrSinglePlayers(stage);
+            multiOrSinglePlayers();
             //welcome(stage, field.getText());
         });
 
@@ -201,12 +205,12 @@ public class GUI extends Application implements RenderingView {
 
         Scene scene = new Scene(root, 300, 100);
 
-        stage.setTitle("Choose nickname");
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setTitle("Choose nickname");
+        this.stage.setScene(scene);
+        this.stage.show();
 
         this.nickname = field.getText();
-        return nickname;
+
     }
 
     @Override
@@ -225,7 +229,11 @@ public class GUI extends Application implements RenderingView {
     }
 
     @Override
-    public ArrayList<String> startingResource(Stage stage) {
+    public ArrayList<String> getStartingResource() {
+        return startingRes;
+    }
+
+    public void startingResources(){
         int i;
         this.startingRes = new ArrayList<>();
 
@@ -301,9 +309,9 @@ public class GUI extends Application implements RenderingView {
 
             //Setting the stage
             Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Pick initial resource");
-            stage.setScene(scene);
-            stage.show();
+            this.stage.setTitle("Pick initial resource");
+            this.stage.setScene(scene);
+            this.stage.show();
 
             coinButton.setOnAction(e -> {
                 this.startingRes.add("COINS");
@@ -322,9 +330,8 @@ public class GUI extends Application implements RenderingView {
             });
         }
 
-        LoadWTFOnTimer(stage, "discardStartingLeaders");
+        LoadWTFOnTimer("discardStartingLeaders");
 
-        return startingRes;
     }
 
     @Override
@@ -338,7 +345,11 @@ public class GUI extends Application implements RenderingView {
     }
 
     @Override
-    public int[] discardStartingLeaders(Stage stage){
+    public int[] getDiscardedStartingLeaders(){
+        return startingDiscardedLeaders;
+    }
+
+    public void discardStartingLeaders(){
         for(int j = 0; j < 2; j++) {
             Group root = new Group();
             //Creating buttons
@@ -416,8 +427,6 @@ public class GUI extends Application implements RenderingView {
                 this.startingDiscardedLeaders[finalJ] = 3;
             });
         }
-
-        return startingDiscardedLeaders;
     }
 
     @Override
@@ -426,64 +435,64 @@ public class GUI extends Application implements RenderingView {
     }
 
     @Override
-    public String actionChoice(Stage stage) {
+    public String getActionChoice() {
         return actionChoice;
     }
 
     @Override
-    public int playLeader(Stage stage) {
+    public int getPlayedLeader() {
         return playLeader;
     }
 
     @Override
-    public int discardLeader(Stage stage) {
+    public int getDiscardedLeader() {
         return discardLeader;
     }
 
     @Override
-    public int[] marketCoordinates(Stage stage) {
+    public int[] getMarketCoordinates() {
         return marketCoordinates;
     }
 
     @Override
-    public String resourcesDestination(Stage stage, String parameter) {
+    public String getResourcesDestination(String parameter) {
         return resourcesDestination;
     }
 
     @Override
-    public String whiteMarbleChoice(Stage stage) {
+    public String getWhiteMarbleChoice() {
         return whiteMarbleChoice;
     }
 
     @Override
-    public int[] developmentCardsGridCoordinates(Stage stage) {
+    public int[] getDevelopmentCardsGridCoordinates() {
         return developmentCardsGridCoordinates;
     }
 
     @Override
-    public String[][] payResources(Stage stage) {
+    public String[][] getPayedResources() {
         return payResources;
     }
 
     @Override
-    public int choosePosition(Stage stage) {
+    public int getChosenPosition() {
         return choosePosition;
     }
 
 
     @Override
-    public int activationProd(Stage stage, int[] activation) {
+    public int getActivationProd(int[] activation) {
         return activationProd;
     }
 
 
     @Override
-    public String inputResourceProd(Stage stage) {
+    public String getInputResourceProd() {
         return inputResourceProd;
     }
 
     @Override
-    public String outputResourceProd(Stage stage) {
+    public String getOutputResourceProd() {
         return outputResourceProd;
     }
 

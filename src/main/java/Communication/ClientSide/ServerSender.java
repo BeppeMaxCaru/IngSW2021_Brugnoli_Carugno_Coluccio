@@ -5,7 +5,6 @@ import Message.*;
 import Message.ActivateProdMessage;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.PlayLeaderMessage;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,8 +26,6 @@ public class ServerSender extends Thread {
     @Override
     public void run() {
 
-        Stage stage = null;
-
         String action = "";
         //Keeps sending messages with switch until quit for now
         do {
@@ -39,14 +36,14 @@ public class ServerSender extends Thread {
 
                 while (!action.equals("END TURN") && !action.equals("QUIT")) {
 
-                    action = this.view.actionChoice(stage);
+                    action = this.view.getActionChoice();
 
                     switch (action) {
                         case "P":
                         case "PLAY LEADER CARD": {
 
                             try {
-                                int leader = this.view.playLeader(stage);
+                                int leader = this.view.getPlayedLeader();
                                 PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(playLeaderMessage);
                             } catch (Exception e) {
@@ -59,7 +56,7 @@ public class ServerSender extends Thread {
                         case "DISCARD LEADER CARD": {
 
                             try {
-                                int leader = this.view.discardLeader(stage);
+                                int leader = this.view.getDiscardedLeader();
                                 DiscardLeaderMessage normalDiscardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), leader);
                                 this.sender.writeObject(normalDiscardLeaderMessage);
 
@@ -73,14 +70,14 @@ public class ServerSender extends Thread {
                         case "PICK RESOURCES FROM MARKET": {
 
 
-                            int[] coordinates = this.view.marketCoordinates(stage);
+                            int[] coordinates = this.view.getMarketCoordinates();
                             String parameter;
                             int index;
                             if(coordinates[0] == 0) parameter = "ROW";
                             else parameter = "COLUMN";
                             index = coordinates[1];
-                            String wlChoice = this.view.resourcesDestination(stage, parameter);
-                            String chosenMarble = this.view.whiteMarbleChoice(stage);
+                            String wlChoice = this.view.getResourcesDestination(parameter);
+                            String chosenMarble = this.view.getWhiteMarbleChoice();
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
                             this.sender.writeObject(resourcesMessage);
@@ -89,7 +86,7 @@ public class ServerSender extends Thread {
                         case "B":
                         case "BUY DEVELOPMENT CARD": {
 
-                            int[] coordinates = this.view.developmentCardsGridCoordinates(stage);
+                            int[] coordinates = this.view.getDevelopmentCardsGridCoordinates();
 
                             int column = coordinates[0];
                             int level = 3 - coordinates[1];
@@ -97,11 +94,11 @@ public class ServerSender extends Thread {
                             //Check
                             int[] quantity = new int[4];
                             String[] shelf;
-                            String[][] pickedResources = this.view.payResources(stage);
+                            String[][] pickedResources = this.view.getPayedResources();
                             for(int k = 0; k < quantity.length; k++)
                                 quantity[k] = Integer.parseInt(pickedResources[0][k]);
                             shelf = pickedResources[1];
-                            int pos = this.view.choosePosition(stage);
+                            int pos = this.view.getChosenPosition();
 
                             //Sending Card request
                             BuyCardMessage buyCard = new BuyCardMessage(column, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
@@ -118,12 +115,12 @@ public class ServerSender extends Thread {
                             int stop;
 
                             do{
-                                stop = this.view.activationProd(stage, activation);
+                                stop = this.view.getActivationProd(activation);
                                 if(stop<6){
                                     activation[stop] = 1;
-                                    whichInput[stop] = this.view.inputResourceProd(stage);
+                                    whichInput[stop] = this.view.getInputResourceProd();
                                     if(stop>2){
-                                        whichOutput[stop-3] = this.view.outputResourceProd(stage);
+                                        whichOutput[stop-3] = this.view.getOutputResourceProd();
                                     }
                                 }
                             } while (stop != 6);
@@ -143,12 +140,12 @@ public class ServerSender extends Thread {
                         }
                         case "END TURN":
                         {
-                            this.view.endTurn(stage);
+                            this.view.endTurn();
                             break;
                         }
                         case "QUIT":
                         {
-                            this.view.quit(stage);
+                            this.view.quit();
                             break;
                         }
                     }

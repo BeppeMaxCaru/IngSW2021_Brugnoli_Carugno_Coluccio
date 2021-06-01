@@ -6,7 +6,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,7 @@ public class CLI implements RenderingView{
 
 
     @Override
-    public String nickName(Stage stage){
+    public String getNickName(){
         Scanner input = new Scanner(System.in);
         System.out.println("Insert your nickname");
         this.nickname=input.nextLine();
@@ -64,7 +63,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public ArrayList<String> startingResource(Stage stage){
+    public ArrayList<String> getStartingResource(){
 
         ArrayList<String> playerStartingResources = new ArrayList<>();
 
@@ -103,7 +102,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int[] discardStartingLeaders(Stage stage){
+    public int[] getDiscardedStartingLeaders(){
         Scanner input = new Scanner(System.in);
         int[] discarded = new int[2];
 
@@ -172,7 +171,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String actionChoice(Stage stage) {
+    public String getActionChoice() {
         Scanner input = new Scanner(System.in);
         String action;
 
@@ -204,7 +203,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int playLeader(Stage stage) {
+    public int getPlayedLeader() {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Which card do you want to play?");
@@ -236,7 +235,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int discardLeader(Stage stage) {
+    public int getDiscardedLeader() {
         Scanner input = new Scanner(System.in);
 
         System.out.println("Which card do you want to discard?");
@@ -268,7 +267,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int[] marketCoordinates(Stage stage) {
+    public int[] getMarketCoordinates() {
         Scanner input = new Scanner(System.in);
         int[] coordinates = new int[2];
 
@@ -322,7 +321,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String resourcesDestination(Stage stage, String parameter) {
+    public String getResourcesDestination(String parameter) {
 
         Scanner input = new Scanner(System.in);
         String wlChoice;
@@ -361,7 +360,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String whiteMarbleChoice(Stage stage) {
+    public String getWhiteMarbleChoice() {
         Scanner input = new Scanner(System.in);
         String chosenMarble;
 
@@ -387,7 +386,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int[] developmentCardsGridCoordinates(Stage stage) {
+    public int[] getDevelopmentCardsGridCoordinates() {
         Scanner input = new Scanner(System.in);
         int[] coordinates = new int[2];
 
@@ -426,7 +425,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String[][] payResources(Stage stage) {
+    public String[][] getPayedResources() {
         Scanner input = new Scanner(System.in);
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
@@ -498,7 +497,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int choosePosition(Stage stage) {
+    public int getChosenPosition() {
         Scanner input = new Scanner(System.in);
         String parameter;
         int position = 0;
@@ -569,7 +568,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int activationProd(Stage stage, int[] activation) {
+    public int getActivationProd(int[] activation) {
         Scanner input = new Scanner(System.in);
         String prodPower = "";
 
@@ -650,7 +649,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String inputResourceProd(Stage stage) {
+    public String getInputResourceProd() {
         Scanner input = new Scanner(System.in);
         StringBuilder whichInput = new StringBuilder();
         String res;
@@ -724,7 +723,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String outputResourceProd(Stage stage) {
+    public String getOutputResourceProd() {
 
         Scanner input = new Scanner(System.in);
         String res;
@@ -759,22 +758,22 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void endTurn(Stage stage) {
+    public void endTurn() {
         System.out.println("Your turn has ended, wait for other players");
     }
 
     @Override
-    public void quit(Stage stage) {
+    public void quit() {
         System.out.println("You left the Game");
     }
 
     @Override
-    public void notValidAction(Stage stage) {
+    public void notValidAction() {
         System.err.println("Not valid action");
     }
 
     @Override
-    public void lorenzoFaithPoints(Stage stage) {
+    public void lorenzoFaithPoints() {
         System.out.println("LORENZO FAITH POINTS: "+this.lorenzoPlayerBoard.getFaithPath().getCrossPosition());
     }
 
@@ -784,7 +783,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void endLocalGame(Stage stage) {
+    public void endLocalGame() {
         System.out.println("Match has ended.");
         if(this.localWinner==0)
             System.out.println("You win the Game, with "+this.playerBoard.getVictoryPoints()+" Victory points.");
@@ -802,12 +801,12 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void drawActionCounter(Stage stage) {
+    public void drawActionCounter() {
         this.counters.drawCounter().activate(this.counters, this.lorenzoPlayerBoard, this.grid);
     }
 
     @Override
-    public void notYourTurn(Stage stage) {
+    public void notYourTurn() {
         System.out.println("It's not your turn.");
     }
 
@@ -817,7 +816,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void endMultiplayerGame(Stage stage) {
+    public void endMultiplayerGame() {
         System.out.println("The winner is " + this.gameOverMessage.getWinner());
         System.out.println("You made " + this.gameOverMessage.getVictoryPoints() + " victory points");
     }

@@ -6,7 +6,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
@@ -21,88 +20,88 @@ public interface RenderingView {
     default void senderError(Exception e){
     }
 
-    default ArrayList<String> startingResource(Stage stage){
+    default ArrayList<String> getStartingResource(){
         return null;
     }
 
-    default int[] discardStartingLeaders(Stage stage){
+    default int[] getDiscardedStartingLeaders(){
         return new int[]{0, 0};
     }
 
-    default String nickName(Stage stage){
+    default String getNickName(){
         return "";
     }
 
-    default String actionChoice(Stage stage){
+    default String getActionChoice(){
         return "";
     }
 
-    default int playLeader(Stage stage){
+    default int getPlayedLeader(){
         return 0;
     }
 
-    default int discardLeader(Stage stage){
+    default int getDiscardedLeader(){
         return 0;
     }
 
-    default int[] marketCoordinates(Stage stage){
+    default int[] getMarketCoordinates(){
         return new int[]{0, 0};
     }
 
-    default String resourcesDestination(Stage stage, String parameter){
+    default String getResourcesDestination(String parameter){
         return "";
     }
 
-    default String whiteMarbleChoice(Stage stage){
+    default String getWhiteMarbleChoice(){
         return "";
     }
 
-    default int[] developmentCardsGridCoordinates(Stage stage){
+    default int[] getDevelopmentCardsGridCoordinates(){
         return new int[]{0, 0};
     }
 
-    default String[][] payResources(Stage stage){
+    default String[][] getPayedResources(){
         return null;
     }
 
-    default int choosePosition(Stage stage){
+    default int getChosenPosition(){
         return 0;
     }
 
-    default int activationProd(Stage stage, int[] activation){
+    default int getActivationProd(int[] activation){
         return 0;
     }
 
-    default String inputResourceProd(Stage stage){
+    default String getInputResourceProd(){
         return "";
     }
 
-    default String outputResourceProd(Stage stage){
+    default String getOutputResourceProd(){
         return "";
     }
 
-    default void endTurn(Stage stage){
+    default void endTurn(){
     }
 
-    default void quit(Stage stage){
+    default void quit(){
     }
 
-    default void notValidAction(Stage stage){
+    default void notValidAction(){
     }
 
-    default void lorenzoFaithPoints(Stage stage){
+    default void lorenzoFaithPoints(){
     }
 
-    default void endLocalGame(Stage stage){
+    default void endLocalGame(){
     }
 
-    default void drawActionCounter(Stage stage){
+    default void drawActionCounter(){
     }
 
-    default void notYourTurn(Stage stage){
+    default void notYourTurn(){
     }
 
-    default void endMultiplayerGame(Stage stage){
+    default void endMultiplayerGame(){
     }
 
     default void setPlayerNumber(int playerNumber) {

@@ -5,7 +5,6 @@ import Communication.ServerSide.PlayerThread;
 import Message.Message;
 import Message.MessageReceived.*;
 import Message.MessageSent.QuitMessage;
-import javafx.stage.Stage;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -30,7 +29,6 @@ public class ServerReceiver extends Thread {
 
     @Override
     public void run() {
-        Stage stage = null;
         //Keeps receiving messages and current player actions
 
         //ASYNC PHASE
@@ -50,7 +48,7 @@ public class ServerReceiver extends Thread {
             if (object instanceof NotYourTurnMessage) {
 
                 try {
-                    this.view.notYourTurn(stage);
+                    this.view.notYourTurn();
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -114,7 +112,7 @@ public class ServerReceiver extends Thread {
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
                     this.view.setGameOverMsg(gameOverMessage);
-                    this.view.endMultiplayerGame(stage);
+                    this.view.endMultiplayerGame();
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();
