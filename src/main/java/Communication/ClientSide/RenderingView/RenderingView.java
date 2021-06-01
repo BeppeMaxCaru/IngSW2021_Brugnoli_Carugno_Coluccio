@@ -140,4 +140,8 @@ public interface RenderingView {
     default void setClientStarted(){
     }
 
+    default int getGameMode(){
+        return 0;
+    }
+
 }

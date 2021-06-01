@@ -41,6 +41,7 @@ public class GUI extends Application implements RenderingView {
     int activationProd;
     String inputResourceProd;
     String outputResourceProd;
+    int gameMode;
 
     //Input methods parameters
     //Initialized by clientMain/serverSender with setters
@@ -186,7 +187,7 @@ public class GUI extends Application implements RenderingView {
                         }
 
                     } catch (Exception e) {
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                 });
             }
@@ -481,7 +482,7 @@ public class GUI extends Application implements RenderingView {
         this.stage.show();
 
     }
-    
+
     public void playDiscardLeaderCard() {
         Group root = new Group();
         Button firstLeader = new Button();
@@ -670,7 +671,13 @@ public class GUI extends Application implements RenderingView {
         this.gameStarted = 1;
     }
 
+    @Override
     public void setClientStarted(){
         this.clientStarted=1;
+    }
+
+    @Override
+    public int getGameMode() {
+        return this.gameMode;
     }
 }
