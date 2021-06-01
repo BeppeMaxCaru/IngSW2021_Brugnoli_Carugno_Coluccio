@@ -82,46 +82,83 @@ public class GUI extends Application implements RenderingView {
         nickName();
     }
 
-    public int multiOrSinglePlayers() {
+    public void nickname(Stage stage) {
         GridPane root = new GridPane();
-        int choice;
-        ToggleButton button1 = new ToggleButton("Single player");
-        ToggleButton button2 = new ToggleButton("Multi player");
+        root.setHgap(8);
+        root.setVgap(8);
+        root.setPadding(new Insets(5));
+
+        ColumnConstraints cons1 = new ColumnConstraints();
+        cons1.setHgrow(Priority.NEVER);
+        root.getColumnConstraints().add(cons1);
+
+        ColumnConstraints cons2 = new ColumnConstraints();
+        cons2.setHgrow(Priority.ALWAYS);
+
+        root.getColumnConstraints().addAll(cons1, cons2);
+
+        RowConstraints rcons1 = new RowConstraints();
+        rcons1.setVgrow(Priority.NEVER);
+
+        RowConstraints rcons2 = new RowConstraints();
+        rcons2.setVgrow(Priority.ALWAYS);
+
+        root.getRowConstraints().addAll(rcons1, rcons2);
+
+        Label lbl = new Label("Insert nickname:");
+        TextField field = new TextField();
+        Button okBtn = new Button("Ok");
+
+        okBtn.setOnAction(e -> multiOrSinglePlayers());
+
+        GridPane.setHalignment(okBtn, HPos.RIGHT);
+
+        root.add(lbl, 0, 0);
+        root.add(field, 1, 0, 3, 1);
+        root.add(okBtn, 2, 1);
+
+        Scene scene = new Scene(root, 300, 100);
+
+        stage.setTitle("Choose nickname");
+        stage.setScene(scene);
+        stage.show();
+
+        this.nickname = field.getText();
+    }
+
+    public void multiOrSinglePlayers() {
+        GridPane root = new GridPane();
+        Button button1 = new Button("Single player");
+        Button button2 = new Button("Multi player");
         root.add(button1, 0, 0);
         root.add(button2, 1, 0);
 
         Scene scene = new Scene(root, 300, 100);
 
-        if(button1.isSelected()) choice = 0;
-        else choice = 1;
-
         /* button1.setOnAction(e -> {
             single player welcome
         }); */
 
-        button2.setOnAction(e -> {
-            welcome();
-        });
+        button2.setOnAction(e -> welcome());
 
         this.stage.setTitle("Multi Or Single Players?");
         this.stage.setScene(scene);
         this.stage.show();
 
-        return choice;
+        //setter di scelta di gioco __________________________________
     }
 
     public void welcome() {
         addLabelByCode("Loading...\nHi " + this.nickname + "!\nWelcome to Master of Renaissance online!");
-        matchHasStarted(); // da togliere
+        while(this.gameStarted != 1) ;
+        LoadWTFOnTimer("matchHasStarted");
     }
 
     public void matchHasStarted() {
-        // Chiamata dal client? Devo far apparire questo messaggio quando il server si connette alla socket.
         addLabelByCode("Match has started, your player number is " + this.playerNumber);
         if(playerNumber != 0) LoadWTFOnTimer("startingResources");
         else LoadWTFOnTimer("discardStartingLeaders");
     }
-
 
     public void addLabelByCode(String string) {
         var label = new Label(string);
@@ -141,9 +178,11 @@ public class GUI extends Application implements RenderingView {
                         System.out.println("loading..");
                         switch(method) {
                             case "startingResources":
-                                startingResources();
+                                startingResource();
                             case "discardStartingLeaders":
                                 discardStartingLeaders();
+                            case "matchHasStarted":
+                                matchHasStarted();
                         }
 
                     } catch (Exception e) {
@@ -155,7 +194,7 @@ public class GUI extends Application implements RenderingView {
 
 
         Timer timer = new Timer("Timer");
-        long delay = 2000L;
+        long delay = 3000L;
         timer.schedule(task, delay);
     }
 
@@ -210,30 +249,9 @@ public class GUI extends Application implements RenderingView {
         this.stage.show();
 
         this.nickname = field.getText();
-
     }
 
-    @Override
-    public void setMarket(Market market) {
-        this.market = market;
-    }
-
-    @Override
-    public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
-        this.grid=grid;
-    }
-
-    @Override
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
-    }
-
-    @Override
-    public ArrayList<String> getStartingResource() {
-        return startingRes;
-    }
-
-    public void startingResources(){
+    public void startingResource() {
         int i;
         this.startingRes = new ArrayList<>();
 
@@ -250,10 +268,10 @@ public class GUI extends Application implements RenderingView {
 
             Group root = new Group();
             //Creating buttons
-            ToggleButton coinButton = new ToggleButton();
-            ToggleButton servantButton = new ToggleButton();
-            ToggleButton shieldButton = new ToggleButton();
-            ToggleButton stoneButton = new ToggleButton();
+            Button coinButton = new Button();
+            Button servantButton = new Button();
+            Button shieldButton = new Button();
+            Button stoneButton = new Button();
 
             int x = 10;
             for (String item : resources) {
@@ -313,50 +331,26 @@ public class GUI extends Application implements RenderingView {
             this.stage.setScene(scene);
             this.stage.show();
 
-            coinButton.setOnAction(e -> {
-                this.startingRes.add("COINS");
-            });
+            coinButton.setOnAction(e -> this.startingRes.add("COINS"));
 
-            servantButton.setOnAction(e -> {
-                this.startingRes.add("SERVANT");
-            });
+            servantButton.setOnAction(e -> this.startingRes.add("SERVANT"));
 
-            shieldButton.setOnAction(e -> {
-                this.startingRes.add("SCHIELD");
-            });
+            shieldButton.setOnAction(e -> this.startingRes.add("SCHIELD"));
 
-            stoneButton.setOnAction(e -> {
-                this.startingRes.add("STONE");
-            });
+            stoneButton.setOnAction(e -> this.startingRes.add("STONE"));
         }
 
         LoadWTFOnTimer("discardStartingLeaders");
-
-    }
-
-    @Override
-    public void setStartingLeaders(LeaderCard[] leaders) {
-        this.startingLeaders = leaders;
-    }
-
-    @Override
-    public void setBoard(Playerboard board) {
-        this.playerBoard=board;
-    }
-
-    @Override
-    public int[] getDiscardedStartingLeaders(){
-        return startingDiscardedLeaders;
     }
 
     public void discardStartingLeaders(){
         for(int j = 0; j < 2; j++) {
             Group root = new Group();
             //Creating buttons
-            ToggleButton firstLeader = new ToggleButton();
-            ToggleButton secondLeader = new ToggleButton();
-            ToggleButton thirdLeader = new ToggleButton();
-            ToggleButton fourthLeader = new ToggleButton();
+            Button firstLeader = new Button();
+            Button secondLeader = new Button();
+            Button thirdLeader = new Button();
+            Button fourthLeader = new Button();
 
             int x = 0;
             for (int i = 0; i < startingLeaders.length; i++) {
@@ -410,23 +404,178 @@ public class GUI extends Application implements RenderingView {
                 }
             }
 
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Discard initial leader cards");
+            stage.setScene(scene);
+            stage.show();
+
             int finalJ = j;
             firstLeader.setOnAction(e -> {
                 this.startingDiscardedLeaders[finalJ] = 0;
+                firstLeader.setVisible(false);
             });
 
             secondLeader.setOnAction(e -> {
                 this.startingDiscardedLeaders[finalJ] = 1;
+                secondLeader.setVisible(false);
             });
 
             thirdLeader.setOnAction(e -> {
                 this.startingDiscardedLeaders[finalJ] = 2;
+                thirdLeader.setVisible(false);
             });
 
             fourthLeader.setOnAction(e -> {
                 this.startingDiscardedLeaders[finalJ] = 3;
+                fourthLeader.setVisible(false);
             });
         }
+        // chiamta metodo choiceAction ________________________________
+    }
+
+    public void choiceAction() {
+        GridPane root = new GridPane();
+        Button playLeaderCardButton = new Button("Play leader card");
+        Button discardLeaderCardButton = new Button("Discard Leader Card");
+        Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
+        Button buyDevelopmentCardButton = new Button("Buy Development Card");
+        Button activateProdButton = new Button("Activate Production Power");
+
+        root.add(playLeaderCardButton, 0, 0);
+        root.add(discardLeaderCardButton, 2, 0);
+        root.add(pickResourceFromMarketButton, 0, 1);
+        root.add(buyDevelopmentCardButton, 2, 1);
+        root.add(activateProdButton, 4, 1);
+
+        Scene scene = new Scene(root, 500, 300);
+
+        playLeaderCardButton.setOnAction(e -> {
+            this.actionChoice = "PLAY LEADER CARD";
+            playDiscardLeaderCard();
+        });
+
+        discardLeaderCardButton.setOnAction(e -> {
+            this.actionChoice = "DISCARD LEADER CARD";
+            playDiscardLeaderCard();
+        });
+
+        pickResourceFromMarketButton.setOnAction(e -> {
+            this.actionChoice = "PICK RESOURCES FROM MARKET";
+            // method
+        });
+
+        buyDevelopmentCardButton.setOnAction(e -> {
+            this.actionChoice = "BUY DEVELOPMENT CARD";
+            // method
+        });
+
+        activateProdButton.setOnAction(e -> {
+            this.actionChoice = "ACTIVATE PRODUCTION POWER";
+            // method
+        });
+
+
+        this.stage.setTitle("Choose the action!");
+        this.stage.setScene(scene);
+        this.stage.show();
+
+    }
+    
+    public void playDiscardLeaderCard() {
+        Group root = new Group();
+        Button firstLeader = new Button();
+        Button secondLeader = new Button();
+
+        int x = 0;
+        for (int i = 0; i < playerLeaders.length; i++) {
+            //Creating a graphic (image)
+            Image img = new Image(playerLeaders[i].getImage());
+            ImageView view = new ImageView(img);
+            view.setFitHeight(80);
+            view.setPreserveRatio(true);
+            //Setting the location of the button
+            if (i == 0 && !this.playerLeaders[0].isPlayed()) {
+                firstLeader.setTranslateX(x);
+                firstLeader.setTranslateY(20);
+                //Setting the size of the button
+                firstLeader.setPrefSize(80, 80);
+                //Setting a graphic to the button
+                firstLeader.setGraphic(view);
+                x = x + 200;
+                root.getChildren().add(firstLeader);
+            } else if (i == 1 && !this.playerLeaders[1].isPlayed()) {
+                secondLeader.setTranslateX(x);
+                secondLeader.setTranslateY(20);
+                //Setting the size of the button
+                secondLeader.setPrefSize(80, 80);
+                //Setting a graphic to the button
+                secondLeader.setGraphic(view);
+                x = x + 200;
+                root.getChildren().add(secondLeader);
+            }
+        }
+
+        //Setting the stage
+        Scene scene = new Scene(root, 740, 130);
+        this.stage.setTitle("Discard initial leader cards");
+        this.stage.setScene(scene);
+        this.stage.show();
+
+        firstLeader.setOnAction(e -> {
+            if(this.actionChoice.equals("PLAY LEADER CARD")) {
+                this.playLeader = 0;
+            }
+            else {
+                this.discardLeader = 0;
+            }
+            choiceAction();
+        });
+
+        secondLeader.setOnAction(e -> {
+            if(this.actionChoice.equals("PLAY LEADER CARD")) {
+                this.playLeader = 1;
+            }
+            else {
+                this.discardLeader = 1;
+            }
+            choiceAction();
+        });
+    }
+
+    @Override
+    public void setMarket(Market market) {
+        this.market = market;
+    }
+
+    @Override
+    public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
+        this.grid=grid;
+    }
+
+    @Override
+    public void setPlayerNumber(int playerNumber) {
+        this.playerNumber = playerNumber;
+    }
+
+    @Override
+    public ArrayList<String> getStartingResource() {
+        return startingRes;
+    }
+
+    @Override
+    public void setStartingLeaders(LeaderCard[] leaders) {
+        this.startingLeaders = leaders;
+    }
+
+    @Override
+    public void setBoard(Playerboard board) {
+        this.playerBoard=board;
+    }
+
+    @Override
+    public int[] getDiscardedStartingLeaders(){
+        return startingDiscardedLeaders;
     }
 
     @Override
