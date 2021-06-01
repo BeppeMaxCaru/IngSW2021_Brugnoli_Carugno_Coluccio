@@ -15,7 +15,6 @@ import Message.MessageReceived.UpdateClientLeaderCardsMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageReceived.UpdateClientPlayerBoardMessage;
 import Message.MessageSent.DiscardLeaderMessage;
-import javafx.stage.Stage;
 
 import java.io.*;
 import java.net.Socket;
@@ -27,7 +26,7 @@ public class ClientMain {
     private int port;
 
     private String nickname;
-    private Scanner consoleInput = new Scanner(System.in);
+
     private int playerNumber;
 
     //TEST MEX MARKET
@@ -58,21 +57,14 @@ public class ClientMain {
 
     public void Execute(RenderingView view) {
 
-        String gameMode;
-        Scanner consoleInput = new Scanner(System.in);
+        int gameMode;
 
         this.nickname = view.getNickName();
         view.setClientStarted();
 
-        System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-        gameMode = consoleInput.nextLine();
-        while (!gameMode.equals("0") && !gameMode.equals("1")) {
-            System.out.println("Number not valid!");
-            System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-            gameMode = consoleInput.nextLine();
-        }
+        gameMode = view.getGameMode();
 
-        if (gameMode.equals("0")) {
+        if (gameMode==0) {
 
             view.setGameStarted();
 
@@ -445,13 +437,9 @@ public class ClientMain {
         }
     }
 
-        public String getNickname () {
-            return this.nickname;
-        }
-
-        public Scanner getConsoleInput () {
-            return this.consoleInput;
-        }
+    public String getNickname () {
+        return this.nickname;
+    }
 
     public Market getMarket() {
         return this.market;

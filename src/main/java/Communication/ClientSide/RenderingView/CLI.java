@@ -38,13 +38,29 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void setGameStarted() {
-        System.out.println("\nMatch has started, your player number is " + this.playerNumber);
-    }
-
     public void setClientStarted(){
         System.out.println("Hi " + this.nickname + "!");
         System.out.println("Welcome to Master of Renaissance!");
+    }
+
+    @Override
+    public int getGameMode() {
+        String gameMode;
+        Scanner input = new Scanner(System.in);
+
+        System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+        gameMode = input.nextLine();
+        while (!gameMode.equals("0") && !gameMode.equals("1")) {
+            System.out.println("Number not valid!");
+            System.out.println("Write 0 for single-player or 1 for multiplayer: ");
+            gameMode = input.nextLine();
+        }
+        return Integer.parseInt(gameMode);
+    }
+
+    @Override
+    public void setGameStarted() {
+        System.out.println("\nMatch has started, your player number is " + this.playerNumber);
     }
 
     @Override

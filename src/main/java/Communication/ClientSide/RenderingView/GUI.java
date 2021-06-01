@@ -41,6 +41,7 @@ public class GUI extends Application implements RenderingView {
     int activationProd;
     String inputResourceProd;
     String outputResourceProd;
+    int gameMode;
 
     //Input methods parameters
     //Initialized by clientMain/serverSender with setters
@@ -82,9 +83,8 @@ public class GUI extends Application implements RenderingView {
         nickName();
     }
 
-    public int multiOrSinglePlayers() {
+    public void multiOrSinglePlayers() {
         GridPane root = new GridPane();
-        int choice;
         ToggleButton button1 = new ToggleButton("Single player");
         ToggleButton button2 = new ToggleButton("Multi player");
         root.add(button1, 0, 0);
@@ -92,8 +92,8 @@ public class GUI extends Application implements RenderingView {
 
         Scene scene = new Scene(root, 300, 100);
 
-        if(button1.isSelected()) choice = 0;
-        else choice = 1;
+        if(button1.isSelected()) this.gameMode = 0;
+        else this.gameMode = 1;
 
         /* button1.setOnAction(e -> {
             single player welcome
@@ -107,7 +107,6 @@ public class GUI extends Application implements RenderingView {
         this.stage.setScene(scene);
         this.stage.show();
 
-        return choice;
     }
 
     public void welcome() {
@@ -147,7 +146,7 @@ public class GUI extends Application implements RenderingView {
                         }
 
                     } catch (Exception e) {
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                 });
             }
@@ -521,7 +520,13 @@ public class GUI extends Application implements RenderingView {
         this.gameStarted = 1;
     }
 
+    @Override
     public void setClientStarted(){
         this.clientStarted=1;
+    }
+
+    @Override
+    public int getGameMode() {
+        return this.gameMode;
     }
 }
