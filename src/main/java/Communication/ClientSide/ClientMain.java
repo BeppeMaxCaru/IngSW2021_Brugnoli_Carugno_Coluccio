@@ -22,8 +22,8 @@ import java.util.*;
 
 public class ClientMain {
 
-    private String hostName;
-    private int port;
+    private final String hostName;
+    private final int port;
 
     private String nickname;
 
@@ -167,7 +167,7 @@ public class ClientMain {
                         if(coordinates[0] == 0) parameter = "ROW";
                         else parameter = "COLUMN";
                         index = coordinates[1];
-                        String wlChoice = view.getResourcesDestination(parameter);
+                        String wlChoice = view.getResourcesDestination();
                         String chosenMarble = view.getWhiteMarbleChoice();
 
                         //If player picks row
@@ -257,15 +257,17 @@ public class ClientMain {
                         }
 
                         int[] activation = {0, 0, 0, 0, 0, 0};
+                        view.setActivation(activation);
                         String[] whichInput = new String[6];
                         String[] whichOutput = new String[3];
 
                         int stop;
                         int[] outputs = new int[3];
                         do{
-                            stop = view.getActivationProd(activation);
+                            stop = view.getActivationProd();
                             if(stop<6){
                                 activation[stop] = 1;
+                                view.setActivation(activation);
                                 whichInput[stop] = view.getInputResourceProd();
                                 if(stop>2){
                                     whichOutput[stop-3] = view.getOutputResourceProd();

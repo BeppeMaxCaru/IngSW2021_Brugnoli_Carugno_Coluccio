@@ -28,6 +28,9 @@ public class CLI implements RenderingView{
     private int localWinner;
     private GameOverMessage gameOverMessage;
 
+    private String parameter;
+    private int[] activation = new int[3];
+
 
     @Override
     public String getNickName(){
@@ -298,6 +301,7 @@ public class CLI implements RenderingView{
             System.out.println("Write 'ROW' or 'COLUMN'.");
             parameter = input.nextLine().toUpperCase();
         }
+        this.parameter = parameter;
 
         //Receives index
         if (parameter.equals("ROW")) {
@@ -337,7 +341,7 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String getResourcesDestination(String parameter) {
+    public String getResourcesDestination() {
 
         Scanner input = new Scanner(System.in);
         String wlChoice;
@@ -346,23 +350,23 @@ public class CLI implements RenderingView{
 
         //Receives deposit
         System.out.println("If you activated your extra warehouse space, where do you want to store your resources?");
-        if (parameter.equals("ROW"))
+        if (this.parameter.equals("ROW"))
             System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
         else
             System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
         wlChoice = input.nextLine().toUpperCase();
         try {
             //Checks if player has written only 'w' and 'l' chars
-            if (parameter.equals("ROW"))
+            if (this.parameter.equals("ROW"))
             {
-                while (wlChoice.length() != 4 && !this.checkShelf(wlChoice)){
+                while (wlChoice.length() != 4 && this.checkShelf(wlChoice)){
                     System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
                     wlChoice = input.nextLine().toUpperCase();
                 }
             }
-            if (parameter.equals("COLUMN"))
+            if (this.parameter.equals("COLUMN"))
             {
-                while (wlChoice.length() != 3 && !this.checkShelf(wlChoice)){
+                while (wlChoice.length() != 3 && this.checkShelf(wlChoice)){
                     System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
                     wlChoice = input.nextLine().toUpperCase();
                 }
@@ -564,9 +568,9 @@ public class CLI implements RenderingView{
     public boolean checkShelf(String wlChoice){
         for (int k = 0; k < wlChoice.length(); k++){
             if (!String.valueOf(wlChoice.charAt(k)).equals("W") && !String.valueOf(wlChoice.charAt(k)).equals("L"))
-                return false;
+                return true;
         }
-        return true;
+        return false;
     }
 
     public boolean checkMarbleChoice(String chosenMarble){
@@ -584,72 +588,72 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public int getActivationProd(int[] activation) {
+    public int getActivationProd() {
         Scanner input = new Scanner(System.in);
-        String prodPower = "";
+        String prodPower;
 
         this.printPlayerboard(this.playerBoard);
         this.printActivatedLeaderCard(this.playerLeaders);
 
         System.out.println("Which production power do you want to activate?");
-        if (activation[0] == 0)
+        if (this.activation[0] == 0)
             System.out.println("Write p0 if you want to activate the first production of your grid, if it's available");
-        if (activation[1] == 0)
+        if (this.activation[1] == 0)
             System.out.println("Write p1 if you want to activate the second production of your grid, if it's available");
-        if (activation[2] == 0)
+        if (this.activation[2] == 0)
             System.out.println("Write p2 if you want to activate the third production of your grid, if it's available");
-        if (activation[3] == 0)
+        if (this.activation[3] == 0)
             System.out.println("Write b if you want to activate the basic production power");
-        if (activation[4] == 0)
+        if (this.activation[4] == 0)
             System.out.println("Write e0 if you want to activate the first extra production power, if it's available");
-        if (activation[5] == 0)
+        if (this.activation[5] == 0)
             System.out.println("Write e1 if you want to activate the second extra production power, if it's available");
         System.out.println("Write STOP if you don't want to activate production powers");
         prodPower = input.nextLine().toUpperCase();
-        while(this.checkProduction(activation, prodPower) == -1){
+        while(this.checkProduction(prodPower) == -1){
             System.err.println("Not valid input.");
             System.out.println("Write a correct production power code.");
             prodPower = input.nextLine().toUpperCase();
         }
 
-        return this.checkProduction(activation, prodPower);
+        return this.checkProduction(prodPower);
     }
 
-    public int checkProduction(int[] activation, String prodPower){
+    public int checkProduction(String prodPower){
         switch(prodPower){
             case "PO":
             {
-                if(activation[0]==0)
+                if(this.activation[0]==0)
                     return 0;
                 else return -1;
             }
             case "P1":
             {
-                if(activation[1]==0)
+                if(this.activation[1]==0)
                     return 1;
                 else return -1;
             }
             case "P2":
             {
-                if(activation[2]==0)
+                if(this.activation[2]==0)
                     return 2;
                 else return -1;
             }
             case "B":
             {
-                if(activation[3]==0)
+                if(this.activation[3]==0)
                     return 3;
                 else return -1;
             }
             case "EO":
             {
-                if(activation[4]==0)
+                if(this.activation[4]==0)
                     return 4;
                 else return -1;
             }
             case "E1":
             {
-                if(activation[5]==0)
+                if(this.activation[5]==0)
                     return 5;
                 else return -1;
             }
@@ -837,4 +841,8 @@ public class CLI implements RenderingView{
         System.out.println("You made " + this.gameOverMessage.getVictoryPoints() + " victory points");
     }
 
+    @Override
+    public void setActivation(int[] activation) {
+        this.activation = activation;
+    }
 }

@@ -59,6 +59,8 @@ public class GUI extends Application implements RenderingView {
     int clientStarted;
     int gameStarted;
 
+    int correctAction;
+
     private Stage stage;
 
     public void setStage(Stage stage) {
@@ -605,7 +607,7 @@ public class GUI extends Application implements RenderingView {
     }
 
     @Override
-    public String getResourcesDestination(String parameter) {
+    public String getResourcesDestination() {
         return resourcesDestination;
     }
 
@@ -629,12 +631,10 @@ public class GUI extends Application implements RenderingView {
         return choosePosition;
     }
 
-
     @Override
-    public int getActivationProd(int[] activation) {
+    public int getActivationProd() {
         return activationProd;
     }
-
 
     @Override
     public String getInputResourceProd() {
@@ -679,5 +679,15 @@ public class GUI extends Application implements RenderingView {
     @Override
     public int getGameMode() {
         return this.gameMode;
+    }
+
+    @Override
+    public void notValidAction() {
+        this.correctAction=0;
+    }
+
+    @Override
+    public void notYourTurn() {
+        this.correctAction=0;
     }
 }

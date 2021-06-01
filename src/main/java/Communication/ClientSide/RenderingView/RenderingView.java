@@ -48,7 +48,7 @@ public interface RenderingView {
         return new int[]{0, 0};
     }
 
-    default String getResourcesDestination(String parameter){
+    default String getResourcesDestination(){
         return "";
     }
 
@@ -68,7 +68,7 @@ public interface RenderingView {
         return 0;
     }
 
-    default int getActivationProd(int[] activation){
+    default int getActivationProd(){
         return 0;
     }
 
@@ -142,6 +142,9 @@ public interface RenderingView {
 
     default int getGameMode(){
         return 0;
+    }
+
+    default void setActivation(int[] activation){
     }
 
 }

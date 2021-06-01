@@ -76,7 +76,7 @@ public class ServerSender extends Thread {
                             if(coordinates[0] == 0) parameter = "ROW";
                             else parameter = "COLUMN";
                             index = coordinates[1];
-                            String wlChoice = this.view.getResourcesDestination(parameter);
+                            String wlChoice = this.view.getResourcesDestination();
                             String chosenMarble = this.view.getWhiteMarbleChoice();
 
                             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
@@ -109,15 +109,17 @@ public class ServerSender extends Thread {
                         case "ACTIVATE PRODUCTION POWER": {
 
                             int[] activation = {0, 0, 0, 0, 0, 0};
+                            this.view.setActivation(activation);
                             String[] whichInput = new String[6];
                             String[] whichOutput = new String[3];
 
                             int stop;
 
                             do{
-                                stop = this.view.getActivationProd(activation);
+                                stop = this.view.getActivationProd();
                                 if(stop<6){
                                     activation[stop] = 1;
+                                    this.view.setActivation(activation);
                                     whichInput[stop] = this.view.getInputResourceProd();
                                     if(stop>2){
                                         whichOutput[stop-3] = this.view.getOutputResourceProd();
