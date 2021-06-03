@@ -110,6 +110,12 @@ public class GameModel{
                     return true;
             } else {
                 remainingPlayers = remainingPlayers - 1;
+                //Test updated version with added messages
+                //
+                //Remove + winner + disconnect
+                //
+                //Check garbage
+                //
                 if (remainingPlayers==1) return true;
             }
         }
