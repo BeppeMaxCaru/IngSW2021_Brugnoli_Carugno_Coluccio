@@ -16,7 +16,7 @@ public class InitialScenarioGUI {
 
     HandlerGUI handlerGUI;
 
-    public void setHandlerGUI(HandlerGUI handlerGUI) {
+    public InitialScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
     }
 
@@ -59,12 +59,13 @@ public class InitialScenarioGUI {
         stage.setScene(scene);
         stage.show();
 
-        handlerGUI.setNickName(field.getText());
-
-        okBtn.setOnAction(e -> multiOrSinglePlayers(stage));
+        okBtn.setOnAction(e -> {
+            multiOrSinglePlayers(stage, handlerGUI);
+            handlerGUI.setNickName(field.getText());
+        });
     }
 
-    public void multiOrSinglePlayers(Stage stage) {
+    public void multiOrSinglePlayers(Stage stage, HandlerGUI handlerGUI) {
         GridPane root = new GridPane();
         Button button1 = new Button("Single player");
         Button button2 = new Button("Multi player");
@@ -83,12 +84,12 @@ public class InitialScenarioGUI {
         });
 
         button2.setOnAction(e -> {
-            welcome(stage);
+            welcome(stage, handlerGUI);
             handlerGUI.setGameMode(1);
         });
     }
 
-    public void welcome(Stage stage) {
+    public void welcome(Stage stage, HandlerGUI handlerGUI) {
         handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + handlerGUI.getNickName() +
                 "!\nWelcome to Master of Renaissance online!", stage);
         //while(this.gameStarted != 1) ;

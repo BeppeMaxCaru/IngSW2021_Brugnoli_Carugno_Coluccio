@@ -16,10 +16,8 @@ import java.util.TimerTask;
 public class GenericClassGUI {
 
     HandlerGUI handlerGUI;
-    InitialScenarioGUI initialScenarioGUI;
-    AsyncScenarioGUI asyncScenarioGUI;
 
-    public void setHandlerGUI(HandlerGUI handlerGUI) {
+    public GenericClassGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
     }
 
@@ -41,11 +39,12 @@ public class GenericClassGUI {
                         System.out.println("loading..");
                         switch(method) {
                             case "startingResources":
-                                asyncScenarioGUI.startingResource(stage);
+                                handlerGUI.getAsyncScenarioGUI().startingResource(stage);
                             case "discardStartingLeaders":
-                                asyncScenarioGUI.discardStartingLeaders(stage);
+                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage);
                             case "matchHasStarted":
-                                asyncScenarioGUI.matchHasStarted(stage);
+                                handlerGUI.getAsyncScenarioGUI().matchHasStarted(stage);
+
                         }
 
                     } catch (Exception e) {

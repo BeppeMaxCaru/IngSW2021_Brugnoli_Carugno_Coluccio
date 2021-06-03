@@ -112,9 +112,6 @@ public interface RenderingView {
     default void endMultiplayerGame(){
     }
 
-    default void setDiscardedStartingLeaders(int[] leadersDiscarded) {
-    }
-
     default void setPlayerNumber(int playerNumber) {
     }
 

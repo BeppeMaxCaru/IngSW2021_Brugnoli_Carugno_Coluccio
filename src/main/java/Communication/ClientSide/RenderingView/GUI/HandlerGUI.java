@@ -8,7 +8,6 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -66,17 +65,13 @@ public class HandlerGUI extends Application implements RenderingView {
     private final GenericClassGUI genericClassGUI;
     private final InitialScenarioGUI initialScenarioGUI;
     private final AsyncScenarioGUI asyncScenarioGUI;
+    private final PlotScenarioGUI plotScenarioGUI;
 
-    public HandlerGUI() {
-        this.genericClassGUI = new GenericClassGUI();
-        this.initialScenarioGUI = new InitialScenarioGUI();
-        this.asyncScenarioGUI = new AsyncScenarioGUI();
-    }
-
-    public void setStage(Stage stage) { this.stage = stage; }
-
-    public static void main(String[] args) {
-        launch(args);
+    public HandlerGUI( ) {
+        this.genericClassGUI = new GenericClassGUI(this);
+        this.initialScenarioGUI = new InitialScenarioGUI(this);
+        this.asyncScenarioGUI = new AsyncScenarioGUI(this);
+        this.plotScenarioGUI = new PlotScenarioGUI(this);
     }
 
     public GenericClassGUI getGenericClassGUI() {
@@ -91,11 +86,18 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.asyncScenarioGUI;
     }
 
+    public PlotScenarioGUI getPlotScenarioGUI() { return this.plotScenarioGUI; }
+
+    public void setStage(Stage stage) { this.stage = stage; }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) {
         this.setStage(stage);
-        initialScenarioGUI.setHandlerGUI(this);
-        this.initialScenarioGUI.nickname(stage);
+        this.initialScenarioGUI.nickname(this.stage);
     }
 
     @Override
@@ -103,212 +105,7 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.nickname;
     }
 
-    public void choiceAction() {
-        GridPane root = new GridPane();
-        Button playLeaderCardButton = new Button("Play leader card");
-        Button discardLeaderCardButton = new Button("Discard Leader Card");
-        Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
-        Button buyDevelopmentCardButton = new Button("Buy Development Card");
-        Button activateProdButton = new Button("Activate Production Power");
-
-        root.add(playLeaderCardButton, 0, 0);
-        root.add(discardLeaderCardButton, 2, 0);
-        root.add(pickResourceFromMarketButton, 0, 1);
-        root.add(buyDevelopmentCardButton, 2, 1);
-        root.add(activateProdButton, 4, 1);
-
-        Scene scene = new Scene(root, 500, 300);
-
-        playLeaderCardButton.setOnAction(e -> {
-            this.actionChoice = "PLAY LEADER CARD";
-            playDiscardLeaderCard();
-        });
-
-        discardLeaderCardButton.setOnAction(e -> {
-            this.actionChoice = "DISCARD LEADER CARD";
-            playDiscardLeaderCard();
-        });
-
-        pickResourceFromMarketButton.setOnAction(e -> {
-            this.actionChoice = "PICK RESOURCES FROM MARKET";
-            market();
-        });
-
-        buyDevelopmentCardButton.setOnAction(e -> {
-            this.actionChoice = "BUY DEVELOPMENT CARD";
-            buyDevelopmentCard();
-        });
-
-        activateProdButton.setOnAction(e -> {
-            this.actionChoice = "ACTIVATE PRODUCTION POWER";
-            // method
-        });
-
-        this.stage.setTitle("Choose the action!");
-        this.stage.setScene(scene);
-        this.stage.show();
-
-    }
-
-    public void playDiscardLeaderCard() {
-        Group root = new Group();
-        Button firstLeader = new Button();
-        Button secondLeader = new Button();
-
-        int x = 0;
-        for (int i = 0; i < playerLeaders.length; i++) {
-            //Creating a graphic (image)
-            Image img = new Image(playerLeaders[i].getImage());
-            ImageView view = new ImageView(img);
-            view.setFitHeight(80);
-            view.setPreserveRatio(true);
-            //Setting the location of the button
-            if (i == 0 && !this.playerLeaders[0].isPlayed()) {
-                firstLeader.setTranslateX(x);
-                firstLeader.setTranslateY(20);
-                //Setting the size of the button
-                firstLeader.setPrefSize(80, 80);
-                //Setting a graphic to the button
-                firstLeader.setGraphic(view);
-                x = x + 200;
-                root.getChildren().add(firstLeader);
-            } else if (i == 1 && !this.playerLeaders[1].isPlayed()) {
-                secondLeader.setTranslateX(x);
-                secondLeader.setTranslateY(20);
-                //Setting the size of the button
-                secondLeader.setPrefSize(80, 80);
-                //Setting a graphic to the button
-                secondLeader.setGraphic(view);
-                x = x + 200;
-                root.getChildren().add(secondLeader);
-            }
-        }
-
-        //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
-        this.stage.setTitle("Choose a leader card");
-        this.stage.setScene(scene);
-        this.stage.show();
-
-        firstLeader.setOnAction(e -> {
-            if(this.actionChoice.equals("PLAY LEADER CARD")) {
-                this.playLeader = 0;
-            }
-            else {
-                this.discardLeader = 0;
-            }
-            choiceAction();
-        });
-
-        secondLeader.setOnAction(e -> {
-            if(this.actionChoice.equals("DISCARD LEADER CARD")) {
-                this.playLeader = 1;
-            }
-            else {
-                this.discardLeader = 1;
-            }
-            choiceAction();
-        });
-
-        genericClassGUI.LoadWTFOnTimer("choiceAction", stage);
-    }
-
-    public void market() {
-        int x, y;
-        //creating the image object
-        Image image = new Image("plancia portabiglie.png");
-        ImageView imageView = new ImageView();
-        imageView.setImage(image);
-        imageView.setX(10);
-        imageView.setY(10);
-        imageView.setFitWidth(575);
-        imageView.setPreserveRatio(true);
-        Group root = new Group(imageView);
-
-        Canvas canvas = new Canvas(600, 800);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        y = 190;
-        for(int i = 0; i < 3; i++) {
-            x = 190;
-            for(int j = 0; j < 4; j++) {
-                drawnMarbles(i, j, x, y, gc);
-                x+=60;
-            }
-            y+=60;
-        }
-
-        Pane rootButton = new Pane();
-        Button c1 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c1);
-        c1.setLayoutX(185);
-        c1.setLayoutY(500);
-        Button c2 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c2);
-        c2.setLayoutX(253);
-        c2.setLayoutY(500);
-        Button c3 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c3);
-        c3.setLayoutX(318);
-        c3.setLayoutY(500);
-        Button c4 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c4);
-        c4.setLayoutX(383);
-        c4.setLayoutY(500);
-        Button r1 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r1);
-        r1.setLayoutX(580);
-        r1.setLayoutY(190);
-        Button r2 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r2);
-        r2.setLayoutX(580);
-        r2.setLayoutY(255);
-        Button r3 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r3);
-        r3.setLayoutX(580);
-        r3.setLayoutY(320);
-        root.getChildren().addAll(canvas, rootButton);
-
-        Scene scene = new Scene(root, 650, 770);
-        this.stage.setTitle("Pick resources from market");
-        this.stage.setScene(scene);
-        this.stage.show();
-
-        c1.setOnAction(e -> System.out.println("ciao"));
-    }
-
-
-    public void drawnMarbles(int i, int j, int x, int y, GraphicsContext gc) {
-        switch (this.market.getMarketArrangement()[i][j].getColour()) {
-            case " YELLOW ":
-                gc.setFill(Color.GOLD);
-                break;
-            case " BLUE ":
-                gc.setFill(Color.DEEPSKYBLUE);
-                break;
-            case " GREY ":
-                gc.setFill(Color.GREY);
-                break;
-            case " PURPLE ":
-                gc.setFill(Color.DARKSLATEBLUE);
-                break;
-            case " RED ":
-                gc.setFill(Color.FIREBRICK);
-                break;
-            case " WHITE ":
-                gc.setFill(Color.WHITE);
-                break;
-        }
-        gc.fillOval(x, y, 40, 40);
-    }
-
-    public void buyDevelopmentCard() {
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 4; j++) {
-                grid.getDevelopmentCardsDecks()[i][j][0].getImage();
-            }
-        }
-    }
+    public void setActionChoice(String action) { this.actionChoice = action; }
 
     @Override
     public int getCorrectAction() { return this.correctAction; }
@@ -321,6 +118,8 @@ public class HandlerGUI extends Application implements RenderingView {
 
     @Override
     public void setMarket(Market market) { this.market = market; }
+
+    public Market getMarket() { return this.market; }
 
     @Override
     public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
@@ -342,6 +141,10 @@ public class HandlerGUI extends Application implements RenderingView {
         return startingRes;
     }
 
+    public void setStartingResource(String string) {
+        this.startingRes.add(string);
+    }
+
     @Override
     public void setStartingLeaders(LeaderCard[] leaders) {
         this.startingLeaders = leaders;
@@ -357,15 +160,17 @@ public class HandlerGUI extends Application implements RenderingView {
         return startingDiscardedLeaders;
     }
 
-    @Override
-    public void setDiscardedStartingLeaders(int[] leadersDiscarded) {
-        this.startingDiscardedLeaders = leadersDiscarded;
+
+    public void setDiscardedStartingLeaders(int leadersDiscarded, int index) {
+        this.startingDiscardedLeaders[index] = leadersDiscarded;
     }
 
     @Override
     public void setPlayerLeaders(LeaderCard[] playerLeaders) {
         this.playerLeaders = playerLeaders;
     }
+
+    public LeaderCard[] getPlayerLeaders() {return this.playerLeaders; }
 
     @Override
     public String getActionChoice() {
@@ -377,10 +182,14 @@ public class HandlerGUI extends Application implements RenderingView {
         return playLeader;
     }
 
+    public void setPlayedLeader(int playLeader) { this.playLeader = playLeader; }
+
     @Override
     public int getDiscardedLeader() {
         return discardLeader;
     }
+
+    public void setDiscardedLeader(int discardLeader) { this.discardLeader = discardLeader; }
 
     @Override
     public int[] getMarketCoordinates() {
