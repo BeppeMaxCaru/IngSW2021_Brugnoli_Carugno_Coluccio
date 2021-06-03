@@ -24,6 +24,10 @@ public interface RenderingView {
         return null;
     }
 
+    default int getPlayerNumber() {
+        return 0;
+    }
+
     default int[] getDiscardedStartingLeaders(){
         return new int[]{0, 0};
     }
@@ -83,6 +87,10 @@ public interface RenderingView {
     default void endTurn(){
     }
 
+    default int getCorrectAction() {
+        return 0;
+    }
+
     default void quit(){
     }
 
@@ -102,6 +110,9 @@ public interface RenderingView {
     }
 
     default void endMultiplayerGame(){
+    }
+
+    default void setDiscardedStartingLeaders(int[] leadersDiscarded) {
     }
 
     default void setPlayerNumber(int playerNumber) {
@@ -140,8 +151,13 @@ public interface RenderingView {
     default void setClientStarted(){
     }
 
+    default void setGameMode(int gameMode) { }
+
     default int getGameMode(){
         return 0;
+    }
+
+    default void setNickName(String nickName) {
     }
 
     default void setActivation(int[] activation){
