@@ -8,15 +8,6 @@ import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
 import javafx.application.Application;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import java.util.*;
 
@@ -123,8 +114,10 @@ public class HandlerGUI extends Application implements RenderingView {
 
     @Override
     public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
-        this.grid=grid;
+        this.grid = grid;
     }
+
+    public DevelopmentCardsDecksGrid getDevCardsGrid( ) { return this.grid; }
 
     @Override
     public void setPlayerNumber(int playerNumber) {
@@ -196,6 +189,8 @@ public class HandlerGUI extends Application implements RenderingView {
         return marketCoordinates;
     }
 
+    public void setMarketCoordinates(int[] marketCoordinates) { this.marketCoordinates = marketCoordinates; }
+
     @Override
     public String getResourcesDestination() {
         return resourcesDestination;
@@ -209,6 +204,10 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public int[] getDevelopmentCardsGridCoordinates() {
         return developmentCardsGridCoordinates;
+    }
+
+    public void setDevelopmentCardsGridCoordinates(int[] coordinates) {
+        this.developmentCardsGridCoordinates = coordinates;
     }
 
     @Override

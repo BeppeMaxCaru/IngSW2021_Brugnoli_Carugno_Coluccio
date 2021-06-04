@@ -44,7 +44,8 @@ public class GenericClassGUI {
                                 handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage);
                             case "matchHasStarted":
                                 handlerGUI.getAsyncScenarioGUI().matchHasStarted(stage);
-
+                            case "choiceAction":
+                                handlerGUI.getPlotScenarioGUI().choiceAction(stage);
                         }
 
                     } catch (Exception e) {
