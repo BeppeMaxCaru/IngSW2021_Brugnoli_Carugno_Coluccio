@@ -25,21 +25,11 @@ public class HandlerCLI {
     private final ClientMain clientMain;
     private ObjectInputStream receiver;
     private final CLI view;
-    private final SendingMessages msg;
+    private SendingMessages msg;
 
     public HandlerCLI(ClientMain main){
         this.clientMain=main;
         this.view = new CLI(this.clientMain);
-        this.msg = new SendingMessages(this.clientMain, this.view);
-
-        try {
-            Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-            this.receiver = new ObjectInputStream(clientSocket.getInputStream());
-
-
-        } catch (Exception e) {
-            this.view.error(e);
-        }
     }
 
     public void execute(){
@@ -60,11 +50,12 @@ public class HandlerCLI {
             this.clientMain.setMarket(new Market());
             this.clientMain.setDevelopmentCardsDecksGrid(new DevelopmentCardsDecksGrid());
             this.clientMain.setActionCountersDeck(new ActionCountersDeck());
-            LeaderCardDeck cardsDeck = new LeaderCardDeck();
+            this.clientMain.setLeaderCardDeck(new LeaderCardDeck());
 
             //Put 4 leader cards into first player space
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
-                this.clientMain.getLocalPlayers()[0].setPlayerLeaderCard(index, cardsDeck.drawOneLeaderCard());
+                this.clientMain.getLocalPlayers()[0].setPlayerLeaderCard(index, this.clientMain.getLeaderCardDeck().drawOneLeaderCard());
+            this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
 
             int[] discard = this.view.getDiscardedStartingLeaders();
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
@@ -73,6 +64,15 @@ public class HandlerCLI {
             new ServerSender(this.clientMain, 0).start();
 
         } else {
+
+            try {
+                Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+                this.receiver = new ObjectInputStream(clientSocket.getInputStream());
+                this.msg = new SendingMessages(this.clientMain, this.view);
+            } catch (Exception e) {
+                this.view.error(e);
+            }
+
             //Send nickname message to server
             try {
                 this.msg.sendNickname();

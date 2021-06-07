@@ -22,7 +22,7 @@ public class SendingMessages {
             Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
             this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 

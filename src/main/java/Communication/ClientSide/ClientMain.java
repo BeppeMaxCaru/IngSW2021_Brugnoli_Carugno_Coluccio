@@ -7,6 +7,7 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 public class ClientMain {
@@ -24,6 +25,7 @@ public class ClientMain {
     private LeaderCard[] leaderCards = new LeaderCard[4];
     private ActionCountersDeck actionCountersDeck;
     private Player[] localPlayers;
+    private LeaderCardDeck leaderCardDeck;
 
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
@@ -118,6 +120,14 @@ public class ClientMain {
 
     public void setLocalPlayers(Player[] localPlayers) {
         this.localPlayers = localPlayers;
+    }
+
+    public LeaderCardDeck getLeaderCardDeck() {
+        return leaderCardDeck;
+    }
+
+    public void setLeaderCardDeck(LeaderCardDeck leaderCardDeck) {
+        this.leaderCardDeck = leaderCardDeck;
     }
 }
 

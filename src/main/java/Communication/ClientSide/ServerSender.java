@@ -2,8 +2,11 @@ package Communication.ClientSide;
 
 import Communication.ClientSide.RenderingView.CLI;
 import Communication.ClientSide.RenderingView.RenderingView;
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.*;
 
 import java.net.Socket;
@@ -16,18 +19,22 @@ public class ServerSender extends Thread {
     private final ClientMain clientMain;
     private final RenderingView view;
     private final int gameMode;
-    private final SendingMessages msg;
+    private SendingMessages msg;
 
     public ServerSender (ClientMain clientMain, int gameMode) {
         this.clientMain = clientMain;
         this.view = new CLI(this.clientMain);
-        try {
-            this.socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-        } catch (Exception e) {
-            this.view.error(e);
-        }
         this.gameMode = gameMode;
-        this.msg = new SendingMessages(this.clientMain, this.view);
+        if(this.gameMode==1)
+        {
+            try {
+                this.socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+            } catch (Exception e) {
+                this.view.error(e);
+            }
+            this.msg = new SendingMessages(this.clientMain, this.view);
+        }
+
     }
 
     @Override
@@ -191,6 +198,7 @@ public class ServerSender extends Thread {
                                     this.clientMain.getActionCountersDeck().drawCounter().activate(this.clientMain.getActionCountersDeck(), this.clientMain.getLocalPlayers()[1].getPlayerBoard(), this.clientMain.getDevelopmentCardsDecksGrid());
                                 }
                                 this.view.endTurn();
+                                if(this.gameMode==0) this.view.lorenzoFaithPoints();
                                 break;
                             }
                             case "QUIT":

@@ -147,16 +147,8 @@ public class CLI implements RenderingView{
 
     @Override
     public String getActionChoice() {
-        String action;
-
-        System.out.println("Which action do you want to do?");
-        System.out.println("Write 'Play leader card'");
-        System.out.println("Write 'Discard leader card'");
-        System.out.println("Write 'pick resources from Market'");
-        System.out.println("Write 'Buy development card'");
-        System.out.println("Write 'Activate production power'");
-        System.out.println("Write 'END TURN' at the end of your turn");
-        action = this.input.nextLine().toUpperCase();
+        this.printActions();
+        String action = this.input.nextLine().toUpperCase();
 
         while(!action.equals("PLAY LEADER CARD") && !action.equals("DISCARD LEADER CARD") &&
             !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
@@ -164,44 +156,32 @@ public class CLI implements RenderingView{
             !action.equals("P") && !action.equals("D") && !action.equals("M") && !action.equals("B") && !action.equals("A"))
         {
             System.err.println("Write a correct action.");
-            System.out.println("Which action do you want to do?");
-            System.out.println("Write 'Play leader card'");
-            System.out.println("Write 'Discard leader card'");
-            System.out.println("Write 'pick resources from Market'");
-            System.out.println("Write 'Buy development card'");
-            System.out.println("Write 'Activate production power'");
-            System.out.println("Write 'END TURN' at the end of your turn");
+            this.printActions();
             action = this.input.nextLine().toUpperCase();
         }
         return action;
     }
 
+    public void printActions(){
+        System.out.println("Which action do you want to do?");
+        System.out.println("Write 'Play leader card'");
+        System.out.println("Write 'Discard leader card'");
+        System.out.println("Write 'pick resources from Market'");
+        System.out.println("Write 'Buy development card'");
+        System.out.println("Write 'Activate production power'");
+        System.out.println("Write 'END TURN' at the end of your turn");
+    }
+
     @Override
     public int getPlayedLeader() {
 
-        System.out.println("Which card do you want to play?");
-        for(int index =0; index<this.main.getLeaderCards().length; index++)
-        {
-            if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
-            {
-                System.out.println("Write "+index+" for this");
-                this.printLeaderCard(this.main.getLeaderCards()[index]);
-            }
-        }
+        this.printLeaderRequest("play");
         String parameter = this.input.nextLine();
 
         while (!parameter.equals("0") && !parameter.equals("1"))
         {
             System.err.println("Choose a correct card.");
-            System.out.println("Which card do you want to play?");
-            for(int index =0; index<this.main.getLeaderCards().length; index++)
-            {
-                if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
-                {
-                    System.out.println("Write "+index+" for this");
-                    this.printLeaderCard(this.main.getLeaderCards()[index]);
-                }
-            }
+            this.printLeaderRequest("play");
             parameter = this.input.nextLine();
         }
         return Integer.parseInt(parameter);
@@ -210,7 +190,20 @@ public class CLI implements RenderingView{
     @Override
     public int getDiscardedLeader() {
 
-        System.out.println("Which card do you want to discard?");
+        this.printLeaderRequest("discard");
+        String parameter = this.input.nextLine();
+
+        while (!parameter.equals("0") && !parameter.equals("1"))
+        {
+            System.err.println("Choose a correct card.");
+            this.printLeaderRequest("discard");
+            parameter = this.input.nextLine();
+        }
+        return Integer.parseInt(parameter);
+    }
+
+    public void printLeaderRequest(String action){
+        System.out.println("Which card do you want to "+action+"?");
         for(int index =0; index<this.main.getLeaderCards().length; index++)
         {
             if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
@@ -219,23 +212,6 @@ public class CLI implements RenderingView{
                 this.printLeaderCard(this.main.getLeaderCards()[index]);
             }
         }
-        String parameter = this.input.nextLine();
-
-        while (!parameter.equals("0") && !parameter.equals("1"))
-        {
-            System.err.println("Choose a correct card.");
-            System.out.println("Which card do you want to discard?");
-            for(int index =0; index<this.main.getLeaderCards().length; index++)
-            {
-                if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
-                {
-                    System.out.println("Write "+index+" for this");
-                    this.printLeaderCard(this.main.getLeaderCards()[index]);
-                }
-            }
-            parameter = this.input.nextLine();
-        }
-        return Integer.parseInt(parameter);
     }
 
     @Override
@@ -649,12 +625,12 @@ public class CLI implements RenderingView{
             }
 
             System.out.println("How much of them do you want to pick?");
-            String quant = input.nextLine(); // Comandi quantità: 1, 2
+            String quant = this.input.nextLine(); //quantity
 
             while(!quant.equals("1") && !quant.equals("2")) {
                 System.err.println("Not valid input.");
                 System.out.println("How much of them do you want to pick?");
-                quant = input.nextLine(); // Comandi quantità: 1, 2
+                quant = this.input.nextLine(); // quantity
             }
             whichInput.append(quant);
 
@@ -677,7 +653,7 @@ public class CLI implements RenderingView{
                     System.out.println("From which store do you want to pick this resource?");
                 else
                     System.out.println("From which store do you want to pick these resources?");
-                shelf = input.nextLine(); // Comandi quantità: 1, 2
+                shelf = input.nextLine(); // quantity
             }
             whichInput.append(shelf.charAt(0));
         }while (!res.equals("STOP"));
