@@ -2,11 +2,8 @@ package Communication.ClientSide;
 
 import Communication.ClientSide.RenderingView.CLI;
 import Communication.ClientSide.RenderingView.RenderingView;
-import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
-import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.*;
 
 import java.net.Socket;
@@ -32,7 +29,7 @@ public class ServerSender extends Thread {
             } catch (Exception e) {
                 this.view.error(e);
             }
-            this.msg = new SendingMessages(this.clientMain, this.view);
+            this.msg = new SendingMessages(this.clientMain, this.view, this.socket);
         }
 
     }

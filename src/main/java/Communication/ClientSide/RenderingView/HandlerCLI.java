@@ -28,25 +28,23 @@ public class HandlerCLI {
     private SendingMessages msg;
 
     public HandlerCLI(ClientMain main){
-        this.clientMain=main;
+        this.clientMain = main;
         this.view = new CLI(this.clientMain);
     }
 
     public void execute(){
 
-        int gameMode;
-
         this.clientMain.setNickname(this.view.getNickName());
 
-        gameMode = this.view.getGameMode();
-
+        int gameMode = this.view.getGameMode();
+        //Single player
         if(gameMode==0){
 
             Player[] localPlayers = new Player[2];
             localPlayers[0] = new Player(this.clientMain.getNickname(), 0);
             localPlayers[1] = new Player("Lorenzo the Magnificent", 1);
-            this.clientMain.setLocalPlayers(localPlayers);
 
+            this.clientMain.setLocalPlayers(localPlayers);
             this.clientMain.setMarket(new Market());
             this.clientMain.setDevelopmentCardsDecksGrid(new DevelopmentCardsDecksGrid());
             this.clientMain.setActionCountersDeck(new ActionCountersDeck());
@@ -63,12 +61,12 @@ public class HandlerCLI {
 
             new ServerSender(this.clientMain, 0).start();
 
-        } else {
+        } else {//MultiPlayer
 
             try {
                 Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
                 this.receiver = new ObjectInputStream(clientSocket.getInputStream());
-                this.msg = new SendingMessages(this.clientMain, this.view);
+                this.msg = new SendingMessages(this.clientMain, this.view, clientSocket);
             } catch (Exception e) {
                 this.view.error(e);
             }
@@ -104,6 +102,7 @@ public class HandlerCLI {
                 //Receive first message
                 ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
                 this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
+                this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
                 this.view.setGameStarted();
 
                 //Send player number and starting resources
@@ -138,8 +137,8 @@ public class HandlerCLI {
             }
 
             //Starts async phase
-            new ServerReceiver(this.clientMain, this.view).start();
             new ServerSender(this.clientMain, gameMode).start();
+            new ServerReceiver(this.clientMain, this.view).start();
 
         }
     }

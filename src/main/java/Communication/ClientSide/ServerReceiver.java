@@ -45,7 +45,6 @@ public class ServerReceiver extends Thread {
                 this.view.receiverError(e);
             }
 
-
             if (object instanceof NotYourTurnMessage) {
 
                 try {
@@ -56,7 +55,6 @@ public class ServerReceiver extends Thread {
                 }
 
             }
-
 
             if (object instanceof UpdateClientMarketMessage) {
                 try {

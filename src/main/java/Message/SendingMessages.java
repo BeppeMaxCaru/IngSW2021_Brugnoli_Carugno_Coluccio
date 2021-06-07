@@ -15,12 +15,11 @@ public class SendingMessages {
     private ObjectOutputStream sender;
     private final RenderingView view;
 
-    public SendingMessages(ClientMain main, RenderingView view){
+    public SendingMessages(ClientMain main, RenderingView view, Socket socket){
         this.clientMain = main;
         this.view= view;
         try {
-            Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-            this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
+            this.sender = new ObjectOutputStream(socket.getOutputStream());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -99,6 +98,14 @@ public class SendingMessages {
             this.sender.writeObject(prodMessage);
         } catch (Exception e) {
             this.view.error(e);
+        }
+    }
+
+    public void resetSender(){
+        try {
+            this.sender.reset();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

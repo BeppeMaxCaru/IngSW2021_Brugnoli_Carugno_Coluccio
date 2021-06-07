@@ -12,17 +12,21 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 
 public class ClientMain {
 
+    //Connection attributes
     private final String hostName;
     private final int port;
 
+    //All game mods attributes
     private String nickname;
-
     private int playerNumber;
-
     private Market market;
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
+
+    //Multi player attributes
     private Playerboard playerboard;
     private LeaderCard[] leaderCards = new LeaderCard[4];
+
+    //Single player attributes
     private ActionCountersDeck actionCountersDeck;
     private Player[] localPlayers;
     private LeaderCardDeck leaderCardDeck;
