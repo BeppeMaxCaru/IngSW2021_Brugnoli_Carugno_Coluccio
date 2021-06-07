@@ -196,7 +196,7 @@ public class HandlerGUI extends Application implements RenderingView {
     public void setMarketCoordinates(int[] marketCoordinates) { this.marketCoordinates = marketCoordinates; }
 
     @Override
-    public String getResourcesDestination() {
+    public String getResourcesDestination(String parameter) {
         return resourcesDestination;
     }
 
@@ -225,7 +225,7 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     @Override
-    public int getActivationProd() {
+    public int getActivationProd(int[] activation) {
         return activationProd;
     }
 

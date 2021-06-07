@@ -1,7 +1,6 @@
 package Communication.ClientSide;
 
 import Communication.ClientSide.RenderingView.RenderingView;
-import Communication.ServerSide.PlayerThread;
 import Message.Message;
 import Message.MessageReceived.*;
 import Message.MessageSent.QuitMessage;
@@ -11,20 +10,22 @@ import java.net.Socket;
 
 public class ServerReceiver extends Thread {
 
-    private Socket socket;
-    private PlayerThread playerThread;
+    private final ClientMain clientMain;
 
-    private ClientMain clientMain;
+    private ObjectInputStream receiver;
 
-    private final ObjectInputStream receiver;
+    private final RenderingView view;
 
-    private RenderingView view;
-
-    public ServerReceiver(ClientMain clientMain, Socket socket, ObjectInputStream receiver, RenderingView view) {
+    public ServerReceiver(ClientMain clientMain, RenderingView view) {
         this.clientMain = clientMain;
-        this.socket = socket;
-        this.receiver = receiver;
         this.view = view;
+
+        try {
+            Socket socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+            this.receiver = new ObjectInputStream(socket.getInputStream());
+        } catch (Exception e) {
+            this.view.error(e);
+        }
     }
 
     @Override
@@ -60,9 +61,7 @@ public class ServerReceiver extends Thread {
             if (object instanceof UpdateClientMarketMessage) {
                 try {
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
-
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
-                    this.view.setMarket(updateClientMarketMessage.getMarket());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -73,9 +72,7 @@ public class ServerReceiver extends Thread {
             if (object instanceof UpdateClientDevCardGridMessage) {
                 try {
                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) object;
-
                     this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
-                    this.view.setDevCardsGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -87,7 +84,6 @@ public class ServerReceiver extends Thread {
                 try {
                     UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) object;
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
-                    this.view.setPlayerLeaders(updateClientLeaderCardsMessage.getLeaderCards());
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -99,7 +95,6 @@ public class ServerReceiver extends Thread {
 
                     UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage) object;
                     this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
-                    this.view.setBoard(updateClientPlayerBoardMessage.getPlayerboard());
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -111,8 +106,7 @@ public class ServerReceiver extends Thread {
 
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
-                    this.view.setGameOverMsg(gameOverMessage);
-                    this.view.endMultiplayerGame();
+                    this.view.endMultiplayerGame(gameOverMessage);
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();
@@ -132,7 +126,7 @@ public class ServerReceiver extends Thread {
                     System.out.println(quitMessage.getQuitMessage());
 
                     //SHUT BOTH THREAD AND STREAM
-                    receiver.close();
+                    this.receiver.close();
                     this.interrupt();
 
                 } catch (Exception e) {

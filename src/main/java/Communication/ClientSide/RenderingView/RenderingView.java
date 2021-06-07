@@ -52,7 +52,7 @@ public interface RenderingView {
         return new int[]{0, 0};
     }
 
-    default String getResourcesDestination(){
+    default String getResourcesDestination(String parameter){
         return "";
     }
 
@@ -72,7 +72,7 @@ public interface RenderingView {
         return 0;
     }
 
-    default int getActivationProd(){
+    default int getActivationProd(int[] activation){
         return 0;
     }
 
@@ -100,7 +100,7 @@ public interface RenderingView {
     default void lorenzoFaithPoints(){
     }
 
-    default void endLocalGame(){
+    default void endLocalGame(int localWinner){
     }
 
     default void drawActionCounter(){
@@ -109,7 +109,7 @@ public interface RenderingView {
     default void notYourTurn(){
     }
 
-    default void endMultiplayerGame(){
+    default void endMultiplayerGame(GameOverMessage msg){
     }
 
     default void setPlayerNumber(int playerNumber) {

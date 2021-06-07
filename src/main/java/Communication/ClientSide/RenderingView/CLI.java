@@ -1,6 +1,6 @@
 package Communication.ClientSide.RenderingView;
 
-import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
+import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
@@ -14,71 +14,43 @@ import java.util.Scanner;
 
 public class CLI implements RenderingView{
 
-    private String nickname;
-    private int playerNumber;
-    private LeaderCard[] startingLeaders = new LeaderCard[4];
+    private final ClientMain main;
+    private final Scanner input;
 
-    private LeaderCard[] playerLeaders;
-    private Playerboard playerBoard;
-    private Market market;
-    private DevelopmentCardsDecksGrid grid;
-
-    private ActionCountersDeck counters;
-    private Playerboard lorenzoPlayerBoard;
-    private int localWinner;
-    private GameOverMessage gameOverMessage;
-
-    private String parameter;
-    private int[] activation = new int[3];
-
+    public CLI(ClientMain main){
+        this.main = main;
+        this.input = new Scanner(System.in);
+    }
 
     @Override
     public String getNickName(){
-        Scanner input = new Scanner(System.in);
         System.out.println("Insert your nickname");
-        this.nickname=input.nextLine();
-        return this.nickname;
+        return this.input.nextLine();
     }
 
     @Override
     public void setClientStarted(){
-        System.out.println("Hi " + this.nickname + "!");
+        System.out.println("Hi " + this.main.getNickname() + "!");
         System.out.println("Welcome to Master of Renaissance!");
     }
 
     @Override
     public int getGameMode() {
         String gameMode;
-        Scanner input = new Scanner(System.in);
 
         System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-        gameMode = input.nextLine();
+        gameMode = this.input.nextLine();
         while (!gameMode.equals("0") && !gameMode.equals("1")) {
             System.out.println("Number not valid!");
             System.out.println("Write 0 for single-player or 1 for multiplayer: ");
-            gameMode = input.nextLine();
+            gameMode = this.input.nextLine();
         }
         return Integer.parseInt(gameMode);
     }
 
     @Override
     public void setGameStarted() {
-        System.out.println("\nMatch has started, your player number is " + this.playerNumber);
-    }
-
-    @Override
-    public void setMarket(Market market) {
-        this.market = market;
-    }
-
-    @Override
-    public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
-        this.grid=grid;
-    }
-
-    @Override
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
+        System.out.println("\nMatch has started, your player number is " + this.main.getPlayerNumber());
     }
 
     @Override
@@ -94,16 +66,16 @@ public class CLI implements RenderingView{
         startingResources.put(3, 2);
         String res;
 
-        for (int resources = 0; resources < startingResources.get(this.playerNumber); resources++) {
-            Scanner input = new Scanner(System.in);
+        for (int resources = 0; resources < startingResources.get(this.main.getPlayerNumber()); resources++) {
+
             System.out.println("Which starting resource do you want to pick?");
             System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
-            res = input.nextLine().toUpperCase();
+            res = this.input.nextLine().toUpperCase();
             while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS")) {
                 System.out.println("Choose a correct resource");
                 System.out.println("Which starting resource do you want to pick?");
                 System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
-                res = input.nextLine().toUpperCase();
+                res = this.input.nextLine().toUpperCase();
             }
             playerStartingResources.add(res);
         }
@@ -111,31 +83,20 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void setStartingLeaders(LeaderCard[] leaders) {
-        this.startingLeaders = leaders;
-    }
-
-    @Override
-    public void setBoard(Playerboard board) {
-        this.playerBoard=board;
-    }
-
-    @Override
     public int[] getDiscardedStartingLeaders(){
-        Scanner input = new Scanner(System.in);
         int[] discarded = new int[2];
 
         System.out.println("Which starting leader card do you want to discard?\n");
-        for (int i = 0; i < this.startingLeaders.length; i++) {
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
             System.out.println("Write " + i + " for this: ");
-            this.printLeaderCard(this.startingLeaders[i]);
+            this.printLeaderCard(this.main.getLeaderCards()[i]);
         }
         int card;
         try {
-            card = input.nextInt();
+            card = this.input.nextInt();
             while (card < 0 || card > 3) {
                 System.out.println("Chose a correct card.");
-                card = input.nextInt();
+                card = this.input.nextInt();
             }
             discarded[0]=card;
         } catch (Exception e) {
@@ -143,32 +104,27 @@ public class CLI implements RenderingView{
         }
 
         System.out.println("Which starting leader card do you want to discard?");
-        for (int i = 0; i < this.startingLeaders.length; i++) {
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
             if(i < discarded[0]) {
                 System.out.println("Write " + i + " for this: ");
-                this.printLeaderCard(this.startingLeaders[i]);
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
             } else if (i>discarded[0]) {
                 int k=i-1;
                 System.out.println("Write " + k + " for this: ");
-                this.printLeaderCard(this.startingLeaders[i]);
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
             }
         }
         try {
-            card = input.nextInt();
+            card = this.input.nextInt();
             while (card < 0 || card > 2) {
                 System.out.println("Chose a correct card.");
-                card = input.nextInt();
+                card = this.input.nextInt();
             }
             discarded[1]=card;
         } catch (Exception e) {
             this.error(e);
         }
         return discarded;
-    }
-
-    @Override
-    public void setPlayerLeaders(LeaderCard[] playerLeaders) {
-        this.playerLeaders = playerLeaders;
     }
 
     @Override
@@ -191,7 +147,6 @@ public class CLI implements RenderingView{
 
     @Override
     public String getActionChoice() {
-        Scanner input = new Scanner(System.in);
         String action;
 
         System.out.println("Which action do you want to do?");
@@ -201,7 +156,7 @@ public class CLI implements RenderingView{
         System.out.println("Write 'Buy development card'");
         System.out.println("Write 'Activate production power'");
         System.out.println("Write 'END TURN' at the end of your turn");
-        action = input.nextLine().toUpperCase();
+        action = this.input.nextLine().toUpperCase();
 
         while(!action.equals("PLAY LEADER CARD") && !action.equals("DISCARD LEADER CARD") &&
             !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
@@ -216,92 +171,88 @@ public class CLI implements RenderingView{
             System.out.println("Write 'Buy development card'");
             System.out.println("Write 'Activate production power'");
             System.out.println("Write 'END TURN' at the end of your turn");
-            action = input.nextLine().toUpperCase();
+            action = this.input.nextLine().toUpperCase();
         }
         return action;
     }
 
     @Override
     public int getPlayedLeader() {
-        Scanner input = new Scanner(System.in);
 
         System.out.println("Which card do you want to play?");
-        for(int index =0; index<this.playerLeaders.length; index++)
+        for(int index =0; index<this.main.getLeaderCards().length; index++)
         {
-            if(this.playerLeaders[index]!=null && !this.playerLeaders[index].isPlayed())
+            if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
             {
                 System.out.println("Write "+index+" for this");
-                this.printLeaderCard(this.playerLeaders[index]);
+                this.printLeaderCard(this.main.getLeaderCards()[index]);
             }
         }
-        String parameter = input.nextLine();
+        String parameter = this.input.nextLine();
 
         while (!parameter.equals("0") && !parameter.equals("1"))
         {
             System.err.println("Choose a correct card.");
             System.out.println("Which card do you want to play?");
-            for(int index =0; index<this.playerLeaders.length; index++)
+            for(int index =0; index<this.main.getLeaderCards().length; index++)
             {
-                if(this.playerLeaders[index]!=null && !this.playerLeaders[index].isPlayed())
+                if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
                 {
                     System.out.println("Write "+index+" for this");
-                    this.printLeaderCard(this.playerLeaders[index]);
+                    this.printLeaderCard(this.main.getLeaderCards()[index]);
                 }
             }
-            parameter = input.nextLine();
+            parameter = this.input.nextLine();
         }
         return Integer.parseInt(parameter);
     }
 
     @Override
     public int getDiscardedLeader() {
-        Scanner input = new Scanner(System.in);
 
         System.out.println("Which card do you want to discard?");
-        for(int index =0; index<this.playerLeaders.length; index++)
+        for(int index =0; index<this.main.getLeaderCards().length; index++)
         {
-            if(this.playerLeaders[index]!=null && !this.playerLeaders[index].isPlayed())
+            if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
             {
                 System.out.println("Write "+index+" for this");
-                this.printLeaderCard(this.playerLeaders[index]);
+                this.printLeaderCard(this.main.getLeaderCards()[index]);
             }
         }
-        String parameter = input.nextLine();
+        String parameter = this.input.nextLine();
 
         while (!parameter.equals("0") && !parameter.equals("1"))
         {
             System.err.println("Choose a correct card.");
             System.out.println("Which card do you want to discard?");
-            for(int index =0; index<this.playerLeaders.length; index++)
+            for(int index =0; index<this.main.getLeaderCards().length; index++)
             {
-                if(this.playerLeaders[index]!=null && !this.playerLeaders[index].isPlayed())
+                if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
                 {
                     System.out.println("Write "+index+" for this");
-                    this.printLeaderCard(this.playerLeaders[index]);
+                    this.printLeaderCard(this.main.getLeaderCards()[index]);
                 }
             }
-            parameter = input.nextLine();
+            parameter = this.input.nextLine();
         }
         return Integer.parseInt(parameter);
     }
 
     @Override
     public int[] getMarketCoordinates() {
-        Scanner input = new Scanner(System.in);
         int[] coordinates = new int[2];
 
-        this.printMarket(this.market);
+        this.printMarket(this.main.getMarket());
 
         //Receives column or row
         System.out.println("Do you want to pick row resources or column resources?");
         System.out.println("Write 'ROW' or 'COLUMN'.");
-        String parameter = input.nextLine().toUpperCase();
+        String parameter = this.input.nextLine().toUpperCase();
         while (!parameter.equals("ROW") && !parameter.equals("COLUMN")) {
             System.err.println("Not valid parameter");
             System.out.println("Write 'ROW' or 'COLUMN'.");
-            parameter = input.nextLine().toUpperCase();
+            parameter = this.input.nextLine().toUpperCase();
         }
-        this.parameter = parameter;
 
         //Receives index
         if (parameter.equals("ROW")) {
@@ -312,7 +263,7 @@ public class CLI implements RenderingView{
             System.out.println("Which column do you want to pick?");
             System.out.println("Write a number between 0 and 3.");
         }
-        String par = input.nextLine();
+        String par = this.input.nextLine();
         int index;
         try {
             //Checks if the leader card position exists
@@ -321,7 +272,7 @@ public class CLI implements RenderingView{
             {
                 while(index < 0 || index > 2) {
                     System.out.println("Value not valid. Write a number between 0 and 2.");
-                    par = input.nextLine();
+                    par = this.input.nextLine();
                     index = Integer.parseInt(par);
                 }
             }
@@ -329,7 +280,7 @@ public class CLI implements RenderingView{
             {
                 while (index < 0 || index > 3) {
                     System.out.println("Value not valid. Write a number between 0 and 3.");
-                    par = input.nextLine();
+                    par = this.input.nextLine();
                     index = Integer.parseInt(par);
                 }
             }
@@ -341,34 +292,33 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public String getResourcesDestination() {
+    public String getResourcesDestination(String parameter) {
 
-        Scanner input = new Scanner(System.in);
         String wlChoice;
 
-        this.printActivatedLeaderCard(this.playerLeaders);
+        this.printActivatedLeaderCard(this.main.getLeaderCards());
 
         //Receives deposit
         System.out.println("If you activated your extra warehouse space, where do you want to store your resources?");
-        if (this.parameter.equals("ROW"))
+        if (parameter.equals("ROW"))
             System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
         else
             System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
-        wlChoice = input.nextLine().toUpperCase();
+        wlChoice = this.input.nextLine().toUpperCase();
         try {
             //Checks if player has written only 'w' and 'l' chars
-            if (this.parameter.equals("ROW"))
+            if (parameter.equals("ROW"))
             {
                 while (wlChoice.length() != 4 && this.checkShelf(wlChoice)){
                     System.out.println("Write w for warehouse, l for leader card, for each of 4 resources you picked");
-                    wlChoice = input.nextLine().toUpperCase();
+                    wlChoice = this.input.nextLine().toUpperCase();
                 }
             }
-            if (this.parameter.equals("COLUMN"))
+            if (parameter.equals("COLUMN"))
             {
                 while (wlChoice.length() != 3 && this.checkShelf(wlChoice)){
                     System.out.println("Write w for warehouse, l for leader card, for each of 3 resources you picked");
-                    wlChoice = input.nextLine().toUpperCase();
+                    wlChoice = this.input.nextLine().toUpperCase();
                 }
             }
 
@@ -381,7 +331,6 @@ public class CLI implements RenderingView{
 
     @Override
     public String getWhiteMarbleChoice() {
-        Scanner input = new Scanner(System.in);
         String chosenMarble;
 
         //Receives position of leader cards to activate to receive a resource from a white marble
@@ -389,7 +338,7 @@ public class CLI implements RenderingView{
         System.out.println("if you activated only one white marble leader card, do you want to activate it?");
         System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
         System.out.println("Write X if you don't want to activate any leader card effect");
-        chosenMarble = input.nextLine().toUpperCase();
+        chosenMarble = this.input.nextLine().toUpperCase();
         try {
             //Checks if player has written only '0', '1' or 'x' chars
             while (!this.checkMarbleChoice(chosenMarble))
@@ -397,7 +346,7 @@ public class CLI implements RenderingView{
                 System.err.println("not valid input.");
                 System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
                 System.out.println("Write X if you don't want to activate any leader card effect");
-                chosenMarble = input.nextLine().toUpperCase();
+                chosenMarble = this.input.nextLine().toUpperCase();
             }
         } catch (Exception e) {
             this.senderError(e);
@@ -407,11 +356,10 @@ public class CLI implements RenderingView{
 
     @Override
     public int[] getDevelopmentCardsGridCoordinates() {
-        Scanner input = new Scanner(System.in);
         int[] coordinates = new int[2];
 
-        this.printPlayerboard(this.playerBoard);
-        this.printDevCardGrid(this.grid);
+        this.printPlayerboard(this.main.getPlayerboard());
+        this.printDevCardGrid(this.main.getDevelopmentCardsDecksGrid());
 
         System.out.println("Which card do you want to buy?");
         System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
@@ -422,18 +370,18 @@ public class CLI implements RenderingView{
             System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
             colour = input.nextLine().toUpperCase();
         }
-        int column = grid.getDevelopmentCardsColours().get(colour);
+        int column = this.main.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour);
         coordinates[0] = column;
 
         System.out.println("Which level do you want to buy?");
         System.out.println("Write the correct number between 1 and 3, if existing in the grid");
-        String lev = input.nextLine();
+        String lev = this.input.nextLine();
         int level;
         try {
             level = Integer.parseInt(lev);
             while (level < 1 || level > 3){
                 System.out.println("Write the correct number between 1 and 3, if existing in the grid");
-                lev = input.nextLine();
+                lev = this.input.nextLine();
                 level = Integer.parseInt(lev);
             }
             coordinates[1] = level;
@@ -446,7 +394,6 @@ public class CLI implements RenderingView{
 
     @Override
     public String[][] getPayedResources() {
-        Scanner input = new Scanner(System.in);
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
             for(int c=0; c<4; c++)
@@ -467,7 +414,7 @@ public class CLI implements RenderingView{
         while (!parameter.equalsIgnoreCase("STOP") || res>4) {
 
             System.out.println("Which resource do you want to pay? Write STOP at the end.");
-            parameter = input.nextLine().toUpperCase();
+            parameter = this.input.nextLine().toUpperCase();
             if (parameter.equals("COINS") || parameter.equals("STONES") || parameter.equals("SERVANTS") || parameter.equals("SHIELDS") || parameter.equals("STOP")) {
                 res++;
 
@@ -477,14 +424,14 @@ public class CLI implements RenderingView{
                 //Receives now quantity
                 System.out.println("How much " + parameter + " do you want to pick?");
                 System.out.println("Write the correct value.");
-                quantity = input.nextLine();
+                quantity = this.input.nextLine();
                 try {
                     while (!quantity.equals("0") && !quantity.equals("1") && !quantity.equals("2") && !quantity.equals("3") &&
                             !quantity.equals("4") && !quantity.equals("5") && !quantity.equals("6") && !quantity.equals("7"))
                     {
                         System.err.println("Not valid input");
                         System.out.println("Write the correct value.");
-                        quantity = input.nextLine();
+                        quantity = this.input.nextLine();
                     }
                     pickedResources[0][resources.get(parameter)] = quantity;
                 } catch (Exception e) {
@@ -493,7 +440,7 @@ public class CLI implements RenderingView{
                 }
 
                 //Player available leader cards
-                this.printActivatedLeaderCard(this.playerLeaders);
+                this.printActivatedLeaderCard(this.main.getLeaderCards());
 
                 String shelf;
                 //Keeps asking a place to take from resources
@@ -518,7 +465,6 @@ public class CLI implements RenderingView{
 
     @Override
     public int getChosenPosition() {
-        Scanner input = new Scanner(System.in);
         String parameter;
         int position = 0;
 
@@ -587,73 +533,71 @@ public class CLI implements RenderingView{
         return true;
     }
 
-    @Override
-    public int getActivationProd() {
-        Scanner input = new Scanner(System.in);
+    public int getActivationProd(int[] activation) {
         String prodPower;
 
-        this.printPlayerboard(this.playerBoard);
-        this.printActivatedLeaderCard(this.playerLeaders);
+        this.printPlayerboard(this.main.getPlayerboard());
+        this.printActivatedLeaderCard(this.main.getLeaderCards());
 
         System.out.println("Which production power do you want to activate?");
-        if (this.activation[0] == 0)
+        if (activation[0] == 0)
             System.out.println("Write p0 if you want to activate the first production of your grid, if it's available");
-        if (this.activation[1] == 0)
+        if (activation[1] == 0)
             System.out.println("Write p1 if you want to activate the second production of your grid, if it's available");
-        if (this.activation[2] == 0)
+        if (activation[2] == 0)
             System.out.println("Write p2 if you want to activate the third production of your grid, if it's available");
-        if (this.activation[3] == 0)
+        if (activation[3] == 0)
             System.out.println("Write b if you want to activate the basic production power");
-        if (this.activation[4] == 0)
+        if (activation[4] == 0)
             System.out.println("Write e0 if you want to activate the first extra production power, if it's available");
-        if (this.activation[5] == 0)
+        if (activation[5] == 0)
             System.out.println("Write e1 if you want to activate the second extra production power, if it's available");
         System.out.println("Write STOP if you don't want to activate production powers");
         prodPower = input.nextLine().toUpperCase();
-        while(this.checkProduction(prodPower) == -1){
+        while(this.checkProduction(prodPower, activation) == -1){
             System.err.println("Not valid input.");
             System.out.println("Write a correct production power code.");
             prodPower = input.nextLine().toUpperCase();
         }
 
-        return this.checkProduction(prodPower);
+        return this.checkProduction(prodPower, activation);
     }
 
-    public int checkProduction(String prodPower){
+    public int checkProduction(String prodPower, int[] activation){
         switch(prodPower){
             case "PO":
             {
-                if(this.activation[0]==0)
+                if(activation[0]==0)
                     return 0;
                 else return -1;
             }
             case "P1":
             {
-                if(this.activation[1]==0)
+                if(activation[1]==0)
                     return 1;
                 else return -1;
             }
             case "P2":
             {
-                if(this.activation[2]==0)
+                if(activation[2]==0)
                     return 2;
                 else return -1;
             }
             case "B":
             {
-                if(this.activation[3]==0)
+                if(activation[3]==0)
                     return 3;
                 else return -1;
             }
             case "EO":
             {
-                if(this.activation[4]==0)
+                if(activation[4]==0)
                     return 4;
                 else return -1;
             }
             case "E1":
             {
-                if(this.activation[5]==0)
+                if(activation[5]==0)
                     return 5;
                 else return -1;
             }
@@ -670,7 +614,6 @@ public class CLI implements RenderingView{
 
     @Override
     public String getInputResourceProd() {
-        Scanner input = new Scanner(System.in);
         StringBuilder whichInput = new StringBuilder();
         String res;
 
@@ -715,7 +658,7 @@ public class CLI implements RenderingView{
             }
             whichInput.append(quant);
 
-            this.printActivatedLeaderCard(this.playerLeaders);
+            this.printActivatedLeaderCard(this.main.getLeaderCards());
 
             if (quant.equals("1"))
                 System.out.println("From which store do you want to pick this resource?");
@@ -745,7 +688,6 @@ public class CLI implements RenderingView{
     @Override
     public String getOutputResourceProd() {
 
-        Scanner input = new Scanner(System.in);
         String res;
 
         System.out.println("Which output resource do you want to pick?");
@@ -794,35 +736,20 @@ public class CLI implements RenderingView{
 
     @Override
     public void lorenzoFaithPoints() {
-        System.out.println("LORENZO FAITH POINTS: "+this.lorenzoPlayerBoard.getFaithPath().getCrossPosition());
+        System.out.println("LORENZO FAITH POINTS: " + this.main.getLocalPlayers()[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
     @Override
-    public void setLocalWinner(int localWinner) {
-        this.localWinner = localWinner;
-    }
-
-    @Override
-    public void endLocalGame() {
+    public void endLocalGame(int localWinner) {
         System.out.println("Match has ended.");
-        if(this.localWinner==0)
-            System.out.println("You win the Game, with "+this.playerBoard.getVictoryPoints()+" Victory points.");
+        if(localWinner==0)
+            System.out.println("You win the Game, with "+this.main.getLocalPlayers()[0].getPlayerBoard().getVictoryPoints()+" Victory points.");
         else System.out.println("Lorenzo the Magnificent wins the Game.");
     }
 
     @Override
-    public void setCountersDeck(ActionCountersDeck deck) {
-        this.counters = deck;
-    }
-
-    @Override
-    public void setLorenzoPlayerBoard(Playerboard board) {
-        this.lorenzoPlayerBoard = board;
-    }
-
-    @Override
     public void drawActionCounter() {
-        this.counters.drawCounter().activate(this.counters, this.lorenzoPlayerBoard, this.grid);
+        this.main.getActionCountersDeck().drawCounter().activate(this.main.getActionCountersDeck(), this.main.getLocalPlayers()[1].getPlayerBoard(), this.main.getDevelopmentCardsDecksGrid());
     }
 
     @Override
@@ -831,18 +758,10 @@ public class CLI implements RenderingView{
     }
 
     @Override
-    public void setGameOverMsg(GameOverMessage msg) {
-        this.gameOverMessage = msg;
+    public void endMultiplayerGame(GameOverMessage gameOverMessage) {
+        System.out.println("The winner is " + gameOverMessage.getWinner());
+        System.out.println("You made " + gameOverMessage.getVictoryPoints() + " victory points");
     }
 
-    @Override
-    public void endMultiplayerGame() {
-        System.out.println("The winner is " + this.gameOverMessage.getWinner());
-        System.out.println("You made " + this.gameOverMessage.getVictoryPoints() + " victory points");
-    }
 
-    @Override
-    public void setActivation(int[] activation) {
-        this.activation = activation;
-    }
 }
