@@ -62,24 +62,22 @@ public class AsyncScenarioGUI {
 
             arrayButtons[0].setOnAction(e -> {
                 handlerGUI.setStartingResource("COINS");
-                discardStartingLeaders(stage);
             });
 
             arrayButtons[1].setOnAction(e -> {
                 handlerGUI.setStartingResource("SERVANT");
-                discardStartingLeaders(stage);
             });
 
             arrayButtons[2].setOnAction(e -> {
                 handlerGUI.setStartingResource("SCHIELD");
-                discardStartingLeaders(stage);
             });
 
             arrayButtons[3].setOnAction(e -> {
                 handlerGUI.setStartingResource("STONE");
-                discardStartingLeaders(stage);
             });
         }
+
+        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
     public void discardStartingLeaders(Stage stage) {

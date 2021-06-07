@@ -1,5 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -32,13 +33,13 @@ public class PlotScenarioGUI {
         Button buyDevelopmentCardButton = new Button("Buy Development Card");
         Button activateProdButton = new Button("Activate Production Power");
 
-        root.add(playLeaderCardButton, 0, 0);
-        root.add(discardLeaderCardButton, 2, 0);
-        root.add(pickResourceFromMarketButton, 0, 1);
-        root.add(buyDevelopmentCardButton, 2, 1);
-        root.add(activateProdButton, 4, 1);
+        root.add(playLeaderCardButton, 1, 0);
+        root.add(discardLeaderCardButton, 3, 0);
+        root.add(pickResourceFromMarketButton, 0, 3);
+        root.add(buyDevelopmentCardButton, 2, 3);
+        root.add(activateProdButton, 4, 3);
 
-        Scene scene = new Scene(root, 500, 300);
+        Scene scene = new Scene(root, 750, 90);
 
         if(!this.checkLeaderAction) {
             playLeaderCardButton.setOnAction(e -> {
@@ -316,6 +317,196 @@ public class PlotScenarioGUI {
         }
         if(!this.checkLeaderAction) handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
         else waitForYouturn(stage);
+    }
+
+    public void activateProductionDevCards(Stage stage) {
+        Group root = new Group();
+        int i;
+        int[] dimPile = new int[3];
+        int[] activate = new int[6];
+        int numBottons = 0;
+        int x = 10;
+        int index = 0;
+
+        for (i = 0; i < 3; i++) {
+            dimPile[i] = handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i].length - 1;
+            if (dimPile[i] != 0) numBottons++;
+        }
+        //Creating buttons
+        Button[] arrayButtons = new Button[numBottons];
+        for (int click = 0; click < numBottons + 1; click++) {
+            for (i = 0; i < numBottons; i++) {
+                //Creating a graphic (image)
+                Image img = new Image(handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+                arrayButtons[index] = new Button();
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                x = x + 200;
+                root.getChildren().add(arrayButtons[index]);
+                index++;
+            }
+            Button okBtn = new Button("Submit");
+            okBtn.setLayoutX(300);
+            okBtn.setLayoutY(300);
+            Button noBtn = new Button("Decline");
+            noBtn.setLayoutX(350);
+            noBtn.setLayoutY(300);
+            root.getChildren().addAll(okBtn, noBtn);
+
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Buy development cards");
+            stage.setScene(scene);
+            stage.show();
+
+            okBtn.setOnAction(e -> {
+                activateBasicProductionPower(stage, activate);
+            });
+
+            noBtn.setOnAction(e -> {
+                activateBasicProductionPower(stage, null);
+            });
+
+            for (int j = 0; j < numBottons; j++) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    activate[finalJ] = 1;
+                });
+            }
+        }
+    }
+
+    public void activateBasicProductionPower(Stage stage, int[] activate) {
+        StringBuilder whichInput = new StringBuilder();
+        StringBuilder whichOutput = new StringBuilder();
+
+        for(int i = 0; i < 3; i++) {
+            String[] resources = new String[] {
+                    "coin.png",
+                    "servant.png",
+                    "shield.png",
+                    "stone.png"
+            };
+
+            if(i == 2) {
+                resources = new String[] {
+                        "redCross.png"
+                };
+            }
+
+            Group root = new Group();
+            //Creating buttons
+            Button[] arrayButtons = new Button[5];
+
+            int x = 10;
+            int index = 0;
+            for (String item : resources) {
+                //Creating a graphic (image)
+                Image img = new Image(item);
+                arrayButtons[index] = new Button();
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                x = x + 200;
+                root.getChildren().add(arrayButtons[index]);
+                index++;
+            }
+
+            Button okBtn = new Button("Submit");
+            okBtn.setLayoutX(300);
+            okBtn.setLayoutY(300);
+            Button noBtn = new Button("Decline");
+            noBtn.setLayoutX(350);
+            noBtn.setLayoutY(300);
+            root.getChildren().addAll(okBtn, noBtn);
+
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Activate basic production power");
+            stage.setScene(scene);
+            stage.show();
+
+            okBtn.setOnAction(e -> {
+                activate[3] = 1;
+                handlerGUI.setInputResourceProd(whichInput.toString());
+                activateExtraProdPower(stage, activate, whichOutput);
+            });
+
+            noBtn.setOnAction(e -> {
+                activateExtraProdPower(stage, activate, null);
+            });
+
+            for(int j = 0; j < 4 && i < 2; j++) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    whichInput.append(finalJ);
+                });
+            }
+
+            for(int j = 0; j < 5 && i == 2; j++) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    whichOutput.append(finalJ);
+                });
+            }
+        }
+    }
+
+    public void activateExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput) {
+        int numBottons = 0;
+        int indexLeader = 0;
+        int index = 0;
+        int x = 10;
+        Group root = new Group();
+
+        for(int i = 0; i < 2; i++) {
+            if (handlerGUI.playerLeaders[i].isPlayed() && handlerGUI.playerLeaders[i] instanceof ExtraProductionPowerLeaderCard) {
+                numBottons++;
+                indexLeader = i;
+            }
+        }
+        //Creating buttons
+        Button[] arrayButtons = new Button[numBottons];
+        for (int click = 0; click < numBottons + 1; click++) {
+            for (int i = 0; i < numBottons; i++) {
+                //Creating a graphic (image)
+                if(numBottons == 1) {
+                    Image img = new Image(handlerGUI.playerLeaders[indexLeader].getImage());
+                    arrayButtons[index] = new Button();
+                    handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                    x = x + 200;
+                    root.getChildren().add(arrayButtons[index]);
+                    index++;
+                }
+            }
+
+            Button okBtn = new Button("Submit");
+            okBtn.setLayoutX(300);
+            okBtn.setLayoutY(300);
+            Button noBtn = new Button("Decline");
+            noBtn.setLayoutX(350);
+            noBtn.setLayoutY(300);
+            root.getChildren().addAll(okBtn, noBtn);
+
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Activate extra production power");
+            stage.setScene(scene);
+            stage.show();
+
+            okBtn.setOnAction(e -> {
+                // metodo per prendere le risorse in ouput
+            });
+
+            noBtn.setOnAction(e -> {
+                // metodo wait your turn
+            });
+
+            for(int j = 0; j < numBottons; j++) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    activate[finalJ + 4] = 1;
+                });
+            }
+
+        }
     }
 
     public void waitForYouturn(Stage stage) {

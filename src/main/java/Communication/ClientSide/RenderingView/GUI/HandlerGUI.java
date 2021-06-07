@@ -148,6 +148,10 @@ public class HandlerGUI extends Application implements RenderingView {
         this.playerBoard=board;
     }
 
+    public Playerboard getBoard( ) {
+        return this.playerBoard;
+    }
+
     @Override
     public int[] getDiscardedStartingLeaders(){
         return startingDiscardedLeaders;
@@ -228,6 +232,10 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public String getInputResourceProd() {
         return inputResourceProd;
+    }
+
+    public void setInputResourceProd(String inputResourceProd) {
+        this.inputResourceProd = inputResourceProd;
     }
 
     @Override
