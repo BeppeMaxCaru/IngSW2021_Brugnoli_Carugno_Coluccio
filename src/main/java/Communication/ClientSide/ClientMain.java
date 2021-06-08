@@ -48,9 +48,9 @@ public class ClientMain {
             HandlerCLI cli = new HandlerCLI(client);
             cli.execute();
         } else {
-            HandlerGUI gui = new HandlerGUI();
-            new ServerReceiver(client, gui).start();
-            HandlerGUI.launch();
+            HandlerGUI gui = new HandlerGUI(client);
+            //new ServerReceiver(client, gui).start();
+            //HandlerGUI.launch(gui.getClass());
         }
     }
 

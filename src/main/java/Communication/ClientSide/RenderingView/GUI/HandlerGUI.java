@@ -1,6 +1,8 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.RenderingView;
+import Communication.ClientSide.ServerReceiver;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
@@ -51,6 +53,8 @@ public class HandlerGUI extends Application implements RenderingView {
 
     int correctAction;
 
+    private ClientMain clientMain;
+
     // Attribute of GUI
     private Stage stage;
     private final GenericClassGUI genericClassGUI;
@@ -58,7 +62,22 @@ public class HandlerGUI extends Application implements RenderingView {
     private final AsyncScenarioGUI asyncScenarioGUI;
     private final PlotScenarioGUI plotScenarioGUI;
 
-    public HandlerGUI( ) {
+    public HandlerGUI() {
+        //this.clientMain = clientMain;
+        this.genericClassGUI = new GenericClassGUI(this);
+        this.initialScenarioGUI = new InitialScenarioGUI(this);
+        this.asyncScenarioGUI = new AsyncScenarioGUI(this);
+        this.plotScenarioGUI = new PlotScenarioGUI(this);
+    }
+
+    public HandlerGUI(ClientMain client) {
+        //System.out.println("Hi");
+        launch();
+
+        this.clientMain = client;
+
+        new ServerReceiver(this.clientMain, this).start();
+
         this.genericClassGUI = new GenericClassGUI(this);
         this.initialScenarioGUI = new InitialScenarioGUI(this);
         this.asyncScenarioGUI = new AsyncScenarioGUI(this);
@@ -81,9 +100,9 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void setStage(Stage stage) { this.stage = stage; }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         launch(args);
-    }
+    }*/
 
     @Override
     public void start(Stage stage) {

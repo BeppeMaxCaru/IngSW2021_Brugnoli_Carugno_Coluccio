@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class AsyncScenarioGUI {
 
-    private final HandlerGUI handlerGUI;
+    private HandlerGUI handlerGUI;
 
     public AsyncScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
@@ -88,7 +88,7 @@ public class AsyncScenarioGUI {
 
             int x = 0;
             int index = 0;
-            for (LeaderCard startingLeader : handlerGUI.startingLeaders) {
+            for (LeaderCard startingLeader : this.handlerGUI.startingLeaders) {
                 //Creating a graphic (image)
                 Image img = new Image(startingLeader.getImage());
                 arrayButtons[index] = new Button();
