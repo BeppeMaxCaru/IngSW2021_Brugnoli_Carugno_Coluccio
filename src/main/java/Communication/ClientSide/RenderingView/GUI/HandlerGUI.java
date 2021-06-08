@@ -75,6 +75,7 @@ public class HandlerGUI extends Application implements RenderingView {
         launch();
 
         this.clientMain = client;
+        System.out.println(this.clientMain.getClass());
 
         new ServerReceiver(this.clientMain, this).start();
 

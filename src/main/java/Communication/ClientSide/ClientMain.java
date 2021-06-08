@@ -1,6 +1,7 @@
 package Communication.ClientSide;
 
 import Communication.ClientSide.RenderingView.GUI.HandlerGUI;
+import Communication.ClientSide.RenderingView.GUI.Testing;
 import Communication.ClientSide.RenderingView.HandlerCLI;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
@@ -9,8 +10,9 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
+import javafx.application.Application;
 
-public class ClientMain {
+public class ClientMain{
 
     //Connection attributes
     private final String hostName;
@@ -41,6 +43,8 @@ public class ClientMain {
         if (args.length > 3) return;
 
         String hostname = args[0];
+
+
         int port = Integer.parseInt(args[1]);
         ClientMain client = new ClientMain(hostname, port);
         if(args.length==3 && args[2].equals("--cli"))
@@ -48,7 +52,13 @@ public class ClientMain {
             HandlerCLI cli = new HandlerCLI(client);
             cli.execute();
         } else {
-            HandlerGUI gui = new HandlerGUI(client);
+            //Testing gui = new Testing();
+            //gui.setClientMain(client);
+            Application.launch(Testing.class, args);
+            //System.out.println("aki");
+            //Application.launch(gui.getClass());
+            //System.out.println("aki");
+
             //new ServerReceiver(client, gui).start();
             //HandlerGUI.launch(gui.getClass());
         }

@@ -25,6 +25,7 @@ public class ServerReceiver extends Thread {
             this.receiver = new ObjectInputStream(socket.getInputStream());
         } catch (Exception e) {
             this.view.error(e);
+            e.printStackTrace();
         }
     }
 

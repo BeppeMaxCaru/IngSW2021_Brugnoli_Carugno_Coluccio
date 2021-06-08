@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class CLI implements RenderingView{
+public class CLI implements RenderingView {
 
     private final ClientMain main;
     private final Scanner input;
@@ -738,6 +738,5 @@ public class CLI implements RenderingView{
         System.out.println("The winner is " + gameOverMessage.getWinner());
         System.out.println("You made " + gameOverMessage.getVictoryPoints() + " victory points");
     }
-
 
 }
