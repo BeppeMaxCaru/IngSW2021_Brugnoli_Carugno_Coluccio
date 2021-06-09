@@ -54,7 +54,7 @@ public class ClientMain{
         } else {
             //Testing gui = new Testing();
             //gui.setClientMain(client);
-            Application.launch(Testing.class, args);
+            Application.launch(HandlerGUI.class, args);
             //System.out.println("aki");
             //Application.launch(gui.getClass());
             //System.out.println("aki");

@@ -1,5 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,23 +12,26 @@ import java.util.ArrayList;
 
 public class AsyncScenarioGUI {
 
-    private HandlerGUI handlerGUI;
+    private final HandlerGUI handlerGUI;
+    private final ClientMain clientMain;
 
-    public AsyncScenarioGUI(HandlerGUI handlerGUI) {
+    public AsyncScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
+        this.clientMain = clientMain;
     }
 
     public void matchHasStarted(Stage stage) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + handlerGUI.getPlayerNumber(), stage);
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.clientMain.getPlayerNumber(), stage);
 
-        if(handlerGUI.getPlayerNumber() != 0) handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
-        else handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
+        if(this.clientMain.getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
+        else this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
     public void startingResource(Stage stage) {
         int i;
+        ArrayList<String> resStart = new ArrayList<>();
 
-        if(handlerGUI.getPlayerNumber() == 1 || handlerGUI.getPlayerNumber() == 2) i = 1;
+        if(this.clientMain.getPlayerNumber() == 1 || this.clientMain.getPlayerNumber() == 2) i = 1;
         else i = 2;
 
         for(; i > 0; i--) {
@@ -48,7 +52,7 @@ public class AsyncScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -61,23 +65,25 @@ public class AsyncScenarioGUI {
             stage.show();
 
             arrayButtons[0].setOnAction(e -> {
-                handlerGUI.setStartingResource("COINS");
+                resStart.add("COINS");
             });
 
             arrayButtons[1].setOnAction(e -> {
-                handlerGUI.setStartingResource("SERVANT");
+                resStart.add("SERVANT");
             });
 
             arrayButtons[2].setOnAction(e -> {
-                handlerGUI.setStartingResource("SCHIELD");
+                resStart.add("SCHIELD");
             });
 
             arrayButtons[3].setOnAction(e -> {
-                handlerGUI.setStartingResource("STONE");
+                resStart.add("STONE");
             });
+
+            if(i - 1 == 0) this.handlerGUI.getMsg().sendStartingRes(resStart);
         }
 
-        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
+        this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
     public void discardStartingLeaders(Stage stage) {
@@ -88,11 +94,11 @@ public class AsyncScenarioGUI {
 
             int x = 0;
             int index = 0;
-            for (LeaderCard startingLeader : this.handlerGUI.startingLeaders) {
+            for (LeaderCard startingLeader : this.clientMain.getLeaderCards()) {
                 //Creating a graphic (image)
                 Image img = new Image(startingLeader.getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
                 x += 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -104,29 +110,28 @@ public class AsyncScenarioGUI {
             stage.setScene(scene);
             stage.show();
 
-            int finalJ = j;
             arrayButtons[0].setOnAction(e -> {
-                handlerGUI.setDiscardedStartingLeaders(0, finalJ);
+                this.handlerGUI.getMsg().sendDiscardedLeader(0);
                 arrayButtons[0].setVisible(false);
             });
 
             arrayButtons[1].setOnAction(e -> {
-                handlerGUI.setDiscardedStartingLeaders(1, finalJ);
+                this.handlerGUI.getMsg().sendDiscardedLeader(1);
                 arrayButtons[1].setVisible(false);
             });
 
             arrayButtons[2].setOnAction(e -> {
-                handlerGUI.setDiscardedStartingLeaders(2, finalJ);
+                this.handlerGUI.getMsg().sendDiscardedLeader(2);
                 arrayButtons[2].setVisible(false);
             });
 
             arrayButtons[3].setOnAction(e -> {
-                handlerGUI.setDiscardedStartingLeaders(3, finalJ);
+                this.handlerGUI.getMsg().sendDiscardedLeader(3);
                 arrayButtons[3].setVisible(false);
             });
         }
 
-        while(handlerGUI.getCorrectAction() != 1) ;
-        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
+        //while(this.handlerGUI.getCorrectAction() != 1) ;
+        this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
     }
 }

@@ -9,8 +9,11 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
+import Message.SendingMessages;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import java.io.ObjectInputStream;
 import java.util.*;
 
 public class HandlerGUI extends Application implements RenderingView {
@@ -53,36 +56,40 @@ public class HandlerGUI extends Application implements RenderingView {
 
     int correctAction;
 
+    // Attribute of GUI da qui ok
+    private Stage stage;
+
+    private GenericClassGUI genericClassGUI;
+    private InitialScenarioGUI initialScenarioGUI;
+    private AsyncScenarioGUI asyncScenarioGUI;
+    private PlotScenarioGUI plotScenarioGUI;
+
     private ClientMain clientMain;
 
-    // Attribute of GUI
-    private Stage stage;
-    private final GenericClassGUI genericClassGUI;
-    private final InitialScenarioGUI initialScenarioGUI;
-    private final AsyncScenarioGUI asyncScenarioGUI;
-    private final PlotScenarioGUI plotScenarioGUI;
+    private ObjectInputStream receiver;
+    private SendingMessages msg;
 
-    public HandlerGUI() {
-        //this.clientMain = clientMain;
-        this.genericClassGUI = new GenericClassGUI(this);
-        this.initialScenarioGUI = new InitialScenarioGUI(this);
-        this.asyncScenarioGUI = new AsyncScenarioGUI(this);
-        this.plotScenarioGUI = new PlotScenarioGUI(this);
-    }
-
-    public HandlerGUI(ClientMain client) {
-        //System.out.println("Hi");
-        launch();
-
-        this.clientMain = client;
-        System.out.println(this.clientMain.getClass());
-
-        new ServerReceiver(this.clientMain, this).start();
+    /*public HandlerGUI() {
 
         this.genericClassGUI = new GenericClassGUI(this);
         this.initialScenarioGUI = new InitialScenarioGUI(this);
         this.asyncScenarioGUI = new AsyncScenarioGUI(this);
         this.plotScenarioGUI = new PlotScenarioGUI(this);
+    } */
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parameters args = getParameters();
+        this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
+
+        this.genericClassGUI = new GenericClassGUI(this, this.clientMain);
+        this.initialScenarioGUI = new InitialScenarioGUI(this, this.clientMain);
+        this.asyncScenarioGUI = new AsyncScenarioGUI(this, this.clientMain);
+        this.plotScenarioGUI = new PlotScenarioGUI(this, this.clientMain);
+
+        System.out.println(this.clientMain.getHostName());
+        this.setStage(stage);
+        this.initialScenarioGUI.nickname(this.stage);
     }
 
     public GenericClassGUI getGenericClassGUI() {
@@ -101,15 +108,20 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void setStage(Stage stage) { this.stage = stage; }
 
-    /*public static void main(String[] args) {
-        launch(args);
-    }*/
+    public ClientMain getClientMain() { return this.clientMain; }
 
-    @Override
-    public void start(Stage stage) {
-        this.setStage(stage);
-        this.initialScenarioGUI.nickname(this.stage);
+    public void setClientMain(ClientMain clientMain) {
+        this.clientMain = clientMain;
+        System.out.println(this.clientMain.getClass());
     }
+
+    public void setMsg(SendingMessages msg) { this.msg = msg; }
+
+    public SendingMessages getMsg() { return this.msg; }
+
+    public void setReceiver(ObjectInputStream receiver) { this.receiver = receiver; }
+
+    public ObjectInputStream getReceiver() { return this.receiver; }
 
     @Override
     public String getNickName() {

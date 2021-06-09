@@ -10,6 +10,7 @@ public class Testing extends Application implements RenderingView {
 
     private ClientMain clientMain;
 
+
     //FARE TUTTO IN START!!!!!!!!!!!!!!!
     @Override
     public void start(Stage stage) throws Exception {

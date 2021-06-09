@@ -1,5 +1,8 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.ServerReceiver;
+import Message.SendingMessages;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -12,12 +15,17 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
+import java.io.ObjectInputStream;
+import java.net.Socket;
+
 public class InitialScenarioGUI {
 
-    HandlerGUI handlerGUI;
+    private final HandlerGUI handlerGUI;
+    private final ClientMain clientMain;
 
-    public InitialScenarioGUI(HandlerGUI handlerGUI) {
+    public InitialScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
+        this.clientMain = clientMain;
     }
 
     public void nickname(Stage stage) {
@@ -60,8 +68,8 @@ public class InitialScenarioGUI {
         stage.show();
 
         okBtn.setOnAction(e -> {
-            multiOrSinglePlayers(stage, handlerGUI);
-            handlerGUI.setNickName(field.getText());
+            multiOrSinglePlayers(stage, this.handlerGUI);
+            this.clientMain.setNickname(field.getText());
         });
     }
 
@@ -80,17 +88,22 @@ public class InitialScenarioGUI {
 
         button1.setOnAction(e -> {
             //single player welcome
-            handlerGUI.setGameMode(0);
         });
 
         button2.setOnAction(e -> {
+            try {
+                Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+                this.handlerGUI.setReceiver(new ObjectInputStream(clientSocket.getInputStream()));
+                this. handlerGUI.setMsg(new SendingMessages(this.clientMain, this.handlerGUI, clientSocket));
+            } catch (Exception ex) {
+                this.handlerGUI.error(ex);
+            }
             welcome(stage, handlerGUI);
-            handlerGUI.setGameMode(1);
         });
     }
 
     public void welcome(Stage stage, HandlerGUI handlerGUI) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + handlerGUI.getNickName() +
+        handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.clientMain.getNickname() +
                 "!\nWelcome to Master of Renaissance online!", stage);
         //while(this.gameStarted != 1) ;
         handlerGUI.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);

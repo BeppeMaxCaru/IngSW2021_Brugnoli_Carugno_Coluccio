@@ -34,8 +34,9 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
         this.requisite = requisite;
         this.input=resourceInput;
         this.image = image;
-
     }
+
+    public String getInput() { return this.input;}
 
     /**
      * Gifts an extra production power to the player

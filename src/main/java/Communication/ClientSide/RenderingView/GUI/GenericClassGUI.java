@@ -1,5 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Communication.ClientSide.ClientMain;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,10 +16,12 @@ import java.util.TimerTask;
 
 public class GenericClassGUI {
 
-    HandlerGUI handlerGUI;
+    private final HandlerGUI handlerGUI;
+    private final ClientMain clientMain;
 
-    public GenericClassGUI(HandlerGUI handlerGUI) {
+    public GenericClassGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
+        this.clientMain = clientMain;
     }
 
     public void addLabelByCode(String string, Stage stage) {

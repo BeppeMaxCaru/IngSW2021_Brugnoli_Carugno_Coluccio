@@ -1,5 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -15,14 +16,16 @@ import javafx.stage.Stage;
 
 public class PlotScenarioGUI {
 
-    HandlerGUI handlerGUI;
-    boolean checkLeaderAction;
-    boolean checkNormalAction;
+    private final HandlerGUI handlerGUI;
+    private boolean checkLeaderAction;
+    private boolean checkNormalAction;
+    private final ClientMain clientMain;
 
-    public PlotScenarioGUI(HandlerGUI handlerGUI) {
+    public PlotScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
         this.checkLeaderAction = false;
         this.checkNormalAction = false;
+        this.clientMain = clientMain;
     }
 
     public void choiceAction(Stage stage) {
@@ -70,7 +73,7 @@ public class PlotScenarioGUI {
 
             activateProdButton.setOnAction(e -> {
                 handlerGUI.setActionChoice("ACTIVATE PRODUCTION POWER");
-                // method
+                activateProductionDevCards(stage);
                 this.checkNormalAction = true;
             });
         }
@@ -145,7 +148,7 @@ public class PlotScenarioGUI {
     }
 
     public void market(Stage stage) {
-        int x, y;
+        int x = 0, y;
         //creating the image object
         Image image = new Image("plancia portabiglie.png");
         ImageView imageView = new ImageView();
@@ -163,11 +166,12 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 3; i++) {
             x = 190;
             for(int j = 0; j < 4; j++) {
-                drawnMarbles(i, j, x, y, gc);
+                drawnMarbles(x, y, gc, handlerGUI.getMarket().getMarketArrangement()[i][j].getColour());
                 x+=60;
             }
             y+=60;
         }
+        drawnMarbles(x, y, gc, handlerGUI.getMarket().getExcessMarble().getColour());
 
         Pane rootButton = new Pane();
         Button c1 = new Button("Click\nHere!");
@@ -253,8 +257,8 @@ public class PlotScenarioGUI {
     }
 
 
-    public void drawnMarbles(int i, int j, int x, int y, GraphicsContext gc) {
-        switch (handlerGUI.getMarket().getMarketArrangement()[i][j].getColour()) {
+    public void drawnMarbles(int x, int y, GraphicsContext gc, String colour) {
+        switch (colour) {
             case " YELLOW ":
                 gc.setFill(Color.GOLD);
                 break;
@@ -324,6 +328,7 @@ public class PlotScenarioGUI {
         int i;
         int[] dimPile = new int[3];
         int[] activate = new int[6];
+        String[] whichInput = new String[6];
         int numBottons = 0;
         int x = 10;
         int index = 0;
@@ -359,24 +364,32 @@ public class PlotScenarioGUI {
             stage.show();
 
             okBtn.setOnAction(e -> {
-                activateBasicProductionPower(stage, activate);
+                activateBasicProductionPower(stage, activate, whichInput);
             });
 
             noBtn.setOnAction(e -> {
-                activateBasicProductionPower(stage, null);
+                activateBasicProductionPower(stage, null, whichInput);
             });
+
 
             for (int j = 0; j < numBottons; j++) {
                 int finalJ = j;
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ] = 1;
+                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0)
+                        whichInput[finalJ] = whichInput[finalJ] + "0";
+                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0)
+                        whichInput[finalJ] = whichInput[finalJ] + "1";
+                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0)
+                        whichInput[finalJ] = whichInput[finalJ] + "2";
+                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0)
+                        whichInput[finalJ] = whichInput[finalJ] + "3";
                 });
             }
         }
     }
 
-    public void activateBasicProductionPower(Stage stage, int[] activate) {
-        StringBuilder whichInput = new StringBuilder();
+    public void activateBasicProductionPower(Stage stage, int[] activate, String[] whichInput) {
         StringBuilder whichOutput = new StringBuilder();
 
         for(int i = 0; i < 3; i++) {
@@ -408,7 +421,6 @@ public class PlotScenarioGUI {
                 root.getChildren().add(arrayButtons[index]);
                 index++;
             }
-
             Button okBtn = new Button("Submit");
             okBtn.setLayoutX(300);
             okBtn.setLayoutY(300);
@@ -425,18 +437,18 @@ public class PlotScenarioGUI {
 
             okBtn.setOnAction(e -> {
                 activate[3] = 1;
-                handlerGUI.setInputResourceProd(whichInput.toString());
-                activateExtraProdPower(stage, activate, whichOutput);
+                activateExtraProdPower(stage, activate, whichOutput, whichInput);
             });
 
             noBtn.setOnAction(e -> {
-                activateExtraProdPower(stage, activate, null);
+                whichInput[3] = null;
+                activateExtraProdPower(stage, activate, null, whichInput);
             });
 
             for(int j = 0; j < 4 && i < 2; j++) {
                 int finalJ = j;
                 arrayButtons[j].setOnAction(e -> {
-                    whichInput.append(finalJ);
+                    whichInput[3] = whichInput[3] + finalJ;
                 });
             }
 
@@ -449,7 +461,7 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void activateExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput) {
+    public void activateExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput, String[] whichInput) {
         int numBottons = 0;
         int indexLeader = 0;
         int index = 0;
@@ -492,11 +504,12 @@ public class PlotScenarioGUI {
             stage.show();
 
             okBtn.setOnAction(e -> {
-                // metodo per prendere le risorse in ouput
+                pickResourceExtraProdPower(stage, activate, whichOutput);
             });
 
             noBtn.setOnAction(e -> {
-                // metodo wait your turn
+                if(!checkLeaderAction) choiceAction(stage);
+                else waitForYouturn(stage);
             });
 
             for(int j = 0; j < numBottons; j++) {
@@ -505,7 +518,58 @@ public class PlotScenarioGUI {
                     activate[finalJ + 4] = 1;
                 });
             }
+        }
+    }
 
+    public void pickResourceExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput) {
+        int num = 0;
+        if(activate[4] == 1) num++;
+        if(activate[5] == 1) num++;
+        for(; num > 0; num--) {
+            String[] resources = new String[]{
+                    "coin.png",
+                    "servant.png",
+                    "shield.png",
+                    "stone.png",
+                    "redCross"
+            };
+            Group root = new Group();
+            //Creating buttons
+            Button[] arrayButtons = new Button[5];
+
+            int x = 10;
+            int index = 0;
+            for (String item : resources) {
+                //Creating a graphic (image)
+                Image img = new Image(item);
+                arrayButtons[index] = new Button();
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                x = x + 200;
+                root.getChildren().add(arrayButtons[index]);
+                index++;
+            }
+            Button okBtn = new Button("Submit");
+            okBtn.setLayoutX(300);
+            okBtn.setLayoutY(300);
+
+            //Setting the stage
+            Scene scene = new Scene(root, 740, 130);
+            stage.setTitle("Choose the resource you want to have.");
+            stage.setScene(scene);
+            stage.show();
+
+            okBtn.setOnAction(e -> {
+                handlerGUI.setActivation(activate);
+                if(!checkLeaderAction) choiceAction(stage);
+                else waitForYouturn(stage);
+            });
+
+            for(int j = 0; j < 5; j++) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    whichOutput.append(finalJ);
+                });
+            }
         }
     }
 
