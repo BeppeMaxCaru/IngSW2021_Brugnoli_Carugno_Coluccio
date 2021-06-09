@@ -1,8 +1,7 @@
 package Communication.ClientSide;
 
-import Communication.ClientSide.RenderingView.GUI.HandlerGUI;
 import Communication.ClientSide.RenderingView.GUI.Testing;
-import Communication.ClientSide.RenderingView.HandlerCLI;
+import Communication.ClientSide.RenderingView.CLI.HandlerCLI;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;

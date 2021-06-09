@@ -1,8 +1,7 @@
-package Communication.ClientSide.RenderingView;
+package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.ServerReceiver;
-import Communication.ClientSide.ServerSender;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
@@ -17,6 +16,7 @@ import Message.SendingMessages;
 import Message.ServerStartingMessage;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
@@ -24,6 +24,7 @@ public class HandlerCLI {
 
     private final ClientMain clientMain;
     private ObjectInputStream receiver;
+    private ObjectOutputStream sender;
     private final CLI view;
     private SendingMessages msg;
 
@@ -59,14 +60,15 @@ public class HandlerCLI {
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[1]);
 
-            new ServerSender(this.clientMain, 0).start();
+            new ServerSender(this.clientMain, 0, null).start();
 
         } else {//MultiPlayer
 
             try {
                 Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
                 this.receiver = new ObjectInputStream(clientSocket.getInputStream());
-                this.msg = new SendingMessages(this.clientMain, this.view, clientSocket);
+                this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
+                this.msg = new SendingMessages(this.clientMain, this.view, this.sender);
             } catch (Exception e) {
                 this.view.error(e);
             }
@@ -137,8 +139,8 @@ public class HandlerCLI {
             }
 
             //Starts async phase
-            new ServerSender(this.clientMain, gameMode).start();
-            new ServerReceiver(this.clientMain, this.view).start();
+            new ServerSender(this.clientMain, gameMode, this.msg).start();
+            new ServerReceiver(this.clientMain, this.view, this.receiver).start();
 
         }
     }

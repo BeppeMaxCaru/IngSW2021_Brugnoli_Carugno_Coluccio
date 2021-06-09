@@ -1,6 +1,6 @@
-package Communication.ClientSide;
+package Communication.ClientSide.RenderingView.CLI;
 
-import Communication.ClientSide.RenderingView.CLI;
+import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
@@ -18,18 +18,13 @@ public class ServerSender extends Thread {
     private final int gameMode;
     private SendingMessages msg;
 
-    public ServerSender (ClientMain clientMain, int gameMode) {
+    public ServerSender (ClientMain clientMain, int gameMode, SendingMessages msg) {
         this.clientMain = clientMain;
         this.view = new CLI(this.clientMain);
         this.gameMode = gameMode;
         if(this.gameMode==1)
         {
-            try {
-                this.socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-            } catch (Exception e) {
-                this.view.error(e);
-            }
-            this.msg = new SendingMessages(this.clientMain, this.view, this.socket);
+            this.msg = msg;
         }
 
     }
@@ -193,6 +188,10 @@ public class ServerSender extends Thread {
                                     mainAction=0;
                                     action="";
                                     this.clientMain.getActionCountersDeck().drawCounter().activate(this.clientMain.getActionCountersDeck(), this.clientMain.getLocalPlayers()[1].getPlayerBoard(), this.clientMain.getDevelopmentCardsDecksGrid());
+                                }
+                                if(this.gameMode==1)
+                                {
+                                    this.msg.sendEndTurn();
                                 }
                                 this.view.endTurn();
                                 if(this.gameMode==0) this.view.lorenzoFaithPoints();
