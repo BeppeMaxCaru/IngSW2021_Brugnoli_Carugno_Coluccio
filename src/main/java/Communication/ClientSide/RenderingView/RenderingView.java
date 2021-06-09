@@ -160,4 +160,6 @@ public interface RenderingView {
     default void setActivation(int[] activation){
     }
 
+    default void itsYourTurn(){}
+
 }

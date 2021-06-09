@@ -3,6 +3,7 @@ package Message;
 import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Message.MessageSent.DiscardLeaderMessage;
+import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
 
 import java.io.ObjectOutputStream;
@@ -15,14 +16,10 @@ public class SendingMessages {
     private ObjectOutputStream sender;
     private final RenderingView view;
 
-    public SendingMessages(ClientMain main, RenderingView view, Socket socket){
+    public SendingMessages(ClientMain main, RenderingView view, ObjectOutputStream sender){
         this.clientMain = main;
         this.view= view;
-        try {
-            this.sender = new ObjectOutputStream(socket.getOutputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        this.sender = sender;
     }
 
     public void sendNickname(){
@@ -101,11 +98,11 @@ public class SendingMessages {
         }
     }
 
-    public void resetSender(){
+    public void sendEndTurn(){
         try {
-            this.sender.reset();
+            this.sender.writeObject(new EndTurnMessage(this.clientMain.getPlayerNumber()));
         } catch (Exception e) {
-            e.printStackTrace();
+            this.view.error(e);
         }
     }
 }

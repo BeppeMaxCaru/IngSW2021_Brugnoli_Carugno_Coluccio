@@ -1,6 +1,7 @@
-package Communication.ClientSide.RenderingView;
+package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.RenderingView.RenderingView;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
@@ -730,7 +731,7 @@ public class CLI implements RenderingView {
 
     @Override
     public void notYourTurn() {
-        System.out.println("It's not your turn.");
+        System.err.println("It's not your turn.");
     }
 
     @Override
@@ -739,4 +740,8 @@ public class CLI implements RenderingView {
         System.out.println("You made " + gameOverMessage.getVictoryPoints() + " victory points");
     }
 
+    @Override
+    public void itsYourTurn() {
+        System.out.println("It's your turn!!");
+    }
 }

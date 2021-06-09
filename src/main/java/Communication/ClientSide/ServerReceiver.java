@@ -6,27 +6,17 @@ import Message.MessageReceived.*;
 import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectInputStream;
-import java.net.Socket;
 
 public class ServerReceiver extends Thread {
 
     private final ClientMain clientMain;
-
-    private ObjectInputStream receiver;
-
+    private final ObjectInputStream receiver;
     private final RenderingView view;
 
-    public ServerReceiver(ClientMain clientMain, RenderingView view) {
+    public ServerReceiver(ClientMain clientMain, RenderingView view, ObjectInputStream receiver) {
         this.clientMain = clientMain;
         this.view = view;
-
-        try {
-            Socket socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-            this.receiver = new ObjectInputStream(socket.getInputStream());
-        } catch (Exception e) {
-            this.view.error(e);
-            e.printStackTrace();
-        }
+        this.receiver = receiver;
     }
 
     @Override
@@ -44,6 +34,14 @@ public class ServerReceiver extends Thread {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 this.view.receiverError(e);
+            }
+
+            if(object instanceof YourTurnMessage){
+                try {
+                    this.view.itsYourTurn();
+                } catch (Exception e) {
+                    this.view.receiverError(e);
+                }
             }
 
             if (object instanceof NotYourTurnMessage) {
