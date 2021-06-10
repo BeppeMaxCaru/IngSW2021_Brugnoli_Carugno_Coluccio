@@ -197,11 +197,20 @@ public class PlayerThread implements Runnable {
             return;
         }
 
+        try {
+            if(this.playerThreadNumber==0)
+            {
+                System.out.println(this.playerThreadNumber);
+                this.sender.writeObject(new YourTurnMessage());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         //BISOGNA ANCORA GESTIRE IL BREAK
         //ASYNC PHASE
-
         //I BROADCAST AVVENGONO SOLO IN QUESTA PHASE
-
         //Aggiornare aggiungendo i broadcast
 
         while (!this.gameController.getGameModel().checkEndPlay()) {
@@ -212,22 +221,6 @@ public class PlayerThread implements Runnable {
                 this.sendErrorMessage();
                 this.removePlayer();
                 System.out.println("Reset sender not working");
-            }
-
-            //Your turn message
-            try {
-                //Non bisogna attendere ricezione di un messaggio per comunicarlo!
-                if (this.gameController.getCurrentPlayerNumber() == this.playerThreadNumber) {
-                    if (this.yourTurnMessageCounter == 0) {
-                        this.sender.writeObject(new YourTurnMessage());
-                        this.yourTurnMessageCounter = 1;
-                    }
-                }
-            } catch (Exception e) {
-                this.sendErrorMessage();
-                this.removePlayer();
-                System.out.println("Error in communicating turn");
-                break;
             }
 
             Message object;

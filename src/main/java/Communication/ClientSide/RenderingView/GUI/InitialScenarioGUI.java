@@ -16,6 +16,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class InitialScenarioGUI {
@@ -94,7 +95,7 @@ public class InitialScenarioGUI {
             try {
                 Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
                 this.handlerGUI.setReceiver(new ObjectInputStream(clientSocket.getInputStream()));
-                this. handlerGUI.setMsg(new SendingMessages(this.clientMain, this.handlerGUI, clientSocket));
+                this.handlerGUI.setMsg(new SendingMessages(this.clientMain, this.handlerGUI, new ObjectOutputStream(clientSocket.getOutputStream())));
             } catch (Exception ex) {
                 this.handlerGUI.error(ex);
             }

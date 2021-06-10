@@ -191,6 +191,7 @@ public class ServerSender extends Thread {
                                 }
                                 if(this.gameMode==1)
                                 {
+                                    action="";
                                     this.msg.sendEndTurn();
                                 }
                                 this.view.endTurn();

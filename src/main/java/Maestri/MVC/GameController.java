@@ -5,6 +5,7 @@ import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
+import Message.MessageReceived.YourTurnMessage;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -72,14 +73,20 @@ public class GameController{
     }
 
     public void nextCurrentPlayerNumber() {
-        //Mettere controllo che ci siano più di un giocatore
-        if (this.currentPlayerNumber == 3) this.currentPlayerNumber = 0;
-
-        //Importante gestire disconnessione
-        for (int i = 0;i<this.gameModel.getPlayers().length;i++) {
-            if (this.gameModel.getPlayers()[i] != null) {
-                this.currentPlayerNumber = i;
-                break;
+        //Mettere controllo che ci sia più di un giocatore
+        do{
+            this.currentPlayerNumber++;
+            if (this.currentPlayerNumber == 4) this.currentPlayerNumber = 0;
+        }while(this.gameModel.getPlayers()[this.currentPlayerNumber]==null);
+        System.out.println(this.currentPlayerNumber);
+        for(PlayerThread thread : this.playerThreads){
+            if(thread.getPlayerThreadNumber()==this.currentPlayerNumber)
+            {
+                try{
+                    thread.getSender().writeObject(new YourTurnMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
