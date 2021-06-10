@@ -293,7 +293,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(handlerGUI.getDevCardsGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -344,7 +344,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -416,7 +416,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -482,7 +482,7 @@ public class PlotScenarioGUI {
                 if(numBottons == 1) {
                     Image img = new Image(handlerGUI.playerLeaders[indexLeader].getImage());
                     arrayButtons[index] = new Button();
-                    handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                    handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
                     x = x + 200;
                     root.getChildren().add(arrayButtons[index]);
                     index++;
@@ -543,7 +543,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;

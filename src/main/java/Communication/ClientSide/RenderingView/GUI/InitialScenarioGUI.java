@@ -69,12 +69,12 @@ public class InitialScenarioGUI {
         stage.show();
 
         okBtn.setOnAction(e -> {
-            multiOrSinglePlayers(stage, this.handlerGUI);
             this.clientMain.setNickname(field.getText());
+            multiOrSinglePlayers(stage);
         });
     }
 
-    public void multiOrSinglePlayers(Stage stage, HandlerGUI handlerGUI) {
+    public void multiOrSinglePlayers(Stage stage) {
         GridPane root = new GridPane();
         Button button1 = new Button("Single player");
         Button button2 = new Button("Multi player");
@@ -92,21 +92,15 @@ public class InitialScenarioGUI {
         });
 
         button2.setOnAction(e -> {
-            try {
-                Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-                this.handlerGUI.setReceiver(new ObjectInputStream(clientSocket.getInputStream()));
-                this.handlerGUI.setMsg(new SendingMessages(this.clientMain, this.handlerGUI, new ObjectOutputStream(clientSocket.getOutputStream())));
-            } catch (Exception ex) {
-                this.handlerGUI.error(ex);
-            }
-            welcome(stage, handlerGUI);
+            this.handlerGUI.connectionSocket();
+            this.handlerGUI.sendNickname();
+            welcome(stage);
         });
     }
 
-    public void welcome(Stage stage, HandlerGUI handlerGUI) {
+    public void welcome(Stage stage) {
         handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.clientMain.getNickname() +
                 "!\nWelcome to Master of Renaissance online!", stage);
-        //while(this.gameStarted != 1) ;
-        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);
+        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("updateMarket", stage);
     }
 }

@@ -41,14 +41,27 @@ public class GenericClassGUI {
                     try {
                         System.out.println("loading..");
                         switch(method) {
+                            case "updateMarket":
+                                handlerGUI.updateMarket();
+                                break;
+                            case "updateGrid":
+                                handlerGUI.updateGridDevCard();
+                                break;
+                            case "startingMessage":
+                                handlerGUI.startingMessage();
+                                break;
                             case "startingResources":
                                 handlerGUI.getAsyncScenarioGUI().startingResource(stage);
+                                break;
                             case "discardStartingLeaders":
-                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage);
+                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage, 1);
+                                break;
                             case "matchHasStarted":
                                 handlerGUI.getAsyncScenarioGUI().matchHasStarted(stage);
+                                break;
                             case "choiceAction":
                                 handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                                break;
                         }
 
                     } catch (Exception e) {
@@ -59,13 +72,14 @@ public class GenericClassGUI {
         };
 
         Timer timer = new Timer("Timer");
-        long delay = 3000L;
+        long delay = 1000L;
         timer.schedule(task, delay);
     }
 
-    public void createIconButton(int x, Image img, Button button) {
+    public void createIconButton(int x, Image img, Button button, int height, int width) {
         ImageView view = new ImageView(img);
-        view.setFitHeight(80);
+        view.setFitHeight(height);
+        view.setFitWidth(width);
         view.setPreserveRatio(true);
 
         //Setting the location of the button
