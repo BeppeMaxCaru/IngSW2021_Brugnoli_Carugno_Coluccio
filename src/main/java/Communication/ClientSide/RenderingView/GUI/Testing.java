@@ -1,6 +1,7 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Communication.ClientSide.ServerReceiver;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
@@ -118,7 +119,9 @@ public class Testing extends Application implements RenderingView {
 
             //Qui parte server reciver e metti server sender
             //Inserirlo
-
+            new ServerReceiver(this.clientMain, this, this.receiver).start();
+            //Mettere ServerSender
+            //o riscrivere
         }
 
     }
