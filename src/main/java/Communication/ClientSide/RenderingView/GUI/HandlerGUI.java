@@ -9,11 +9,16 @@ import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
+import Message.MessageReceived.UpdateClientDevCardGridMessage;
+import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.SendingMessages;
+import Message.ServerStartingMessage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.*;
 
 public class HandlerGUI extends Application implements RenderingView {
@@ -67,15 +72,9 @@ public class HandlerGUI extends Application implements RenderingView {
     private ClientMain clientMain;
 
     private ObjectInputStream receiver;
+    private ObjectOutputStream sender;
     private SendingMessages msg;
 
-    /*public HandlerGUI() {
-
-        this.genericClassGUI = new GenericClassGUI(this);
-        this.initialScenarioGUI = new InitialScenarioGUI(this);
-        this.asyncScenarioGUI = new AsyncScenarioGUI(this);
-        this.plotScenarioGUI = new PlotScenarioGUI(this);
-    } */
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -87,6 +86,8 @@ public class HandlerGUI extends Application implements RenderingView {
         this.asyncScenarioGUI = new AsyncScenarioGUI(this, this.clientMain);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.clientMain);
 
+
+
         System.out.println(this.clientMain.getHostName());
         this.setStage(stage);
         this.initialScenarioGUI.nickname(this.stage);
@@ -94,10 +95,6 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public GenericClassGUI getGenericClassGUI() {
         return this.genericClassGUI;
-    }
-
-    public InitialScenarioGUI getInitialScenarioGUI() {
-        return this.initialScenarioGUI;
     }
 
     public AsyncScenarioGUI getAsyncScenarioGUI() {
@@ -122,6 +119,10 @@ public class HandlerGUI extends Application implements RenderingView {
     public void setReceiver(ObjectInputStream receiver) { this.receiver = receiver; }
 
     public ObjectInputStream getReceiver() { return this.receiver; }
+
+    public void setSender(ObjectOutputStream sender) { this.sender = sender; }
+
+    public ObjectOutputStream getSender() { return this.sender; }
 
     @Override
     public String getNickName() {
@@ -318,5 +319,56 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public void notYourTurn() {
         this.correctAction=0;
+    }
+
+    public void connectionSocket() {
+        try {
+            Socket socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+            this.receiver = new ObjectInputStream(socket.getInputStream());
+            this.sender = new ObjectOutputStream(socket.getOutputStream());
+            //Check passing this
+            this.msg = new SendingMessages(this.clientMain, this, this.sender);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendNickname() {
+        try {
+            this.msg.sendNickname();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateMarket() {
+        try {
+            UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) this.receiver.readObject();
+            this.clientMain.setMarket(updateClientMarketMessage.getMarket());
+            genericClassGUI.LoadWTFOnTimer("updateGrid", stage);
+        } catch (Exception e) {
+            this.error(e);
+        }
+    }
+
+    public void updateGridDevCard() {
+        try {
+            UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();
+            this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
+            genericClassGUI.LoadWTFOnTimer("startingMessage", stage);
+        } catch (Exception e) {
+            this.error(e);
+        }
+    }
+
+    public void startingMessage() {
+        try {
+            ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
+            this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
+            this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
+            this.genericClassGUI.LoadWTFOnTimer("matchHasStarted", this.stage);
+        } catch (Exception e) {
+            this.error(e);
+        }
     }
 }

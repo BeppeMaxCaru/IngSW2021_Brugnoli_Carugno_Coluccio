@@ -21,6 +21,7 @@ public class AsyncScenarioGUI {
     }
 
     public void matchHasStarted(Stage stage) {
+        System.out.println("Ciao");
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.clientMain.getPlayerNumber(), stage);
 
         if(this.clientMain.getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
@@ -52,7 +53,7 @@ public class AsyncScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -64,74 +65,57 @@ public class AsyncScenarioGUI {
             stage.setScene(scene);
             stage.show();
 
-            arrayButtons[0].setOnAction(e -> {
-                resStart.add("COINS");
-            });
+            String str;
+            for(int j = 0; j < 4; j++) {
+                int finalI = i;
 
-            arrayButtons[1].setOnAction(e -> {
-                resStart.add("SERVANT");
-            });
+                if(j == 0) str = "COINS";
+                else if(j == 1) str = "SERVANT";
+                else if(j == 2) str = "SCHIELD";
+                else str = "STONE";
+                String finalStr = str;
 
-            arrayButtons[2].setOnAction(e -> {
-                resStart.add("SCHIELD");
-            });
-
-            arrayButtons[3].setOnAction(e -> {
-                resStart.add("STONE");
-            });
-
-            if(i - 1 == 0) this.handlerGUI.getMsg().sendStartingRes(resStart);
+                arrayButtons[j].setOnAction(e -> {
+                    resStart.add(finalStr);
+                    if (finalI - 1 == 0) {
+                        this.handlerGUI.getMsg().sendStartingRes(resStart);
+                        discardStartingLeaders(stage, 1);
+                    }
+                });
+            }
         }
-
-        this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
-    public void discardStartingLeaders(Stage stage) {
-        for(int j = 0; j < 2; j++) {
-            Group root = new Group();
-            //Creating buttons
-            Button[] arrayButtons = new Button[4];
-
-            int x = 0;
-            int index = 0;
-            for (LeaderCard startingLeader : this.clientMain.getLeaderCards()) {
-                //Creating a graphic (image)
-                Image img = new Image(startingLeader.getImage());
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index]);
-                x += 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
-            }
-
-            //Setting the stage
-            Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Discard initial leader cards");
-            stage.setScene(scene);
-            stage.show();
-
-            arrayButtons[0].setOnAction(e -> {
-                this.handlerGUI.getMsg().sendDiscardedLeader(0);
-                arrayButtons[0].setVisible(false);
-            });
-
-            arrayButtons[1].setOnAction(e -> {
-                this.handlerGUI.getMsg().sendDiscardedLeader(1);
-                arrayButtons[1].setVisible(false);
-            });
-
-            arrayButtons[2].setOnAction(e -> {
-                this.handlerGUI.getMsg().sendDiscardedLeader(2);
-                arrayButtons[2].setVisible(false);
-            });
-
-            arrayButtons[3].setOnAction(e -> {
-                this.handlerGUI.getMsg().sendDiscardedLeader(3);
-                arrayButtons[3].setVisible(false);
-            });
+    public void discardStartingLeaders(Stage stage, int check) {
+        Group root = new Group();
+        //Creating buttons
+        Button[] arrayButtons = new Button[4];
+        int x = 0;
+        int index = 0;
+        for (LeaderCard startingLeader : this.clientMain.getLeaderCards()) {
+            //Creating a graphic (image)
+            Image img = new Image(startingLeader.getImage());
+            arrayButtons[index] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 450, 150);
+            x += 200;
+            root.getChildren().add(arrayButtons[index]);
+            index++;
         }
 
-        //while(this.handlerGUI.getCorrectAction() != 1) ;
-        this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
+        //Setting the stage
+        Scene scene = new Scene(root, 800, 500);
+        stage.setTitle("Discard initial leader cards");
+        stage.setScene(scene);
+        stage.show();
+
+        for(int i = 0; i < 4; i++) {
+            int finalI = i;
+            arrayButtons[i].setOnAction(e -> {
+                this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
+                if(check == 2) this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                // gestire problema prima carta deve non essere stampata
+                else discardStartingLeaders( stage, 2);
+            });
+        }
     }
 }
