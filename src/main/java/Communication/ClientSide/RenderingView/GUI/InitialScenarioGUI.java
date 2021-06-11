@@ -101,6 +101,6 @@ public class InitialScenarioGUI {
     public void welcome(Stage stage) {
         handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.clientMain.getNickname() +
                 "!\nWelcome to Master of Renaissance online!", stage);
-        handlerGUI.getGenericClassGUI().LoadWTFOnTimer("updateMarket", stage);
+        this.handlerGUI.updateMarket();
     }
 }

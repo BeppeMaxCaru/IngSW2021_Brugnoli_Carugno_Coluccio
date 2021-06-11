@@ -33,6 +33,6 @@ public class WhiteMarble extends Marble implements Serializable {
 
     @Override
     public String getColour(){
-        return " WHITE  ";
+        return " WHITE ";
     }
 }

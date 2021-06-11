@@ -63,6 +63,6 @@ public class GreyMarble extends Marble implements Serializable {
 
     @Override
     public String getColour(){
-        return " GREY   ";
+        return " GREY ";
     }
 }

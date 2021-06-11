@@ -26,6 +26,6 @@ public class RedMarble extends Marble implements Serializable {
 
     @Override
     public String getColour(){
-        return " RED    ";
+        return " RED ";
     }
 }

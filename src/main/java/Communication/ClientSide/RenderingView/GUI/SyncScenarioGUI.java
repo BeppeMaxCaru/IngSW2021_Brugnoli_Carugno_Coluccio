@@ -21,7 +21,6 @@ public class SyncScenarioGUI {
     }
 
     public void matchHasStarted(Stage stage) {
-        System.out.println("Ciao");
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.clientMain.getPlayerNumber(), stage);
 
         if(this.clientMain.getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);

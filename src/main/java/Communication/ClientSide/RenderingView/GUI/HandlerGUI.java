@@ -65,7 +65,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
     private GenericClassGUI genericClassGUI;
     private InitialScenarioGUI initialScenarioGUI;
-    private SyncScenarioGUI asyncScenarioGUI;
+    private SyncScenarioGUI syncScenarioGUI;
     private PlotScenarioGUI plotScenarioGUI;
 
     private ClientMain clientMain;
@@ -82,7 +82,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
         this.genericClassGUI = new GenericClassGUI(this, this.clientMain);
         this.initialScenarioGUI = new InitialScenarioGUI(this, this.clientMain);
-        this.asyncScenarioGUI = new SyncScenarioGUI(this, this.clientMain);
+        this.syncScenarioGUI = new SyncScenarioGUI(this, this.clientMain);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.clientMain);
 
 
@@ -96,8 +96,8 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.genericClassGUI;
     }
 
-    public SyncScenarioGUI getAsyncScenarioGUI() {
-        return this.asyncScenarioGUI;
+    public SyncScenarioGUI getSyncScenarioGUI() {
+        return this.syncScenarioGUI;
     }
 
     public PlotScenarioGUI getPlotScenarioGUI() { return this.plotScenarioGUI; }
@@ -344,7 +344,7 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) this.receiver.readObject();
             this.clientMain.setMarket(updateClientMarketMessage.getMarket());
-            genericClassGUI.LoadWTFOnTimer("updateGrid", stage);
+            updateGridDevCard();
         } catch (Exception e) {
             this.error(e);
         }
@@ -354,7 +354,7 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();
             this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
-            genericClassGUI.LoadWTFOnTimer("startingMessage", stage);
+            startingMessage();
         } catch (Exception e) {
             this.error(e);
         }
@@ -365,7 +365,7 @@ public class HandlerGUI extends Application implements RenderingView {
             ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
             this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
-            this.genericClassGUI.LoadWTFOnTimer("matchHasStarted", this.stage);
+            this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);
         } catch (Exception e) {
             this.error(e);
         }
@@ -390,7 +390,6 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     public void syncReceiver() {
-        new ServerSender(this.clientMain, gameMode, this.msg).start();
         new ServerReceiver(this.clientMain, this, this.receiver).start();
     }
 }

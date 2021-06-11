@@ -37,12 +37,14 @@ public class PlotScenarioGUI {
         Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
         Button buyDevelopmentCardButton = new Button("Buy Development Card");
         Button activateProdButton = new Button("Activate Production Power");
+        Button exitButton = new Button("Submit");
 
         root.add(playLeaderCardButton, 1, 0);
         root.add(discardLeaderCardButton, 3, 0);
         root.add(pickResourceFromMarketButton, 0, 3);
         root.add(buyDevelopmentCardButton, 2, 3);
         root.add(activateProdButton, 4, 3);
+        root.add(exitButton, 4, 5);
 
         Scene scene = new Scene(root, 750, 90);
 
@@ -74,6 +76,13 @@ public class PlotScenarioGUI {
             activateProdButton.setOnAction(e -> {
                 activateProductionDevCards(stage);
                 this.checkNormalAction = true;
+            });
+        }
+        else {
+            exitButton.setOnAction(e -> {
+                waitForYouturn(stage);
+                this.checkLeaderAction = false;
+                this.checkNormalAction = false;
             });
         }
 
@@ -247,7 +256,7 @@ public class PlotScenarioGUI {
                 gc.setFill(Color.FIREBRICK);
                 break;
             case " WHITE ":
-                gc.setFill(Color.WHITE);
+                gc.setFill(Color.FLORALWHITE);
                 break;
         }
         gc.fillOval(x, y, 40, 40);
@@ -263,9 +272,9 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 4; j++) {
                 //Creating a graphic (image)
-                Image img = new Image(handlerGUI.getDevCardsGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
+                Image img = new Image(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;

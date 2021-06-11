@@ -41,23 +41,14 @@ public class GenericClassGUI {
                     try {
                         System.out.println("loading..");
                         switch(method) {
-                            case "updateMarket":
-                                handlerGUI.updateMarket();
-                                break;
-                            case "updateGrid":
-                                handlerGUI.updateGridDevCard();
-                                break;
-                            case "startingMessage":
-                                handlerGUI.startingMessage();
-                                break;
                             case "startingResources":
-                                handlerGUI.getAsyncScenarioGUI().startingResource(stage);
+                                handlerGUI.getSyncScenarioGUI().startingResource(stage);
                                 break;
                             case "discardStartingLeaders":
-                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
+                                handlerGUI.getSyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
                                 break;
                             case "matchHasStarted":
-                                handlerGUI.getAsyncScenarioGUI().matchHasStarted(stage);
+                                handlerGUI.getSyncScenarioGUI().matchHasStarted(stage);
                                 break;
                             case "choiceAction":
                                 handlerGUI.getPlotScenarioGUI().choiceAction(stage);
@@ -72,7 +63,7 @@ public class GenericClassGUI {
         };
 
         Timer timer = new Timer("Timer");
-        long delay = 1000L;
+        long delay = 3000L;
         timer.schedule(task, delay);
     }
 
