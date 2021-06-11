@@ -54,7 +54,7 @@ public class GenericClassGUI {
                                 handlerGUI.getAsyncScenarioGUI().startingResource(stage);
                                 break;
                             case "discardStartingLeaders":
-                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage, 1);
+                                handlerGUI.getAsyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
                                 break;
                             case "matchHasStarted":
                                 handlerGUI.getAsyncScenarioGUI().matchHasStarted(stage);

@@ -1,6 +1,7 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Communication.ClientSide.ServerReceiver;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
@@ -8,9 +9,7 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
-import Message.MessageReceived.GameOverMessage;
-import Message.MessageReceived.UpdateClientDevCardGridMessage;
-import Message.MessageReceived.UpdateClientMarketMessage;
+import Message.MessageReceived.*;
 import Message.SendingMessages;
 import Message.ServerStartingMessage;
 import javafx.application.Application;
@@ -66,7 +65,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
     private GenericClassGUI genericClassGUI;
     private InitialScenarioGUI initialScenarioGUI;
-    private AsyncScenarioGUI asyncScenarioGUI;
+    private SyncScenarioGUI asyncScenarioGUI;
     private PlotScenarioGUI plotScenarioGUI;
 
     private ClientMain clientMain;
@@ -83,7 +82,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
         this.genericClassGUI = new GenericClassGUI(this, this.clientMain);
         this.initialScenarioGUI = new InitialScenarioGUI(this, this.clientMain);
-        this.asyncScenarioGUI = new AsyncScenarioGUI(this, this.clientMain);
+        this.asyncScenarioGUI = new SyncScenarioGUI(this, this.clientMain);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.clientMain);
 
 
@@ -97,7 +96,7 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.genericClassGUI;
     }
 
-    public AsyncScenarioGUI getAsyncScenarioGUI() {
+    public SyncScenarioGUI getAsyncScenarioGUI() {
         return this.asyncScenarioGUI;
     }
 
@@ -370,5 +369,28 @@ public class HandlerGUI extends Application implements RenderingView {
         } catch (Exception e) {
             this.error(e);
         }
+    }
+
+    public void updatePlayerBoard() {
+        try {
+            UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
+            this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
+        } catch (Exception e) {
+            this.error(e);
+        }
+    }
+
+    public void updateLeaderCard() {
+        try {
+            UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
+            this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
+        } catch (Exception e) {
+            this.error(e);
+        }
+    }
+
+    public void syncReceiver() {
+        new ServerSender(this.clientMain, gameMode, this.msg).start();
+        new ServerReceiver(this.clientMain, this, this.receiver).start();
     }
 }

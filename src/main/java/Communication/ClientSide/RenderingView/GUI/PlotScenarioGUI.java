@@ -2,6 +2,7 @@ package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -20,6 +21,7 @@ public class PlotScenarioGUI {
     private boolean checkLeaderAction;
     private boolean checkNormalAction;
     private final ClientMain clientMain;
+    private String action;
 
     public PlotScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
@@ -46,13 +48,13 @@ public class PlotScenarioGUI {
 
         if(!this.checkLeaderAction) {
             playLeaderCardButton.setOnAction(e -> {
-                handlerGUI.setActionChoice("PLAY LEADER CARD");
+                action = "PLAY LEADER CARD";
                 playDiscardLeaderCard(stage);
                 this.checkLeaderAction = true;
             });
 
             discardLeaderCardButton.setOnAction(e -> {
-                handlerGUI.setActionChoice("DISCARD LEADER CARD");
+                action = "DISCARD LEADER CARD";
                 playDiscardLeaderCard(stage);
                 this.checkLeaderAction = true;
             });
@@ -60,19 +62,16 @@ public class PlotScenarioGUI {
 
         if(!checkNormalAction) {
             pickResourceFromMarketButton.setOnAction(e -> {
-                handlerGUI.setActionChoice("PICK RESOURCES FROM MARKET");
                 market(stage);
                 this.checkNormalAction = true;
             });
 
             buyDevelopmentCardButton.setOnAction(e -> {
-                handlerGUI.setActionChoice("BUY DEVELOPMENT CARD");
                 buyDevelopmentCard(stage);
                 this.checkNormalAction = true;
             });
 
             activateProdButton.setOnAction(e -> {
-                handlerGUI.setActionChoice("ACTIVATE PRODUCTION POWER");
                 activateProductionDevCards(stage);
                 this.checkNormalAction = true;
             });
@@ -89,14 +88,14 @@ public class PlotScenarioGUI {
         Button secondLeader = new Button();
 
         int x = 0;
-        for (int i = 0; i < handlerGUI.getPlayerLeaders().length; i++) {
+        for (int i = 0; i < this.clientMain.getLeaderCards().length; i++) {
             //Creating a graphic (image)
-            Image img = new Image(handlerGUI.getPlayerLeaders()[i].getImage());
+            Image img = new Image(this.clientMain.getLeaderCards()[i].getImage());
             ImageView view = new ImageView(img);
             view.setFitHeight(80);
             view.setPreserveRatio(true);
             //Setting the location of the button
-            if (i == 0 && !this.handlerGUI.getPlayerLeaders()[0].isPlayed()) {
+            if (i == 0 && !this.clientMain.getLeaderCards()[0].isPlayed()) {
                 firstLeader.setTranslateX(x);
                 firstLeader.setTranslateY(20);
                 //Setting the size of the button
@@ -105,7 +104,7 @@ public class PlotScenarioGUI {
                 firstLeader.setGraphic(view);
                 x = x + 200;
                 root.getChildren().add(firstLeader);
-            } else if (i == 1 && !this.handlerGUI.getPlayerLeaders()[1].isPlayed()) {
+            } else if (i == 1 && !this.clientMain.getLeaderCards()[1].isPlayed()) {
                 secondLeader.setTranslateX(x);
                 secondLeader.setTranslateY(20);
                 //Setting the size of the button
@@ -124,26 +123,18 @@ public class PlotScenarioGUI {
         stage.show();
 
         firstLeader.setOnAction(e -> {
-            if(handlerGUI.getActionChoice().equals("PLAY LEADER CARD")) {
-                handlerGUI.setPlayedLeader(0);
-            }
-            else {
-                handlerGUI.setDiscardedLeader(0);
-            }
+            if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
+            else this.handlerGUI.getMsg().sendDiscardedLeader(0);
             choiceAction(stage);
         });
 
         secondLeader.setOnAction(e -> {
-            if(handlerGUI.getActionChoice().equals("DISCARD LEADER CARD")) {
-                handlerGUI.setPlayedLeader(1);
-            }
-            else {
-                handlerGUI.setDiscardedLeader(1);
-            }
+            if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
+            else this.handlerGUI.getMsg().sendDiscardedLeader(1);
             choiceAction(stage);
         });
 
-        if(!checkNormalAction) handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
+        if(!checkNormalAction) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
         else waitForYouturn(stage);
     }
 
@@ -166,42 +157,31 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 3; i++) {
             x = 190;
             for(int j = 0; j < 4; j++) {
-                drawnMarbles(x, y, gc, handlerGUI.getMarket().getMarketArrangement()[i][j].getColour());
+                drawnMarbles(x, y, gc, this.clientMain.getMarket().getMarketArrangement()[i][j].getColour());
                 x+=60;
             }
             y+=60;
         }
-        drawnMarbles(x, y, gc, handlerGUI.getMarket().getExcessMarble().getColour());
+        drawnMarbles(x, y, gc, this.clientMain.getMarket().getExcessMarble().getColour());
 
         Pane rootButton = new Pane();
-        Button c1 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c1);
-        c1.setLayoutX(185);
-        c1.setLayoutY(500);
-        Button c2 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c2);
-        c2.setLayoutX(253);
-        c2.setLayoutY(500);
-        Button c3 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c3);
-        c3.setLayoutX(318);
-        c3.setLayoutY(500);
-        Button c4 = new Button("Click\nHere!");
-        rootButton.getChildren().add(c4);
-        c4.setLayoutX(383);
-        c4.setLayoutY(500);
-        Button r1 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r1);
-        r1.setLayoutX(580);
-        r1.setLayoutY(190);
-        Button r2 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r2);
-        r2.setLayoutX(580);
-        r2.setLayoutY(255);
-        Button r3 = new Button("Click\nHere!");
-        rootButton.getChildren().add(r3);
-        r3.setLayoutX(580);
-        r3.setLayoutY(320);
+        Button[] buttonClick = new Button[7];
+        x = 185;
+        y = 190;
+        for(int j = 0; j < 7; j++) {
+            buttonClick[j] = new Button("Click\nHere!");
+            rootButton.getChildren().add(buttonClick[j]);
+            if(j < 4) {
+                buttonClick[j].setLayoutX(x);
+                buttonClick[j].setLayoutY(500);
+                x+= 65;
+            }
+            else {
+                buttonClick[j].setLayoutX(580);
+                buttonClick[j].setLayoutY(y);
+                y+= 65;
+            }
+        }
         root.getChildren().addAll(canvas, rootButton);
 
         Scene scene = new Scene(root, 650, 770);
@@ -209,53 +189,45 @@ public class PlotScenarioGUI {
         stage.setScene(scene);
         stage.show();
 
+        x = 1;
+        y = 0;
         int[] coordinates = new int[2];
-        c1.setOnAction(e -> {
-            coordinates[0] = 1;
-            coordinates[1] = 0;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        c2.setOnAction(e -> {
-            coordinates[0] = 1;
-            coordinates[1] = 1;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        c3.setOnAction(e -> {
-            coordinates[0] = 1;
-            coordinates[1] = 2;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        c4.setOnAction(e -> {
-            coordinates[0] = 1;
-            coordinates[1] = 3;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        r1.setOnAction(e -> {
-            coordinates[0] = 0;
-            coordinates[1] = 0;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        r2.setOnAction(e -> {
-            coordinates[0] = 0;
-            coordinates[1] = 1;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        r3.setOnAction(e -> {
-            coordinates[0] = 0;
-            coordinates[1] = 2;
-            handlerGUI.setMarketCoordinates(coordinates);
-        });
-
-        if(!this.checkLeaderAction) handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
-        else waitForYouturn(stage);
+        for(int k = 0; k < 7; k++) {
+            int finalY = y;
+            int finalX = x;
+            int finalK = k;
+            buttonClick[k].setOnAction(e -> {
+                coordinates[0] = finalX;
+                coordinates[1] = finalY;
+                if(finalK < 4) { String[] resource = new String[3]; }
+                else { String[] resource = new String[4]; }
+                //putResources(stage, );
+                if (!this.checkLeaderAction) choiceAction(stage);
+                else waitForYouturn(stage);
+            });
+            if(k == 4) {
+                x = 0;
+                y = 0;
+            }
+            y++;
+        }
     }
 
+    public void putResources(Stage stage, String[] resource) {
+        boolean checkExtraSpace = false;
+        for(int i = 0; i < 2; i++) {
+            if (this.clientMain.getLeaderCards()[i].isPlayed() && this.clientMain.getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
+                checkExtraSpace = true;
+            }
+        }
+
+        if(checkExtraSpace) {
+            for(String s: resource) {
+
+            }
+        }
+        //else this.handlerGUI.getMsg().sendMarketAction(, , , );
+    }
 
     public void drawnMarbles(int x, int y, GraphicsContext gc, String colour) {
         switch (colour) {
