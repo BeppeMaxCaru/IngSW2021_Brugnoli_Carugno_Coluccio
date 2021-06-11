@@ -88,8 +88,8 @@ public class Testing extends Application implements RenderingView {
                 //this.view.setGameStarted();
 
                 //Send player number and starting resources
-                ArrayList<String> startingRes = this.getStartingResource();
-                this.msg.sendStartingRes(startingRes);
+                //ArrayList<String> startingRes = this.getStartingResource();
+                //this.msg.sendStartingRes(startingRes);
 
                 try {
                     UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
@@ -100,11 +100,11 @@ public class Testing extends Application implements RenderingView {
                 }
 
                 //Receive from input 2 leader cards to be discarded
-                int[] cards = this.getDiscardedStartingLeaders();
+                //int[] cards = this.getDiscardedStartingLeaders();
 
                 //Sends starting excess leader card to discard
-                this.msg.sendDiscardedLeader(cards[0]);
-                this.msg.sendDiscardedLeader(cards[1]);
+                //this.msg.sendDiscardedLeader(cards[0]);
+                //this.msg.sendDiscardedLeader(cards[1]);
 
             } catch (Exception e) {
                 this.error(e);

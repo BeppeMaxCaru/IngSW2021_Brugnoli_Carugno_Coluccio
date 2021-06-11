@@ -23,19 +23,16 @@ public class CLI implements RenderingView {
         this.input = new Scanner(System.in);
     }
 
-    @Override
     public String getNickName(){
         System.out.println("Insert your nickname");
         return this.input.nextLine();
     }
 
-    @Override
     public void setClientStarted(){
         System.out.println("Hi " + this.main.getNickname() + "!");
         System.out.println("Welcome to Master of Renaissance!");
     }
 
-    @Override
     public int getGameMode() {
         String gameMode;
 
@@ -49,12 +46,10 @@ public class CLI implements RenderingView {
         return Integer.parseInt(gameMode);
     }
 
-    @Override
     public void setGameStarted() {
         System.out.println("\nMatch has started, your player number is " + this.main.getPlayerNumber());
     }
 
-    @Override
     public ArrayList<String> getStartingResource(){
 
         ArrayList<String> playerStartingResources = new ArrayList<>();
@@ -83,7 +78,6 @@ public class CLI implements RenderingView {
         return playerStartingResources;
     }
 
-    @Override
     public int[] getDiscardedStartingLeaders(){
         int[] discarded = new int[2];
 
@@ -146,7 +140,6 @@ public class CLI implements RenderingView {
         System.err.println("Not valid parameter");
     }
 
-    @Override
     public String getActionChoice() {
         this.printActions();
         String action = this.input.nextLine().toUpperCase();
@@ -173,7 +166,6 @@ public class CLI implements RenderingView {
         System.out.println("Write 'END TURN' at the end of your turn");
     }
 
-    @Override
     public int getPlayedLeader() {
 
         this.printLeaderRequest("play");
@@ -188,7 +180,6 @@ public class CLI implements RenderingView {
         return Integer.parseInt(parameter);
     }
 
-    @Override
     public int getDiscardedLeader() {
 
         this.printLeaderRequest("discard");
@@ -215,7 +206,6 @@ public class CLI implements RenderingView {
         }
     }
 
-    @Override
     public int[] getMarketCoordinates() {
         int[] coordinates = new int[2];
 
@@ -268,7 +258,6 @@ public class CLI implements RenderingView {
         return coordinates;
     }
 
-    @Override
     public String getResourcesDestination(String parameter) {
 
         String wlChoice;
@@ -306,7 +295,6 @@ public class CLI implements RenderingView {
         return wlChoice;
     }
 
-    @Override
     public String getWhiteMarbleChoice() {
         String chosenMarble;
 
@@ -331,7 +319,6 @@ public class CLI implements RenderingView {
         return chosenMarble;
     }
 
-    @Override
     public int[] getDevelopmentCardsGridCoordinates() {
         int[] coordinates = new int[2];
 
@@ -369,7 +356,6 @@ public class CLI implements RenderingView {
         return coordinates;
     }
 
-    @Override
     public String[][] getPayedResources() {
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
@@ -440,7 +426,6 @@ public class CLI implements RenderingView {
         return pickedResources;
     }
 
-    @Override
     public int getChosenPosition() {
         String parameter;
         int position = 0;
@@ -589,7 +574,6 @@ public class CLI implements RenderingView {
         }
     }
 
-    @Override
     public String getInputResourceProd() {
         StringBuilder whichInput = new StringBuilder();
         String res;
@@ -662,7 +646,6 @@ public class CLI implements RenderingView {
         return whichInput.toString();
     }
 
-    @Override
     public String getOutputResourceProd() {
 
         String res;
@@ -711,7 +694,6 @@ public class CLI implements RenderingView {
         System.err.println("Not valid action");
     }
 
-    @Override
     public void lorenzoFaithPoints() {
         System.out.println("LORENZO FAITH POINTS: " + this.main.getLocalPlayers()[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
@@ -722,11 +704,6 @@ public class CLI implements RenderingView {
         if(localWinner==0)
             System.out.println("You win the Game, with "+this.main.getLocalPlayers()[0].getPlayerBoard().getVictoryPoints()+" Victory points.");
         else System.out.println("Lorenzo the Magnificent wins the Game.");
-    }
-
-    @Override
-    public void drawActionCounter() {
-        this.main.getActionCountersDeck().drawCounter().activate(this.main.getActionCountersDeck(), this.main.getLocalPlayers()[1].getPlayerBoard(), this.main.getDevelopmentCardsDecksGrid());
     }
 
     @Override
