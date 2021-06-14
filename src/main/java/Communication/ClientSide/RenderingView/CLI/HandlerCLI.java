@@ -25,19 +25,19 @@ public class HandlerCLI {
     private final ClientMain clientMain;
     private ObjectInputStream receiver;
     private ObjectOutputStream sender;
-    private final CLI view;
+    private final CLI cli;
     private SendingMessages msg;
 
     public HandlerCLI(ClientMain main){
         this.clientMain = main;
-        this.view = new CLI(this.clientMain);
+        this.cli = new CLI(this.clientMain);
     }
 
     public void execute(){
 
-        this.clientMain.setNickname(this.view.getNickName());
+        this.clientMain.setNickname(this.cli.getNickName());
 
-        int gameMode = this.view.getGameMode();
+        int gameMode = this.cli.getGameMode();
         //Single player
         if(gameMode==0){
 
@@ -56,7 +56,7 @@ public class HandlerCLI {
                 this.clientMain.getLocalPlayers()[0].setPlayerLeaderCard(index, this.clientMain.getLeaderCardDeck().drawOneLeaderCard());
             this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
 
-            int[] discard = this.view.getDiscardedStartingLeaders();
+            int[] discard = this.cli.getDiscardedStartingLeaders();
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[1]);
 
@@ -68,26 +68,26 @@ public class HandlerCLI {
                 Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
                 this.receiver = new ObjectInputStream(clientSocket.getInputStream());
                 this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
-                this.msg = new SendingMessages(this.clientMain, this.view, this.sender);
+                this.msg = new SendingMessages(this.clientMain, this.cli, this.sender);
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
             }
 
             //Send nickname message to server
             try {
                 this.msg.sendNickname();
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
                 return;
             }
 
-            this.view.setClientStarted();
+            this.cli.setClientStarted();
 
             try {
                 UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) this.receiver.readObject();
                 this.clientMain.setMarket(updateClientMarketMessage.getMarket());
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
                 return;
             }
 
@@ -95,7 +95,7 @@ public class HandlerCLI {
                 UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();
                 this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
                 return;
             }
 
@@ -105,42 +105,42 @@ public class HandlerCLI {
                 ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
                 this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
                 this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
-                this.view.setGameStarted();
+                this.cli.setGameStarted();
 
                 //Send player number and starting resources
-                ArrayList<String> startingRes = this.view.getStartingResource();
+                ArrayList<String> startingRes = this.cli.getStartingResource();
                 this.msg.sendStartingRes(startingRes);
 
                 try {
                     UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
                     this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
                 } catch (Exception e) {
-                    this.view.error(e);
+                    this.cli.error(e);
                     return;
                 }
 
                 //Receive from input 2 leader cards to be discarded
-                int[] cards = this.view.getDiscardedStartingLeaders();
+                int[] cards = this.cli.getDiscardedStartingLeaders();
 
                 //Sends starting excess leader card to discard
                 this.msg.sendDiscardedLeader(cards[0]);
                 this.msg.sendDiscardedLeader(cards[1]);
 
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
             }
 
             try {
                 UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                 this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
             } catch (Exception e) {
-                this.view.error(e);
+                this.cli.error(e);
                 return;
             }
 
             //Starts async phase
             new ServerSender(this.clientMain, gameMode, this.msg).start();
-            new ServerReceiver(this.clientMain, this.view, this.receiver).start();
+            new ServerReceiver(this.clientMain, this.cli, this.receiver).start();
 
         }
     }

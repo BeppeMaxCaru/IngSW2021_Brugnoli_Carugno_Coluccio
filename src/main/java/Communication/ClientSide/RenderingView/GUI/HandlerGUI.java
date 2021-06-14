@@ -38,6 +38,7 @@ public class HandlerGUI extends Application implements RenderingView {
     String[][] payResources;
     int choosePosition;
     int activationProd;
+    int[] activate;
     String inputResourceProd;
     String outputResourceProd;
     int gameMode;
@@ -123,45 +124,36 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public ObjectOutputStream getSender() { return this.sender; }
 
-    @Override
     public String getNickName() {
         return this.nickname;
     }
 
     public void setActionChoice(String action) { this.actionChoice = action; }
 
-    @Override
     public int getCorrectAction() { return this.correctAction; }
 
-    @Override
     public void setNickName(String nickname) { this.nickname = nickname; }
 
-    @Override
     public void setGameMode(int gameMode) { this.gameMode = gameMode; }
 
-    @Override
     public void setMarket(Market market) { this.market = market; }
 
     public Market getMarket() { return this.market; }
 
-    @Override
     public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
         this.grid = grid;
     }
 
     public DevelopmentCardsDecksGrid getDevCardsGrid( ) { return this.grid; }
 
-    @Override
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
 
-    @Override
     public int getPlayerNumber() {
         return this.playerNumber;
     }
 
-    @Override
     public ArrayList<String> getStartingResource() {
         return startingRes;
     }
@@ -170,12 +162,10 @@ public class HandlerGUI extends Application implements RenderingView {
         this.startingRes.add(string);
     }
 
-    @Override
     public void setStartingLeaders(LeaderCard[] leaders) {
         this.startingLeaders = leaders;
     }
 
-    @Override
     public void setBoard(Playerboard board) {
         this.playerBoard=board;
     }
@@ -184,7 +174,6 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.playerBoard;
     }
 
-    @Override
     public int[] getDiscardedStartingLeaders(){
         return startingDiscardedLeaders;
     }
@@ -194,50 +183,42 @@ public class HandlerGUI extends Application implements RenderingView {
         this.startingDiscardedLeaders[index] = leadersDiscarded;
     }
 
-    @Override
     public void setPlayerLeaders(LeaderCard[] playerLeaders) {
         this.playerLeaders = playerLeaders;
     }
 
     public LeaderCard[] getPlayerLeaders() {return this.playerLeaders; }
 
-    @Override
     public String getActionChoice() {
         return actionChoice;
     }
 
-    @Override
     public int getPlayedLeader() {
         return playLeader;
     }
 
     public void setPlayedLeader(int playLeader) { this.playLeader = playLeader; }
 
-    @Override
     public int getDiscardedLeader() {
         return discardLeader;
     }
 
     public void setDiscardedLeader(int discardLeader) { this.discardLeader = discardLeader; }
 
-    @Override
     public int[] getMarketCoordinates() {
         return marketCoordinates;
     }
 
     public void setMarketCoordinates(int[] marketCoordinates) { this.marketCoordinates = marketCoordinates; }
 
-    @Override
     public String getResourcesDestination(String parameter) {
         return resourcesDestination;
     }
 
-    @Override
     public String getWhiteMarbleChoice() {
         return whiteMarbleChoice;
     }
 
-    @Override
     public int[] getDevelopmentCardsGridCoordinates() {
         return developmentCardsGridCoordinates;
     }
@@ -246,22 +227,18 @@ public class HandlerGUI extends Application implements RenderingView {
         this.developmentCardsGridCoordinates = coordinates;
     }
 
-    @Override
     public String[][] getPayedResources() {
         return payResources;
     }
 
-    @Override
     public int getChosenPosition() {
         return choosePosition;
     }
 
-    @Override
     public int getActivationProd(int[] activation) {
         return activationProd;
     }
 
-    @Override
     public String getInputResourceProd() {
         return inputResourceProd;
     }
@@ -270,42 +247,34 @@ public class HandlerGUI extends Application implements RenderingView {
         this.inputResourceProd = inputResourceProd;
     }
 
-    @Override
     public String getOutputResourceProd() {
         return outputResourceProd;
     }
 
-    @Override
     public void setLocalWinner(int localWinner) {
         this.localWinner = localWinner;
     }
 
-    @Override
     public void setCountersDeck(ActionCountersDeck deck) {
         this.counters = deck;
     }
 
-    @Override
     public void setLorenzoPlayerBoard(Playerboard board) {
         this.lorenzoPlayerBoard = board;
     }
 
-    @Override
     public void setGameOverMsg(GameOverMessage msg) {
         this.gameOverMessage = msg;
     }
 
-    @Override
     public void setGameStarted() {
         this.gameStarted = 1;
     }
 
-    @Override
     public void setClientStarted() {
         this.clientStarted=1;
     }
 
-    @Override
     public int getGameMode() {
         return this.gameMode;
     }
@@ -391,5 +360,13 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void syncReceiver() {
         new ServerReceiver(this.clientMain, this, this.receiver).start();
+    }
+
+    public void setActivationProd(int activationProd) {
+        this.activationProd = activationProd;
+    }
+
+    public void setActivation(int[] activate) {
+        this.activate = activate;
     }
 }

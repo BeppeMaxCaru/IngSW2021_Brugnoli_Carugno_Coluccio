@@ -1,32 +1,26 @@
 package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
-import Communication.ClientSide.RenderingView.RenderingView;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Message.*;
 
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ServerSender extends Thread {
 
-    private Socket socket;
     private final ClientMain clientMain;
-    private final RenderingView view;
+    private final CLI cli;
     private final int gameMode;
     private SendingMessages msg;
 
     public ServerSender (ClientMain clientMain, int gameMode, SendingMessages msg) {
         this.clientMain = clientMain;
-        this.view = new CLI(this.clientMain);
+        this.cli = new CLI(this.clientMain);
         this.gameMode = gameMode;
         if(this.gameMode==1)
-        {
             this.msg = msg;
-        }
-
     }
 
     @Override
@@ -41,28 +35,28 @@ public class ServerSender extends Thread {
 
                     while (!action.equals("END TURN") && !action.equals("QUIT")) {
 
-                        action = this.view.getActionChoice();
+                        action = this.cli.getActionChoice();
 
                         switch (action) {
                             case "P":
                             case "PLAY LEADER CARD": {
-                                int leader = this.view.getPlayedLeader();
+                                int leader = this.cli.getPlayedLeader();
                                 if(gameMode==0) {
                                     if(this.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
                                     {
                                         if(!this.clientMain.getLocalPlayers()[0].playLeaderCard(leader))
-                                            this.view.notValidAction();
+                                            this.cli.notValidAction();
                                     }
                                 } else this.msg.sendPlayedLeader(leader);
                                 break;
                             }
                             case "D":
                             case "DISCARD LEADER CARD": {
-                                int leader = this.view.getDiscardedLeader();
+                                int leader = this.cli.getDiscardedLeader();
                                 if(this.gameMode==0){
                                     if(this.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){
                                         if(!this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader))
-                                            this.view.notValidAction();
+                                            this.cli.notValidAction();
                                     }
                                 } else this.msg.sendDiscardedLeader(leader);
                                 break;
@@ -72,18 +66,18 @@ public class ServerSender extends Thread {
 
                                 if(this.gameMode==0 && mainAction==1)
                                 {
-                                    this.view.notValidAction();
+                                    this.cli.notValidAction();
                                     break;
                                 }
 
-                                int[] coordinates = this.view.getMarketCoordinates();
+                                int[] coordinates = this.cli.getMarketCoordinates();
                                 String parameter;
                                 int index;
                                 if(coordinates[0] == 0) parameter = "ROW";
                                 else parameter = "COLUMN";
                                 index = coordinates[1];
-                                String wlChoice = this.view.getResourcesDestination(parameter);
-                                String chosenMarble = this.view.getWhiteMarbleChoice();
+                                String wlChoice = this.cli.getResourcesDestination(parameter);
+                                String chosenMarble = this.cli.getWhiteMarbleChoice();
 
                                 if(this.gameMode==0){
                                     if(this.checkLocalMarketAction(this.clientMain.getLocalPlayers()[0].getPlayerBoard(), wlChoice, chosenMarble))
@@ -91,11 +85,11 @@ public class ServerSender extends Thread {
                                         {
                                             if(this.clientMain.getMarket().updateRow(index, this.clientMain.getLocalPlayers(), 0, wlChoice, chosenMarble))
                                                 mainAction++;
-                                            else this.view.notValidAction();
+                                            else this.cli.notValidAction();
                                         } else {
                                             if(this.clientMain.getMarket().updateColumn(index, this.clientMain.getLocalPlayers(), 0, wlChoice, chosenMarble))
                                                 mainAction++;
-                                            else this.view.notValidAction();
+                                            else this.cli.notValidAction();
                                         }
                                 } else {
                                     this.msg.sendMarketAction(parameter, index, wlChoice, chosenMarble);
@@ -107,29 +101,29 @@ public class ServerSender extends Thread {
 
                                 if(this.gameMode==0 && mainAction==1)
                                 {
-                                    this.view.notValidAction();
+                                    this.cli.notValidAction();
                                     break;
                                 }
 
-                                int[] coordinates = this.view.getDevelopmentCardsGridCoordinates();
+                                int[] coordinates = this.cli.getDevelopmentCardsGridCoordinates();
                                 int column = coordinates[0];
                                 int level = 3 - coordinates[1];
 
                                 //Check
                                 int[] quantity = new int[4];
                                 String[] shelf;
-                                String[][] pickedResources = this.view.getPayedResources();
+                                String[][] pickedResources = this.cli.getPayedResources();
                                 for(int k = 0; k < quantity.length; k++)
                                     quantity[k] = Integer.parseInt(pickedResources[0][k]);
                                 shelf = pickedResources[1];
-                                int pos = this.view.getChosenPosition();
+                                int pos = this.cli.getChosenPosition();
 
                                 if(this.gameMode==0){
                                     if(this.checkLocalBuyCard(this.clientMain.getLocalPlayers()[0], column, level, quantity, shelf))
                                     {
                                         if(this.clientMain.getLocalPlayers()[0].buyDevelopmentCard(this.clientMain.getDevelopmentCardsDecksGrid(), column, level, pos, shelf))
                                             mainAction++;
-                                        else this.view.notValidAction();
+                                        else this.cli.notValidAction();
                                     }
                                 } else this.msg.sendBuyCardAction(column, level, quantity, shelf, pos);
                                 break;
@@ -139,7 +133,7 @@ public class ServerSender extends Thread {
 
                                 if(this.gameMode==0 && mainAction==1)
                                 {
-                                    this.view.notValidAction();
+                                    this.cli.notValidAction();
                                     break;
                                 }
 
@@ -150,13 +144,12 @@ public class ServerSender extends Thread {
                                 int stop;
 
                                 do{
-                                    stop = this.view.getActivationProd(activation);
+                                    stop = this.cli.getActivationProd(activation);
                                     if(stop<6){
                                         activation[stop] = 1;
-                                        this.view.setActivation(activation);
-                                        whichInput[stop] = this.view.getInputResourceProd();
+                                        whichInput[stop] = this.cli.getInputResourceProd();
                                         if(stop>2){
-                                            whichOutput[stop-3] = this.view.getOutputResourceProd();
+                                            whichOutput[stop-3] = this.cli.getOutputResourceProd();
                                         }
                                     }
                                 } while (stop != 6);
@@ -170,7 +163,7 @@ public class ServerSender extends Thread {
                                     if(this.checkLocalActivateProd(this.clientMain.getLocalPlayers()[0], activation, whichInput, whichOutput))
                                         if(this.clientMain.getLocalPlayers()[0].activateProduction(activation, whichInput, outputs))
                                             mainAction++;
-                                        else this.view.notValidAction();
+                                        else this.cli.notValidAction();
                                 } else {
                                     for (int k = 0; k < 6; k++) {
                                         this.msg.sendActivationProdAction(k, activation, whichInput, whichOutput);
@@ -182,7 +175,7 @@ public class ServerSender extends Thread {
                             {
 
                                 if(this.gameMode==0 && mainAction==0)
-                                    this.view.notValidAction();
+                                    this.cli.notValidAction();
                                 else if (this.gameMode==0 && mainAction==1)
                                 {
                                     mainAction=0;
@@ -194,30 +187,24 @@ public class ServerSender extends Thread {
                                     action="";
                                     this.msg.sendEndTurn();
                                 }
-                                this.view.endTurn();
-                                if(this.gameMode==0) this.view.lorenzoFaithPoints();
+                                this.cli.endTurn();
+                                if(this.gameMode==0) this.cli.lorenzoFaithPoints();
                                 break;
                             }
                             case "QUIT":
                             {
-                                this.view.quit();
+                                this.cli.quit();
                                 break;
                             }
                         }
                         //Player writes quit
                     }
                 } catch (Exception e) {
-                    this.view.senderError(e);
+                    this.cli.senderError(e);
                     System.exit(1);
                 }
 
             } while (!action.equals("QUIT") || !this.endLocalGame(this.clientMain.getLocalPlayers()));
-
-            try {
-                this.socket.close();
-            } catch (Exception e) {
-                this.view.senderError(e);
-            }
     }
 
     public boolean endLocalGame(Player[] localPlayers){
