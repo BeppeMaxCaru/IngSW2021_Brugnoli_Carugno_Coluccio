@@ -80,10 +80,10 @@ public class HandlerGUI extends Application implements RenderingView {
         Parameters args = getParameters();
         this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
-        this.genericClassGUI = new GenericClassGUI(this, this.clientMain);
-        this.initialScenarioGUI = new InitialScenarioGUI(this, this.clientMain);
-        this.syncScenarioGUI = new SyncScenarioGUI(this, this.clientMain);
-        this.plotScenarioGUI = new PlotScenarioGUI(this, this.clientMain);
+        this.genericClassGUI = new GenericClassGUI(this);
+        this.initialScenarioGUI = new InitialScenarioGUI(this);
+        this.syncScenarioGUI = new SyncScenarioGUI(this);
+        this.plotScenarioGUI = new PlotScenarioGUI(this);
 
 
 
@@ -142,6 +142,8 @@ public class HandlerGUI extends Application implements RenderingView {
     public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
         this.grid = grid;
     }
+
+
 
     public DevelopmentCardsDecksGrid getDevCardsGrid( ) { return this.grid; }
 

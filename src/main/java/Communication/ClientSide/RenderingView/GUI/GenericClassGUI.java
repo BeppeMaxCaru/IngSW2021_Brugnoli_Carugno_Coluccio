@@ -17,11 +17,11 @@ import java.util.TimerTask;
 public class GenericClassGUI {
 
     private final HandlerGUI handlerGUI;
-    private final ClientMain clientMain;
+    //private final ClientMain clientMain;
 
-    public GenericClassGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
+    public GenericClassGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
-        this.clientMain = clientMain;
+        //this.clientMain = clientMain;
     }
 
     public void addLabelByCode(String string, Stage stage) {

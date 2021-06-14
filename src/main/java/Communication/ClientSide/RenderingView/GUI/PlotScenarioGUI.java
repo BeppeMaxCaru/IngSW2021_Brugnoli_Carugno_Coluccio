@@ -24,12 +24,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PlotScenarioGUI {
 
     private final HandlerGUI handlerGUI;
-    private final ClientMain clientMain;
     private String action;
 
-    public PlotScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
+    public PlotScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
-        this.clientMain = clientMain;
     }
 
     public void choiceAction(Stage stage) {
@@ -87,14 +85,14 @@ public class PlotScenarioGUI {
         Button secondLeader = new Button();
 
         int x = 10;
-        for (int i = 0; i < this.clientMain.getLeaderCards().length; i++) {
+        for (int i = 0; i < this.handlerGUI.getClientMain().getLeaderCards().length; i++) {
             //Creating a graphic (image)
-            Image img = new Image(this.clientMain.getLeaderCards()[i].getImage());
-            if (i == 0 && !this.clientMain.getLeaderCards()[0].isPlayed()) {
+            Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
+            if (i == 0 && !this.handlerGUI.getClientMain().getLeaderCards()[0].isPlayed()) {
                 this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, firstLeader, 450, 150);
                 x += 200;
                 root.getChildren().add(firstLeader);
-            } else if (i == 1 && !this.clientMain.getLeaderCards()[1].isPlayed()) {
+            } else if (i == 1 && !this.handlerGUI.getClientMain().getLeaderCards()[1].isPlayed()) {
                 this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, secondLeader, 450, 150);
                 x += 200;
                 root.getChildren().add(secondLeader);
@@ -139,12 +137,12 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 3; i++) {
             x = 190;
             for(int j = 0; j < 4; j++) {
-                drawnMarbles(x, y, gc, this.clientMain.getMarket().getMarketArrangement()[i][j].getColour());
+                drawnMarbles(x, y, gc, this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[i][j].getColour());
                 x+=60;
             }
             y+=60;
         }
-        drawnMarbles(x, y, gc, this.clientMain.getMarket().getExcessMarble().getColour());
+        drawnMarbles(x, y, gc, this.handlerGUI.getClientMain().getMarket().getExcessMarble().getColour());
 
         Pane rootButton = new Pane();
         Button[] buttonClick = new Button[7];
@@ -185,13 +183,13 @@ public class PlotScenarioGUI {
                 if(finalK < 4) {
                     resource = new String[3];
                     for(int i = 0; i < 4; i++) {
-                        resource[i] = resourceMarbles(this.clientMain.getMarket().getMarketArrangement()[i][finalK].getColour());
+                        resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[i][finalK].getColour());
                     }
                 }
                 else {
                     resource = new String[4];
                     for(int i = 0; i < 3; i++) {
-                        resource[i] = resourceMarbles(this.clientMain.getMarket().getMarketArrangement()[finalK - 4][i].getColour());
+                        resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
                 putResources(stage, coordinates, resource);
@@ -319,7 +317,7 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 4; j++) {
                 //Creating a graphic (image)
-                Image img = new Image(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
+                Image img = new Image(this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
                 arrayButtons[index] = new Button();
                 this.handlerGUI.getGenericClassGUI().createIconButton(x, y, img, arrayButtons[index], 450, 150);
                 x += 200;
@@ -346,7 +344,7 @@ public class PlotScenarioGUI {
             arrayButtons[i].setOnAction(e -> {
                 coordinates[0] = finalRow;
                 coordinates[1] = finalColumn;
-                DevelopmentCard developmentCard = this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
+                DevelopmentCard developmentCard = this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
                 int numResource;
                 if(developmentCard.getDevelopmentCardCost().get("COINS") != 0) numResource = 0;
                 else if(developmentCard.getDevelopmentCardCost().get("STONES") != 0) numResource = 1;
@@ -504,13 +502,13 @@ public class PlotScenarioGUI {
                 int finalJ = j;
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ] = 1;
-                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0)
+                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0)
                         whichInput[finalJ] = whichInput[finalJ] + "0";
-                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0)
+                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0)
                         whichInput[finalJ] = whichInput[finalJ] + "1";
-                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0)
+                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0)
                         whichInput[finalJ] = whichInput[finalJ] + "2";
-                    if(clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0)
+                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0)
                         whichInput[finalJ] = whichInput[finalJ] + "3";
                 });
             }

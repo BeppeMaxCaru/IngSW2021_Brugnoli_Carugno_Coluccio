@@ -13,17 +13,15 @@ import java.util.ArrayList;
 public class SyncScenarioGUI {
 
     private final HandlerGUI handlerGUI;
-    private final ClientMain clientMain;
 
-    public SyncScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
+    public SyncScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
-        this.clientMain = clientMain;
     }
 
     public void matchHasStarted(Stage stage) {
-        this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.clientMain.getPlayerNumber(), stage);
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), stage);
 
-        if(this.clientMain.getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
+        if(this.handlerGUI.getClientMain().getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
         else this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
@@ -31,7 +29,7 @@ public class SyncScenarioGUI {
         int i;
         ArrayList<String> resStart = new ArrayList<>();
 
-        if(this.clientMain.getPlayerNumber() == 1 || this.clientMain.getPlayerNumber() == 2) i = 1;
+        if(this.handlerGUI.getClientMain().getPlayerNumber() == 1 || this.handlerGUI.getClientMain().getPlayerNumber() == 2) i = 1;
         else i = 2;
 
         for(; i > 0; i--) {
@@ -96,7 +94,7 @@ public class SyncScenarioGUI {
 
         int x = 0;
         int index = 0;
-        LeaderCard[] leaderCards = this.clientMain.getLeaderCards();
+        LeaderCard[] leaderCards = this.handlerGUI.getClientMain().getLeaderCards();
         for (int i = 0; i < leaderCards.length; i++) {
             LeaderCard startingLeader = leaderCards[i];
             //Creating a graphic (image)

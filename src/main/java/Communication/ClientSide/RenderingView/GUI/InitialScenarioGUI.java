@@ -22,11 +22,9 @@ import java.net.Socket;
 public class InitialScenarioGUI {
 
     private final HandlerGUI handlerGUI;
-    private final ClientMain clientMain;
 
-    public InitialScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
+    public InitialScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
-        this.clientMain = clientMain;
     }
 
     public void nickname(Stage stage) {
@@ -69,7 +67,8 @@ public class InitialScenarioGUI {
         stage.show();
 
         okBtn.setOnAction(e -> {
-            this.clientMain.setNickname(field.getText());
+            //this.clientMain.setNickname(field.getText());
+            this.handlerGUI.getClientMain().setNickname(field.getText());
             multiOrSinglePlayers(stage);
         });
     }
@@ -99,7 +98,7 @@ public class InitialScenarioGUI {
     }
 
     public void welcome(Stage stage) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.clientMain.getNickname() +
+        handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.handlerGUI.getClientMain().getNickname() +
                 "!\nWelcome to Master of Renaissance online!", stage);
         this.handlerGUI.updateMarket();
     }
