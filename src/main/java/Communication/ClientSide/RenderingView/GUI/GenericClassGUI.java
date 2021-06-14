@@ -11,6 +11,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -33,6 +34,7 @@ public class GenericClassGUI {
     }
 
     public void LoadWTFOnTimer(String method, Stage stage) {
+        ArrayList<String> resStart = new ArrayList<>();
         TimerTask task = new TimerTask() {
 
             public void run() {
@@ -42,7 +44,7 @@ public class GenericClassGUI {
                         System.out.println("loading..");
                         switch(method) {
                             case "startingResources":
-                                handlerGUI.getSyncScenarioGUI().startingResource(stage);
+                                handlerGUI.getSyncScenarioGUI().startingResource(stage, resStart);
                                 break;
                             case "discardStartingLeaders":
                                 handlerGUI.getSyncScenarioGUI().discardStartingLeaders(stage, 1, -1);

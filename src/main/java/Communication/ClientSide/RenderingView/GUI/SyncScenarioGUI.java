@@ -27,62 +27,58 @@ public class SyncScenarioGUI {
         else this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
     }
 
-    public void startingResource(Stage stage) {
-        int i;
-        ArrayList<String> resStart = new ArrayList<>();
+    public void startingResource(Stage stage, ArrayList<String> resStart) {
+        int num;
 
-        if(this.clientMain.getPlayerNumber() == 1 || this.clientMain.getPlayerNumber() == 2) i = 1;
-        else i = 2;
+        if(this.clientMain.getPlayerNumber() == 1 || this.clientMain.getPlayerNumber() == 2) num = 1;
+        else num = 2;
 
-        for(; i > 0; i--) {
-            String[] resources = new String[] {
-                    "coin.png",
-                    "servant.png",
-                    "shield.png",
-                    "stone.png"
-            };
+        String[] resources = new String[] {
+                "coin.png",
+                "servant.png",
+                "shield.png",
+                "stone.png"
+        };
 
-            Group root = new Group();
-            //Creating buttons
-            Button[] arrayButtons = new Button[4];
+        Group root = new Group();
+        //Creating buttons
+        Button[] arrayButtons = new Button[4];
 
-            int x = 10;
-            int index = 0;
-            for (String item : resources) {
-                //Creating a graphic (image)
-                Image img = new Image(item);
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
-                x = x + 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
-            }
+        int x = 10;
+        int index = 0;
+        for (String item : resources) {
+            //Creating a graphic (image)
+            Image img = new Image(item);
+            arrayButtons[index] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
+            x = x + 200;
+            root.getChildren().add(arrayButtons[index]);
+            index++;
+        }
 
-            //Setting the stage
-            Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Pick initial resource");
-            stage.setScene(scene);
-            stage.show();
+        //Setting the stage
+        Scene scene = new Scene(root, 740, 130);
+        stage.setTitle("Pick initial resource");
+        stage.setScene(scene);
+        stage.show();
 
-            String str;
-            for(int j = 0; j < 4; j++) {
-                int finalI = i;
+        String str;
+        for(int j = 0; j < 4; j++) {
+            if(j == 0) str = "COINS";
+            else if(j == 1) str = "SERVANT";
+            else if(j == 2) str = "SCHIELD";
+            else str = "STONE";
+            String finalStr = str;
 
-                if(j == 0) str = "COINS";
-                else if(j == 1) str = "SERVANT";
-                else if(j == 2) str = "SCHIELD";
-                else str = "STONE";
-                String finalStr = str;
-
-                arrayButtons[j].setOnAction(e -> {
-                    resStart.add(finalStr);
-                    if (finalI - 1 == 0) {
-                        this.handlerGUI.getMsg().sendStartingRes(resStart);
-                        this.handlerGUI.updatePlayerBoard();
-                        discardStartingLeaders(stage, 1, -1);
-                    }
-                });
-            }
+            arrayButtons[j].setOnAction(e -> {
+                resStart.add(finalStr);
+                if (resStart.size() == num) {
+                    this.handlerGUI.getMsg().sendStartingRes(resStart);
+                    this.handlerGUI.updatePlayerBoard();
+                    discardStartingLeaders(stage, 1, -1);
+                }
+                else startingResource(stage, resStart);
+            });
         }
     }
 
@@ -122,7 +118,7 @@ public class SyncScenarioGUI {
                 this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
                 if (times == 2) {
                     this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
-                    this.handlerGUI.syncReceiver();
+                    this.handlerGUI.AsyncReceiver();
                     this.handlerGUI.updateLeaderCard();
                 }
                 else discardStartingLeaders(stage, 2, finalI);
