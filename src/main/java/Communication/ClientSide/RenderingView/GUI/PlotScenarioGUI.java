@@ -350,15 +350,15 @@ public class PlotScenarioGUI {
                 else if(developmentCard.getDevelopmentCardCost().get("STONES") != 0) numResource = 1;
                 else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0) numResource = 2;
                 else numResource = 3;
-                putPayedResource(stage, numResource, pickedResources, developmentCard);
+                putPayedResource(stage, coordinates, numResource, pickedResources, developmentCard, 0);
             });
             column++;
         }
     }
 
-    public void putPayedResource(Stage stage, int numResource, String[][] pickedResources, DevelopmentCard developmentCard) {
+    public void putPayedResource(Stage stage, int[] coordinates, int numResource, String[][] pickedResources, DevelopmentCard developmentCard, int sameResources) {
         String nameImage;
-        int i, num;
+        int num, numSame;
         Map<Integer, String> resources = new HashMap<>();
         resources.put(0, "COINS");
         resources.put(1, "STONES");
@@ -369,6 +369,8 @@ public class PlotScenarioGUI {
         else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0 && numResource < 2) num = 2;
         else if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0 && numResource < 3) num = 3;
         else num = 4;
+
+        numSame = sameResources + 1;
 
         String resource = resources.get(numResource);
         switch (resource) {
@@ -388,64 +390,124 @@ public class PlotScenarioGUI {
                 throw new IllegalStateException("Unexpected value: " + resource);
         }
 
-        for(i = 0; i < developmentCard.getDevelopmentCardCost().get(resource) + 1; i++) {
+        Image image = new Image(nameImage);
+        ImageView imageView = new ImageView();
+        Pane root = new Pane(imageView);
+        imageView.setImage(image);
+        imageView.setLayoutX(10);
+        imageView.setLayoutY(10);
+        imageView.setFitWidth(200);
+        imageView.setPreserveRatio(true);
 
-            Image image = new Image(nameImage);
-            ImageView imageView = new ImageView();
-            Pane root = new Pane(imageView);
-            imageView.setImage(image);
-            imageView.setLayoutX(10);
-            imageView.setLayoutY(10);
-            imageView.setFitWidth(200);
-            imageView.setPreserveRatio(true);
+        // non funziona il tooltip
+        //Tooltip.install(imageView, new Tooltip((i + 1) + " of " + developmentCard.getDevelopmentCardCost().get(resource)));
 
-            // non funziona il tooltip
-            //Tooltip.install(imageView, new Tooltip((i + 1) + " of " + developmentCard.getDevelopmentCardCost().get(resource)));
+        Button warehouse = new Button("Warehouse");
+        warehouse.setLayoutX(300);
+        warehouse.setLayoutY(60);
+        Button chest = new Button("Chest");
+        chest.setLayoutX(300);
+        chest.setLayoutY(100);
+        Button extra = new Button("Extra Warehouse");
+        extra.setLayoutX(300);
+        extra.setLayoutY(140);
+        root.getChildren().addAll(warehouse, chest, extra);
 
-            Button warehouse = new Button("Warehouse");
-            warehouse.setLayoutX(300);
-            warehouse.setLayoutY(60);
-            Button chest = new Button("Chest");
-            chest.setLayoutX(300);
-            chest.setLayoutY(100);
-            // controllo su extra warehouse??
-            Button extra = new Button("Extra Warehouse");
-            extra.setLayoutX(300);
-            extra.setLayoutY(140);
-            Button submit = new Button("Submit");
-            submit.setLayoutX(300);
-            submit.setLayoutY(180);
-            root.getChildren().addAll(warehouse, chest, extra, submit);
+        //Setting the stage
+        Scene scene = new Scene(root, 500, 300);
+        stage.setTitle("Where do you want to pick the resources?");
+        stage.setScene(scene);
+        stage.show();
 
-            //Setting the stage
-            Scene scene = new Scene(root, 500, 300);
-            stage.setTitle("Where do you want to pick the resources?");
-            stage.setScene(scene);
-            stage.show();
-
-            if(i < developmentCard.getDevelopmentCardCost().get(resource)) {
-                pickedResources[0][numResource] = developmentCard.getDevelopmentCardCost().get(resource).toString();
-                warehouse.setOnAction(e -> {
-                    pickedResources[1][numResource] = pickedResources[1][numResource] + "w";
-                });
-
-                chest.setOnAction(e -> {
-                    pickedResources[1][numResource] = pickedResources[1][numResource] + "c";
-                });
-
-                extra.setOnAction(e -> {
-                    pickedResources[1][numResource] = pickedResources[1][numResource] + "l";
-                });
+        pickedResources[0][numResource] = developmentCard.getDevelopmentCardCost().get(resource).toString();
+        warehouse.setOnAction(e -> {
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "w";
+            if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
+                if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
+                else {
+                    putCardOnPlayerBoard(stage, coordinates, pickedResources);
+                }
             }
+            else putPayedResource(stage, coordinates, numResource, pickedResources, developmentCard, numSame);
+        });
 
-            if(i == developmentCard.getDevelopmentCardCost().get(resource)) {
-                submit.setOnAction(e -> {
-                    if(num < 4) putPayedResource(stage, num, pickedResources, developmentCard);
-                    else {
-                        choiceAction(stage); // manca posizione nella plancia
-                    }
-                });
+        chest.setOnAction(e -> {
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "c";
+            if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
+                if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
+                else {
+                    putCardOnPlayerBoard(stage, coordinates, pickedResources);
+                }
             }
+            else putPayedResource(stage, coordinates, numResource, pickedResources, developmentCard, numSame);
+        });
+
+        extra.setOnAction(e -> {
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "l";
+            if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
+                if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
+                else {
+                    putCardOnPlayerBoard(stage, coordinates, pickedResources);
+                }
+            }
+            else putPayedResource(stage, coordinates, numResource, pickedResources, developmentCard, numSame);
+        });
+    }
+
+    public void putCardOnPlayerBoard(Stage stage, int[] coordinates, String[][] pickedResources) {
+        int[] dimPile = new int[3];
+        int i, x = 90;
+
+        Image image = new Image("devCardPlayerBoard.png");
+        ImageView imageView1 = new ImageView();
+        imageView1.setImage(image);
+        imageView1.setX(10);
+        imageView1.setY(10);
+        imageView1.setFitWidth(575);
+        imageView1.setPreserveRatio(true);
+        Pane root = new Pane(imageView1);
+
+        // Trovo la lunghezza della pila di carte.
+        /*for (i = 0; i < 3; i++) {
+            if(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i] != null)
+                dimPile[i] = this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
+            else dimPile[i] = 0;
+        } */
+
+        //Creating buttons
+        Button[] arrayButtons = new Button[3];
+        for (i = 0; i < 3; i++) {
+            //Creating a graphic (image)
+            /*if(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
+                Image img = new Image(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+                ImageView imageView2 = new ImageView();
+                imageView2.setImage(image);
+                imageView2.setLayoutX(10);
+                imageView2.setLayoutY(10);
+                imageView2.setFitWidth(200);
+                imageView2.setPreserveRatio(true); */
+                arrayButtons[i] = new Button("Click\nHere!");
+                arrayButtons[i].setLayoutX(x);
+                arrayButtons[i].setLayoutY(250);
+                root.getChildren().add(arrayButtons[i]);
+                x+= 170;
+            //}
+        }
+
+        //Setting the stage
+        Scene scene = new Scene(root, 600, 470);
+        stage.setTitle("Where do you want to pick the resources from?");
+        stage.setScene(scene);
+        stage.show();
+
+        for(int j = 0; j < 3; j++) {
+            int finalJ = j;
+            arrayButtons[j].setOnAction(e -> {
+                int[] quantity = new int[4];
+                for(int k = 0; k < quantity.length; k++) quantity[k] = Integer.parseInt(pickedResources[0][k]);
+                this.handlerGUI.getMsg().sendBuyCardAction(coordinates[0], coordinates[1], quantity, pickedResources[1], finalJ);
+                choiceAction(stage);
+            });
         }
     }
 

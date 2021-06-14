@@ -359,7 +359,7 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
-    public void syncReceiver() {
+    public void AsyncReceiver() {
         new ServerReceiver(this.clientMain, this, this.receiver).start();
     }
 
