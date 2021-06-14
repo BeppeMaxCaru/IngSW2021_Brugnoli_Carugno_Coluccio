@@ -1,19 +1,25 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlotScenarioGUI {
 
@@ -96,37 +102,23 @@ public class PlotScenarioGUI {
         Button firstLeader = new Button();
         Button secondLeader = new Button();
 
-        int x = 0;
+        int x = 10;
         for (int i = 0; i < this.clientMain.getLeaderCards().length; i++) {
             //Creating a graphic (image)
             Image img = new Image(this.clientMain.getLeaderCards()[i].getImage());
-            ImageView view = new ImageView(img);
-            view.setFitHeight(80);
-            view.setPreserveRatio(true);
-            //Setting the location of the button
             if (i == 0 && !this.clientMain.getLeaderCards()[0].isPlayed()) {
-                firstLeader.setTranslateX(x);
-                firstLeader.setTranslateY(20);
-                //Setting the size of the button
-                firstLeader.setPrefSize(80, 80);
-                //Setting a graphic to the button
-                firstLeader.setGraphic(view);
-                x = x + 200;
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, firstLeader, 450, 150);
+                x += 200;
                 root.getChildren().add(firstLeader);
             } else if (i == 1 && !this.clientMain.getLeaderCards()[1].isPlayed()) {
-                secondLeader.setTranslateX(x);
-                secondLeader.setTranslateY(20);
-                //Setting the size of the button
-                secondLeader.setPrefSize(80, 80);
-                //Setting a graphic to the button
-                secondLeader.setGraphic(view);
-                x = x + 200;
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, secondLeader, 450, 150);
+                x += 200;
                 root.getChildren().add(secondLeader);
             }
         }
 
         //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
+        Scene scene = new Scene(root, 420, 300);
         stage.setTitle("Choose a leader card");
         stage.setScene(scene);
         stage.show();
@@ -134,17 +126,16 @@ public class PlotScenarioGUI {
         firstLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
             else this.handlerGUI.getMsg().sendDiscardedLeader(0);
-            choiceAction(stage);
+            if(!checkNormalAction) choiceAction(stage);
+            else waitForYouturn(stage);
         });
 
         secondLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
             else this.handlerGUI.getMsg().sendDiscardedLeader(1);
-            choiceAction(stage);
+            if(!checkNormalAction) choiceAction(stage);
+            else waitForYouturn(stage);
         });
-
-        if(!checkNormalAction) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
-        else waitForYouturn(stage);
     }
 
     public void market(Stage stage) {
@@ -208,11 +199,20 @@ public class PlotScenarioGUI {
             buttonClick[k].setOnAction(e -> {
                 coordinates[0] = finalX;
                 coordinates[1] = finalY;
-                if(finalK < 4) { String[] resource = new String[3]; }
-                else { String[] resource = new String[4]; }
-                //putResources(stage, );
-                if (!this.checkLeaderAction) choiceAction(stage);
-                else waitForYouturn(stage);
+                String[] resource;
+                if(finalK < 4) {
+                    resource = new String[3];
+                    for(int i = 0; i < 4; i++) {
+                        resource[i] = resourceMarbles(this.clientMain.getMarket().getMarketArrangement()[i][finalK].getColour());
+                    }
+                }
+                else {
+                    resource = new String[4];
+                    for(int i = 0; i < 3; i++) {
+                        resource[i] = resourceMarbles(this.clientMain.getMarket().getMarketArrangement()[finalK - 4][i].getColour());
+                    }
+                }
+                putResources(stage, coordinates, resource);
             });
             if(k == 4) {
                 x = 0;
@@ -222,21 +222,53 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void putResources(Stage stage, String[] resource) {
-        boolean checkExtraSpace = false;
+    public void putResources(Stage stage, int[] coordinates, String[] resource) {
+        /*boolean checkExtraSpace = false;
+        String whichWL;
         for(int i = 0; i < 2; i++) {
             if (this.clientMain.getLeaderCards()[i].isPlayed() && this.clientMain.getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
                 checkExtraSpace = true;
             }
         }
 
-        if(checkExtraSpace) {
-            for(String s: resource) {
+        if(checkExtraSpace) { */
+        String whichWl;
+            for(int i = 0; i < resource.length; i++) {
+                if(!resource[i].equals(" ")) {
+                    Image image = new Image(resource[i]);
+                    ImageView imageView = new ImageView();
+                    Pane root = new Pane(imageView);
+                    imageView.setImage(image);
+                    imageView.setLayoutX(10);
+                    imageView.setLayoutY(10);
+                    imageView.setFitWidth(100);
+                    imageView.setPreserveRatio(true);
+                    Button warehouse = new Button("Warehouse");
+                    Button extra = new Button("Extra Warehouse");
+                    Button submit = new Button("submit");
+                    warehouse.setLayoutX(50);
+                    extra.setLayoutX(70);
+                    root.getChildren().addAll(warehouse, extra, submit);
+
+                    Scene scene = new Scene(root, 595, 355);
+                    stage.setTitle("Put the resources in the stores.");
+                    stage.setScene(scene);
+                    stage.show();
+
+                    warehouse.setOnAction(e -> {
+                    });
+
+                    extra.setOnAction(e -> {
+                    });
+
+                    submit.setOnAction(e -> {
+                    });
+                }
 
             }
         }
         //else this.handlerGUI.getMsg().sendMarketAction(, , , );
-    }
+    //}
 
     public void drawnMarbles(int x, int y, GraphicsContext gc, String colour) {
         switch (colour) {
@@ -262,27 +294,62 @@ public class PlotScenarioGUI {
         gc.fillOval(x, y, 40, 40);
     }
 
+    public String resourceMarbles(String colour) {
+        String resource;
+        switch (colour) {
+            case " YELLOW ":
+                resource = "coin.png";
+                break;
+            case " BLUE ":
+                resource = "schield.png";
+                break;
+            case " GREY ":
+                resource = "stone.png";
+                break;
+            case " PURPLE ":
+                resource = "servant.png";
+                break;
+            case " RED ":
+                resource = "redCross.png";
+                break;
+            default:
+                resource = " ";
+                break;
+        }
+        return resource;
+    }
+
     public void buyDevelopmentCard(Stage stage) {
         Group root = new Group();
         //Creating buttons
         Button[] arrayButtons = new Button[12];
+        String[][] pickedResources = new String[2][4];
+        for (int r = 0; r < 2; r++) {
+            for (int c = 0; c < 4; c++) {
+                if (r == 0) pickedResources[r][c] = "0";
+                else pickedResources[r][c] = "";
+            }
+        }
 
         int x = 10;
+        int y = 20;
         int index = 0;
         for(int i = 0; i < 3; i++) {
             for(int j = 0; j < 4; j++) {
                 //Creating a graphic (image)
                 Image img = new Image(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[i][j][0].getImage());
                 arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
-                x = x + 200;
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, y, img, arrayButtons[index], 450, 150);
+                x += 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
             }
+            x = 10;
+            y += 300;
         }
 
         //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
+        Scene scene = new Scene(root, 800, 900);
         stage.setTitle("Buy development card.");
         stage.setScene(scene);
         stage.show();
@@ -292,16 +359,115 @@ public class PlotScenarioGUI {
         for(int i = 0; i < 12; i++) {
             if(i == 4) { column = 0; row = 1; }
             else if(i == 8) { column = 0; row = 2; }
-            coordinates[0] = row;
-            coordinates[1] = column;
+            int finalRow = row;
+            int finalColumn = column;
             arrayButtons[i].setOnAction(e -> {
-                handlerGUI.setDevelopmentCardsGridCoordinates(coordinates);
-                handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
+                coordinates[0] = finalRow;
+                coordinates[1] = finalColumn;
+                DevelopmentCard developmentCard = this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
+                int numResource;
+                if(developmentCard.getDevelopmentCardCost().get("COINS") != 0) numResource = 0;
+                else if(developmentCard.getDevelopmentCardCost().get("STONES") != 0) numResource = 1;
+                else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0) numResource = 2;
+                else numResource = 3;
+                putPayedResource(stage, numResource, pickedResources, developmentCard);
             });
             column++;
         }
-        if(!this.checkLeaderAction) handlerGUI.getGenericClassGUI().LoadWTFOnTimer("choiceAction", stage);
-        else waitForYouturn(stage);
+    }
+
+    public void putPayedResource(Stage stage, int numResource, String[][] pickedResources, DevelopmentCard developmentCard) {
+        String nameImage;
+        int i, num;
+        Map<Integer, String> resources = new HashMap<>();
+        resources.put(0, "COINS");
+        resources.put(1, "STONES");
+        resources.put(2, "SHIELDS");
+        resources.put(3, "SERVANTS");
+
+        if(developmentCard.getDevelopmentCardCost().get("STONES") != 0 && numResource < 1) num = 1;
+        else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0 && numResource < 2) num = 2;
+        else if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0 && numResource < 3) num = 3;
+        else num = 4;
+
+        String resource = resources.get(numResource);
+        switch (resource) {
+            case "COINS":
+                nameImage = "coin.png";
+                break;
+            case "STONES":
+                nameImage = "stone.png";
+                break;
+            case "SHIELDS":
+                nameImage = "shield.png";
+                break;
+            case "SERVANTS":
+                nameImage = "servant.png";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + resource);
+        }
+
+        for(i = 0; i < developmentCard.getDevelopmentCardCost().get(resource) + 1; i++) {
+
+            Image image = new Image(nameImage);
+            ImageView imageView = new ImageView();
+            Pane root = new Pane(imageView);
+            imageView.setImage(image);
+            imageView.setLayoutX(10);
+            imageView.setLayoutY(10);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
+
+            // non funziona il tooltip
+            //Tooltip.install(imageView, new Tooltip((i + 1) + " of " + developmentCard.getDevelopmentCardCost().get(resource)));
+
+            Button warehouse = new Button("Warehouse");
+            warehouse.setLayoutX(300);
+            warehouse.setLayoutY(60);
+            Button chest = new Button("Chest");
+            chest.setLayoutX(300);
+            chest.setLayoutY(100);
+            // controllo su extra warehouse??
+            Button extra = new Button("Extra Warehouse");
+            extra.setLayoutX(300);
+            extra.setLayoutY(140);
+            Button submit = new Button("Submit");
+            submit.setLayoutX(300);
+            submit.setLayoutY(180);
+            root.getChildren().addAll(warehouse, chest, extra, submit);
+
+            //Setting the stage
+            Scene scene = new Scene(root, 500, 300);
+            stage.setTitle("Where do you want to pick the resources?");
+            stage.setScene(scene);
+            stage.show();
+
+            if(i < developmentCard.getDevelopmentCardCost().get(resource)) {
+                pickedResources[0][numResource] = developmentCard.getDevelopmentCardCost().get(resource).toString();
+                warehouse.setOnAction(e -> {
+                    pickedResources[1][numResource] = pickedResources[1][numResource] + "w";
+                });
+
+                chest.setOnAction(e -> {
+                    pickedResources[1][numResource] = pickedResources[1][numResource] + "c";
+                });
+
+                extra.setOnAction(e -> {
+                    pickedResources[1][numResource] = pickedResources[1][numResource] + "l";
+                });
+            }
+
+            if(i == developmentCard.getDevelopmentCardCost().get(resource)) {
+                submit.setOnAction(e -> {
+                    if(num < 4) putPayedResource(stage, num, pickedResources, developmentCard);
+                    else {
+                        if(!checkLeaderAction) choiceAction(stage); // manca posizione nella plancia
+                        else waitForYouturn(stage);
+                    }
+                });
+            }
+        }
     }
 
     public void activateProductionDevCards(Stage stage) {
@@ -325,7 +491,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
+                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -397,7 +563,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
+                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -463,7 +629,7 @@ public class PlotScenarioGUI {
                 if(numBottons == 1) {
                     Image img = new Image(handlerGUI.playerLeaders[indexLeader].getImage());
                     arrayButtons[index] = new Button();
-                    handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 250, 200);
+                    handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
                     x = x + 200;
                     root.getChildren().add(arrayButtons[index]);
                     index++;
@@ -524,7 +690,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
+                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;

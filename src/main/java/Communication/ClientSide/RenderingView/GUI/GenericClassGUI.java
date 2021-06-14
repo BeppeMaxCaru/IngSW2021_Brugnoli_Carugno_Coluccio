@@ -67,7 +67,7 @@ public class GenericClassGUI {
         timer.schedule(task, delay);
     }
 
-    public void createIconButton(int x, Image img, Button button, int height, int width) {
+    public void createIconButton(int x, int y, Image img, Button button, int height, int width) {
         ImageView view = new ImageView(img);
         view.setFitHeight(height);
         view.setFitWidth(width);
@@ -75,7 +75,7 @@ public class GenericClassGUI {
 
         //Setting the location of the button
         button.setTranslateX(x);
-        button.setTranslateY(20);
+        button.setTranslateY(y);
 
         //Setting the size of the button
         button.setPrefSize(80, 80);

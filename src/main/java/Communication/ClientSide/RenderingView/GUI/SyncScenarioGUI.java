@@ -52,7 +52,7 @@ public class SyncScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 80, 80);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -103,7 +103,7 @@ public class SyncScenarioGUI {
             if (cardDiscarded != i) {
                 Image img = new Image(startingLeader.getImage());
                 arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, img, arrayButtons[index], 450, 150);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 450, 150);
                 x += 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;

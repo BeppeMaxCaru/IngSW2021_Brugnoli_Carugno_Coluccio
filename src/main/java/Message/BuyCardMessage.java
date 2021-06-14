@@ -9,7 +9,7 @@ public class BuyCardMessage extends Message implements Serializable {
     private final int level;
     private final int[] quantity;
     private final String[] shelf;
-    private int playerboardPosition;
+    private final int playerboardPosition;
 
     public BuyCardMessage(int col, int lev, int num, int[] q, String[] s, int playerboardPosition){
         this.column=col;
