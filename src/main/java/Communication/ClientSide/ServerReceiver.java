@@ -45,14 +45,21 @@ public class ServerReceiver extends Thread {
             }
 
             if (object instanceof NotYourTurnMessage) {
-
                 try {
                     this.view.notYourTurn();
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
                 }
+            }
 
+            if(object instanceof TurnOverMessage) {
+                try {
+                    this.view.endTurn();
+                } catch (Exception e) {
+                    this.view.receiverError(e);
+                    break;
+                }
             }
 
             if (object instanceof UpdateClientMarketMessage) {

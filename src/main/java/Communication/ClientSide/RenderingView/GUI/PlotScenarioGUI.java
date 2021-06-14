@@ -24,15 +24,11 @@ import java.util.concurrent.atomic.AtomicReference;
 public class PlotScenarioGUI {
 
     private final HandlerGUI handlerGUI;
-    private boolean checkLeaderAction;
-    private boolean checkNormalAction;
     private final ClientMain clientMain;
     private String action;
 
     public PlotScenarioGUI(HandlerGUI handlerGUI, ClientMain clientMain) {
         this.handlerGUI = handlerGUI;
-        this.checkLeaderAction = false;
-        this.checkNormalAction = false;
         this.clientMain = clientMain;
     }
 
@@ -54,43 +50,31 @@ public class PlotScenarioGUI {
 
         Scene scene = new Scene(root, 750, 90);
 
-        if(!this.checkLeaderAction) {
             playLeaderCardButton.setOnAction(e -> {
                 action = "PLAY LEADER CARD";
                 playDiscardLeaderCard(stage);
-                this.checkLeaderAction = true;
             });
 
             discardLeaderCardButton.setOnAction(e -> {
                 action = "DISCARD LEADER CARD";
                 playDiscardLeaderCard(stage);
-                this.checkLeaderAction = true;
             });
-        }
 
-        if(!checkNormalAction) {
             pickResourceFromMarketButton.setOnAction(e -> {
                 market(stage);
-                this.checkNormalAction = true;
             });
 
             buyDevelopmentCardButton.setOnAction(e -> {
                 buyDevelopmentCard(stage);
-                this.checkNormalAction = true;
             });
 
             activateProdButton.setOnAction(e -> {
                 activateProductionDevCards(stage);
-                this.checkNormalAction = true;
             });
-        }
-        else {
+
             exitButton.setOnAction(e -> {
-                waitForYouturn(stage);
-                this.checkLeaderAction = false;
-                this.checkNormalAction = false;
+                this.handlerGUI.getMsg().sendEndTurn();
             });
-        }
 
         stage.setTitle("Choose the action!");
         stage.setScene(scene);
@@ -126,15 +110,13 @@ public class PlotScenarioGUI {
         firstLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
             else this.handlerGUI.getMsg().sendDiscardedLeader(0);
-            if(!checkNormalAction) choiceAction(stage);
-            else waitForYouturn(stage);
+            choiceAction(stage);
         });
 
         secondLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
             else this.handlerGUI.getMsg().sendDiscardedLeader(1);
-            if(!checkNormalAction) choiceAction(stage);
-            else waitForYouturn(stage);
+            choiceAction(stage);
         });
     }
 
@@ -462,8 +444,7 @@ public class PlotScenarioGUI {
                 submit.setOnAction(e -> {
                     if(num < 4) putPayedResource(stage, num, pickedResources, developmentCard);
                     else {
-                        if(!checkLeaderAction) choiceAction(stage); // manca posizione nella plancia
-                        else waitForYouturn(stage);
+                        choiceAction(stage); // manca posizione nella plancia
                     }
                 });
             }
@@ -655,8 +636,7 @@ public class PlotScenarioGUI {
             });
 
             noBtn.setOnAction(e -> {
-                if(!checkLeaderAction) choiceAction(stage);
-                else waitForYouturn(stage);
+                choiceAction(stage);
             });
 
             for(int j = 0; j < numBottons; j++) {
@@ -707,8 +687,7 @@ public class PlotScenarioGUI {
 
             okBtn.setOnAction(e -> {
                 handlerGUI.setActivation(activate);
-                if(!checkLeaderAction) choiceAction(stage);
-                else waitForYouturn(stage);
+                choiceAction(stage);
             });
 
             for(int j = 0; j < 5; j++) {
@@ -720,7 +699,9 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void waitForYouturn(Stage stage) {
+    public void waitForYourTurn(Stage stage) {
         handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
     }
+
 }
+

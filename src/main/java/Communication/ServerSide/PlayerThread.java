@@ -224,6 +224,7 @@ public class PlayerThread implements Runnable {
             }
 
             Message object;
+            this.mainAction=false;
 
             //Receive object
             //Check current player here
@@ -398,9 +399,17 @@ public class PlayerThread implements Runnable {
             }
 
             if (object instanceof EndTurnMessage) {
-                this.mainAction = false;
-                this.gameController.nextCurrentPlayerNumber();
-                this.yourTurnMessageCounter = 0;
+                if(this.mainAction)
+                {
+                    try {
+                        this.sender.writeObject(new TurnOverMessage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    this.mainAction = false;
+                    this.gameController.nextCurrentPlayerNumber();
+                    this.yourTurnMessageCounter = 0;
+                }
                 //Salva come giocatore corrente nel gamecontroller/gamemodel
                 //il giocatore successivo a questo per abilitarlo e bloccare questo
             }

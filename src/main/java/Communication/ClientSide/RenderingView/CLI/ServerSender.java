@@ -187,7 +187,6 @@ public class ServerSender extends Thread {
                                     action="";
                                     this.msg.sendEndTurn();
                                 }
-                                this.cli.endTurn();
                                 if(this.gameMode==0) this.cli.lorenzoFaithPoints();
                                 break;
                             }

@@ -1,7 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
-import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Communication.ClientSide.ServerReceiver;
 import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
@@ -368,5 +367,15 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void setActivation(int[] activate) {
         this.activate = activate;
+    }
+
+    @Override
+    public void itsYourTurn() {
+        this.plotScenarioGUI.choiceAction(this.stage);
+    }
+
+    @Override
+    public void endTurn() {
+        this.plotScenarioGUI.waitForYourTurn(this.stage);
     }
 }
