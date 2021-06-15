@@ -1,6 +1,7 @@
 package Maestri.MVC.Model.GModel.LeaderCards;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.io.Serializable;
 

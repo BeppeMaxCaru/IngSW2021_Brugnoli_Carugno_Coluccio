@@ -1,8 +1,8 @@
 package Communication.ClientSide.RenderingView.GUI;
 
-import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -15,11 +15,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class PlotScenarioGUI {
 
@@ -120,6 +118,7 @@ public class PlotScenarioGUI {
 
     public void market(Stage stage) {
         int x = 0, y;
+        String[] whichWl = new String[4];
         //creating the image object
         Image image = new Image("plancia portabiglie.png");
         ImageView imageView = new ImageView();
@@ -192,7 +191,7 @@ public class PlotScenarioGUI {
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
-                putResources(stage, coordinates, resource);
+                putResources(stage, coordinates, resource, 0, whichWl, "x");
             });
             if(k == 4) {
                 x = 0;
@@ -202,53 +201,143 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void putResources(Stage stage, int[] coordinates, String[] resource) {
-        /*boolean checkExtraSpace = false;
-        String whichWL;
+    public void putResources(Stage stage, int[] coordinates, String[] resource, int index, String[] whichWl, String whiteMarble) {
+        boolean checkExtraSpace = false;
+        int numIndex = index + 1;
+        String parameter;
+        if(coordinates[0] == 0) parameter = "ROW";
+        else parameter = "COLUMN";
+
         for(int i = 0; i < 2; i++) {
-            if (this.clientMain.getLeaderCards()[i].isPlayed() && this.clientMain.getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
+            if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
                 checkExtraSpace = true;
             }
         }
 
-        if(checkExtraSpace) { */
-        String whichWl;
-            for(int i = 0; i < resource.length; i++) {
-                if(!resource[i].equals(" ")) {
-                    Image image = new Image(resource[i]);
-                    ImageView imageView = new ImageView();
-                    Pane root = new Pane(imageView);
-                    imageView.setImage(image);
-                    imageView.setLayoutX(10);
-                    imageView.setLayoutY(10);
-                    imageView.setFitWidth(100);
-                    imageView.setPreserveRatio(true);
-                    Button warehouse = new Button("Warehouse");
-                    Button extra = new Button("Extra Warehouse");
-                    Button submit = new Button("submit");
-                    warehouse.setLayoutX(50);
-                    extra.setLayoutX(70);
-                    root.getChildren().addAll(warehouse, extra, submit);
+        if(checkExtraSpace) {
+            if (!resource[index].equals(" ")) {
+                Image image = new Image(resource[index]);
+                ImageView imageView = new ImageView();
+                Pane root = new Pane(imageView);
+                imageView.setImage(image);
+                imageView.setLayoutX(10);
+                imageView.setLayoutY(10);
+                imageView.setFitWidth(200);
+                imageView.setPreserveRatio(true);
 
-                    Scene scene = new Scene(root, 595, 355);
-                    stage.setTitle("Put the resources in the stores.");
-                    stage.setScene(scene);
-                    stage.show();
+                Button warehouse = new Button("Warehouse");
+                warehouse.setLayoutX(300);
+                warehouse.setLayoutY(60);
+                Button extra = new Button("Extra Warehouse");
+                warehouse.setLayoutX(300);
+                warehouse.setLayoutY(100);
+                root.getChildren().addAll(warehouse, extra);
 
-                    warehouse.setOnAction(e -> {
-                    });
+                Scene scene = new Scene(root, 595, 355);
+                stage.setTitle("Put the resources in the stores.");
+                stage.setScene(scene);
+                stage.show();
 
-                    extra.setOnAction(e -> {
-                    });
+                warehouse.setOnAction(e -> {
+                    whichWl[index] = "w";
+                    if(index == resource.length - 1) {
+                        String whichWl2 = null;
+                        for (String s : whichWl) {
+                            if (s != null) {
+                                whichWl2 = whichWl2 + s;
+                            }
+                        }
+                        this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                        choiceAction(stage);
+                    }
+                    else putResources(stage, coordinates, resource, numIndex, whichWl, whiteMarble);
+                });
 
-                    submit.setOnAction(e -> {
-                    });
+                extra.setOnAction(e -> {
+                    whichWl[index] = "l";
+                    if(index == resource.length - 1) {
+                        String whichWl2 = null;
+                        for (String s : whichWl) {
+                            if (s != null) {
+                                whichWl2 = whichWl2 + s;
+                            }
+                        }
+                        this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                        choiceAction(stage);
+                    }
+                    else putResources(stage, coordinates, resource, numIndex, whichWl, whiteMarble);
+                });
+            }
+            else {
+                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
+                    whiteMarble(stage, coordinates, resource, index, whichWl);
                 }
-
             }
         }
-        //else this.handlerGUI.getMsg().sendMarketAction(, , , );
-    //}
+        else {
+            if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
+                whiteMarble(stage, coordinates, resource, index, whichWl);
+            }
+
+            if(resource.length == 3) {
+                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "www", whiteMarble);
+                choiceAction(stage);
+            }
+            else {
+                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "wwww", whiteMarble);
+                choiceAction(stage);
+            }
+        }
+    }
+
+    public void whiteMarble(Stage stage, int[] coordinates, String[] resource, int numIndex, String[] whichWl) {
+
+        for(int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles().length; i++) {
+            if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1] == null) {
+                resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+                putResources(stage, coordinates, resource, numIndex, whichWl, "0");
+            }
+            else {
+                Group root = new Group();
+                String resource1 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+                Image image1 = new Image(resource1);
+                Button button1 = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(10,50, image1, button1, 80, 80);
+
+                String resource2 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
+                Image image2 = new Image(resource2);
+                Button button2 = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(210,50, image2, button2, 80, 80);
+
+                Button declineButton = new Button("I don't want to activate any leader cards.");
+                declineButton.setLayoutX(220);
+                declineButton.setLayoutY(70);
+
+                root.getChildren().addAll(button1, button2, declineButton);
+
+                Scene scene = new Scene(root, 595, 355);
+                stage.setTitle("Choose the resource for the white marble.");
+                stage.setScene(scene);
+                stage.show();
+
+                button1.setOnAction(e -> {
+                    resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+                    putResources(stage, coordinates, resource, numIndex, whichWl, "0");
+                });
+
+                button2.setOnAction(e -> {
+                    resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
+                    putResources(stage, coordinates, resource, numIndex, whichWl, "1");
+                });
+
+                declineButton.setOnAction(e -> {
+                    resource[numIndex] = "x";
+                    putResources(stage, coordinates, resource, numIndex + 1, whichWl, "x");
+                });
+            }
+        }
+    }
+
 
     public void drawnMarbles(int x, int y, GraphicsContext gc, String colour) {
         switch (colour) {
@@ -468,20 +557,20 @@ public class PlotScenarioGUI {
         Pane root = new Pane(imageView1);
 
         // Trovo la lunghezza della pila di carte.
-        /*for (i = 0; i < 3; i++) {
-            if(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i] != null)
-                dimPile[i] = this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
+        /* for (i = 0; i < 3; i++) {
+            if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null)
+                dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
             else dimPile[i] = 0;
-        } */
+        }*/
 
         //Creating buttons
         Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
-            /*if(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
-                Image img = new Image(this.clientMain.getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+           /* if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
                 ImageView imageView2 = new ImageView();
-                imageView2.setImage(image);
+                imageView2.setImage(img);
                 imageView2.setLayoutX(10);
                 imageView2.setLayoutY(10);
                 imageView2.setFitWidth(200);
@@ -491,7 +580,7 @@ public class PlotScenarioGUI {
                 arrayButtons[i].setLayoutY(250);
                 root.getChildren().add(arrayButtons[i]);
                 x+= 170;
-            //}
+           // }
         }
 
         //Setting the stage

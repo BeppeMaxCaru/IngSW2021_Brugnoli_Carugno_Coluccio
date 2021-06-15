@@ -24,39 +24,16 @@ public class HandlerGUI extends Application implements RenderingView {
     String nickname;
     int playerNumber;
 
-    //Return attributes
-    ArrayList<String> startingRes;
-    int[] startingDiscardedLeaders;
-    String actionChoice;
-    int playLeader;
-    int discardLeader;
-    int[] marketCoordinates;
-    String resourcesDestination;
-    String whiteMarbleChoice;
-    int[] developmentCardsGridCoordinates;
-    String[][] payResources;
-    int choosePosition;
     int activationProd;
     int[] activate;
-    String inputResourceProd;
-    String outputResourceProd;
     int gameMode;
 
     //Input methods parameters
     //Initialized by clientMain/serverSender with setters
-    LeaderCard[] startingLeaders;
     LeaderCard[] playerLeaders;
     Playerboard playerBoard;
     Market market;
     DevelopmentCardsDecksGrid grid;
-    ActionCountersDeck counters;
-    Playerboard lorenzoPlayerBoard;
-    int localWinner;
-    GameOverMessage gameOverMessage;
-
-    //Game/turn handler attributes
-    int clientStarted;
-    int gameStarted;
 
     int correctAction;
 
@@ -111,25 +88,11 @@ public class HandlerGUI extends Application implements RenderingView {
         System.out.println(this.clientMain.getClass());
     }
 
-    public void setMsg(SendingMessages msg) { this.msg = msg; }
-
     public SendingMessages getMsg() { return this.msg; }
-
-    public void setReceiver(ObjectInputStream receiver) { this.receiver = receiver; }
-
-    public ObjectInputStream getReceiver() { return this.receiver; }
-
-    public void setSender(ObjectOutputStream sender) { this.sender = sender; }
-
-    public ObjectOutputStream getSender() { return this.sender; }
 
     public String getNickName() {
         return this.nickname;
     }
-
-    public void setActionChoice(String action) { this.actionChoice = action; }
-
-    public int getCorrectAction() { return this.correctAction; }
 
     public void setNickName(String nickname) { this.nickname = nickname; }
 
@@ -143,8 +106,6 @@ public class HandlerGUI extends Application implements RenderingView {
         this.grid = grid;
     }
 
-
-
     public DevelopmentCardsDecksGrid getDevCardsGrid( ) { return this.grid; }
 
     public void setPlayerNumber(int playerNumber) {
@@ -155,18 +116,6 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.playerNumber;
     }
 
-    public ArrayList<String> getStartingResource() {
-        return startingRes;
-    }
-
-    public void setStartingResource(String string) {
-        this.startingRes.add(string);
-    }
-
-    public void setStartingLeaders(LeaderCard[] leaders) {
-        this.startingLeaders = leaders;
-    }
-
     public void setBoard(Playerboard board) {
         this.playerBoard=board;
     }
@@ -175,106 +124,12 @@ public class HandlerGUI extends Application implements RenderingView {
         return this.playerBoard;
     }
 
-    public int[] getDiscardedStartingLeaders(){
-        return startingDiscardedLeaders;
-    }
-
-
-    public void setDiscardedStartingLeaders(int leadersDiscarded, int index) {
-        this.startingDiscardedLeaders[index] = leadersDiscarded;
-    }
-
     public void setPlayerLeaders(LeaderCard[] playerLeaders) {
         this.playerLeaders = playerLeaders;
     }
 
     public LeaderCard[] getPlayerLeaders() {return this.playerLeaders; }
 
-    public String getActionChoice() {
-        return actionChoice;
-    }
-
-    public int getPlayedLeader() {
-        return playLeader;
-    }
-
-    public void setPlayedLeader(int playLeader) { this.playLeader = playLeader; }
-
-    public int getDiscardedLeader() {
-        return discardLeader;
-    }
-
-    public void setDiscardedLeader(int discardLeader) { this.discardLeader = discardLeader; }
-
-    public int[] getMarketCoordinates() {
-        return marketCoordinates;
-    }
-
-    public void setMarketCoordinates(int[] marketCoordinates) { this.marketCoordinates = marketCoordinates; }
-
-    public String getResourcesDestination(String parameter) {
-        return resourcesDestination;
-    }
-
-    public String getWhiteMarbleChoice() {
-        return whiteMarbleChoice;
-    }
-
-    public int[] getDevelopmentCardsGridCoordinates() {
-        return developmentCardsGridCoordinates;
-    }
-
-    public void setDevelopmentCardsGridCoordinates(int[] coordinates) {
-        this.developmentCardsGridCoordinates = coordinates;
-    }
-
-    public String[][] getPayedResources() {
-        return payResources;
-    }
-
-    public int getChosenPosition() {
-        return choosePosition;
-    }
-
-    public int getActivationProd(int[] activation) {
-        return activationProd;
-    }
-
-    public String getInputResourceProd() {
-        return inputResourceProd;
-    }
-
-    public void setInputResourceProd(String inputResourceProd) {
-        this.inputResourceProd = inputResourceProd;
-    }
-
-    public String getOutputResourceProd() {
-        return outputResourceProd;
-    }
-
-    public void setLocalWinner(int localWinner) {
-        this.localWinner = localWinner;
-    }
-
-    public void setCountersDeck(ActionCountersDeck deck) {
-        this.counters = deck;
-    }
-
-    public void setLorenzoPlayerBoard(Playerboard board) {
-        this.lorenzoPlayerBoard = board;
-    }
-
-    public void setGameOverMsg(GameOverMessage msg) {
-        this.gameOverMessage = msg;
-    }
-
-    public void setGameStarted() {
-        this.gameStarted = 1;
-    }
-
-    public void setClientStarted() {
-        this.clientStarted=1;
-    }
 
     public int getGameMode() {
         return this.gameMode;
@@ -363,10 +218,6 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void AsyncReceiver() {
         new ServerReceiver(this.clientMain, this, this.receiver).start();
-    }
-
-    public void setActivationProd(int activationProd) {
-        this.activationProd = activationProd;
     }
 
     public void setActivation(int[] activate) {
