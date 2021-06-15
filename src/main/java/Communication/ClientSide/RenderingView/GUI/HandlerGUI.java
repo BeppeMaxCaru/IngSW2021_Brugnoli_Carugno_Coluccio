@@ -336,6 +336,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
             this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);
+            //updatePlayerBoard();
         } catch (Exception e) {
             this.error(e);
         }
@@ -354,6 +355,7 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
             this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
+            //System.out.println(this.clientMain.getPlayerboard().getVictoryPoints());
         } catch (Exception e) {
             this.error(e);
         }

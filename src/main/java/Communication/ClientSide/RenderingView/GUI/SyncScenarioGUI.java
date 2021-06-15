@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class SyncScenarioGUI {
 
-    private final HandlerGUI handlerGUI;
+    private HandlerGUI handlerGUI;
 
     public SyncScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
@@ -67,16 +67,18 @@ public class SyncScenarioGUI {
                 int finalI = i;
 
                 if(j == 0) str = "COINS";
-                else if(j == 1) str = "SERVANT";
-                else if(j == 2) str = "SCHIELD";
-                else str = "STONE";
+                else if(j == 1) str = "SERVANTS";
+                else if(j == 2) str = "SHIELDS";
+                else str = "STONES";
                 String finalStr = str;
 
                 arrayButtons[j].setOnAction(e -> {
                     resStart.add(finalStr);
                     if (finalI - 1 == 0) {
                         this.handlerGUI.getMsg().sendStartingRes(resStart);
+
                         this.handlerGUI.updatePlayerBoard();
+                        //System.out.println(this.handlerGUI.getClientMain().getPlayerboard().getVictoryPoints());
                         discardStartingLeaders(stage, 1, -1);
                     }
                 });
@@ -120,7 +122,7 @@ public class SyncScenarioGUI {
                 this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
                 if (times == 2) {
                     this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
-                    this.handlerGUI.syncReceiver();
+                    this.handlerGUI.AsyncReceiver();
                     this.handlerGUI.updateLeaderCard();
                 }
                 else discardStartingLeaders(stage, 2, finalI);
