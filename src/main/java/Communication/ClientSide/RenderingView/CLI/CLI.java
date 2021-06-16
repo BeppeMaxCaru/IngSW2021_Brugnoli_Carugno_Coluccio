@@ -262,6 +262,20 @@ public class CLI implements RenderingView {
 
         String wlChoice;
 
+        boolean extraSpace=false;
+        for(String res : this.main.getPlayerboard().getWareHouse().getWarehouseResources().keySet())
+        {
+            if (res.contains("extra")) {
+                extraSpace = true;
+                break;
+            }
+        }
+        if(!extraSpace){
+            if(parameter.equals("ROW"))
+                return "WWWW";
+            else return "WWW";
+        }
+
         this.printActivatedLeaderCard(this.main.getLeaderCards());
 
         //Receives deposit
@@ -298,18 +312,35 @@ public class CLI implements RenderingView {
     public String getWhiteMarbleChoice() {
         String chosenMarble;
 
+        int marbles=-1;
+        if(this.main.getPlayerboard().getResourceMarbles()[0]==null && this.main.getPlayerboard().getResourceMarbles()[1]==null)
+            return "";
+        if(this.main.getPlayerboard().getResourceMarbles()[0]!=null && this.main.getPlayerboard().getResourceMarbles()[1]==null)
+            marbles=0;
+        if(this.main.getPlayerboard().getResourceMarbles()[0]!=null && this.main.getPlayerboard().getResourceMarbles()[1]!=null)
+            marbles=1;
+
         //Receives position of leader cards to activate to receive a resource from a white marble
-        System.out.println("If you activated both your white marble resources leader card, which one do you want to activate for each white marble you picked?");
-        System.out.println("if you activated only one white marble leader card, do you want to activate it?");
-        System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
+        if(marbles==0)
+        {
+            System.out.println("If you activated only one white marble leader card, do you want to activate it?");
+            System.out.println("Write 0 for activate your fist leader card.");
+        } else if (marbles==1) {
+            System.out.println("If you activated both your white marble resources leader card, which one do you want to activate for each white marble you picked?");
+            System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked.");
+        }
         System.out.println("Write X if you don't want to activate any leader card effect");
+
         chosenMarble = this.input.nextLine().toUpperCase();
         try {
             //Checks if player has written only '0', '1' or 'x' chars
             while (!this.checkMarbleChoice(chosenMarble))
             {
-                System.err.println("not valid input.");
-                System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked");
+                System.err.println("Not valid input.");
+                if(marbles==0)
+                    System.out.println("Write 0 for activate your fist leader card.");
+                else if (marbles==1)
+                    System.out.println("Write 0 for activate your fist leader card, 1 for activate your second leader card, for each white marble you picked.");
                 System.out.println("Write X if you don't want to activate any leader card effect");
                 chosenMarble = this.input.nextLine().toUpperCase();
             }
