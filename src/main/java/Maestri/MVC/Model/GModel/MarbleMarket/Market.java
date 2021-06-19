@@ -172,7 +172,15 @@ public class Market implements Serializable {
             System.out.print("|");
             for (int k=0; k<this.column; k++)
             {
-                System.out.print(this.marketArrangement[i][k].getColour()+"|");
+                System.out.print(this.marketArrangement[i][k].getColour());
+                if(this.marketArrangement[i][k].getColour().length()==5)
+                    System.out.print("   |");
+                if(this.marketArrangement[i][k].getColour().length()==6)
+                    System.out.print("  |");
+                if(this.marketArrangement[i][k].getColour().length()==7)
+                    System.out.print(" |");
+                if(this.marketArrangement[i][k].getColour().length()==8)
+                    System.out.print("|");
             }
             System.out.print(" ←");
             System.out.println();
