@@ -611,7 +611,7 @@ public class PlotScenarioGUI {
         int index = 0;
 
         for (i = 0; i < 3; i++) {
-            dimPile[i] = handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i].length - 1;
+            dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
             if (dimPile[i] != 0) numBottons++;
         }
         //Creating buttons
@@ -619,9 +619,9 @@ public class PlotScenarioGUI {
         for (int click = 0; click < numBottons + 1; click++) {
             for (i = 0; i < numBottons; i++) {
                 //Creating a graphic (image)
-                Image img = new Image(handlerGUI.getBoard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -746,7 +746,7 @@ public class PlotScenarioGUI {
         Group root = new Group();
 
         for(int i = 0; i < 2; i++) {
-            if (handlerGUI.playerLeaders[i].isPlayed() && handlerGUI.playerLeaders[i] instanceof ExtraProductionPowerLeaderCard) {
+            if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraProductionPowerLeaderCard) {
                 numBottons++;
                 indexLeader = i;
             }
@@ -757,9 +757,9 @@ public class PlotScenarioGUI {
             for (int i = 0; i < numBottons; i++) {
                 //Creating a graphic (image)
                 if(numBottons == 1) {
-                    Image img = new Image(handlerGUI.playerLeaders[indexLeader].getImage());
+                    Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[indexLeader].getImage());
                     arrayButtons[index] = new Button();
-                    handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
+                    this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
                     x = x + 200;
                     root.getChildren().add(arrayButtons[index]);
                     index++;
@@ -819,7 +819,7 @@ public class PlotScenarioGUI {
                 //Creating a graphic (image)
                 Image img = new Image(item);
                 arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[index]);
                 index++;
@@ -835,7 +835,7 @@ public class PlotScenarioGUI {
             stage.show();
 
             okBtn.setOnAction(e -> {
-                handlerGUI.setActivation(activate);
+                this.handlerGUI.setActivation(activate);
                 choiceAction(stage);
             });
 
@@ -849,7 +849,7 @@ public class PlotScenarioGUI {
     }
 
     public void waitForYourTurn(Stage stage) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
     }
 
 }

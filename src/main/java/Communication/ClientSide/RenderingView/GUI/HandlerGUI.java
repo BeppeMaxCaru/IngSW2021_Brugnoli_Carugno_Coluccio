@@ -21,19 +21,19 @@ import java.util.*;
 
 public class HandlerGUI extends Application implements RenderingView {
 
-    String nickname;
-    int playerNumber;
+    //String nickname;
+    //int playerNumber;
 
-    int activationProd;
+    //int activationProd;
     int[] activate;
-    int gameMode;
+    //int gameMode;
 
     //Input methods parameters
     //Initialized by clientMain/serverSender with setters
-    LeaderCard[] playerLeaders;
-    Playerboard playerBoard;
-    Market market;
-    DevelopmentCardsDecksGrid grid;
+    //LeaderCard[] playerLeaders;
+    //Playerboard playerBoard;
+    //Market market;
+    //DevelopmentCardsDecksGrid grid;
 
     int correctAction;
 
@@ -64,7 +64,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
 
 
-        System.out.println(this.clientMain.getHostName());
+        //System.out.println(this.clientMain.getHostName());
         this.setStage(stage);
         this.initialScenarioGUI.nickname(this.stage);
     }
@@ -89,51 +89,6 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     public SendingMessages getMsg() { return this.msg; }
-
-    public String getNickName() {
-        return this.nickname;
-    }
-
-    public void setNickName(String nickname) { this.nickname = nickname; }
-
-    public void setGameMode(int gameMode) { this.gameMode = gameMode; }
-
-    public void setMarket(Market market) { this.market = market; }
-
-    public Market getMarket() { return this.market; }
-
-    public void setDevCardsGrid(DevelopmentCardsDecksGrid grid) {
-        this.grid = grid;
-    }
-
-    public DevelopmentCardsDecksGrid getDevCardsGrid( ) { return this.grid; }
-
-    public void setPlayerNumber(int playerNumber) {
-        this.playerNumber = playerNumber;
-    }
-
-    public int getPlayerNumber() {
-        return this.playerNumber;
-    }
-
-    public void setBoard(Playerboard board) {
-        this.playerBoard=board;
-    }
-
-    public Playerboard getBoard( ) {
-        return this.playerBoard;
-    }
-
-    public void setPlayerLeaders(LeaderCard[] playerLeaders) {
-        this.playerLeaders = playerLeaders;
-    }
-
-    public LeaderCard[] getPlayerLeaders() {return this.playerLeaders; }
-
-
-    public int getGameMode() {
-        return this.gameMode;
-    }
 
     @Override
     public void notValidAction() {
@@ -201,6 +156,7 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
             this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
+            System.out.println(playerBoardMessage.getPlayerboard().getVictoryPoints());
         } catch (Exception e) {
             this.error(e);
         }

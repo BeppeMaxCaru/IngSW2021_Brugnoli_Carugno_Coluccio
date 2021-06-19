@@ -34,6 +34,7 @@ public class ServerReceiver extends Thread {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 this.view.receiverError(e);
+                break;
             }
 
             if(object instanceof YourTurnMessage){
@@ -41,6 +42,7 @@ public class ServerReceiver extends Thread {
                     this.view.itsYourTurn();
                 } catch (Exception e) {
                     this.view.receiverError(e);
+                    break;
                 }
             }
 
