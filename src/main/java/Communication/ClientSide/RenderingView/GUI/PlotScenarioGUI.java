@@ -32,6 +32,7 @@ public class PlotScenarioGUI {
         GridPane root = new GridPane();
         int[] activate = new int[6];
         String[] whichOutput = new String[6];
+
         Button playLeaderCardButton = new Button("Play leader card");
         Button discardLeaderCardButton = new Button("Discard Leader Card");
         Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
@@ -66,9 +67,7 @@ public class PlotScenarioGUI {
                 buyDevelopmentCard(stage);
             });
 
-            activateProdButton.setOnAction(e -> {
-                activateProductionDevCards(stage, activate, whichOutput);
-            });
+            activateProdButton.setOnAction(e -> activateProductionDevCards(stage, activate, whichOutput));
 
             exitButton.setOnAction(e -> {
                 this.handlerGUI.getMsg().sendEndTurn();
@@ -559,30 +558,30 @@ public class PlotScenarioGUI {
         Pane root = new Pane(imageView1);
 
         // Trovo la lunghezza della pila di carte.
-        /* for (i = 0; i < 3; i++) {
+        for (i = 0; i < 3; i++) {
             if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null)
                 dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
             else dimPile[i] = 0;
-        }*/
+        }
 
         //Creating buttons
         Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
-           /* if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
+           if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
                 Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
                 ImageView imageView2 = new ImageView();
                 imageView2.setImage(img);
                 imageView2.setLayoutX(10);
                 imageView2.setLayoutY(10);
                 imageView2.setFitWidth(200);
-                imageView2.setPreserveRatio(true); */
+                imageView2.setPreserveRatio(true);
                 arrayButtons[i] = new Button("Click\nHere!");
                 arrayButtons[i].setLayoutX(x);
                 arrayButtons[i].setLayoutY(250);
                 root.getChildren().add(arrayButtons[i]);
                 x+= 170;
-           // }
+           }
         }
 
         //Setting the stage
@@ -606,6 +605,7 @@ public class PlotScenarioGUI {
         int i;
         int numBottons = 0;
         int x = 10;
+        StringBuilder string = new StringBuilder();
 
         for (i = 0; i < 3; i++) {
             if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) numBottons++;
@@ -667,25 +667,26 @@ public class PlotScenarioGUI {
                 if(activate[finalJ] != 1) {
                     activate[finalJ] = 1;
                     if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("COINS") != 0) {
-                        whichInput[finalJ] += "0";
+                        string.append("0");
                         if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("COINS") > 1)
                             num = "2";
                     }
                     if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SHIELDS") != 0) {
-                        whichInput[finalJ] += "1";
+                        string.append("1");
                         if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SHIELDS") > 1)
                             num = "2";
                     }
                     if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SERVANTS") != 0) {
-                        whichInput[finalJ] += "2";
+                        string.append("2");
                         if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SERVANTS") > 1)
                             num = "2";
                     }
                     if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("STONES") != 0) {
-                        whichInput[finalJ] += "3";
+                        string.append("3");
                         if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("STONES") > 0)
                             num = "2";
                     }
+                    whichInput[finalJ] = string.toString();
                     putResourcePayedDevCard(stage, activate, whichInput, finalJ, num,0);
                 }
                 else activateProductionDevCards(stage, activate, whichInput);
@@ -791,17 +792,25 @@ public class PlotScenarioGUI {
 
     public void activateBasicProductionPower(Stage stage, int[] activate, String[] whichInput, int index) {
         String[] whichOutput = new String[3];
+        StringBuilder string = new StringBuilder();
         int indexPar = index + 1;
+        int iter;
+        String[] resources;
 
-        String[] resources = new String[] {
-                "coin.png",
-                "servant.png",
-                "shield.png",
-                "stone.png"
-        };
-
-        if(index == 2) {
+        if(index < 2) {
             resources = new String[] {
+                    "coin.png",
+                    "servant.png",
+                    "shield.png",
+                    "stone.png"
+            };
+        }
+        else {
+            resources = new String[] {
+                    "coin.png",
+                    "servant.png",
+                    "shield.png",
+                    "stone.png",
                     "redCross.png"
             };
         }
@@ -811,23 +820,22 @@ public class PlotScenarioGUI {
         Button[] arrayButtons = new Button[5];
 
         int x = 10;
-        for (String item : resources) {
+        for (int i = 0; i < resources.length; i++) {
             //Creating a graphic (image)
-            Image img = new Image(item);
-            arrayButtons[index] = new Button();
-            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
+            Image img = new Image(resources[i]);
+            arrayButtons[i] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[i], 80, 80);
             x = x + 200;
-            root.getChildren().add(arrayButtons[index]);
-            index++;
+            root.getChildren().add(arrayButtons[i]);
         }
 
-        Button noBtn = new Button("Decline");
-        noBtn.setLayoutX(350);
-        noBtn.setLayoutY(300);
+        Button noBtn = new Button("I don't want to activate this production power!");
+        noBtn.setLayoutX(10);
+        noBtn.setLayoutY(120);
         root.getChildren().add(noBtn);
 
         //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
+        Scene scene = new Scene(root, 900, 150);
         stage.setTitle("Activate basic production power");
         stage.setScene(scene);
         stage.show();
@@ -839,25 +847,28 @@ public class PlotScenarioGUI {
             activateExtraProdPower(stage, activate, whichOutput, whichInput);
         });
 
-        for(int j = 0; j < 4 && index < 2; j++) {
-            int finalJ = j;
-            arrayButtons[j].setOnAction(e -> {
-                whichInput[3] += finalJ;
-                activateBasicProductionPower(stage,activate, whichInput, indexPar);
-            });
-        }
+        if(index < 2) iter = 4;
+        else iter = 5;
 
-        for(int j = 0; j < 5 && index == 2; j++) {
+        for(int j = 0; j < iter; j++) {
             int finalJ = j;
             arrayButtons[j].setOnAction(e -> {
-                whichOutput[0] += finalJ;
-                String num;
-                if(whichInput[3].charAt(0) == whichInput[3].charAt(1)) {
-                    num = "2";
-                    whichInput[3] = whichInput[3].charAt(0) + "";
+                if(iter == 4) {
+                    if(whichInput[3] == null)  whichInput[3] = finalJ + "";
+                    else whichInput[3] += finalJ;
+                    activateBasicProductionPower(stage, activate, whichInput, indexPar);
                 }
-                else num = "1";
-                putResourcePayedDevCard(stage, activate, whichInput, 3, num, 0);
+                else {
+                    if(whichOutput[0] == null)  whichOutput[0] = finalJ + "";
+                    else whichOutput[0] += finalJ;
+                    String num;
+                    if(whichInput[3].charAt(0) == whichInput[3].charAt(1)) {
+                        num = "2";
+                        whichInput[3] = whichInput[3].charAt(0) + "";
+                    }
+                    else num = "1";
+                    putResourcePayedDevCard(stage, activate, whichInput, 3, num, 0);
+                }
             });
         }
     }
@@ -896,7 +907,7 @@ public class PlotScenarioGUI {
             okBtn.setLayoutY(300);
             root.getChildren().add(okBtn);
 
-            Button noBtn = new Button("Decline");
+            Button noBtn = new Button("I don't want to activate this production power!");
             noBtn.setLayoutX(350);
             noBtn.setLayoutY(300);
             root.getChildren().add(noBtn);
@@ -941,7 +952,10 @@ public class PlotScenarioGUI {
                 });
             }
         }
-        else choiceAction(stage);
+        else {
+            for (int k = 0; k < 6; k++) this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+            choiceAction(stage);
+        }
     }
 
     public void pickResourceExtraProdPower(Stage stage, int[] activate, String[] whichOutput, String[] whichInput, int num) {
@@ -979,8 +993,8 @@ public class PlotScenarioGUI {
         for(int j = 0; j < 5; j++) {
             int finalJ = j;
             arrayButtons[j].setOnAction(e -> {
-                if(num == 2) whichOutput[1] += finalJ;
-                else if(num == 1) whichOutput[2] += finalJ;
+                if(num == 2) whichOutput[1] = String.valueOf(finalJ);
+                else if(num == 1) whichOutput[2] = String.valueOf(finalJ);
                 if(numPar == 0) {
                     for (int k = 0; k < 6; k++)
                         this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
