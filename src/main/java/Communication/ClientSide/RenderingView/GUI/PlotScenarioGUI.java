@@ -182,13 +182,13 @@ public class PlotScenarioGUI {
                 String[] resource;
                 if(finalK < 4) {
                     resource = new String[3];
-                    for(int i = 0; i < 4; i++) {
+                    for(int i = 0; i < 3; i++) {
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[i][finalK].getColour());
                     }
                 }
                 else {
                     resource = new String[4];
-                    for(int i = 0; i < 3; i++) {
+                    for(int i = 0; i < 4; i++) {
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
@@ -545,7 +545,6 @@ public class PlotScenarioGUI {
     }
 
     public void putCardOnPlayerBoard(Stage stage, int[] coordinates, String[][] pickedResources) {
-        int[] dimPile = new int[3];
         int i, x = 90;
 
         Image image = new Image("devCardPlayerBoard.png");
@@ -557,19 +556,12 @@ public class PlotScenarioGUI {
         imageView1.setPreserveRatio(true);
         Pane root = new Pane(imageView1);
 
-        // Trovo la lunghezza della pila di carte.
-        for (i = 0; i < 3; i++) {
-            if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null)
-                dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
-            else dimPile[i] = 0;
-        }
-
         //Creating buttons
         Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
            if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
-                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
                 ImageView imageView2 = new ImageView();
                 imageView2.setImage(img);
                 imageView2.setLayoutX(10);
