@@ -604,13 +604,11 @@ public class PlotScenarioGUI {
 
     public void activateProductionDevCards(Stage stage, int[] activate, String[] whichInput) {
         int i;
-        int[] dimPile = new int[3];
         int numBottons = 0;
         int x = 10;
 
         for (i = 0; i < 3; i++) {
-            dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
-            if (dimPile[i] >= 0) numBottons++;
+            if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) numBottons++;
         }
 
         Image image = new Image("devCardPlayerBoard.png");
@@ -626,11 +624,13 @@ public class PlotScenarioGUI {
         Button[] arrayButtons = new Button[numBottons];
         for (i = 0; i < numBottons; i++) {
             //Creating a graphic (image)
-            Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
-            arrayButtons[i] = new Button();
-            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[i], 250, 200);
-            x = x + 200;
-            root.getChildren().add(arrayButtons[i]);
+            if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
+                arrayButtons[i] = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[i], 250, 200);
+                x = x + 200;
+                root.getChildren().add(arrayButtons[i]);
+            }
         }
 
         Button okBtn = new Button("Submit");
@@ -666,24 +666,24 @@ public class PlotScenarioGUI {
                 String num = "1";
                 if(activate[finalJ] != 1) {
                     activate[finalJ] = 1;
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("COINS") != 0) {
                         whichInput[finalJ] += "0";
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") > 1)
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("COINS") > 1)
                             num = "2";
                     }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SHIELDS") != 0) {
                         whichInput[finalJ] += "1";
-                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") > 1)
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SHIELDS") > 1)
                             num = "2";
                     }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SERVANTS") != 0) {
                         whichInput[finalJ] += "2";
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") > 1)
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("SERVANTS") > 1)
                             num = "2";
                     }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("STONES") != 0) {
                         whichInput[finalJ] += "3";
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") > 0)
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][0].getDevelopmentCardInput().get("STONES") > 0)
                             num = "2";
                     }
                     putResourcePayedDevCard(stage, activate, whichInput, finalJ, num,0);
