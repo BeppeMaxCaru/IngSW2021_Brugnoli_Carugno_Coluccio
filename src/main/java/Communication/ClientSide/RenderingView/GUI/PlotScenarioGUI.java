@@ -30,6 +30,8 @@ public class PlotScenarioGUI {
 
     public void choiceAction(Stage stage) {
         GridPane root = new GridPane();
+        int[] activate = new int[6];
+        String[] whichOutput = new String[6];
         Button playLeaderCardButton = new Button("Play leader card");
         Button discardLeaderCardButton = new Button("Discard Leader Card");
         Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
@@ -65,7 +67,7 @@ public class PlotScenarioGUI {
             });
 
             activateProdButton.setOnAction(e -> {
-                activateProductionDevCards(stage);
+                activateProductionDevCards(stage, activate, whichOutput);
             });
 
             exitButton.setOnAction(e -> {
@@ -585,7 +587,7 @@ public class PlotScenarioGUI {
 
         //Setting the stage
         Scene scene = new Scene(root, 600, 470);
-        stage.setTitle("Where do you want to pick the resources from?");
+        stage.setTitle("Where do you want to put the development card?");
         stage.setScene(scene);
         stage.show();
 
@@ -600,150 +602,273 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void activateProductionDevCards(Stage stage) {
-        Group root = new Group();
+    public void activateProductionDevCards(Stage stage, int[] activate, String[] whichInput) {
         int i;
         int[] dimPile = new int[3];
-        int[] activate = new int[6];
-        String[] whichInput = new String[6];
         int numBottons = 0;
         int x = 10;
-        int index = 0;
 
         for (i = 0; i < 3; i++) {
             dimPile[i] = this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i].length - 1;
-            if (dimPile[i] != 0) numBottons++;
+            if (dimPile[i] >= 0) numBottons++;
         }
+
+        Image image = new Image("devCardPlayerBoard.png");
+        ImageView imageView1 = new ImageView();
+        imageView1.setImage(image);
+        imageView1.setX(10);
+        imageView1.setY(10);
+        imageView1.setFitWidth(575);
+        imageView1.setPreserveRatio(true);
+        Pane root = new Pane(imageView1);
+
         //Creating buttons
         Button[] arrayButtons = new Button[numBottons];
-        for (int click = 0; click < numBottons + 1; click++) {
-            for (i = 0; i < numBottons; i++) {
-                //Creating a graphic (image)
-                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
-                x = x + 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
-            }
-            Button okBtn = new Button("Submit");
+        for (i = 0; i < numBottons; i++) {
+            //Creating a graphic (image)
+            Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][dimPile[i]].getImage());
+            arrayButtons[i] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[i], 250, 200);
+            x = x + 200;
+            root.getChildren().add(arrayButtons[i]);
+        }
+
+        Button okBtn = new Button("Submit");
+        if(numBottons > 0) {
             okBtn.setLayoutX(300);
             okBtn.setLayoutY(300);
-            Button noBtn = new Button("Decline");
-            noBtn.setLayoutX(350);
-            noBtn.setLayoutY(300);
-            root.getChildren().addAll(okBtn, noBtn);
+            root.getChildren().add(okBtn);
+        }
 
-            //Setting the stage
-            Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Buy development cards");
-            stage.setScene(scene);
-            stage.show();
+        Button noBtn = new Button("Decline");
+        noBtn.setLayoutX(350);
+        noBtn.setLayoutY(300);
+        root.getChildren().add(noBtn);
 
-            okBtn.setOnAction(e -> {
-                activateBasicProductionPower(stage, activate, whichInput);
-            });
+        //Setting the stage
+        Scene scene = new Scene(root, 740, 130);
+        stage.setTitle("Activate production power");
+        stage.setScene(scene);
+        stage.show();
 
-            noBtn.setOnAction(e -> {
-                activateBasicProductionPower(stage, null, whichInput);
-            });
+        okBtn.setOnAction(e -> {
+            activateBasicProductionPower(stage, activate, whichInput, 0);
+        });
 
+        noBtn.setOnAction(e -> {
+            for(int j = 0; j < 3; j++) activate[j] = 0;
+            activateBasicProductionPower(stage, activate, whichInput, 0);
+        });
 
-            for (int j = 0; j < numBottons; j++) {
-                int finalJ = j;
-                arrayButtons[j].setOnAction(e -> {
+        for (int j = 0; j < numBottons; j++) {
+            int finalJ = j;
+            arrayButtons[j].setOnAction(e -> {
+                String num = "1";
+                if(activate[finalJ] != 1) {
                     activate[finalJ] = 1;
-                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0)
-                        whichInput[finalJ] = whichInput[finalJ] + "0";
-                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0)
-                        whichInput[finalJ] = whichInput[finalJ] + "1";
-                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0)
-                        whichInput[finalJ] = whichInput[finalJ] + "2";
-                    if(handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0)
-                        whichInput[finalJ] = whichInput[finalJ] + "3";
-                });
-            }
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") != 0) {
+                        whichInput[finalJ] += "0";
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("COINS") > 1)
+                            num = "2";
+                    }
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") != 0) {
+                        whichInput[finalJ] += "1";
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SHIELDS") > 1)
+                            num = "2";
+                    }
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") != 0) {
+                        whichInput[finalJ] += "2";
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("SERVANTS") > 1)
+                            num = "2";
+                    }
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") != 0) {
+                        whichInput[finalJ] += "3";
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[finalJ][dimPile[finalJ]].getDevelopmentCardInput().get("STONES") > 0)
+                            num = "2";
+                    }
+                    putResourcePayedDevCard(stage, activate, whichInput, finalJ, num,0);
+                }
+                else activateProductionDevCards(stage, activate, whichInput);
+            });
         }
     }
 
-    public void activateBasicProductionPower(Stage stage, int[] activate, String[] whichInput) {
-        StringBuilder whichOutput = new StringBuilder();
+    public void putResourcePayedDevCard(Stage stage, int[] activate, String[] whichInput, int index, String num, int charResource) {
+        String nameImage;
 
-        for(int i = 0; i < 3; i++) {
-            String[] resources = new String[] {
-                    "coin.png",
-                    "servant.png",
-                    "shield.png",
-                    "stone.png"
+        switch (whichInput[index].charAt(charResource)) {
+            case '0':
+                nameImage = "coin.png";
+                break;
+            case '1':
+                nameImage = "shield.png";
+                break;
+            case '2':
+                nameImage = "servant.png";
+                break;
+            case '3':
+                nameImage = "stone.png";
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + whichInput[index]);
+        }
+
+        Image image = new Image(nameImage);
+        ImageView imageView = new ImageView();
+        Pane root = new Pane(imageView);
+        imageView.setImage(image);
+        imageView.setLayoutX(10);
+        imageView.setLayoutY(10);
+        imageView.setFitWidth(200);
+        imageView.setPreserveRatio(true);
+
+        Button warehouse = new Button("Warehouse");
+        warehouse.setLayoutX(300);
+        warehouse.setLayoutY(60);
+        Button chest = new Button("Chest");
+        chest.setLayoutX(300);
+        chest.setLayoutY(100);
+        Button extra = new Button("Extra Warehouse");
+        extra.setLayoutX(300);
+        extra.setLayoutY(140);
+        root.getChildren().addAll(warehouse, chest, extra);
+
+        //Setting the stage
+        Scene scene = new Scene(root, 500, 300);
+        stage.setTitle("Where do you want to pick the resources?");
+        stage.setScene(scene);
+        stage.show();
+
+        warehouse.setOnAction(e -> {
+            actionOnWhichInput(stage, activate, whichInput, index, num, "w", null);
+        });
+
+        chest.setOnAction(e -> {
+            actionOnWhichInput(stage, activate, whichInput, index, num, "c", null);
+        });
+
+        extra.setOnAction(e -> {
+            actionOnWhichInput(stage, activate, whichInput, index, num, "l", null);
+        });
+    }
+
+    public void actionOnWhichInput(Stage stage, int[] activate, String[] whichInput, int index, String num, String reserve, String[] whichOutput) {
+        if(whichInput[index].length() == 1 && num.equals("1")) {
+            whichInput[index] += num + reserve;
+            redirect(index, activate, stage, whichInput, whichOutput);
+        }
+
+        else if(whichInput[index].length() == 1 && num.equals("2")) {
+            whichInput[index] += num + reserve;
+            putResourcePayedDevCard(stage, activate, whichInput, index, num, 0);
+        }
+
+        else if(whichInput[index].length() == 3 && num.equals("2") && whichInput[index].charAt(2) == reserve.charAt(0)) {
+            redirect(index, activate, stage, whichInput, whichOutput);
+        }
+
+        else if(whichInput[index].length() == 3 && num.equals("2") && whichInput[index].charAt(2) != reserve.charAt(0)) {
+            whichInput[index] = whichInput[index].charAt(0) + "1" + whichInput[index].charAt(2) + whichInput[index].charAt(0) + "1" + reserve;
+            redirect(index, activate, stage, whichInput, whichOutput);
+        }
+        else if(whichInput[index].length() == 2 && num.equals("1")) {
+            whichInput[index] = whichInput[index].charAt(0) + "1" + reserve + whichInput[index].charAt(1);
+            putResourcePayedDevCard(stage, activate, whichInput, index, num, 3);
+        }
+
+        else if(whichInput[index].length() == 4 && num.equals("1")) {
+            whichInput[index] += "1" + reserve;
+            redirect(index, activate, stage, whichInput, whichOutput);
+        }
+    }
+
+    public void redirect(int index, int[] activate, Stage stage, String[] whichInput, String[] whichOutput) {
+        if(index < 3 && (activate[0] != 1 || activate[1] != 1 || activate[2] != 1)) activateProductionDevCards(stage, activate, whichInput);
+        else if(index < 3) activateBasicProductionPower(stage, activate, whichInput, 0);
+        else if(index == 3) activateExtraProdPower(stage, activate, whichOutput, whichInput);
+        else if(activate[4] != 1 || activate[5] != 1) activateExtraProdPower(stage, activate, whichOutput, whichInput);
+    }
+
+    public void activateBasicProductionPower(Stage stage, int[] activate, String[] whichInput, int index) {
+        String[] whichOutput = new String[3];
+        int indexPar = index + 1;
+
+        String[] resources = new String[] {
+                "coin.png",
+                "servant.png",
+                "shield.png",
+                "stone.png"
+        };
+
+        if(index == 2) {
+            resources = new String[] {
+                    "redCross.png"
             };
+        }
 
-            if(i == 2) {
-                resources = new String[] {
-                        "redCross.png"
-                };
-            }
+        Group root = new Group();
+        //Creating buttons
+        Button[] arrayButtons = new Button[5];
 
-            Group root = new Group();
-            //Creating buttons
-            Button[] arrayButtons = new Button[5];
+        int x = 10;
+        for (String item : resources) {
+            //Creating a graphic (image)
+            Image img = new Image(item);
+            arrayButtons[index] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
+            x = x + 200;
+            root.getChildren().add(arrayButtons[index]);
+            index++;
+        }
 
-            int x = 10;
-            int index = 0;
-            for (String item : resources) {
-                //Creating a graphic (image)
-                Image img = new Image(item);
-                arrayButtons[index] = new Button();
-                handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
-                x = x + 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
-            }
-            Button okBtn = new Button("Submit");
-            okBtn.setLayoutX(300);
-            okBtn.setLayoutY(300);
-            Button noBtn = new Button("Decline");
-            noBtn.setLayoutX(350);
-            noBtn.setLayoutY(300);
-            root.getChildren().addAll(okBtn, noBtn);
+        Button noBtn = new Button("Decline");
+        noBtn.setLayoutX(350);
+        noBtn.setLayoutY(300);
+        root.getChildren().add(noBtn);
 
-            //Setting the stage
-            Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Activate basic production power");
-            stage.setScene(scene);
-            stage.show();
+        //Setting the stage
+        Scene scene = new Scene(root, 740, 130);
+        stage.setTitle("Activate basic production power");
+        stage.setScene(scene);
+        stage.show();
 
-            okBtn.setOnAction(e -> {
-                activate[3] = 1;
-                activateExtraProdPower(stage, activate, whichOutput, whichInput);
+        noBtn.setOnAction(e -> {
+            activate[3] = 0;
+            whichOutput[0] = null;
+            whichInput[3] = null;
+            activateExtraProdPower(stage, activate, whichOutput, whichInput);
+        });
+
+        for(int j = 0; j < 4 && index < 2; j++) {
+            int finalJ = j;
+            arrayButtons[j].setOnAction(e -> {
+                whichInput[3] += finalJ;
+                activateBasicProductionPower(stage,activate, whichInput, indexPar);
             });
+        }
 
-            noBtn.setOnAction(e -> {
-                whichInput[3] = null;
-                activateExtraProdPower(stage, activate, null, whichInput);
+        for(int j = 0; j < 5 && index == 2; j++) {
+            int finalJ = j;
+            arrayButtons[j].setOnAction(e -> {
+                whichOutput[0] += finalJ;
+                String num;
+                if(whichInput[3].charAt(0) == whichInput[3].charAt(1)) {
+                    num = "2";
+                    whichInput[3] = whichInput[3].charAt(0) + "";
+                }
+                else num = "1";
+                putResourcePayedDevCard(stage, activate, whichInput, 3, num, 0);
             });
-
-            for(int j = 0; j < 4 && i < 2; j++) {
-                int finalJ = j;
-                arrayButtons[j].setOnAction(e -> {
-                    whichInput[3] = whichInput[3] + finalJ;
-                });
-            }
-
-            for(int j = 0; j < 5 && i == 2; j++) {
-                int finalJ = j;
-                arrayButtons[j].setOnAction(e -> {
-                    whichOutput.append(finalJ);
-                });
-            }
         }
     }
 
-    public void activateExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput, String[] whichInput) {
+    public void activateExtraProdPower(Stage stage, int[] activate, String[] whichOutput, String[] whichInput) {
         int numBottons = 0;
         int indexLeader = 0;
         int index = 0;
         int x = 10;
         Group root = new Group();
+        Image img;
 
         for(int i = 0; i < 2; i++) {
             if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraProductionPowerLeaderCard) {
@@ -751,28 +876,30 @@ public class PlotScenarioGUI {
                 indexLeader = i;
             }
         }
-        //Creating buttons
-        Button[] arrayButtons = new Button[numBottons];
-        for (int click = 0; click < numBottons + 1; click++) {
+        if(numBottons > 0) {
+            //Creating buttons
+            Button[] arrayButtons = new Button[numBottons];
             for (int i = 0; i < numBottons; i++) {
                 //Creating a graphic (image)
-                if(numBottons == 1) {
-                    Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[indexLeader].getImage());
-                    arrayButtons[index] = new Button();
-                    this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
-                    x = x + 200;
-                    root.getChildren().add(arrayButtons[index]);
-                    index++;
-                }
+                if (numBottons == 1)
+                    img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[indexLeader].getImage());
+                else img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
+                arrayButtons[index] = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
+                x = x + 200;
+                root.getChildren().add(arrayButtons[index]);
+                index++;
             }
 
             Button okBtn = new Button("Submit");
             okBtn.setLayoutX(300);
             okBtn.setLayoutY(300);
+            root.getChildren().add(okBtn);
+
             Button noBtn = new Button("Decline");
             noBtn.setLayoutX(350);
             noBtn.setLayoutY(300);
-            root.getChildren().addAll(okBtn, noBtn);
+            root.getChildren().add(noBtn);
 
             //Setting the stage
             Scene scene = new Scene(root, 740, 130);
@@ -781,75 +908,91 @@ public class PlotScenarioGUI {
             stage.show();
 
             okBtn.setOnAction(e -> {
-                pickResourceExtraProdPower(stage, activate, whichOutput);
+                if(activate[4] == 0 && activate[5] == 0) {
+                    for (int k = 0; k < 6; k++)
+                        this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+                    choiceAction(stage);
+                }
+                else {
+                    int num = 0;
+                    if(activate[4] == 1) num++;
+                    if(activate[5] == 1) num++;
+                    pickResourceExtraProdPower(stage, activate, whichOutput, whichInput, num);
+                }
             });
 
             noBtn.setOnAction(e -> {
+                activate[4] = 0;
+                activate[5] = 0;
+                whichInput[4] = null;
+                whichInput[5] = null;
+                whichOutput[1] = null;
+                whichOutput[2] = null;
+                for (int k = 0; k < 6; k++) this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
                 choiceAction(stage);
             });
 
-            for(int j = 0; j < numBottons; j++) {
+            for (int j = 0; j < numBottons; j++) {
                 int finalJ = j;
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ + 4] = 1;
+                    whichInput[finalJ + 4] = this.handlerGUI.getClientMain().getPlayerboard().getExtraProductionPowerInput()[finalJ];
+                    putResourcePayedDevCard(stage, activate, whichInput, finalJ + 4, "1", 0);
                 });
             }
         }
+        else choiceAction(stage);
     }
 
-    public void pickResourceExtraProdPower(Stage stage, int[] activate, StringBuilder whichOutput) {
-        int num = 0;
-        if(activate[4] == 1) num++;
-        if(activate[5] == 1) num++;
-        for(; num > 0; num--) {
-            String[] resources = new String[]{
-                    "coin.png",
-                    "servant.png",
-                    "shield.png",
-                    "stone.png",
-                    "redCross"
-            };
-            Group root = new Group();
-            //Creating buttons
-            Button[] arrayButtons = new Button[5];
+    public void pickResourceExtraProdPower(Stage stage, int[] activate, String[] whichOutput, String[] whichInput, int num) {
+        int numPar = num - 1;
 
-            int x = 10;
-            int index = 0;
-            for (String item : resources) {
-                //Creating a graphic (image)
-                Image img = new Image(item);
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
-                x = x + 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
-            }
-            Button okBtn = new Button("Submit");
-            okBtn.setLayoutX(300);
-            okBtn.setLayoutY(300);
+        String[] resources = new String[]{
+                "coin.png",
+                "servant.png",
+                "shield.png",
+                "stone.png",
+                "redCross"
+        };
+        Group root = new Group();
+        //Creating buttons
+        Button[] arrayButtons = new Button[5];
 
-            //Setting the stage
-            Scene scene = new Scene(root, 740, 130);
-            stage.setTitle("Choose the resource you want to have.");
-            stage.setScene(scene);
-            stage.show();
+        int x = 10;
+        int index = 0;
+        for (String item : resources) {
+            //Creating a graphic (image)
+            Image img = new Image(item);
+            arrayButtons[index] = new Button();
+            this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 80, 80);
+            x = x + 200;
+            root.getChildren().add(arrayButtons[index]);
+            index++;
+        }
 
-            okBtn.setOnAction(e -> {
-                this.handlerGUI.setActivation(activate);
-                choiceAction(stage);
+        //Setting the stage
+        Scene scene = new Scene(root, 740, 130);
+        stage.setTitle("Choose the resource you want to have.");
+        stage.setScene(scene);
+        stage.show();
+
+        for(int j = 0; j < 5; j++) {
+            int finalJ = j;
+            arrayButtons[j].setOnAction(e -> {
+                if(num == 2) whichOutput[1] += finalJ;
+                else if(num == 1) whichOutput[2] += finalJ;
+                if(numPar == 0) {
+                    for (int k = 0; k < 6; k++)
+                        this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+                    choiceAction(stage);
+                }
+                else pickResourceExtraProdPower(stage, activate, whichOutput, whichInput, numPar);
             });
-
-            for(int j = 0; j < 5; j++) {
-                int finalJ = j;
-                arrayButtons[j].setOnAction(e -> {
-                    whichOutput.append(finalJ);
-                });
-            }
         }
     }
 
     public void waitForYourTurn(Stage stage) {
-        this.handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
+        handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
     }
 
 }
