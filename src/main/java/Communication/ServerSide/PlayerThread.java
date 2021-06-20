@@ -451,6 +451,7 @@ public class PlayerThread implements Runnable {
             this.sender.close();
             this.receiver.close();
             this.playerSocket.close();
+            //System.out.println("Giocatore staccato");
         } catch (Exception e) {
             System.out.println("Rimosso giocatore");
             e.printStackTrace();

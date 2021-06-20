@@ -84,7 +84,7 @@ public class PlotScenarioGUI {
         Button secondLeader = new Button();
 
         int x = 10;
-        for (int i = 0; i < this.handlerGUI.getClientMain().getLeaderCards().length; i++) {
+        for (int i = 0; i < 2; i++) {
             //Creating a graphic (image)
             Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
             if (i == 0 && !this.handlerGUI.getClientMain().getLeaderCards()[0].isPlayed()) {
@@ -999,7 +999,7 @@ public class PlotScenarioGUI {
     }
 
     public void waitForYourTurn(Stage stage) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
     }
 
 }

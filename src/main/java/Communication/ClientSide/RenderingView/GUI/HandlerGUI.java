@@ -21,19 +21,7 @@ import java.util.*;
 
 public class HandlerGUI extends Application implements RenderingView {
 
-    //String nickname;
-    //int playerNumber;
-
-    //int activationProd;
     int[] activate;
-    //int gameMode;
-
-    //Input methods parameters
-    //Initialized by clientMain/serverSender with setters
-    //LeaderCard[] playerLeaders;
-    //Playerboard playerBoard;
-    //Market market;
-    //DevelopmentCardsDecksGrid grid;
 
     int correctAction;
 
@@ -144,7 +132,9 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
             this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
+            //System.out.println(startingMessage.getLeaderCards().length);
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
+            System.out.println(startingMessage.getLeaderCards()[0].getClass());
             this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);
             //updatePlayerBoard();
         } catch (Exception e) {
@@ -156,8 +146,9 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
             this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
-            System.out.println(playerBoardMessage.getPlayerboard().getVictoryPoints());
+            System.out.println(playerBoardMessage.getPlayerboard().getClass());
         } catch (Exception e) {
+            //System.out.println("Non arriva playerboard");
             this.error(e);
         }
     }

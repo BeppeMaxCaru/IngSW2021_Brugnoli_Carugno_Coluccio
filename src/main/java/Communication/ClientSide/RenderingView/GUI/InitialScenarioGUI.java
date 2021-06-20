@@ -98,7 +98,7 @@ public class InitialScenarioGUI {
     }
 
     public void welcome(Stage stage) {
-        handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.handlerGUI.getClientMain().getNickname() +
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.handlerGUI.getClientMain().getNickname() +
                 "!\nWelcome to Master of Renaissance online!", stage);
         this.handlerGUI.updateMarket();
     }
