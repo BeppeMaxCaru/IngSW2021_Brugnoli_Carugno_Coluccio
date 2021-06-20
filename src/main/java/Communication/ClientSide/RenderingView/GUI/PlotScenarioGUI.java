@@ -560,20 +560,21 @@ public class PlotScenarioGUI {
         Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
-           if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i] != null) {
-                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
-                ImageView imageView2 = new ImageView();
-                imageView2.setImage(img);
-                imageView2.setLayoutX(10);
-                imageView2.setLayoutY(10);
-                imageView2.setFitWidth(200);
-                imageView2.setPreserveRatio(true);
-                arrayButtons[i] = new Button("Click\nHere!");
-                arrayButtons[i].setLayoutX(x);
-                arrayButtons[i].setLayoutY(250);
-                root.getChildren().add(arrayButtons[i]);
-                x+= 170;
+           if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) {
+               Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
+               ImageView imageView2 = new ImageView();
+               imageView2.setImage(img);
+               imageView2.setLayoutX(x);
+               imageView2.setLayoutY(250);
+               imageView2.setFitWidth(200);
+               imageView2.setPreserveRatio(true);
            }
+           arrayButtons[i] = new Button("Click\nHere!");
+           arrayButtons[i].setLayoutX(x);
+           arrayButtons[i].setLayoutY(250);
+           root.getChildren().add(arrayButtons[i]);
+           x+= 170;
+
         }
 
         //Setting the stage
