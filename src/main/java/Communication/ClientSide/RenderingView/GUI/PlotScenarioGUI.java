@@ -84,17 +84,20 @@ public class PlotScenarioGUI {
         Button secondLeader = new Button();
 
         int x = 10;
-        for (int i = 0; i < 2; i++) {
+        //Qui va 2
+        for (int i = 0; i < this.handlerGUI.getClientMain().getLeaderCards().length; i++) {
             //Creating a graphic (image)
-            Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
-            if (i == 0 && !this.handlerGUI.getClientMain().getLeaderCards()[0].isPlayed()) {
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, firstLeader, 450, 150);
-                x += 200;
-                root.getChildren().add(firstLeader);
-            } else if (i == 1 && !this.handlerGUI.getClientMain().getLeaderCards()[1].isPlayed()) {
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, secondLeader, 450, 150);
-                x += 200;
-                root.getChildren().add(secondLeader);
+            if (this.handlerGUI.getClientMain().getLeaderCards()[i] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
+                if (i == 0 && !this.handlerGUI.getClientMain().getLeaderCards()[0].isPlayed()) {
+                    this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, firstLeader, 450, 150);
+                    x += 200;
+                    root.getChildren().add(firstLeader);
+                } else if (i == 1 && !this.handlerGUI.getClientMain().getLeaderCards()[1].isPlayed()) {
+                    this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, secondLeader, 450, 150);
+                    x += 200;
+                    root.getChildren().add(secondLeader);
+                }
             }
         }
 
