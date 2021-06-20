@@ -635,18 +635,18 @@ public class PlotScenarioGUI {
 
         Button okBtn = new Button("Submit");
         if(numBottons > 0) {
-            okBtn.setLayoutX(300);
-            okBtn.setLayoutY(300);
+            okBtn.setLayoutX(470);
+            okBtn.setLayoutY(400);
             root.getChildren().add(okBtn);
         }
 
         Button noBtn = new Button("Decline");
-        noBtn.setLayoutX(350);
-        noBtn.setLayoutY(300);
+        noBtn.setLayoutX(500);
+        noBtn.setLayoutY(400);
         root.getChildren().add(noBtn);
 
         //Setting the stage
-        Scene scene = new Scene(root, 740, 130);
+        Scene scene = new Scene(root, 600, 470);
         stage.setTitle("Activate production power");
         stage.setScene(scene);
         stage.show();

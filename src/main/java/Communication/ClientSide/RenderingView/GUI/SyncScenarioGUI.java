@@ -22,7 +22,10 @@ public class SyncScenarioGUI {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), stage);
 
         if(this.handlerGUI.getClientMain().getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
-        else this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
+        else {
+            this.handlerGUI.getMsg().sendStartingRes(new ArrayList<>());
+            this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
+        }
     }
 
     public void startingResource(Stage stage, ArrayList<String> resStart) {
