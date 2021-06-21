@@ -28,7 +28,7 @@ public class SendingMessages {
             NicknameMessage nicknameMessage = new NicknameMessage(this.clientMain.getNickname());
             this.sender.writeObject(nicknameMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -38,7 +38,7 @@ public class SendingMessages {
             StartingResourcesMessage resourcesMessage = new StartingResourcesMessage(this.clientMain.getPlayerNumber(), startingRes);
             this.sender.writeObject(resourcesMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -48,7 +48,7 @@ public class SendingMessages {
             DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), leader);
             this.sender.writeObject(discardLeaderMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -58,7 +58,7 @@ public class SendingMessages {
             PlayLeaderMessage playLeaderMessage = new PlayLeaderMessage(this.clientMain.getPlayerNumber(), leader);
             this.sender.writeObject(playLeaderMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -68,7 +68,7 @@ public class SendingMessages {
             MarketResourcesMessage resourcesMessage = new MarketResourcesMessage(this.clientMain.getPlayerNumber(), parameter, index, wlChoice, chosenMarble);
             this.sender.writeObject(resourcesMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -78,23 +78,25 @@ public class SendingMessages {
             BuyCardMessage buyCard = new BuyCardMessage(column, level, this.clientMain.getPlayerNumber(), quantity, shelf, pos);
             this.sender.writeObject(buyCard);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
-    public void sendActivationProdAction(int k, int[] activation, String[] whichInput, String[] whichOutput){
+    public void sendActivationProdAction(int[] activation, String[] whichInput, String[] whichOutput){
         try {
             this.sender.reset();
+            int[] outputs = new int[3];
+            if(whichOutput!=null)
+                for(int k=0; k< whichOutput.length; k++)
+                {
+                    if(whichOutput[k]!=null)
+                        outputs[k] = Integer.parseInt(whichOutput[k]);
+                }
             ActivateProdMessage prodMessage;
-            if (activation[k] == 0) {
-                prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), null, null);
-            } else {
-                if (k <3) prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], null);
-                else prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), whichInput[k], whichOutput[3-k]);
-            }
+            prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), activation, whichInput, outputs);
             this.sender.writeObject(prodMessage);
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 
@@ -102,7 +104,7 @@ public class SendingMessages {
         try {
             this.sender.writeObject(new EndTurnMessage(this.clientMain.getPlayerNumber()));
         } catch (Exception e) {
-            this.view.error(e);
+            e.printStackTrace();
         }
     }
 }

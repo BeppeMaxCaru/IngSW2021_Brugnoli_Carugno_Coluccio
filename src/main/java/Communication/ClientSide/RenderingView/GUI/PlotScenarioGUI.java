@@ -738,15 +738,15 @@ public class PlotScenarioGUI {
         stage.show();
 
         warehouse.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "w", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "W", null);
         });
 
         chest.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "c", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "C", null);
         });
 
         extra.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "l", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "L", null);
         });
     }
 
@@ -917,8 +917,7 @@ public class PlotScenarioGUI {
 
             okBtn.setOnAction(e -> {
                 if(activate[4] == 0 && activate[5] == 0) {
-                    for (int k = 0; k < 6; k++)
-                        this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+                    this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                     choiceAction(stage);
                 }
                 else {
@@ -936,7 +935,7 @@ public class PlotScenarioGUI {
                 whichInput[5] = null;
                 whichOutput[1] = null;
                 whichOutput[2] = null;
-                for (int k = 0; k < 6; k++) this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+                this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                 choiceAction(stage);
             });
 
@@ -950,7 +949,7 @@ public class PlotScenarioGUI {
             }
         }
         else {
-            for (int k = 0; k < 6; k++) this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+            this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
             choiceAction(stage);
         }
     }
@@ -994,7 +993,7 @@ public class PlotScenarioGUI {
                 else if(num == 1) whichOutput[2] = String.valueOf(finalJ);
                 if(numPar == 0) {
                     for (int k = 0; k < 6; k++)
-                        this.handlerGUI.getMsg().sendActivationProdAction(k, activate, whichInput, whichOutput);
+                        this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                     choiceAction(stage);
                 }
                 else pickResourceExtraProdPower(stage, activate, whichOutput, whichInput, numPar);

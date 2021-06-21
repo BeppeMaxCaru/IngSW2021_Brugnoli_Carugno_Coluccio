@@ -165,9 +165,7 @@ public class ServerSender extends Thread {
                                             mainAction++;
                                         else this.cli.notValidAction();
                                 } else {
-                                    for (int k = 0; k < 6; k++) {
-                                        this.msg.sendActivationProdAction(k, activation, whichInput, whichOutput);
-                                    }
+                                    this.msg.sendActivationProdAction(activation, whichInput, whichOutput);
                                 }
                                 break;
                             }

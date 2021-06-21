@@ -330,6 +330,7 @@ public class PlayerThread implements Runnable {
                         }
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.sendErrorMessage();
                     this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (market action)");
@@ -380,26 +381,23 @@ public class PlayerThread implements Runnable {
                 try {
                     ActivateProdMessage prodMessage = (ActivateProdMessage) object;
                     System.out.println("Activate prod received");
-                    if(!this.mainAction)
-                    {
-                        int[] activation = new int[6];
-                        String[] whichInput = new String[6];
-                        int[] whichOutput = new int[3];
+
+                    int[] activation;
+                    String[] whichInput;
+                    int[] whichOutput;
+
+                    if (!this.mainAction) {
+                        activation=prodMessage.getActivation();
+                        whichInput=prodMessage.getInputs();
+                        whichOutput=prodMessage.getOutputs();
 
                         for (int k = 0; k < 6; k++) {
-                            if (prodMessage.getInputs() != null) {
-                                activation[k] = 1;
-                                whichInput[k] = prodMessage.getInputs();
-                                if (k >= 3) {
-                                    whichOutput[k - 3] = Integer.parseInt(prodMessage.getOutputs());
-                                }
-                            } else {
-                                activation[k] = 0;
-                                whichInput[k] = "";
-                                whichOutput[k] = -1;
+                            System.out.println("Activation power n."+k+": "+activation[k]);
+                            System.out.println(whichInput[k]);
+                            if (k >= 3) {
+                                System.out.println(whichOutput[k - 3]);
                             }
                         }
-
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                             System.out.println("Playerboard sent");

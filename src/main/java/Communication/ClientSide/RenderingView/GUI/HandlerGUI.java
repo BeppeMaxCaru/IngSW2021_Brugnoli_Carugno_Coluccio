@@ -44,7 +44,7 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public void start(Stage stage) throws Exception {
         Parameters args = getParameters();
-        //this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
+        this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
         this.genericClassGUI = new GenericClassGUI(this);
         this.initialScenarioGUI = new InitialScenarioGUI(this);
@@ -54,8 +54,8 @@ public class HandlerGUI extends Application implements RenderingView {
 
         //System.out.println(this.clientMain.getHostName());
         this.setStage(stage);
-        this.playerBoardScenario.PlayerBoard(stage);
-        //this.initialScenarioGUI.nickname(this.stage);
+        //this.playerBoardScenario.PlayerBoard(stage);
+        this.initialScenarioGUI.nickname(this.stage);
     }
 
     public GenericClassGUI getGenericClassGUI() {

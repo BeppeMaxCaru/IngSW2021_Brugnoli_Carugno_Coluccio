@@ -235,6 +235,11 @@ public class GameController{
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
+        int act = 0;
+        for (int i : activation) act = act + i;
+        if(act==0)
+            return false;
+
 
         for(int k=0; k<activation.length; k++)
         {

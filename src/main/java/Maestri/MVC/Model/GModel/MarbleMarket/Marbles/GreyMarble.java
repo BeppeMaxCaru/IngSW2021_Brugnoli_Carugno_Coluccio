@@ -50,6 +50,8 @@ public class GreyMarble extends Marble implements Serializable {
             //If the resource has to be discarded, other players obtain 1 faithPoint
             for(Player p : players)
             {
+                if(p==null)
+                    break;
                 /*
                  for-each player in the game
                  If he isn't the one who discards the marble, he obtains 1 faithPoint
