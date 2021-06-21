@@ -78,7 +78,7 @@ public class GameController{
             this.currentPlayerNumber++;
             if (this.currentPlayerNumber == 4) this.currentPlayerNumber = 0;
         }while(this.gameModel.getPlayers()[this.currentPlayerNumber]==null);
-        System.out.println(this.currentPlayerNumber);
+        System.out.println("Turn of player "+this.currentPlayerNumber);
         for(PlayerThread thread : this.playerThreads){
             if(thread.getPlayerThreadNumber()==this.currentPlayerNumber)
             {

@@ -28,7 +28,7 @@ public class ServerReceiver extends Thread {
 
             //Switch with different messages to receive and prints results
 
-            Message object = null;
+            Message object;
 
             try {
                 object = (Message) this.receiver.readObject();

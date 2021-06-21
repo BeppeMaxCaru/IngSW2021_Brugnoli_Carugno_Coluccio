@@ -196,7 +196,7 @@ public class PlotScenarioGUI {
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
-                putResources(stage, coordinates, resource, 0, whichWl, "x");
+                putResources(stage, coordinates, resource, 0, whichWl, "X");
             });
             if(k == 4) {
                 x = 0;
@@ -214,8 +214,10 @@ public class PlotScenarioGUI {
         else parameter = "COLUMN";
 
         for(int i = 0; i < 2; i++) {
-            if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
-                checkExtraSpace = true;
+            if(this.handlerGUI.getClientMain().getLeaderCards()[i]!=null){
+                if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
+                    checkExtraSpace = true;
+                }
             }
         }
 
@@ -244,7 +246,7 @@ public class PlotScenarioGUI {
                 stage.show();
 
                 warehouse.setOnAction(e -> {
-                    whichWl[index] = "w";
+                    whichWl[index] = "W";
                     if(index == resource.length - 1) {
                         String whichWl2 = null;
                         for (String s : whichWl) {
@@ -259,7 +261,7 @@ public class PlotScenarioGUI {
                 });
 
                 extra.setOnAction(e -> {
-                    whichWl[index] = "l";
+                    whichWl[index] = "L";
                     if(index == resource.length - 1) {
                         String whichWl2 = null;
                         for (String s : whichWl) {
@@ -285,11 +287,11 @@ public class PlotScenarioGUI {
             }
 
             if(resource.length == 3) {
-                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "www", whiteMarble);
+                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
                 choiceAction(stage);
             }
             else {
-                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "wwww", whiteMarble);
+                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
                 choiceAction(stage);
             }
         }
@@ -337,7 +339,7 @@ public class PlotScenarioGUI {
 
                 declineButton.setOnAction(e -> {
                     resource[numIndex] = "x";
-                    putResources(stage, coordinates, resource, numIndex + 1, whichWl, "x");
+                    putResources(stage, coordinates, resource, numIndex + 1, whichWl, "X");
                 });
             }
         }

@@ -193,7 +193,7 @@ public class ServerSender extends Thread {
                             case "QUIT":
                             {
                                 this.cli.quit();
-                                break;
+                                return;
                             }
                         }
                         //Player writes quit
@@ -202,8 +202,7 @@ public class ServerSender extends Thread {
                     this.cli.senderError(e);
                     System.exit(1);
                 }
-
-            } while (!action.equals("QUIT") || !this.endLocalGame(this.clientMain.getLocalPlayers()));
+            } while (!this.endLocalGame(this.clientMain.getLocalPlayers()));
     }
 
     public boolean endLocalGame(Player[] localPlayers){
