@@ -23,7 +23,6 @@ public class SyncScenarioGUI {
 
         if(this.handlerGUI.getClientMain().getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
         else {
-
             this.handlerGUI.getMsg().sendStartingRes(new ArrayList<>());
             this.handlerGUI.updatePlayerBoard();
             this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);

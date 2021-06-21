@@ -50,12 +50,12 @@ public class PlotScenarioGUI {
         Scene scene = new Scene(root, 750, 90);
 
             playLeaderCardButton.setOnAction(e -> {
-                action = "PLAY LEADER CARD";
+                this.action = "PLAY LEADER CARD";
                 playDiscardLeaderCard(stage);
             });
 
             discardLeaderCardButton.setOnAction(e -> {
-                action = "DISCARD LEADER CARD";
+                this.action = "DISCARD LEADER CARD";
                 playDiscardLeaderCard(stage);
             });
 
@@ -198,9 +198,9 @@ public class PlotScenarioGUI {
                 }
                 putResources(stage, coordinates, resource, 0, whichWl, "X");
             });
-            if(k == 4) {
+            if(k == 3) {
                 x = 0;
-                y = 0;
+                y = -1;
             }
             y++;
         }
@@ -214,7 +214,7 @@ public class PlotScenarioGUI {
         else parameter = "COLUMN";
 
         for(int i = 0; i < 2; i++) {
-            if(this.handlerGUI.getClientMain().getLeaderCards()[i]!=null){
+            if(this.handlerGUI.getClientMain().getLeaderCards()[i] != null){
                 if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
                     checkExtraSpace = true;
                 }
@@ -250,9 +250,8 @@ public class PlotScenarioGUI {
                     if(index == resource.length - 1) {
                         String whichWl2 = null;
                         for (String s : whichWl) {
-                            if (s != null) {
-                                whichWl2 = whichWl2 + s;
-                            }
+                            if (s != null && whichWl2 == null) whichWl2 = s;
+                            else if(s != null) whichWl2 += s;
                         }
                         this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
                         choiceAction(stage);
@@ -265,9 +264,8 @@ public class PlotScenarioGUI {
                     if(index == resource.length - 1) {
                         String whichWl2 = null;
                         for (String s : whichWl) {
-                            if (s != null) {
-                                whichWl2 = whichWl2 + s;
-                            }
+                            if (s != null && whichWl2 == null) whichWl2 = s;
+                            else if(s != null) whichWl2 += s;
                         }
                         this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
                         choiceAction(stage);
