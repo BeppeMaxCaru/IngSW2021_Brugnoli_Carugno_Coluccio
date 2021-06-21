@@ -684,14 +684,14 @@ public class PlotScenarioGUI {
                             num = "2";
                     }
                     whichInput[finalJ] = string.toString();
-                    putResourcePayedDevCard(stage, activate, whichInput, finalJ, num,0);
+                    putResourcePayedDevCard(stage, activate, whichInput, finalJ, num,0, null);
                 }
                 else activateProductionDevCards(stage, activate, whichInput);
             });
         }
     }
 
-    public void putResourcePayedDevCard(Stage stage, int[] activate, String[] whichInput, int index, String num, int charResource) {
+    public void putResourcePayedDevCard(Stage stage, int[] activate, String[] whichInput, int index, String num, int charResource, String[] whichOutput) {
         String nameImage;
 
         switch (whichInput[index].charAt(charResource)) {
@@ -699,10 +699,10 @@ public class PlotScenarioGUI {
                 nameImage = "coin.png";
                 break;
             case '1':
-                nameImage = "shield.png";
+                nameImage = "servant.png";
                 break;
             case '2':
-                nameImage = "servant.png";
+                nameImage = "shield.png";
                 break;
             case '3':
                 nameImage = "stone.png";
@@ -758,7 +758,7 @@ public class PlotScenarioGUI {
 
         else if(whichInput[index].length() == 1 && num.equals("2")) {
             whichInput[index] += num + reserve;
-            putResourcePayedDevCard(stage, activate, whichInput, index, num, 0);
+            putResourcePayedDevCard(stage, activate, whichInput, index, num, 0, whichOutput);
         }
 
         else if(whichInput[index].length() == 3 && num.equals("2") && whichInput[index].charAt(2) == reserve.charAt(0)) {
@@ -771,7 +771,7 @@ public class PlotScenarioGUI {
         }
         else if(whichInput[index].length() == 2 && num.equals("1")) {
             whichInput[index] = whichInput[index].charAt(0) + "1" + reserve + whichInput[index].charAt(1);
-            putResourcePayedDevCard(stage, activate, whichInput, index, num, 3);
+            putResourcePayedDevCard(stage, activate, whichInput, index, num, 3, whichOutput);
         }
 
         else if(whichInput[index].length() == 4 && num.equals("1")) {
@@ -789,7 +789,6 @@ public class PlotScenarioGUI {
 
     public void activateBasicProductionPower(Stage stage, int[] activate, String[] whichInput, int index) {
         String[] whichOutput = new String[3];
-        StringBuilder string = new StringBuilder();
         int indexPar = index + 1;
         int iter;
         String[] resources;
@@ -839,8 +838,8 @@ public class PlotScenarioGUI {
 
         noBtn.setOnAction(e -> {
             activate[3] = 0;
-            whichOutput[0] = null;
-            whichInput[3] = null;
+            whichOutput[0] = "-1";
+            whichInput[3] = "-1";
             activateExtraProdPower(stage, activate, whichOutput, whichInput);
         });
 
@@ -851,20 +850,20 @@ public class PlotScenarioGUI {
             int finalJ = j;
             arrayButtons[j].setOnAction(e -> {
                 if(iter == 4) {
-                    if(whichInput[3] == null)  whichInput[3] = finalJ + "";
+                    if(whichInput[3] == null) whichInput[3] = finalJ + "";
                     else whichInput[3] += finalJ;
                     activateBasicProductionPower(stage, activate, whichInput, indexPar);
                 }
                 else {
-                    if(whichOutput[0] == null)  whichOutput[0] = finalJ + "";
-                    else whichOutput[0] += finalJ;
+                    whichOutput[0] = finalJ + "";
                     String num;
                     if(whichInput[3].charAt(0) == whichInput[3].charAt(1)) {
                         num = "2";
                         whichInput[3] = whichInput[3].charAt(0) + "";
                     }
                     else num = "1";
-                    putResourcePayedDevCard(stage, activate, whichInput, 3, num, 0);
+                    activate[3] = 1;
+                    putResourcePayedDevCard(stage, activate, whichInput, 3, num, 0, whichOutput);
                 }
             });
         }
@@ -944,7 +943,7 @@ public class PlotScenarioGUI {
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ + 4] = 1;
                     whichInput[finalJ + 4] = this.handlerGUI.getClientMain().getPlayerboard().getExtraProductionPowerInput()[finalJ];
-                    putResourcePayedDevCard(stage, activate, whichInput, finalJ + 4, "1", 0);
+                    putResourcePayedDevCard(stage, activate, whichInput, finalJ + 4, "1", 0, whichOutput);
                 });
             }
         }

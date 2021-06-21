@@ -26,6 +26,7 @@ public class PlayerBoardScenario {
         putRedCross(root);
         putDevCards(root);
         putResourcesInChest(root);
+        putResourcesInWarehouse(root);
 
         Scene scene = new Scene(root, 700, 500);
         stage.setTitle("Your playerboard");
@@ -46,13 +47,7 @@ public class PlayerBoardScenario {
         }
 
         Image image = new Image("redCross.png");
-        ImageView imageView = new ImageView();
-        imageView.setImage(image);
-        imageView.setX(x);
-        imageView.setY(y);
-        imageView.setFitWidth(35);
-        imageView.setPreserveRatio(true);
-        root.getChildren().add(imageView);
+        imageView(image, x, y, root);
     }
 
     public void putDevCards(Group root) {
@@ -99,17 +94,70 @@ public class PlayerBoardScenario {
                     y += 20;
                     numResource = 0;
                 }
-                ImageView imageView = new ImageView();
-                imageView.setImage(image);
-                imageView.setX(x);
-                imageView.setY(y);
-                imageView.setFitWidth(35);
-                imageView.setPreserveRatio(true);
-                root.getChildren().add(imageView);
+                imageView(image, x, y, root);
                 numResource++;
                 x += 25;
             }
         }
+    }
 
+    public void putResourcesInWarehouse(Group root) {
+        Image image;
+        boolean first = false;
+        boolean second = false;
+
+        for(String s: this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
+            switch (s) {
+                case "COINS":
+                    image = new Image("coin.png");
+                    break;
+                case "SHIELDS":
+                    image = new Image("shield.png");
+                    break;
+                case "SERVANTS":
+                    image = new Image("servant.png");
+                    break;
+                default:
+                    image = new Image("stone.png");
+                    break;
+            }
+            if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 1) {
+                if(!first) {
+                    imageView(image, 70, 215, root);
+                    first = true;
+                }
+                else if(!second) {
+                    imageView(image,50, 260, root);
+                    second = true;
+                }
+                else imageView(image,40, 305, root);
+            }
+            else if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 2) {
+                if(!second) {
+                    imageView(image,50, 260, root);
+                    imageView(image,90, 260, root);
+                    second = true;
+                }
+                else {
+                    imageView(image,40, 305, root);
+                    imageView(image,73, 305, root);
+                }
+            }
+            else {
+                imageView(image,40, 305, root);
+                imageView(image,73, 305, root);
+                imageView(image,106, 305, root);
+            }
+        }
+    }
+
+    public void imageView(Image image, int x, int y, Group root) {
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setFitWidth(35);
+        imageView.setPreserveRatio(true);
+        root.getChildren().add(imageView);
     }
 }
