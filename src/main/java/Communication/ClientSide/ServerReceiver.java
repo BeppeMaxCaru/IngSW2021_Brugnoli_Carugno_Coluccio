@@ -33,6 +33,7 @@ public class ServerReceiver extends Thread {
             try {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
+                e.printStackTrace();
                 this.view.receiverError(e);
                 break;
             }
@@ -41,6 +42,7 @@ public class ServerReceiver extends Thread {
                 try {
                     this.view.itsYourTurn();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.view.receiverError(e);
                     break;
                 }
@@ -50,6 +52,7 @@ public class ServerReceiver extends Thread {
                 try {
                     this.view.notYourTurn();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.view.receiverError(e);
                     break;
                 }
@@ -59,6 +62,7 @@ public class ServerReceiver extends Thread {
                 try {
                     this.view.endTurn();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.view.receiverError(e);
                     break;
                 }

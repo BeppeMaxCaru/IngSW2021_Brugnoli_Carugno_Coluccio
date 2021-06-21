@@ -121,9 +121,11 @@ public class SyncScenarioGUI {
             arrayButtons[i].setOnAction(e -> {
                 this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
                 if (times == 2) {
+                    //this.handlerGUI.AsyncReceiver();
                     this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
-                    this.handlerGUI.AsyncReceiver();
                     this.handlerGUI.updateLeaderCard();
+                    this.handlerGUI.AsyncReceiver();
+
                 }
                 else discardStartingLeaders(stage, 2, finalI);
             });

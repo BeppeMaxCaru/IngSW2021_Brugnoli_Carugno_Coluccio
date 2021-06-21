@@ -83,11 +83,6 @@ public class HandlerGUI extends Application implements RenderingView {
         this.correctAction=0;
     }
 
-    @Override
-    public void notYourTurn() {
-        this.correctAction=0;
-    }
-
     public void connectionSocket() {
         try {
             Socket socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
@@ -171,13 +166,26 @@ public class HandlerGUI extends Application implements RenderingView {
         this.activate = activate;
     }
 
-    @Override
+    /*@Override
     public void itsYourTurn() {
-        this.plotScenarioGUI.choiceAction(this.stage);
+        this.notify();
+    }
+
+    @Override
+    public void notYourTurn() {
+        try {
+            this.wait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void endTurn() {
-        this.plotScenarioGUI.waitForYourTurn(this.stage);
-    }
+        try {
+            this.wait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }*/
 }

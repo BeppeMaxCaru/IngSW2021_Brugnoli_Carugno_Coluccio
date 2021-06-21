@@ -110,6 +110,7 @@ public class PlotScenarioGUI {
         firstLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
             else this.handlerGUI.getMsg().sendDiscardedLeader(0);
+
             choiceAction(stage);
         });
 
