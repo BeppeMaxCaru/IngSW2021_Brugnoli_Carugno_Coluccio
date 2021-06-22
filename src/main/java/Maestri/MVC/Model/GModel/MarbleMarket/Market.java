@@ -89,7 +89,7 @@ public class Market implements Serializable {
      * @return the current excess marble
      */
     public Marble getExcessMarble(){
-        return excessMarble;
+        return this.excessMarble;
     }
 
     public void setExcessMarble(Marble excessMarble) {

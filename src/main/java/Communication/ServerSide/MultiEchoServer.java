@@ -80,6 +80,7 @@ public class MultiEchoServer {
                 //if
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);
+                //this.playersNicknames.add(newPlayer.getNickName());
 
             } catch(IOException e) {
                 System.out.println("Server failure!");

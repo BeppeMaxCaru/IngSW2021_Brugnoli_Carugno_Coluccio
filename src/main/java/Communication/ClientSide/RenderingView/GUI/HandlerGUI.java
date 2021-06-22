@@ -138,7 +138,7 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
             this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
-            System.out.println(playerBoardMessage.getPlayerboard().getClass());
+            //System.out.println(playerBoardMessage.getPlayerboard().getClass());
         } catch (Exception e) {
             //System.out.println("Non arriva playerboard");
             this.error(e);

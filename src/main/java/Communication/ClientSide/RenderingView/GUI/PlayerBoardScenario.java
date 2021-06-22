@@ -155,7 +155,7 @@ public class PlayerBoardScenario {
                     imageView(image,73, 305, root);
                 }
             }
-            else if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 3){
+            else if (this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 3) {
                 imageView(image,40, 305, root);
                 imageView(image,73, 305, root);
                 imageView(image,106, 305, root);
