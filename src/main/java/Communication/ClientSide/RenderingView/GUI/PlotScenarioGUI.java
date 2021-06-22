@@ -51,29 +51,29 @@ public class PlotScenarioGUI {
 
         Scene scene = new Scene(root, 750, 90);
 
-            playLeaderCardButton.setOnAction(e -> {
-                this.action = "PLAY LEADER CARD";
-                playDiscardLeaderCard(stage);
-            });
+        playLeaderCardButton.setOnAction(e -> {
+            this.action = "PLAY LEADER CARD";
+            playDiscardLeaderCard(stage);
+        });
 
-            discardLeaderCardButton.setOnAction(e -> {
-                this.action = "DISCARD LEADER CARD";
-                playDiscardLeaderCard(stage);
-            });
+        discardLeaderCardButton.setOnAction(e -> {
+            this.action = "DISCARD LEADER CARD";
+            playDiscardLeaderCard(stage);
+        });
 
-            pickResourceFromMarketButton.setOnAction(e -> {
-                market(stage);
-            });
+        pickResourceFromMarketButton.setOnAction(e -> {
+            market(stage);
+        });
 
-            buyDevelopmentCardButton.setOnAction(e -> {
-                buyDevelopmentCard(stage);
-            });
+        buyDevelopmentCardButton.setOnAction(e -> {
+            buyDevelopmentCard(stage);
+        });
 
-            activateProdButton.setOnAction(e -> activateProductionDevCards(stage, activate, whichOutput));
+        activateProdButton.setOnAction(e -> activateProductionDevCards(stage, activate, whichOutput));
 
-            exitButton.setOnAction(e -> {
-                this.handlerGUI.getMsg().sendEndTurn();
-            });
+        exitButton.setOnAction(e -> {
+            this.handlerGUI.getMsg().sendEndTurn();
+        });
 
         stage.setTitle("Choose the action!");
         stage.setScene(scene);
@@ -103,11 +103,20 @@ public class PlotScenarioGUI {
             }
         }
 
+        Button decline = new Button("Decline");
+        decline.setLayoutX(300);
+        decline.setLayoutY(270);
+        root.getChildren().add(decline);
+
         //Setting the stage
         Scene scene = new Scene(root, 420, 300);
         stage.setTitle("Choose a leader card");
         stage.setScene(scene);
         stage.show();
+
+        decline.setOnAction(e -> {
+            choiceAction(stage);
+        });
 
         firstLeader.setOnAction(e -> {
             if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
@@ -443,7 +452,7 @@ public class PlotScenarioGUI {
                 DevelopmentCard developmentCard = this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
                 int numResource;
                 if(developmentCard.getDevelopmentCardCost().get("COINS") != 0) numResource = 0;
-                else if(developmentCard.getDevelopmentCardCost().get("STONES") != 0) numResource = 1;
+                else if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0) numResource = 1;
                 else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0) numResource = 2;
                 else numResource = 3;
                 putPayedResource(stage, coordinates, numResource, pickedResources, developmentCard, 0);
@@ -457,13 +466,13 @@ public class PlotScenarioGUI {
         int num, numSame;
         Map<Integer, String> resources = new HashMap<>();
         resources.put(0, "COINS");
-        resources.put(1, "STONES");
+        resources.put(1, "SERVANTS");
         resources.put(2, "SHIELDS");
-        resources.put(3, "SERVANTS");
+        resources.put(3, "STONES");
 
-        if(developmentCard.getDevelopmentCardCost().get("STONES") != 0 && numResource < 1) num = 1;
+        if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0 && numResource < 1) num = 1;
         else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0 && numResource < 2) num = 2;
-        else if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0 && numResource < 3) num = 3;
+        else if(developmentCard.getDevelopmentCardCost().get("STONES") != 0 && numResource < 3) num = 3;
         else num = 4;
 
         numSame = sameResources + 1;
@@ -495,9 +504,6 @@ public class PlotScenarioGUI {
         imageView.setFitWidth(200);
         imageView.setPreserveRatio(true);
 
-        // non funziona il tooltip
-        //Tooltip.install(imageView, new Tooltip((i + 1) + " of " + developmentCard.getDevelopmentCardCost().get(resource)));
-
         Button warehouse = new Button("Warehouse");
         warehouse.setLayoutX(300);
         warehouse.setLayoutY(60);
@@ -517,7 +523,7 @@ public class PlotScenarioGUI {
 
         pickedResources[0][numResource] = developmentCard.getDevelopmentCardCost().get(resource).toString();
         warehouse.setOnAction(e -> {
-            pickedResources[1][numResource] = pickedResources[1][numResource] + "w";
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "W";
             if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
                 if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
                 else {
@@ -528,7 +534,7 @@ public class PlotScenarioGUI {
         });
 
         chest.setOnAction(e -> {
-            pickedResources[1][numResource] = pickedResources[1][numResource] + "c";
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "C";
             if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
                 if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
                 else {
@@ -539,7 +545,7 @@ public class PlotScenarioGUI {
         });
 
         extra.setOnAction(e -> {
-            pickedResources[1][numResource] = pickedResources[1][numResource] + "l";
+            pickedResources[1][numResource] = pickedResources[1][numResource] + "L";
             if(numSame == developmentCard.getDevelopmentCardCost().get(resource)) {
                 if(num < 4) putPayedResource(stage, coordinates, num, pickedResources, developmentCard, 0);
                 else {
@@ -594,7 +600,7 @@ public class PlotScenarioGUI {
             arrayButtons[j].setOnAction(e -> {
                 int[] quantity = new int[4];
                 for(int k = 0; k < quantity.length; k++) quantity[k] = Integer.parseInt(pickedResources[0][k]);
-                this.handlerGUI.getMsg().sendBuyCardAction(coordinates[0], coordinates[1], quantity, pickedResources[1], finalJ);
+                this.handlerGUI.getMsg().sendBuyCardAction(coordinates[1], 3 - coordinates[0], quantity, pickedResources[1], finalJ);
                 choiceAction(stage);
             });
         }
@@ -740,15 +746,15 @@ public class PlotScenarioGUI {
         stage.show();
 
         warehouse.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "W", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "W", whichOutput);
         });
 
         chest.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "C", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "C", whichOutput);
         });
 
         extra.setOnAction(e -> {
-            actionOnWhichInput(stage, activate, whichInput, index, num, "L", null);
+            actionOnWhichInput(stage, activate, whichInput, index, num, "L", whichOutput);
         });
     }
 
@@ -795,27 +801,16 @@ public class PlotScenarioGUI {
         int iter;
         String[] resources;
 
-        if(index < 2) {
-            resources = new String[] {
-                    "coin.png",
-                    "servant.png",
-                    "shield.png",
-                    "stone.png"
-            };
-        }
-        else {
-            resources = new String[] {
-                    "coin.png",
-                    "servant.png",
-                    "shield.png",
-                    "stone.png",
-                    "redCross.png"
-            };
-        }
+        resources = new String[] {
+                "coin.png",
+                "servant.png",
+                "shield.png",
+                "stone.png"
+        };
 
         Group root = new Group();
         //Creating buttons
-        Button[] arrayButtons = new Button[5];
+        Button[] arrayButtons = new Button[4];
 
         int x = 10;
         for (int i = 0; i < resources.length; i++) {
@@ -833,7 +828,7 @@ public class PlotScenarioGUI {
         root.getChildren().add(noBtn);
 
         //Setting the stage
-        Scene scene = new Scene(root, 900, 150);
+        Scene scene = new Scene(root, 800, 150);
         stage.setTitle("Activate basic production power");
         stage.setScene(scene);
         stage.show();
@@ -845,19 +840,16 @@ public class PlotScenarioGUI {
             activateExtraProdPower(stage, activate, whichOutput, whichInput);
         });
 
-        if(index < 2) iter = 4;
-        else iter = 5;
-
-        for(int j = 0; j < iter; j++) {
+        for(int j = 0; j < 4; j++) {
             int finalJ = j;
             arrayButtons[j].setOnAction(e -> {
-                if(iter == 4) {
+                if(index < 2) {
                     if(whichInput[3] == null) whichInput[3] = finalJ + "";
                     else whichInput[3] += finalJ;
                     activateBasicProductionPower(stage, activate, whichInput, indexPar);
                 }
                 else {
-                    whichOutput[0] = finalJ + "";
+                    whichOutput[0] = String.valueOf(finalJ);
                     String num;
                     if(whichInput[3].charAt(0) == whichInput[3].charAt(1)) {
                         num = "2";

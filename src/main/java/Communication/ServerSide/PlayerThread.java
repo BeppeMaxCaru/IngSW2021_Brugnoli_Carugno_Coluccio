@@ -370,7 +370,8 @@ public class PlayerThread implements Runnable {
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
-                        for(int i : quantity){
+                        for(int i = 0; i < 4; i++){
+                            System.out.println(i);
                             System.out.println(quantity[i]);
                             System.out.println(deposit[i]);
                         }
