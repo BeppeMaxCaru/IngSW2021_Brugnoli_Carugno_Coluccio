@@ -29,6 +29,8 @@ public class PlotScenarioGUI {
     }
 
     public void choiceAction(Stage stage) {
+        this.handlerGUI.getPlayerBoardScenario().PlayerBoard();
+
         GridPane root = new GridPane();
         int[] activate = new int[6];
         String[] whichOutput = new String[6];

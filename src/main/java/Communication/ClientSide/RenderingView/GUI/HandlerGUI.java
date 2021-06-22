@@ -3,11 +3,6 @@ package Communication.ClientSide.RenderingView.GUI;
 import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Communication.ClientSide.ServerReceiver;
-import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
-import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
-import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.*;
 import Message.SendingMessages;
 import Message.ServerStartingMessage;
@@ -17,7 +12,6 @@ import javafx.stage.Stage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.*;
 
 public class HandlerGUI extends Application implements RenderingView {
 
@@ -43,6 +37,8 @@ public class HandlerGUI extends Application implements RenderingView {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Stage anotherStage = new Stage();
+
         Parameters args = getParameters();
         this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
@@ -50,11 +46,9 @@ public class HandlerGUI extends Application implements RenderingView {
         this.initialScenarioGUI = new InitialScenarioGUI(this);
         this.syncScenarioGUI = new SyncScenarioGUI(this);
         this.plotScenarioGUI = new PlotScenarioGUI(this);
-        this.playerBoardScenario = new PlayerBoardScenario(this);
+        this.playerBoardScenario = new PlayerBoardScenario(this, anotherStage);
 
-        //System.out.println(this.clientMain.getHostName());
         this.setStage(stage);
-        //this.playerBoardScenario.PlayerBoard(stage);
         this.initialScenarioGUI.nickname(this.stage);
     }
 
@@ -67,6 +61,8 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     public PlotScenarioGUI getPlotScenarioGUI() { return this.plotScenarioGUI; }
+
+    public PlayerBoardScenario getPlayerBoardScenario() { return this.playerBoardScenario; }
 
     public void setStage(Stage stage) { this.stage = stage; }
 

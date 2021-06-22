@@ -2,7 +2,6 @@ package Communication.ClientSide.RenderingView.GUI;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -10,12 +9,14 @@ import javafx.stage.Stage;
 public class PlayerBoardScenario {
 
     private final HandlerGUI handlerGUI;
+    private final Stage anotherStage;
 
-    public PlayerBoardScenario(HandlerGUI handlerGUI) {
+    public PlayerBoardScenario(HandlerGUI handlerGUI, Stage anotherStage) {
         this.handlerGUI = handlerGUI;
+        this.anotherStage = anotherStage;
     }
 
-    public void PlayerBoard(Stage stage) {
+    public void PlayerBoard() {
         Image image = new Image("playerBoard.png");
         ImageView imageView = new ImageView();
         imageView.setImage(image);
@@ -29,9 +30,9 @@ public class PlayerBoardScenario {
         putResourcesInWarehouse(root);
 
         Scene scene = new Scene(root, 700, 500);
-        stage.setTitle("Your playerboard");
-        stage.setScene(scene);
-        stage.show();
+        this.anotherStage.setTitle("Your playerboard");
+        this.anotherStage.setScene(scene);
+        this.anotherStage.show();
     }
 
     public void putRedCross(Group root) {
