@@ -677,18 +677,26 @@ public class CLI implements RenderingView {
         return whichInput.toString();
     }
 
-    public String getOutputResourceProd() {
+    public String getOutputResourceProd(int prod) {
 
         String res;
 
         System.out.println("Which output resource do you want to pick?");
-        System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
+        if(prod!=3) System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
+        else System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
         res = input.nextLine().toUpperCase();
-        while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("REDCROSS")) {
-            System.out.println("Choose a correct resource");
-            System.out.println("Which starting resource do you want to pick?");
-            System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
-            res = input.nextLine().toUpperCase();
+        if(prod!=3) {
+            while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("REDCROSS")) {
+                System.err.println("Choose a correct resource");
+                System.out.println("Write COINS, STONES, SERVANTS, SHIELDS or REDCROSS.");
+                res = input.nextLine().toUpperCase();
+            }
+        } else {
+            while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS")) {
+                System.out.println("Choose a correct resource");
+                System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
+                res = input.nextLine().toUpperCase();
+            }
         }
 
         switch (res){

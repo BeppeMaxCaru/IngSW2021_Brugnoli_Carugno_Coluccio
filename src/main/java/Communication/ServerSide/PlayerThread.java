@@ -230,6 +230,17 @@ public class PlayerThread implements Runnable {
                 System.out.println("Reset sender not working");
             }
 
+            //SEND UPDATED PLAYERBOARD AT THE BEGINNING OF THE TURN
+            try {
+                this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                System.out.println("PlayerBoard sent");
+            } catch (Exception e) {
+                this.sendErrorMessage();
+                this.removePlayer();
+                System.out.println("Error in receiving in PlayerThread (sending playerBoard)");
+                break;
+            }
+
             Message object;
 
             //Receive object
@@ -287,6 +298,8 @@ public class PlayerThread implements Runnable {
 
                     if (this.gameController.checkDiscardCards(currentPlayer, position))
                     {
+                        this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                        System.out.println("Playerboard sent");
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         System.out.println("Leaders sent");
                     }
@@ -349,12 +362,18 @@ public class PlayerThread implements Runnable {
                     {
                         //DevCard colour
                         int column = buyCardMessage.getColour();
+                        System.out.println(column);
                         //DevCard level
                         int level = buyCardMessage.getLevel();
+                        System.out.println(level);
                         //How much resources does the player spend
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
+                        for(int i : quantity){
+                            System.out.println(quantity[i]);
+                            System.out.println(deposit[i]);
+                        }
 
                         if (this.gameController.checkBuyDevCard(currentPlayer, column, level, quantity, deposit)) {
 

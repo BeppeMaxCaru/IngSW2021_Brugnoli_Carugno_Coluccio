@@ -149,7 +149,7 @@ public class ServerSender extends Thread {
                                         activation[stop] = 1;
                                         whichInput[stop] = this.cli.getInputResourceProd();
                                         if(stop>2){
-                                            whichOutput[stop-3] = this.cli.getOutputResourceProd();
+                                            whichOutput[stop-3] = this.cli.getOutputResourceProd(stop);
                                         }
                                     }
                                 } while (stop != 6);
