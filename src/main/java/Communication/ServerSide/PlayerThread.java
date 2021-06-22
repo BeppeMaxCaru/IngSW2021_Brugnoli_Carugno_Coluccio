@@ -348,6 +348,7 @@ public class PlayerThread implements Runnable {
                         if (this.gameController.checkBuyDevCard(currentPlayer, column, level, quantity, deposit)) {
 
                             int pos = buyCardMessage.getPlayerboardPosition();
+                            System.out.println("Put in position "+pos);
 
                             if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[row][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {

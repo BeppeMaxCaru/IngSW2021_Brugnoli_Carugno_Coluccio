@@ -70,7 +70,7 @@ public class DevelopmentCard implements Serializable {
      * @param shieldsOutput - shields output from the production of the development card
      * @param faithPoints - faith points output from the production of the development card
      * @param victoryPoints - victory points of the development card
-     * @param image
+     * @param image - image of the card
      */
     public DevelopmentCard(String colour, int level,
                            int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
@@ -82,19 +82,19 @@ public class DevelopmentCard implements Serializable {
         this.colour = colour;
         this.level = level;
 
-        this.cost = new HashMap<String, Integer>();
+        this.cost = new HashMap<>();
         this.cost.put("COINS", coinsCost);
         this.cost.put("STONES", stonesCost);
         this.cost.put("SERVANTS", servantsCost);
         this.cost.put("SHIELDS", shieldsCost);
 
-        this.input = new HashMap<String, Integer>();
+        this.input = new HashMap<>();
         this.input.put("COINS", coinsInput);
         this.input.put("STONES", stonesInput);
         this.input.put("SERVANTS", servantsInput);
         this.input.put("SHIELDS", shieldsInput);
 
-        this.output = new HashMap<String, Integer>();
+        this.output = new HashMap<>();
         this.output.put("COINS", coinsOutput);
         this.output.put("STONES", stonesOutput);
         this.output.put("SERVANTS", servantsOutput);
@@ -206,10 +206,11 @@ public class DevelopmentCard implements Serializable {
 
         //For each cost resource to remove asks the player where to pick it from
         for (String key : this.cost.keySet()) {
-            if(this.cost.get(key)==0) break;
-            int resourcesToRemove = this.cost.get(key);
-            for (int i=0;i<resourcesToRemove;i++) {
-                playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);
+            if(this.cost.get(key)!=0) {
+                int resourcesToRemove = this.cost.get(key);
+                for (int i=0;i<resourcesToRemove;i++) {
+                    playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);
+                }
             }
         }
     }
