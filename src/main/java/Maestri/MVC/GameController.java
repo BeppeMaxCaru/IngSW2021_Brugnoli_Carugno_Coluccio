@@ -5,6 +5,7 @@ import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
+import Message.MessageReceived.UpdateClientPlayerBoardMessage;
 import Message.MessageReceived.YourTurnMessage;
 
 import java.util.*;
@@ -374,6 +375,20 @@ public class GameController{
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("Grid broadcast not working for " + playerThread.getNickName());
+            }
+        }
+
+    }
+
+    public void broadcastPlayerBoards() {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().writeObject(new UpdateClientPlayerBoardMessage(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Player boards broadcast not working");
             }
         }
 
