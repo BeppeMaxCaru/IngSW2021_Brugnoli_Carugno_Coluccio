@@ -323,6 +323,8 @@ public class PlayerThread implements Runnable {
                         //IN MARKET, GRID E ACTIVATE PRODUCTION
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
+                            this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                            System.out.println("Playerboard sent");
                             UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
                             this.gameController.broadcastMarket(updateMarket);
                             System.out.println("Market sent");
@@ -360,6 +362,8 @@ public class PlayerThread implements Runnable {
 
                             if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                                    this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                                    System.out.println("Playerboard sent");
                                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
                                     this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
                                     System.out.println("DevCards sent");
