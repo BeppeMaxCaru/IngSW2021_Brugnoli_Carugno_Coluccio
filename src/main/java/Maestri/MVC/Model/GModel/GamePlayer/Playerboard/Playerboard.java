@@ -17,10 +17,14 @@ public class Playerboard implements Serializable {
      */
     private int developmentCardsBought;
 
+    public void setPlayerboardDevelopmentCards(DevelopmentCard developmentCard, int pos) {
+        this.playerboardDevelopmentCards[developmentCard.getDevelopmentCardLevel()-1][pos] = developmentCard;
+    }
+
     /**
      * Development cards spaces where to place development cards bought
      */
-    private final DevelopmentCard[][] playerboardDevelopmentCards;
+    private DevelopmentCard[][] playerboardDevelopmentCards;
 
     /**
      * Unlimited resources reserve

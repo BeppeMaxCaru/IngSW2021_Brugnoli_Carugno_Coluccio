@@ -44,7 +44,7 @@ public class PlayerBoardScenario {
         else y = 20;
         // x
         for(int i = 0; i < redCross; i++) {
-             if(i != 3 && i != 4 && i != 10 && i != 11 && i != 17 && i != 18) x+= 35;
+             if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 35;
         }
 
         Image image = new Image("redCross.png");

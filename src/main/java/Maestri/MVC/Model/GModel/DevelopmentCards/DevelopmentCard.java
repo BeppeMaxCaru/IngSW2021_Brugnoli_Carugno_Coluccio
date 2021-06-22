@@ -206,6 +206,7 @@ public class DevelopmentCard implements Serializable {
 
         //For each cost resource to remove asks the player where to pick it from
         for (String key : this.cost.keySet()) {
+            if(this.cost.get(key)==0) break;
             int resourcesToRemove = this.cost.get(key);
             for (int i=0;i<resourcesToRemove;i++) {
                 playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);

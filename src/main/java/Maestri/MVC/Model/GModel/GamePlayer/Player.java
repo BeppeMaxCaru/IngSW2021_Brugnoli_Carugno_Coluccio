@@ -148,19 +148,19 @@ public class Player
      */
     public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, int column, int level, int position, String[] wclChoice) {
 
-        //Removes the resources from the player who bought the development card
-        //according to the development card cost
-        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].payDevelopmentCard(this.playerBoard, wclChoice);
-        //Ask the player where to place the new development card on his board
-        this.playerBoard.isCardBelowCompatible(position, developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0]);
-        //Updates the player victory points by adding to them the
-        //victory points obtained from the new development card
-        this.playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column][0].getVictoryPoints());
-        //Removes the development card from the grid by removing it
-        //from the deck where it was bought
-        List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]));
+        //Removes the resources from the player who bought the development card according to the development card cost
+        developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0].payDevelopmentCard(this.playerBoard, wclChoice);
+
+        //Place the dev card into the indicated position
+        this.playerBoard.setPlayerboardDevelopmentCards(developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0], position);
+
+        //Updates the player victory points by adding to them the victory points obtained from the new development card
+        this.playerBoard.sumVictoryPoints(developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0].getVictoryPoints());
+
+        //Removes the development card from the grid by removing it from the deck where it was bought
+        List<DevelopmentCard> reducedDeck = new ArrayList<>(Arrays.asList(developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column]));
         reducedDeck.remove(0);
-        developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[level][column]);
+        developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column] = reducedDeck.toArray(developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column]);
         return true;
     }
 

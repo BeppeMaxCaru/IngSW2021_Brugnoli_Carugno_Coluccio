@@ -33,7 +33,7 @@ public class ServerSender extends Thread {
 
                 try {
 
-                    while (!action.equals("END TURN") && !action.equals("QUIT")) {
+                    while (!action.equals("END TURN")) {
 
                         action = this.cli.getActionChoice();
 

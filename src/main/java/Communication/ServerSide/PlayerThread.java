@@ -11,7 +11,6 @@ import Message.MessageSent.QuitMessage;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Scanner;
 
 public class PlayerThread implements Runnable {
 
@@ -19,8 +18,6 @@ public class PlayerThread implements Runnable {
     private int playerThreadNumber;
 
     private Socket playerSocket;
-    private Scanner inScanner;
-    private PrintWriter outPrintWriter;
 
     private ObjectInputStream receiver;
     private ObjectOutputStream sender;
@@ -30,7 +27,7 @@ public class PlayerThread implements Runnable {
 
     private boolean mainAction = false;
 
-    private int yourTurnMessageCounter = 0;
+    //private int yourTurnMessageCounter = 0;
 
     //Il game controller va assegnato con setter siccome creato prima
     public PlayerThread(Socket clientSocket) {
@@ -64,24 +61,6 @@ public class PlayerThread implements Runnable {
 
     public void setPlayerThreadNumber(int playerThreadNumber) {
         this.playerThreadNumber = playerThreadNumber;
-    }
-
-    public Scanner getInScanner() {
-        return this.inScanner;
-    }
-
-    public Socket getPlayerSocket() { return this.playerSocket; }
-
-    public void setInScanner(Scanner inScanner) {
-        this.inScanner = inScanner;
-    }
-
-    public PrintWriter getOutPrintWriter() {
-        return this.outPrintWriter;
-    }
-
-    public void setOutPrintWriter(PrintWriter outPrintWriter) {
-        this.outPrintWriter = outPrintWriter;
     }
 
     public void setGameController(GameController gameController) {
@@ -226,19 +205,8 @@ public class PlayerThread implements Runnable {
                 this.sender.reset();
             } catch (Exception e) {
                 this.sendErrorMessage();
-                this.removePlayer();
+                //this.removePlayer();
                 System.out.println("Reset sender not working");
-            }
-
-            //SEND UPDATED PLAYERBOARD AT THE BEGINNING OF THE TURN
-            try {
-                this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                System.out.println("PlayerBoard sent");
-            } catch (Exception e) {
-                this.sendErrorMessage();
-                this.removePlayer();
-                System.out.println("Error in receiving in PlayerThread (sending playerBoard)");
-                break;
             }
 
             Message object;
@@ -256,7 +224,7 @@ public class PlayerThread implements Runnable {
                 }
             } catch (Exception e) {
                 this.sendErrorMessage();
-                this.removePlayer();
+                //this.removePlayer();
                 System.out.println("Error in receiving in PlayerThread");
                 break;
             }
@@ -282,7 +250,7 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     this.sendErrorMessage();
-                    this.removePlayer();
+                    //this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (play leader)");
                     break;
                 }
@@ -306,7 +274,7 @@ public class PlayerThread implements Runnable {
 
                 } catch (Exception e) {
                     this.sendErrorMessage();
-                    this.removePlayer();
+                    //this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (discard leader)");
                     break;
                 }
@@ -347,7 +315,7 @@ public class PlayerThread implements Runnable {
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.sendErrorMessage();
-                    this.removePlayer();
+                    //this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (market action)");
                     break;
                 }
@@ -362,15 +330,16 @@ public class PlayerThread implements Runnable {
                     {
                         //DevCard colour
                         int column = buyCardMessage.getColour();
-                        System.out.println(column);
+                        System.out.println("column "+column);
                         //DevCard level
                         int level = buyCardMessage.getLevel();
-                        System.out.println(level);
+                        int row = 3-level;
+                        System.out.println("level "+level);
                         //How much resources does the player spend
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
-                        for(int i = 0; i < 4; i++){
+                        for(int i =0; i<4; i++){
                             System.out.println(i);
                             System.out.println(quantity[i]);
                             System.out.println(deposit[i]);
@@ -380,7 +349,7 @@ public class PlayerThread implements Runnable {
 
                             int pos = buyCardMessage.getPlayerboardPosition();
 
-                            if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0])) {
+                            if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[row][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
                                     this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                                     System.out.println("Playerboard sent");
@@ -388,13 +357,14 @@ public class PlayerThread implements Runnable {
                                     this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
                                     System.out.println("DevCards sent");
                                     this.mainAction = true;
-                                }
-                            }
-                        }
+                                } else System.out.println("Not valid model action");
+                            } else System.out.println("Not valid isCardBelowCompatible");
+                        } else System.out.println("Not valid controller check");
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.sendErrorMessage();
-                    this.removePlayer();
+                    //this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (buy card action)");
                     break;
                 }
@@ -426,12 +396,13 @@ public class PlayerThread implements Runnable {
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                             System.out.println("Playerboard sent");
                             this.mainAction = true;
-                        }
+                        } else System.out.println("Not valid controller check");
                     }
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     this.sendErrorMessage();
-                    this.removePlayer();
+                    //this.removePlayer();
                     System.out.println("Error in receiving in PlayerThread (activate prod)");
                     break;
                 }
@@ -447,7 +418,7 @@ public class PlayerThread implements Runnable {
                     }
                     this.mainAction = false;
                     this.gameController.nextCurrentPlayerNumber();
-                    this.yourTurnMessageCounter = 0;
+                    //this.yourTurnMessageCounter = 0;
                 } else System.out.println("No main action valid");
                 //Salva come giocatore corrente nel gamecontroller/gamemodel
                 //il giocatore successivo a questo per abilitarlo e bloccare questo

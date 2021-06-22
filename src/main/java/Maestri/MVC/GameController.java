@@ -156,7 +156,7 @@ public class GameController{
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
-        if (this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[l][column][0] != null) {
+        if (this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0] != null) {
 
             //Control on quantity and possibly discounts
             //If paidResources hashMap isn't equals to cardCost hashMap
@@ -181,36 +181,38 @@ public class GameController{
                     }
                 }
             }
-        }
+        } else System.out.println("Card null");
 
         for (int k = 0; k < 4; k++) {
             int count = 0;
             for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("W"))
                     count++;
             }
-            if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count) {
-                return false;
-            }
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
+                    return false;
+                }
 
             count = 0;
             for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("C"))
                     count++;
             }
-            if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count) {
-                return false;
-            }
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
+                    return false;
+                }
 
             count = 0;
             for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("L"))
                     count++;
             }
-            if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
-                return false;
-            }
-
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) < count) {
+                    return false;
+                }
         }
         return true;
     }
