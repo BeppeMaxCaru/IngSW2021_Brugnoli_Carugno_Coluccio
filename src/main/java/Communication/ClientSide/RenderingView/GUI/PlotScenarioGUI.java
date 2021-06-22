@@ -568,12 +568,23 @@ public class PlotScenarioGUI {
         imageView1.setPreserveRatio(true);
         Pane root = new Pane(imageView1);
 
+        int[] dimPile = new int[3];
+        for(int col = 0; col < 3; col++) {
+            int row;
+            for(row = 2; row > 0; row--) {
+                if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[row][col] != null)
+                    break;
+            }
+            if(row == -1) row = 0;
+            dimPile[col] = row;
+        }
+
         //Creating buttons
         Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
-           if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) {
-               Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
+            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i].getImage());
                ImageView imageView2 = new ImageView();
                imageView2.setImage(img);
                imageView2.setLayoutX(x);
@@ -632,7 +643,7 @@ public class PlotScenarioGUI {
             if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) {
                 Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
                 arrayButtons[i] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[i], 250, 200);
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 50, img, arrayButtons[i], 250, 200);
                 x = x + 200;
                 root.getChildren().add(arrayButtons[i]);
             }
@@ -646,7 +657,7 @@ public class PlotScenarioGUI {
         }
 
         Button noBtn = new Button("Decline");
-        noBtn.setLayoutX(500);
+        noBtn.setLayoutX(530);
         noBtn.setLayoutY(400);
         root.getChildren().add(noBtn);
 

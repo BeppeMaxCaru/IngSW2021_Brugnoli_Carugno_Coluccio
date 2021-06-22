@@ -53,10 +53,21 @@ public class PlayerBoardScenario {
 
     public void putDevCards(Group root) {
         int x = 270;
+        int[] dimPile = new int[3];
+        for(int col = 0; col < 3; col++) {
+            int row;
+            for(row = 2; row > 0; row--) {
+                if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[row][col] != null)
+                    break;
+            }
+            if(row == -1) row = 0;
+            dimPile[col] = row;
+        }
+
         for (int i = 0; i < 3; i++) {
             //Creating a graphic (image)
-            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0] != null) {
-                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[i][0].getImage());
+            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i].getImage());
                 ImageView imageView = new ImageView();
                 imageView.setImage(img);
                 imageView.setLayoutX(x);
