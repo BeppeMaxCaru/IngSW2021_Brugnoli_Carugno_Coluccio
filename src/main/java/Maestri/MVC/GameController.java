@@ -191,7 +191,11 @@ public class GameController{
                     count++;
             }
             if(count>0)
-                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
+                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != null) {
+                    if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
 
@@ -201,7 +205,11 @@ public class GameController{
                     count++;
             }
             if(count>0)
-                if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
+                if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != null) {
+                    if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
 

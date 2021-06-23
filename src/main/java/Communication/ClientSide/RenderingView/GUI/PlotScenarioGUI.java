@@ -905,7 +905,7 @@ public class PlotScenarioGUI {
         Image img;
 
         for(int i = 0; i < 2; i++) {
-            if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraProductionPowerLeaderCard) {
+            if (this.handlerGUI.getClientMain().getLeaderCards()[i] != null && this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraProductionPowerLeaderCard) {
                 numBottons++;
                 indexLeader = i;
             }
