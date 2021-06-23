@@ -155,8 +155,10 @@ public class ServerSender extends Thread {
                                 } while (stop != 6);
 
                                 int[] outputs = new int[3];
-                                for(int k=0; k< whichOutput.length; k++)
-                                    outputs[k] = Integer.parseInt(whichOutput[k]);
+                                for(int k = 0; k < whichOutput.length; k++) {
+                                    if(whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
+                                    else outputs[k] = -1;
+                                }
 
                                 if(this.gameMode==0)
                                 {

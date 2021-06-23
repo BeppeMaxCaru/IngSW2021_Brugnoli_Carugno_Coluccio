@@ -1,6 +1,7 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -118,16 +119,27 @@ public class SyncScenarioGUI {
         for(int i = 0; i < numButtons; i++) {
             int finalI = i;
             arrayButtons[i].setOnAction(e -> {
-                this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
-                if (times == 2) {
-                    //this.handlerGUI.AsyncReceiver();
-                    this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
-                    this.handlerGUI.updateLeaderCard();
-                    this.handlerGUI.AsyncReceiver();
-
+                // MultiPlayer
+                if(this.handlerGUI.getGameMode() == 1) {
+                    this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
+                    if (times == 2) {
+                        this.handlerGUI.updateLeaderCard();
+                        this.handlerGUI.AsyncReceiver();
+                        this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                    }
+                    else discardStartingLeaders(stage, 2, finalI);
                 }
-                else discardStartingLeaders(stage, 2, finalI);
+                // Single Player
+                else {
+                    this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
+                    if (times == 2) {
+                        new ServerSender(this.handlerGUI.getClientMain(), 0, null).start();
+                        this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                    }
+                    else discardStartingLeaders(stage, 2, finalI);
+                }
             });
         }
     }
 }
+

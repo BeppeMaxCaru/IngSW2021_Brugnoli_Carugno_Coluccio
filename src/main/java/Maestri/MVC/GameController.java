@@ -321,8 +321,8 @@ public class GameController{
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
                     for(String extraRes : paidWarehouseResources.keySet())
                     {
-                        if(extraRes.contains(res))
-                            paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                        // if(extraRes.contains(res))
+                           // paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
                     }
                 }
 
@@ -335,9 +335,9 @@ public class GameController{
                         }
                     }
                 } else {
-                        if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
-                            return false;
-                        }
+                        //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
+                            //return false;
+                       // }
                 }
             }
         }

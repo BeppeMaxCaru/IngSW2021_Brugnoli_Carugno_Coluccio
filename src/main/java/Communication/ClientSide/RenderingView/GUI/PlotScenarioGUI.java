@@ -73,6 +73,7 @@ public class PlotScenarioGUI {
 
         exitButton.setOnAction(e -> {
             this.handlerGUI.getMsg().sendEndTurn();
+            choiceAction(stage);
         });
 
         stage.setTitle("Choose the action!");
@@ -119,15 +120,36 @@ public class PlotScenarioGUI {
         });
 
         firstLeader.setOnAction(e -> {
-            if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
-            else this.handlerGUI.getMsg().sendDiscardedLeader(0);
-
+            // Multiplayer
+            if(this.handlerGUI.getGameMode() == 1) {
+                if (action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
+                else this.handlerGUI.getMsg().sendDiscardedLeader(0);
+            }
+            // single player
+            else {
+                if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0))
+                {
+                    if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(0))
+                        this.handlerGUI.notValidAction();
+                }
+            }
             choiceAction(stage);
         });
 
         secondLeader.setOnAction(e -> {
-            if(action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
-            else this.handlerGUI.getMsg().sendDiscardedLeader(1);
+            // Multiplayer
+            if(this.handlerGUI.getGameMode() == 1) {
+                if (action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
+                else this.handlerGUI.getMsg().sendDiscardedLeader(1);
+            }
+            // single player
+            else {
+                if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1))
+                {
+                    if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(1))
+                        this.handlerGUI.notValidAction();
+                }
+            }
             choiceAction(stage);
         });
     }
@@ -1005,9 +1027,8 @@ public class PlotScenarioGUI {
         }
     }
 
-    public void waitForYourTurn(Stage stage) {
-        this.handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", stage);
+    public void waitForYourchoiceAction(Stage stage) {
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Your choiceAction is ended, wait some minutes!", stage);
     }
-
 }
 

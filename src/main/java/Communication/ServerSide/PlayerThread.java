@@ -304,8 +304,8 @@ public class PlayerThread implements Runnable {
                         //IN MARKET, GRID E ACTIVATE PRODUCTION
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                            //this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                            this.gameController.broadcastPlayerBoards();
+                            this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                            //this.gameController.broadcastPlayerBoards();
                             System.out.println("Playerboard sent");
                             UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
                             this.gameController.broadcastMarket(updateMarket);

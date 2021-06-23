@@ -1,7 +1,13 @@
 package Communication.ClientSide.RenderingView.GUI;
 
 import Communication.ClientSide.ClientMain;
+import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Communication.ClientSide.ServerReceiver;
+import Maestri.MVC.Model.GModel.ActionCounters.ActionCountersDeck;
+import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
+import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardDeck;
+import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.SendingMessages;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -87,12 +93,29 @@ public class InitialScenarioGUI {
         stage.show();
 
         button1.setOnAction(e -> {
-            //single player welcome
+            this.handlerGUI.setGameMode(0);
+            Player[] localPlayers = new Player[2];
+            localPlayers[0] = new Player(this.handlerGUI.getClientMain().getNickname(), 0);
+            localPlayers[1] = new Player("Lorenzo the Magnificent", 1);
+
+            this.handlerGUI.getClientMain().setLocalPlayers(localPlayers);
+            this.handlerGUI.getClientMain().setMarket(new Market());
+            this.handlerGUI.getClientMain().setDevelopmentCardsDecksGrid(new DevelopmentCardsDecksGrid());
+            this.handlerGUI.getClientMain().setActionCountersDeck(new ActionCountersDeck());
+            this.handlerGUI.getClientMain().setLeaderCardDeck(new LeaderCardDeck());
+
+            //Put 4 leader cards into first player space
+            for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
+                this.handlerGUI.getClientMain().getLocalPlayers()[0].setPlayerLeaderCard(index, this.handlerGUI.getClientMain().getLeaderCardDeck().drawOneLeaderCard());
+            this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
+
+            this.handlerGUI.getSyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
         });
 
         button2.setOnAction(e -> {
             this.handlerGUI.connectionSocket();
             this.handlerGUI.sendNickname();
+            this.handlerGUI.setGameMode(1);
             welcome(stage);
         });
     }

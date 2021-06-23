@@ -672,7 +672,7 @@ public class CLI implements RenderingView {
                 shelf = input.nextLine(); // quantity
             }
             whichInput.append(shelf.charAt(0));
-        }while (!res.equals("STOP"));
+        } while (!res.equals("STOP"));
 
         return whichInput.toString();
     }
