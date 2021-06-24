@@ -133,12 +133,14 @@ public class SyncScenarioGUI {
                 }
                 // Single Player
                 else {
-                    this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
                     if (times == 2) {
-                        new ServerSender(this.handlerGUI.getClientMain(), 0, null).start();
+                        this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(cardDiscarded);
+                        this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
                         this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
                     }
-                    else discardStartingLeaders(stage, 2, finalI);
+                    else {
+                        discardStartingLeaders(stage, 2, finalI);
+                    }
                 }
             });
         }
