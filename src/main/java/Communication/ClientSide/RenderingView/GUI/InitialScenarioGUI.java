@@ -103,6 +103,7 @@ public class InitialScenarioGUI {
             this.handlerGUI.getClientMain().setDevelopmentCardsDecksGrid(new DevelopmentCardsDecksGrid());
             this.handlerGUI.getClientMain().setActionCountersDeck(new ActionCountersDeck());
             this.handlerGUI.getClientMain().setLeaderCardDeck(new LeaderCardDeck());
+            this.handlerGUI.getClientMain().setPlayerboard(localPlayers[0].getPlayerBoard());
 
             //Put 4 leader cards into first player space
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)
