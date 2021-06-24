@@ -50,6 +50,7 @@ public class HandlerCLI {
             this.clientMain.setDevelopmentCardsDecksGrid(new DevelopmentCardsDecksGrid());
             this.clientMain.setActionCountersDeck(new ActionCountersDeck());
             this.clientMain.setLeaderCardDeck(new LeaderCardDeck());
+            this.clientMain.setPlayerboard(localPlayers[0].getPlayerBoard());
 
             //Put 4 leader cards into first player space
             for(int index = 0; index < localPlayers[0].getPlayerLeaderCards().length; index++)

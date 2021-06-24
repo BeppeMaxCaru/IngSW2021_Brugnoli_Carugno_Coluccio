@@ -3,6 +3,7 @@ package Communication.ClientSide.RenderingView.GUI;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -23,13 +24,17 @@ public class PlotScenarioGUI {
 
     private final HandlerGUI handlerGUI;
     private String action;
+    private boolean mainAction;
 
     public PlotScenarioGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
+        this.mainAction = false;
     }
 
     public void choiceAction(Stage stage) {
-        //this.handlerGUI.getPlayerBoardScenario().PlayerBoard();
+       if(this.handlerGUI.getGameMode() == 0) {
+           Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
+       }
 
         GridPane root = new GridPane();
         int[] activate = new int[6];
@@ -72,8 +77,12 @@ public class PlotScenarioGUI {
         activateProdButton.setOnAction(e -> activateProductionDevCards(stage, activate, whichOutput));
 
         exitButton.setOnAction(e -> {
-            this.handlerGUI.getMsg().sendEndTurn();
-            choiceAction(stage);
+            if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendEndTurn();
+            else if(this.mainAction) {
+                choiceAction(stage);
+                this.mainAction = false;
+            }
+            else this.handlerGUI.notValidAction();
         });
 
         stage.setTitle("Choose the action!");
@@ -125,12 +134,19 @@ public class PlotScenarioGUI {
                 if (action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(0);
                 else this.handlerGUI.getMsg().sendDiscardedLeader(0);
             }
-            // single player
+            // Single player
             else {
-                if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0))
-                {
-                    if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(0))
-                        this.handlerGUI.notValidAction();
+                if (action.equals("PLAY LEADER CARD")) {
+                    if (this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)) {
+                        if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(0))
+                            this.handlerGUI.notValidAction();
+                    }
+                }
+                else {
+                    if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)){
+                        if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(0))
+                            this.handlerGUI.notValidAction();
+                    }
                 }
             }
             choiceAction(stage);
@@ -142,12 +158,19 @@ public class PlotScenarioGUI {
                 if (action.equals("PLAY LEADER CARD")) this.handlerGUI.getMsg().sendPlayedLeader(1);
                 else this.handlerGUI.getMsg().sendDiscardedLeader(1);
             }
-            // single player
+            // Single player
             else {
-                if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1))
-                {
-                    if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(1))
-                        this.handlerGUI.notValidAction();
+                if (action.equals("PLAY LEADER CARD")) {
+                    if (this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)) {
+                        if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(1))
+                            this.handlerGUI.notValidAction();
+                    }
+                }
+                else {
+                    if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)){
+                        if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(1))
+                            this.handlerGUI.notValidAction();
+                    }
                 }
             }
             choiceAction(stage);
@@ -286,7 +309,22 @@ public class PlotScenarioGUI {
                             if (s != null && whichWl2 == null) whichWl2 = s;
                             else if(s != null) whichWl2 += s;
                         }
-                        this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+
+                        if(this.handlerGUI.getGameMode() == 1)
+                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                        else if(!this.mainAction) {
+                            if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), whichWl2, whiteMarble)) {
+                                if (parameter.equals("ROW")) {
+                                    if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
+                                        mainAction = true;
+                                    else this.handlerGUI.notValidAction();
+                                } else {
+                                    if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
+                                        mainAction = true;
+                                    else this.handlerGUI.notValidAction();
+                                }
+                            }
+                        }
                         choiceAction(stage);
                     }
                     else putResources(stage, coordinates, resource, numIndex, whichWl, whiteMarble);
@@ -300,7 +338,21 @@ public class PlotScenarioGUI {
                             if (s != null && whichWl2 == null) whichWl2 = s;
                             else if(s != null) whichWl2 += s;
                         }
-                        this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                        if(this.handlerGUI.getGameMode() == 1)
+                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                        else if(!this.mainAction) {
+                            if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), whichWl2, whiteMarble)) {
+                                if (parameter.equals("ROW")) {
+                                    if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
+                                        mainAction = true;
+                                    else this.handlerGUI.notValidAction();
+                                } else {
+                                    if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
+                                        mainAction = true;
+                                    else this.handlerGUI.notValidAction();
+                                }
+                            }
+                        }
                         choiceAction(stage);
                     }
                     else putResources(stage, coordinates, resource, numIndex, whichWl, whiteMarble);
@@ -316,13 +368,40 @@ public class PlotScenarioGUI {
             if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
                 whiteMarble(stage, coordinates, resource, index, whichWl);
             }
-
             if(resource.length == 3) {
-                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
+                if(this.handlerGUI.getGameMode() == 1)
+                    this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
+                else if(!this.mainAction) {
+                    if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), "WWW", whiteMarble)) {
+                        if (parameter.equals("ROW")) {
+                            if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWW", whiteMarble))
+                                mainAction = true;
+                            else this.handlerGUI.notValidAction();
+                        } else {
+                            if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWW", whiteMarble))
+                                mainAction = true;
+                            else this.handlerGUI.notValidAction();
+                        }
+                    }
+                }
                 choiceAction(stage);
             }
             else {
-                this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
+                if(this.handlerGUI.getGameMode() == 1)
+                    this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
+                else if(!this.mainAction) {
+                    if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), "WWWW", whiteMarble)) {
+                        if (parameter.equals("ROW")) {
+                            if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWWW", whiteMarble))
+                                mainAction = true;
+                            else this.handlerGUI.notValidAction();
+                        } else {
+                            if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWWW", whiteMarble))
+                                mainAction = true;
+                            else this.handlerGUI.notValidAction();
+                        }
+                    }
+                }
                 choiceAction(stage);
             }
         }
@@ -633,7 +712,15 @@ public class PlotScenarioGUI {
             arrayButtons[j].setOnAction(e -> {
                 int[] quantity = new int[4];
                 for(int k = 0; k < quantity.length; k++) quantity[k] = Integer.parseInt(pickedResources[0][k]);
-                this.handlerGUI.getMsg().sendBuyCardAction(coordinates[1], 3 - coordinates[0], quantity, pickedResources[1], finalJ);
+                if(this.handlerGUI.getGameMode() == 1)
+                    this.handlerGUI.getMsg().sendBuyCardAction(coordinates[1], 3 - coordinates[0], quantity, pickedResources[1], finalJ);
+                else if(!this.mainAction) {
+                    if(this.handlerGUI.checkLocalBuyCard(this.handlerGUI.getClientMain().getLocalPlayers()[0], coordinates[1], 3 - coordinates[0], quantity, pickedResources[1])) {
+                        if(this.handlerGUI.getClientMain().getLocalPlayers()[0].buyDevelopmentCard(this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid(), coordinates[1], 3 - coordinates[0], finalJ, pickedResources[1]))
+                            this.mainAction = true;
+                        else this.handlerGUI.notValidAction();
+                    }
+                }
                 choiceAction(stage);
             });
         }
@@ -903,6 +990,7 @@ public class PlotScenarioGUI {
         int x = 10;
         Group root = new Group();
         Image img;
+        int[] outputs = new int[3];
 
         for(int i = 0; i < 2; i++) {
             if (this.handlerGUI.getClientMain().getLeaderCards()[i] != null && this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraProductionPowerLeaderCard) {
@@ -943,7 +1031,18 @@ public class PlotScenarioGUI {
 
             okBtn.setOnAction(e -> {
                 if(activate[4] == 0 && activate[5] == 0) {
-                    this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                    if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                    else if(!this.mainAction) {
+                        if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                            for (int k = 0; k < whichOutput.length; k++) {
+                                if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
+                                else outputs[k] = -1;
+                            }
+                            if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
+                                this.mainAction = true;
+                        }
+                        else this.handlerGUI.notValidAction();
+                    }
                     choiceAction(stage);
                 }
                 else {
@@ -959,9 +1058,20 @@ public class PlotScenarioGUI {
                 activate[5] = 0;
                 whichInput[4] = null;
                 whichInput[5] = null;
-                whichOutput[1] = null;
-                whichOutput[2] = null;
-                this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                whichOutput[1] = "-1";
+                whichOutput[2] = "-1";
+                if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                else if(!this.mainAction) {
+                    if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                        for (int k = 0; k < whichOutput.length; k++) {
+                            if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
+                            else outputs[k] = -1;
+                        }
+                        if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
+                            this.mainAction = true;
+                    }
+                    else this.handlerGUI.notValidAction();
+                }
                 choiceAction(stage);
             });
 
@@ -975,13 +1085,25 @@ public class PlotScenarioGUI {
             }
         }
         else {
-            this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+            if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+            else if(!this.mainAction) {
+                if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                    for (int k = 0; k < whichOutput.length; k++) {
+                        if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
+                        else outputs[k] = -1;
+                    }
+                    if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
+                        this.mainAction = true;
+                }
+                else this.handlerGUI.notValidAction();
+            }
             choiceAction(stage);
         }
     }
 
     public void pickResourceExtraProdPower(Stage stage, int[] activate, String[] whichOutput, String[] whichInput, int num) {
         int numPar = num - 1;
+        int[] outputs = new int[3];
 
         String[] resources = new String[]{
                 "coin.png",
@@ -1018,8 +1140,19 @@ public class PlotScenarioGUI {
                 if(num == 2) whichOutput[1] = String.valueOf(finalJ);
                 else if(num == 1) whichOutput[2] = String.valueOf(finalJ);
                 if(numPar == 0) {
-                    for (int k = 0; k < 6; k++)
-                        this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                    for (int k = 0; k < 6; k++) {
+                        if (this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                        else if (!this.mainAction) {
+                            if (this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                                for (int i = 0; i < whichOutput.length; i++) {
+                                    if (whichOutput[i] != null) outputs[i] = Integer.parseInt(whichOutput[i]);
+                                    else outputs[i] = -1;
+                                }
+                                if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
+                                    this.mainAction = true;
+                            } else this.handlerGUI.notValidAction();
+                        }
+                    }
                     choiceAction(stage);
                 }
                 else pickResourceExtraProdPower(stage, activate, whichOutput, whichInput, numPar);
