@@ -18,7 +18,7 @@ public class Player
     /**
      * Name that the player chooses to join the game
      */
-    private final String nickname;
+    private String nickname;
 
     /**
      * Order in which the player joined the game
@@ -70,6 +70,10 @@ public class Player
 
     public String getNickname(){
         return this.nickname;
+    }
+
+    public void setNickname(String nick) {
+        this.nickname = nick;
     }
 
     /**

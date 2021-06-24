@@ -84,7 +84,8 @@ public class PlayerThread implements Runnable {
         try {
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
-            System.out.println("Nickname received");
+            this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName);
+            System.out.println("Nickname received" + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
         } catch (Exception e) {
             this.sendErrorMessage();
             this.removePlayer();
@@ -439,10 +440,14 @@ public class PlayerThread implements Runnable {
             //Ritorna numero player vincitore
             int winner = this.gameController.getGameModel().checkWinner();
             //Prende il nickname del vincitore
-            String nicknameWinner = this.gameController.getGameModel().getPlayers()[winner].getNickname();
+            //String nickNameWinner = "winner missing";
+            /*for (PlayerThread p : this.gameController.getPlayerThreads()) {
+                if (p.getPlayerThreadNumber() == winner) nickNameWinner = p.getNickName();
+            }*/
+            String nickNameWinner = this.gameController.getGameModel().getPlayers()[winner].getNickname();
             //Punti vittoria di questo giocatore
             int victoryPoints = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].sumAllVictoryPoints();
-            GameOverMessage gameOverMessage = new GameOverMessage(nicknameWinner, victoryPoints);
+            GameOverMessage gameOverMessage = new GameOverMessage(nickNameWinner, victoryPoints);
             this.sender.writeObject(gameOverMessage);
             //this.removePlayer();
         } catch (Exception e) {

@@ -37,6 +37,7 @@ public class GameController{
                 if (!queueFIFO.isEmpty()) {
                     playersPlaying[i] = queueFIFO.remove(0);
                     playersPlaying[i].setPlayerThreadNumber(i);
+                    //playersPlaying[i].setNickName(playersPlaying[i].getNickName());
                     //Starts the thread
                     //playerThreadExecutor.execute(playersPlaying[i]);
 
@@ -44,6 +45,7 @@ public class GameController{
 
                     //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
+                    //System.out.println(playersPlaying[i].getNickName());
                     numOfPlayers++;
 
                 }
@@ -90,6 +92,10 @@ public class GameController{
                 }
             }
         }
+    }
+
+    public Set<PlayerThread> getPlayerThreads() {
+        return this.playerThreads;
     }
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
