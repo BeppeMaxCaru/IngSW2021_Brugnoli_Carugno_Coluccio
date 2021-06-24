@@ -9,6 +9,7 @@ import Message.MessageReceived.*;
 import Message.SendingMessages;
 import Message.ServerStartingMessage;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.io.ObjectInputStream;
@@ -52,7 +53,7 @@ public class HandlerGUI extends Application implements RenderingView {
         this.initialScenarioGUI = new InitialScenarioGUI(this);
         this.syncScenarioGUI = new SyncScenarioGUI(this);
         this.plotScenarioGUI = new PlotScenarioGUI(this);
-        this.playerBoardScenario = new PlayerBoardScenario(this, anotherStage);
+        this.playerBoardScenario = new PlayerBoardScenario(this, new Stage());
 
         this.setStage(stage);
         this.initialScenarioGUI.nickname(this.stage);
@@ -68,7 +69,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public PlotScenarioGUI getPlotScenarioGUI() { return this.plotScenarioGUI; }
 
-    public PlayerBoardScenario getPlayerBoardScenario() { return this.playerBoardScenario; }
+    public PlayerBoardScenario getPlayerBoardScenario() { return this.playerBoardScenario;}
 
     public void setStage(Stage stage) { this.stage = stage; }
 
@@ -444,12 +445,20 @@ public class HandlerGUI extends Application implements RenderingView {
 }
 
 
-    /*
+
     @Override
     public void itsYourTurn() {
-
+        //this.plotScenarioGUI.choiceAction(this.stage);
+        //this.playerBoardScenario.PlayerBoard();
+        //System.out.println("ok");
     }
 
+    @Override
+    public void update() {
+        Platform.runLater(this.playerBoardScenario);
+    }
+
+    /*
     @Override
     public void notYourTurn() {
         this.turn = false;

@@ -33,4 +33,6 @@ public interface RenderingView {
 
     default void itsYourTurn(){}
 
+    default void update(){}
+
 }

@@ -3,6 +3,7 @@ package Communication.ClientSide.RenderingView.GUI;
 import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.CLI.ServerSender;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -126,6 +127,7 @@ public class SyncScenarioGUI {
                         this.handlerGUI.updateLeaderCard();
                         this.handlerGUI.AsyncReceiver();
                         this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                        Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
                     }
                     else discardStartingLeaders(stage, 2, finalI);
                 }

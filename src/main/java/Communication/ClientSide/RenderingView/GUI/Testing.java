@@ -84,12 +84,6 @@ public class Testing extends Application implements RenderingView {
                 ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
                 this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
                 this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
-                //Serve?
-                //this.view.setGameStarted();
-
-                //Send player number and starting resources
-                //ArrayList<String> startingRes = this.getStartingResource();
-                //this.msg.sendStartingRes(startingRes);
 
                 try {
                     UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
@@ -98,13 +92,6 @@ public class Testing extends Application implements RenderingView {
                     this.error(e);
                     return;
                 }
-
-                //Receive from input 2 leader cards to be discarded
-                //int[] cards = this.getDiscardedStartingLeaders();
-
-                //Sends starting excess leader card to discard
-                //this.msg.sendDiscardedLeader(cards[0]);
-                //this.msg.sendDiscardedLeader(cards[1]);
 
             } catch (Exception e) {
                 this.error(e);

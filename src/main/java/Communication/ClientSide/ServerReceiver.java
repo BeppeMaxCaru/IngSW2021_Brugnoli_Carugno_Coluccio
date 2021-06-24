@@ -106,6 +106,8 @@ public class ServerReceiver extends Thread {
                     UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage) object;
                     this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
 
+                    this.view.update();
+
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;

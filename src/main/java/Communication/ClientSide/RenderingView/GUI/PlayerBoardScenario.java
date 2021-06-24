@@ -1,22 +1,27 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class PlayerBoardScenario {
+public class PlayerBoardScenario implements Runnable {
 
     private final HandlerGUI handlerGUI;
     private final Stage anotherStage;
 
     public PlayerBoardScenario(HandlerGUI handlerGUI, Stage anotherStage) {
+
         this.handlerGUI = handlerGUI;
         this.anotherStage = anotherStage;
+
     }
 
-    public void PlayerBoard() {
+    @Override
+    public void run() {
+
         Image image = new Image("playerBoard.png");
         ImageView imageView = new ImageView();
         imageView.setImage(image);
@@ -33,7 +38,28 @@ public class PlayerBoardScenario {
         this.anotherStage.setTitle("Your playerboard");
         this.anotherStage.setScene(scene);
         this.anotherStage.show();
+
     }
+
+    //Usa thread al suo posto
+    /*public void PlayerBoard() {
+        Image image = new Image("playerBoard.png");
+        ImageView imageView = new ImageView();
+        imageView.setImage(image);
+        imageView.setFitWidth(700);
+        imageView.setPreserveRatio(true);
+        Group root = new Group(imageView);
+
+        putRedCross(root);
+        putDevCards(root);
+        putResourcesInChest(root);
+        putResourcesInWarehouse(root);
+
+        Scene scene = new Scene(root, 700, 500);
+        this.anotherStage.setTitle("Your playerboard");
+        this.anotherStage.setScene(scene);
+        this.anotherStage.show();
+    }*/
 
     public void putRedCross(Group root) {
         int x = 25, y;
