@@ -80,7 +80,7 @@ public class ServerSender extends Thread {
                                 String chosenMarble = this.cli.getWhiteMarbleChoice();
 
                                 if(this.gameMode==0){
-                                    if(this.checkLocalMarketAction(this.clientMain.getLocalPlayers()[0].getPlayerBoard(), wlChoice, chosenMarble))
+                                    if(this.checkLocalMarketAction(this.clientMain.getLocalPlayers()[0].getPlayerBoard(), parameter, index, wlChoice, chosenMarble))
                                         if(parameter.equals("ROW"))
                                         {
                                             if(this.clientMain.getMarket().updateRow(index, this.clientMain.getLocalPlayers(), 0, wlChoice, chosenMarble))
@@ -224,7 +224,7 @@ public class ServerSender extends Thread {
         return player.getPlayerLeaderCards()[card] != null && !player.getPlayerLeaderCards()[card].isPlayed();
     }
 
-    public boolean checkLocalMarketAction(Playerboard board, String wlChoice, String leader) {
+    public boolean checkLocalMarketAction(Playerboard board,  String choice, int i, String wlChoice, String leader) {
 
         if(leader.contains("1"))
             if (board.getResourceMarbles()[1]==null) return false;
@@ -235,8 +235,29 @@ public class ServerSender extends Thread {
         if(wlChoice.contains("L"))
             for(String keys : board.getWareHouse().getWarehouseResources().keySet())
                 if (!keys.contains("extra")) return false;
+        //return true;
 
-        return true;
+        if(choice.equalsIgnoreCase("ROW"))
+        {
+            if(leader.length()<4) {
+                StringBuilder cBuilder = new StringBuilder(leader);
+                for(int k = cBuilder.length(); k<4; k++)
+                    cBuilder.append("X");
+                leader = cBuilder.toString();
+            }
+            return this.clientMain.getMarket().updateRow(i, this.clientMain.getLocalPlayers(), 0, wlChoice, leader);
+        }
+        else
+        {
+            if(leader.length()<3) {
+                StringBuilder cBuilder = new StringBuilder(leader);
+                for(int k = cBuilder.length(); k<3; k++)
+                    cBuilder.append("X");
+                leader = cBuilder.toString();
+            }
+            return this.clientMain.getMarket().updateColumn(i, this.clientMain.getLocalPlayers(), 0, wlChoice, leader);
+        }
+
     }
 
     public boolean checkLocalBuyCard(Player player, int column, int level, int[] quantity, String[] wclChoice) {
