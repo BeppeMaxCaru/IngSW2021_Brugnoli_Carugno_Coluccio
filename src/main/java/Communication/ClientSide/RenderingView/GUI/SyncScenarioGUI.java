@@ -15,23 +15,25 @@ import java.util.ArrayList;
 public class SyncScenarioGUI {
 
     private HandlerGUI handlerGUI;
+    private Stage stage;
 
-    public SyncScenarioGUI(HandlerGUI handlerGUI) {
+    public SyncScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
         this.handlerGUI = handlerGUI;
+        this.stage = stage;
     }
 
-    public void matchHasStarted(Stage stage) {
-        this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), stage);
+    public void matchHasStarted() {
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), this.stage);
 
-        if(this.handlerGUI.getClientMain().getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources", stage);
+        if(this.handlerGUI.getClientMain().getPlayerNumber() != 0) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("startingResources");
         else {
             this.handlerGUI.getMsg().sendStartingRes(new ArrayList<>());
             this.handlerGUI.updatePlayerBoard();
-            this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders", stage);
+            this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders");
         }
     }
 
-    public void startingResource(Stage stage, ArrayList<String> resStart) {
+    public void startingResource(ArrayList<String> resStart) {
         int num;
 
         if(this.handlerGUI.getClientMain().getPlayerNumber() == 1 || this.handlerGUI.getClientMain().getPlayerNumber() == 2) num = 1;
@@ -80,14 +82,14 @@ public class SyncScenarioGUI {
                 if (resStart.size() == num) {
                     this.handlerGUI.getMsg().sendStartingRes(resStart);
                     this.handlerGUI.updatePlayerBoard();
-                    discardStartingLeaders(stage, 1, -1);
+                    discardStartingLeaders(1, -1);
                 }
-                else startingResource(stage, resStart);
+                else startingResource(resStart);
             });
         }
     }
 
-    public void discardStartingLeaders(Stage stage, int times, int cardDiscarded) {
+    public void discardStartingLeaders(int times, int cardDiscarded) {
         Group root = new Group();
         //Creating buttons
         int numButtons;
@@ -126,20 +128,18 @@ public class SyncScenarioGUI {
                     if (times == 2) {
                         this.handlerGUI.updateLeaderCard();
                         this.handlerGUI.AsyncReceiver();
-                        this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
                         Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
                     }
-                    else discardStartingLeaders(stage, 2, finalI);
+                    else discardStartingLeaders(2, finalI);
                 }
                 // Single Player
                 else {
                     if (times == 2) {
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(cardDiscarded);
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
-                        this.handlerGUI.getPlotScenarioGUI().choiceAction(stage);
                     }
                     else {
-                        discardStartingLeaders(stage, 2, finalI);
+                        discardStartingLeaders(2, finalI);
                     }
                 }
             });

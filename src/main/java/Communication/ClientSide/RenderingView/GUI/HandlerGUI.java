@@ -34,6 +34,8 @@ public class HandlerGUI extends Application implements RenderingView {
     private SyncScenarioGUI syncScenarioGUI;
     private PlotScenarioGUI plotScenarioGUI;
     private PlayerBoardScenario playerBoardScenario;
+    private WaitForYourTurnScenario waitForYourTurnScenario;
+    private EndGameScenario endGameScenario;
 
     private ClientMain clientMain;
 
@@ -41,22 +43,21 @@ public class HandlerGUI extends Application implements RenderingView {
     private ObjectOutputStream sender;
     private SendingMessages msg;
 
-
     @Override
     public void start(Stage stage) throws Exception {
-        Stage anotherStage = new Stage();
-
         Parameters args = getParameters();
+        this.setStage(stage);
         this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
         this.genericClassGUI = new GenericClassGUI(this);
-        this.initialScenarioGUI = new InitialScenarioGUI(this);
-        this.syncScenarioGUI = new SyncScenarioGUI(this);
-        this.plotScenarioGUI = new PlotScenarioGUI(this);
+        this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
+        this.syncScenarioGUI = new SyncScenarioGUI(this, this.stage);
+        this.plotScenarioGUI = new PlotScenarioGUI(this, this.stage);
         this.playerBoardScenario = new PlayerBoardScenario(this, new Stage());
+        this.waitForYourTurnScenario = new WaitForYourTurnScenario(this,new Stage());
+        this.endGameScenario = new EndGameScenario(this,new Stage());
 
-        this.setStage(stage);
-        this.initialScenarioGUI.nickname(this.stage);
+        this.initialScenarioGUI.nickname();
     }
 
     public GenericClassGUI getGenericClassGUI() {
@@ -140,7 +141,7 @@ public class HandlerGUI extends Application implements RenderingView {
             //System.out.println(startingMessage.getLeaderCards().length);
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
             System.out.println(startingMessage.getLeaderCards()[0].getClass());
-            this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted", stage);
+            this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted");
             //updatePlayerBoard();
         } catch (Exception e) {
             this.error(e);
@@ -444,27 +445,30 @@ public class HandlerGUI extends Application implements RenderingView {
         return true;
 }
 
-
-
     @Override
     public void itsYourTurn() {
-        //this.plotScenarioGUI.choiceAction(this.stage);
-        //this.playerBoardScenario.PlayerBoard();
-        //System.out.println("ok");
+        Platform.runLater(this.plotScenarioGUI);
     }
+
 
     @Override
     public void update() {
         Platform.runLater(this.playerBoardScenario);
     }
 
-    /*
+
     @Override
     public void notYourTurn() {
-        this.turn = false;
     }
 
     @Override
     public void endTurn() {
-    } */
+        Platform.runLater(this.waitForYourTurnScenario);
+        this.stage.close();
+    }
+
+    @Override
+    public void endMultiplayerGame(GameOverMessage msg) {
+        Platform.runLater(this.endGameScenario);
+    }
 }

@@ -28,12 +28,14 @@ import java.net.Socket;
 public class InitialScenarioGUI {
 
     private final HandlerGUI handlerGUI;
+    private final Stage stage;
 
-    public InitialScenarioGUI(HandlerGUI handlerGUI) {
+    public InitialScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
         this.handlerGUI = handlerGUI;
+        this.stage = stage;
     }
 
-    public void nickname(Stage stage) {
+    public void nickname() {
         GridPane root = new GridPane();
         root.setHgap(8);
         root.setVgap(8);
@@ -68,18 +70,18 @@ public class InitialScenarioGUI {
 
         Scene scene = new Scene(root, 300, 100);
 
-        stage.setTitle("Choose nickname");
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setTitle("Choose nickname");
+        this.stage.setScene(scene);
+        this.stage.show();
 
         okBtn.setOnAction(e -> {
             //this.clientMain.setNickname(field.getText());
             this.handlerGUI.getClientMain().setNickname(field.getText());
-            multiOrSinglePlayers(stage);
+            multiOrSinglePlayers();
         });
     }
 
-    public void multiOrSinglePlayers(Stage stage) {
+    public void multiOrSinglePlayers( ) {
         GridPane root = new GridPane();
         Button button1 = new Button("Single player");
         Button button2 = new Button("Multi player");
@@ -88,9 +90,9 @@ public class InitialScenarioGUI {
 
         Scene scene = new Scene(root, 300, 100);
 
-        stage.setTitle("Multi Or Single Players?");
-        stage.setScene(scene);
-        stage.show();
+        this.stage.setTitle("Multi Or Single Players?");
+        this.stage.setScene(scene);
+        this.stage.show();
 
         button1.setOnAction(e -> {
             this.handlerGUI.setGameMode(0);
@@ -110,20 +112,20 @@ public class InitialScenarioGUI {
                 this.handlerGUI.getClientMain().getLocalPlayers()[0].setPlayerLeaderCard(index, this.handlerGUI.getClientMain().getLeaderCardDeck().drawOneLeaderCard());
             this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
 
-            this.handlerGUI.getSyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
+            this.handlerGUI.getSyncScenarioGUI().discardStartingLeaders(1, -1);
         });
 
         button2.setOnAction(e -> {
             this.handlerGUI.connectionSocket();
             this.handlerGUI.sendNickname();
             this.handlerGUI.setGameMode(1);
-            welcome(stage);
+            welcome();
         });
     }
 
-    public void welcome(Stage stage) {
+    public void welcome() {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.handlerGUI.getClientMain().getNickname() +
-                "!\nWelcome to Master of Renaissance online!", stage);
+                "!\nWelcome to Master of Renaissance online!", this.stage);
         this.handlerGUI.updateMarket();
     }
 }

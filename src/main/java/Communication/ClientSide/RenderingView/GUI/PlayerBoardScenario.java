@@ -86,10 +86,11 @@ public class PlayerBoardScenario implements Runnable {
             for(int i = 0; i < blackCross; i++) {
                 if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 35;
             }
+
+            Image image2 = new Image("croce.png");
+            imageView(image2, x, y, root);
         }
 
-        Image image2 = new Image("croce.png");
-        imageView(image2, x, y, root);
     }
 
     public void putDevCards(Group root) {

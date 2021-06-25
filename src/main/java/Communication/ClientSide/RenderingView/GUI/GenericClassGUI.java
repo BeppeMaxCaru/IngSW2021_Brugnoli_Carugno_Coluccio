@@ -33,7 +33,7 @@ public class GenericClassGUI {
         stage.show();
     }
 
-    public void LoadWTFOnTimer(String method, Stage stage) {
+    public void LoadWTFOnTimer(String method) {
         ArrayList<String> resStart = new ArrayList<>();
         TimerTask task = new TimerTask() {
 
@@ -44,16 +44,13 @@ public class GenericClassGUI {
                         System.out.println("loading..");
                         switch(method) {
                             case "startingResources":
-                                handlerGUI.getSyncScenarioGUI().startingResource(stage, resStart);
+                                handlerGUI.getSyncScenarioGUI().startingResource(resStart);
                                 break;
                             case "discardStartingLeaders":
-                                handlerGUI.getSyncScenarioGUI().discardStartingLeaders(stage, 1, -1);
+                                handlerGUI.getSyncScenarioGUI().discardStartingLeaders(1, -1);
                                 break;
                             case "matchHasStarted":
-                                handlerGUI.getSyncScenarioGUI().matchHasStarted(stage);
-                                break;
-                            case "choiceAction":
-                                handlerGUI.getPlotScenarioGUI().choiceAction(stage);
+                                handlerGUI.getSyncScenarioGUI().matchHasStarted();
                                 break;
                         }
 
