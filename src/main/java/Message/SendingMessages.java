@@ -5,6 +5,7 @@ import Communication.ClientSide.RenderingView.RenderingView;
 import Message.MessageSent.DiscardLeaderMessage;
 import Message.MessageSent.EndTurnMessage;
 import Message.MessageSent.PlayLeaderMessage;
+import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -96,6 +97,14 @@ public class SendingMessages {
             ActivateProdMessage prodMessage;
             prodMessage = new ActivateProdMessage(this.clientMain.getPlayerNumber(), activation, whichInput, outputs);
             this.sender.writeObject(prodMessage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendQuitMessage() {
+        try {
+            this.sender.writeObject(new QuitMessage());
         } catch (Exception e) {
             e.printStackTrace();
         }

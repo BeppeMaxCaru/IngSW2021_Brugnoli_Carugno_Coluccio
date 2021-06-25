@@ -239,7 +239,7 @@ public class PlayerThread implements Runnable {
             //Check current player here
             try {
                 object = (Message) this.receiver.readObject();
-                System.out.println("Received message from player "+object.getPlayerNumber());
+                System.out.println("Received message from player " + object.getPlayerNumber());
                 if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber())
                 {
                     object = new NotYourTurnMessage();

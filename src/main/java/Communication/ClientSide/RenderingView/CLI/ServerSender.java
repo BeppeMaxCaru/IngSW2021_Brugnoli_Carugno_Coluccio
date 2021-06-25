@@ -193,6 +193,7 @@ public class ServerSender extends Thread {
                             }
                             case "QUIT":
                             {
+                                this.msg.sendQuitMessage();
                                 this.cli.quit();
                                 return;
                             }
