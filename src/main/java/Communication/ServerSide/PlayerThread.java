@@ -77,7 +77,7 @@ public class PlayerThread implements Runnable {
 
         //SWITCH THAT READS MESSAGES AND SENDS RESPONSES/DOES ACTIONS
 
-        System.out.println("PlayerThread started");
+        //System.out.println("PlayerThread started");
 
         Player currentPlayer = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber];
 
@@ -92,7 +92,7 @@ public class PlayerThread implements Runnable {
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName);
-            System.out.println("Nickname received" + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
+            //System.out.println("Nickname received " + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -107,7 +107,7 @@ public class PlayerThread implements Runnable {
         try {
             UpdateClientMarketMessage updateClientMarketMessage = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
             this.sender.writeObject(updateClientMarketMessage);
-            System.out.println("Market sent");
+            //System.out.println("Market sent");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -121,7 +121,7 @@ public class PlayerThread implements Runnable {
         try {
             UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
             this.sender.writeObject(updateClientDevCardGridMessage);
-            System.out.println("DevCards sent");
+            //System.out.println("DevCards sent");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -135,7 +135,7 @@ public class PlayerThread implements Runnable {
             ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
                     this.playerThreadNumber, this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards());
             this.sender.writeObject(serverStartingMessage);
-            System.out.println("Player number and leaders sent");
+            //System.out.println("Player number and leaders sent");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -150,7 +150,7 @@ public class PlayerThread implements Runnable {
             while (!startingResourcesMessage.getStartingRes().isEmpty())
                 currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
             //this.sender.writeObject( new ActionOutcomeMessage(true));
-            System.out.println("Starting res received");
+            //System.out.println("Starting res received");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -163,7 +163,7 @@ public class PlayerThread implements Runnable {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard());
             this.sender.writeObject(playerBoardMessage);
-            System.out.println("Playerboard sent");
+            //System.out.println("Playerboard sent");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -179,7 +179,7 @@ public class PlayerThread implements Runnable {
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
                 //this.sender.writeObject(new ActionOutcomeMessage(true));
-                System.out.println("Leader received");
+                //System.out.println("Leader received");
 
             } catch (Exception e) {
                 this.sendErrorMessage();
@@ -195,7 +195,7 @@ public class PlayerThread implements Runnable {
             this.sender.reset();
             UpdateClientLeaderCardsMessage leaderCardsMessage = new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards());
             this.sender.writeObject(leaderCardsMessage);
-            System.out.println("Leaders sent");
+            //System.out.println("Leaders sent");
         } catch (Exception e) {
             this.sendErrorMessage();
             //this.removePlayer();
@@ -313,16 +313,16 @@ public class PlayerThread implements Runnable {
                     {
                         //Row/column choice
                         String rowOrColumnChoice = marketResourcesMessage.getRowColumnChoice();
-                        System.out.println(rowOrColumnChoice);
+                        //System.out.println(rowOrColumnChoice);
                         //Row/column index
                         int index = marketResourcesMessage.getIndex();
-                        System.out.println(index);
+                        //System.out.println(index);
                         //Warehouse/leaderCard choice
                         String wlChoice = marketResourcesMessage.getWarehouseLeaderChoice();
-                        System.out.println(wlChoice);
+                        //System.out.println(wlChoice);
                         //If he has 2 whiteMarbleLeaderCards
                         String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
-                        System.out.println(chosenMarble);
+                        //System.out.println(chosenMarble);
 
                         //Qui invece che outcome vanno messi i broadcast
                         //IN MARKET, GRID E ACTIVATE PRODUCTION
@@ -346,7 +346,6 @@ public class PlayerThread implements Runnable {
                 }
             }
 
-
             Map<Integer, String> resources = new HashMap<>();
             resources.put(0, "COINS");
             resources.put(1, "SERVANTS");
@@ -361,25 +360,26 @@ public class PlayerThread implements Runnable {
                     {
                         //DevCard colour
                         int column = buyCardMessage.getColour();
-                        System.out.println("column "+column);
+                        //System.out.println("column "+column);
                         //DevCard level
                         int level = buyCardMessage.getLevel();
                         int row = 3-level;
-                        System.out.println("level "+level);
+                        //System.out.println("level "+level);
                         //How much resources does the player spend
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
-                        for(int i =0; i<4; i++){
-                            System.out.println(resources.get(i));
-                            System.out.println(quantity[i]);
-                            System.out.println(deposit[i]);
-                        }
+                        /*for(int i =0; i<4; i++){
+                            //System.out.println(resources.get(i));
+                            //System.out.println(quantity[i]);
+                            //System.out.println(deposit[i]);
+                            }
+                         */
 
                         if (this.gameController.checkBuyDevCard(currentPlayer, column, level, quantity, deposit)) {
 
                             int pos = buyCardMessage.getPlayerboardPosition();
-                            System.out.println("Put in position "+pos);
+                            //System.out.println("Put in position "+pos);
 
                             if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[row][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
@@ -417,6 +417,7 @@ public class PlayerThread implements Runnable {
                         whichInput=prodMessage.getInputs();
                         whichOutput=prodMessage.getOutputs();
 
+                        /*
                         for (int k = 0; k < 6; k++) {
                             System.out.println("Activation power n."+k+": "+activation[k]);
                             System.out.println(whichInput[k]);
@@ -424,6 +425,7 @@ public class PlayerThread implements Runnable {
                                 System.out.println(whichOutput[k - 3]);
                             }
                         }
+                         */
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                             System.out.println("Playerboard sent");
