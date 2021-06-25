@@ -54,8 +54,8 @@ public class HandlerGUI extends Application implements RenderingView {
         this.syncScenarioGUI = new SyncScenarioGUI(this, this.stage);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.stage);
         this.playerBoardScenario = new PlayerBoardScenario(this, new Stage());
-        this.waitForYourTurnScenario = new WaitForYourTurnScenario(this,new Stage());
-        this.endGameScenario = new EndGameScenario(this,new Stage());
+        this.waitForYourTurnScenario = new WaitForYourTurnScenario(this, this.stage);
+        this.endGameScenario = new EndGameScenario(this, this.stage);
 
         this.initialScenarioGUI.nickname();
     }
@@ -464,7 +464,6 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public void endTurn() {
         Platform.runLater(this.waitForYourTurnScenario);
-        this.stage.close();
     }
 
     @Override
