@@ -107,7 +107,8 @@ public class ServerSender extends Thread {
 
                                 int[] coordinates = this.cli.getDevelopmentCardsGridCoordinates();
                                 int column = coordinates[0];
-                                int level = 3 - coordinates[1];
+                                if(column==-1) break;
+                                int level = coordinates[1];
 
                                 //Check
                                 int[] quantity = new int[4];

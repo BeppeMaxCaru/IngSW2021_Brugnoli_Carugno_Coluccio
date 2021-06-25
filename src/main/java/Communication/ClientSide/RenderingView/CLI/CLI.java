@@ -86,14 +86,14 @@ public class CLI implements RenderingView {
             System.out.println("Write " + i + " for this: ");
             this.printLeaderCard(this.main.getLeaderCards()[i]);
         }
-        int card;
+        String card;
         try {
-            card = this.input.nextInt();
-            while (card < 0 || card > 3) {
+            card = this.input.nextLine();
+            while (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) {
                 System.out.println("Chose a correct card.");
-                card = this.input.nextInt();
+                card = this.input.nextLine();
             }
-            discarded[0]=card;
+            discarded[0]=Integer.parseInt(card);
         } catch (Exception e) {
             this.error(e);
         }
@@ -110,12 +110,12 @@ public class CLI implements RenderingView {
             }
         }
         try {
-            card = this.input.nextInt();
-            while (card < 0 || card > 2) {
+            card = this.input.nextLine();
+            while (!card.equals("0") && !card.equals("1") && !card.equals("2")) {
                 System.out.println("Chose a correct card.");
-                card = this.input.nextInt();
+                card = this.input.nextLine();
             }
-            discarded[1]=card;
+            discarded[1]=Integer.parseInt(card);
         } catch (Exception e) {
             this.error(e);
         }
@@ -142,13 +142,13 @@ public class CLI implements RenderingView {
 
     public String getActionChoice() {
         this.printActions();
-        String action = this.input.nextLine().toUpperCase();
+        String action;
 
-        while(!action.equals("PLAY LEADER CARD") && !action.equals("DISCARD LEADER CARD") &&
-            !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
-            !action.equals("ACTIVATE PRODUCTION POWER") && !action.equals("END TURN") && !action.equals("QUIT") &&
-            !action.equals("P") && !action.equals("D") && !action.equals("M") && !action.equals("B") && !action.equals("A"))
-        {
+        action = this.input.nextLine().toUpperCase();
+        while (!action.equals("PLAY LEADER CARD") && !action.equals("DISCARD LEADER CARD") &&
+                !action.equals("PICK RESOURCES FROM MARKET") && !action.equals("BUY DEVELOPMENT CARD") &&
+                !action.equals("ACTIVATE PRODUCTION POWER") && !action.equals("END TURN") && !action.equals("QUIT") &&
+                !action.equals("P") && !action.equals("D") && !action.equals("M") && !action.equals("B") && !action.equals("A")) {
             System.err.println("Write a correct action.");
             this.printActions();
             action = this.input.nextLine().toUpperCase();
@@ -169,7 +169,9 @@ public class CLI implements RenderingView {
     public int getPlayedLeader() {
 
         this.printLeaderRequest("play");
-        String parameter = this.input.nextLine();
+        String parameter;
+
+        parameter = this.input.nextLine();
 
         while (!parameter.equals("0") && !parameter.equals("1"))
         {
@@ -177,6 +179,7 @@ public class CLI implements RenderingView {
             this.printLeaderRequest("play");
             parameter = this.input.nextLine();
         }
+
         return Integer.parseInt(parameter);
     }
 
@@ -358,13 +361,18 @@ public class CLI implements RenderingView {
 
         System.out.println("Which card do you want to buy?");
         System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
+        System.out.println("Write BACK if you want to chose another action");
         String colour = input.nextLine().toUpperCase();
-        while (!colour.equals("GREEN") && !colour.equals("YELLOW") && !colour.equals("BLUE") && !colour.equals("PURPLE")) {
+        while (!colour.equals("GREEN") && !colour.equals("YELLOW") && !colour.equals("BLUE") && !colour.equals("PURPLE") && !colour.equals("BACK")) {
             //Resets controller
             System.err.println("Not valid colour");
             System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
+            System.out.println("Write BACK if you want to chose another action");
             colour = input.nextLine().toUpperCase();
         }
+        if(colour.equals("BACK"))
+            return new int[]{-1, 0};
+
         int column = this.main.getDevelopmentCardsDecksGrid().getDevelopmentCardsColours().get(colour);
         coordinates[0] = column;
 
@@ -640,38 +648,41 @@ public class CLI implements RenderingView {
                 }
             }
 
-            System.out.println("How much of them do you want to pick?");
-            String quant = this.input.nextLine(); //quantity
-
-            while(!quant.equals("1") && !quant.equals("2")) {
-                System.err.println("Not valid input.");
+            if (!res.equals("STOP")) {
                 System.out.println("How much of them do you want to pick?");
-                quant = this.input.nextLine(); // quantity
-            }
-            whichInput.append(quant);
+                String quant = this.input.nextLine(); //quantity
 
-            this.printActivatedLeaderCard(this.main.getLeaderCards());
+                while(!quant.equals("1") && !quant.equals("2")) {
+                    System.err.println("Not valid input.");
+                    System.out.println("How much of them do you want to pick?");
+                    quant = this.input.nextLine(); // quantity
+                }
+                whichInput.append(quant);
 
-            if (quant.equals("1"))
-                System.out.println("From which store do you want to pick this resource?");
-            else
-                System.out.println("From which store do you want to pick these resources?");
-            System.out.println("Write 'WAREHOUSE' if you want to pick resources from warehouse");
-            System.out.println("Write 'CHEST' if you want to pick resources from chest");
-            System.out.println("Write 'LEADER CARD' if you want to pick resources from your extra space leader card, if it's available");
+                this.printActivatedLeaderCard(this.main.getLeaderCards());
 
-            String shelf = input.nextLine().toUpperCase();
-
-            while(!shelf.equals("WAREHOUSE") && !shelf.equals("CHEST") && !shelf.equals("LEADER CARD") &&
-                    !shelf.equals("W") && !shelf.equals("C") && !shelf.equals("L")) {
-                System.err.println("Not valid input.");
                 if (quant.equals("1"))
                     System.out.println("From which store do you want to pick this resource?");
                 else
                     System.out.println("From which store do you want to pick these resources?");
-                shelf = input.nextLine(); // quantity
+                System.out.println("Write 'WAREHOUSE' if you want to pick resources from warehouse");
+                System.out.println("Write 'CHEST' if you want to pick resources from chest");
+                System.out.println("Write 'LEADER CARD' if you want to pick resources from your extra space leader card, if it's available");
+
+                String shelf = input.nextLine().toUpperCase();
+
+                while(!shelf.equals("WAREHOUSE") && !shelf.equals("CHEST") && !shelf.equals("LEADER CARD") &&
+                        !shelf.equals("W") && !shelf.equals("C") && !shelf.equals("L")) {
+                    System.err.println("Not valid input.");
+                    if (quant.equals("1"))
+                        System.out.println("From which store do you want to pick this resource?");
+                    else
+                        System.out.println("From which store do you want to pick these resources?");
+                    shelf = input.nextLine(); // quantity
+                }
+                whichInput.append(shelf.charAt(0));
             }
-            whichInput.append(shelf.charAt(0));
+
         } while (!res.equals("STOP"));
 
         return whichInput.toString();
