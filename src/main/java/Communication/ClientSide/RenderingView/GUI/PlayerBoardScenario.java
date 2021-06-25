@@ -35,7 +35,7 @@ public class PlayerBoardScenario implements Runnable {
         putResourcesInWarehouse(root);
 
         Scene scene = new Scene(root, 700, 500);
-        this.anotherStage.setTitle("Your playerboard");
+        this.anotherStage.setTitle("Player" + this.handlerGUI.getClientMain().getPlayerNumber() + ": your playerboard");
         this.anotherStage.setScene(scene);
         this.anotherStage.show();
 
@@ -90,7 +90,6 @@ public class PlayerBoardScenario implements Runnable {
             Image image2 = new Image("croce.png");
             imageView(image2, x, y, root);
         }
-
     }
 
     public void putDevCards(Group root) {

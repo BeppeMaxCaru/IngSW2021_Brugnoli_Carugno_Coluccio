@@ -181,6 +181,7 @@ public class GameController{
                                 paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
                                 if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                     //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
+                                    System.out.println("1");
                                     return false;
                                 }
                             }
@@ -199,9 +200,11 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
+                        System.out.println("2");
                         return false;
                     }
                 } else {
+                    System.out.println("3");
                     return false;
                 }
 
@@ -213,9 +216,11 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
+                        System.out.println("4");
                         return false;
                     }
                 } else {
+                    System.out.println("5");
                     return false;
                 }
 
@@ -227,9 +232,11 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) < count) {
+                        System.out.println("6");
                         return false;
                     }
                 } else {
+                    System.out.println("7");
                     return false;
                 }
         }

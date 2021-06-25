@@ -468,6 +468,8 @@ public class HandlerGUI extends Application implements RenderingView {
 
     @Override
     public void endMultiplayerGame(GameOverMessage msg) {
+        getClientMain().setVictoryPoints(msg.getVictoryPoints());
+        getClientMain().setWinner(msg.getWinner());
         Platform.runLater(this.endGameScenario);
     }
 }

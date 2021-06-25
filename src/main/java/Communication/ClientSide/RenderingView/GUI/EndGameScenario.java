@@ -14,6 +14,13 @@ public class EndGameScenario implements Runnable{
 
     @Override
     public void run() {
+        winner();
+    }
 
+    public void winner() {
+        String s;
+        if(this.handlerGUI.getClientMain().getWinner().equals(this.handlerGUI.getClientMain().getNickname())) s = "you";
+        else s = this.handlerGUI.getClientMain().getWinner();
+        this.handlerGUI.getGenericClassGUI().addLabelByCode("The winner is " + s + "!\nYour victory points: " + this.handlerGUI.getClientMain().getVictoryPoints(), this.anotherStage);
     }
 }

@@ -26,6 +26,8 @@ public class ClientMain{
     //Multi player attributes
     private Playerboard playerboard;
     private LeaderCard[] leaderCards = new LeaderCard[4];
+    private String winner;
+    private int victoryPoints;
 
     //Single player attributes
     private ActionCountersDeck actionCountersDeck;
@@ -141,6 +143,22 @@ public class ClientMain{
 
     public void setLeaderCardDeck(LeaderCardDeck leaderCardDeck) {
         this.leaderCardDeck = leaderCardDeck;
+    }
+
+    public String getWinner() {
+        return winner;
+    }
+
+    public void setWinner(String winner) {
+        this.winner = winner;
+    }
+
+    public void setVictoryPoints(int victoryPoints) {
+        this.victoryPoints = victoryPoints;
+    }
+
+    public int getVictoryPoints() {
+        return this.victoryPoints;
     }
 }
 
