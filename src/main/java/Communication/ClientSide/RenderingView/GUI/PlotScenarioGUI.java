@@ -42,25 +42,37 @@ public class PlotScenarioGUI implements Runnable{
            Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
        }
 
-        GridPane root = new GridPane();
+        Group root = new Group();
         int[] activate = new int[6];
         String[] whichOutput = new String[6];
 
         Button playLeaderCardButton = new Button("Play leader card");
-        Button discardLeaderCardButton = new Button("Discard Leader Card");
-        Button pickResourceFromMarketButton = new Button("Pick Resource From Market");
-        Button buyDevelopmentCardButton = new Button("Buy Development Card");
-        Button activateProdButton = new Button("Activate Production Power");
+        playLeaderCardButton.setLayoutX(10);
+        playLeaderCardButton.setLayoutY(10);
+        Button discardLeaderCardButton = new Button("Discard leader card");
+        discardLeaderCardButton.setLayoutX(130);
+        discardLeaderCardButton.setLayoutY(10);
+        Button pickResourceFromMarketButton = new Button("Pick resource from market");
+        pickResourceFromMarketButton.setLayoutX(10);
+        pickResourceFromMarketButton.setLayoutY(60);
+        Button buyDevelopmentCardButton = new Button("Buy development card");
+        buyDevelopmentCardButton.setLayoutX(190);
+        buyDevelopmentCardButton.setLayoutY(60);
+        Button activateProdButton = new Button("Activate production power");
+        activateProdButton.setLayoutX(350);
+        activateProdButton.setLayoutY(60);
+        Button quitButton = new Button("Quit the game");
+        quitButton.setLayoutX(10);
+        quitButton.setLayoutY(110);
         Button exitButton = new Button("Submit");
+        exitButton.setLayoutX(110);
+        exitButton.setLayoutY(110);
 
-        root.add(playLeaderCardButton, 1, 0);
-        root.add(discardLeaderCardButton, 3, 0);
-        root.add(pickResourceFromMarketButton, 0, 3);
-        root.add(buyDevelopmentCardButton, 2, 3);
-        root.add(activateProdButton, 4, 3);
-        root.add(exitButton, 4, 5);
 
-        Scene scene = new Scene(root, 750, 90);
+        root.getChildren().addAll(playLeaderCardButton, discardLeaderCardButton, pickResourceFromMarketButton,
+                buyDevelopmentCardButton, activateProdButton, quitButton, exitButton);
+
+        Scene scene = new Scene(root, 650, 160);
 
         playLeaderCardButton.setOnAction(e -> {
             this.action = "PLAY LEADER CARD";
@@ -89,6 +101,11 @@ public class PlotScenarioGUI implements Runnable{
                 this.mainAction = false;
             }
             else this.handlerGUI.notValidAction();
+        });
+
+        quitButton.setOnAction(e -> {
+            this.handlerGUI.getGenericClassGUI().addLabelByCode("You left the game\nBye bye!", this.stage);
+            this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("quit");
         });
 
         this.stage.setTitle("Player " + this.handlerGUI.getClientMain().getPlayerNumber() + ": choose the action!");

@@ -52,6 +52,9 @@ public class GenericClassGUI {
                             case "matchHasStarted":
                                 handlerGUI.getSyncScenarioGUI().matchHasStarted();
                                 break;
+                            case "quit":
+                                System.exit(0);
+                                break;
                         }
 
                     } catch (Exception e) {

@@ -475,4 +475,55 @@ public class HandlerGUI extends Application implements RenderingView {
         getClientMain().setWinner(msg.getWinner());
         Platform.runLater(this.endGameScenario);
     }
+
+    @Override
+    public void connectionError(Exception e) {
+        //e.printStackTrace();
+        System.err.println("Connection error");
+        System.exit(-1);
+    }
+
+    @Override
+    public void setupError(Exception e) {
+        //e.printStackTrace();
+        System.err.println("Error during setup");
+        System.exit(-2);
+    }
+
+    @Override
+    public void gameError(Exception e) {
+        //e.printStackTrace();
+        System.err.println("The application encountered a problem");
+        System.out.println(-3);
+    }
+
+    @Override
+    public void serverError(Exception e) {
+        System.err.println("Server not responding");
+        System.exit(-5);
+    }
+
+    @Override
+    public void invalidInputError(Exception e) {
+        System.err.println("Not valid input");
+    }
+
+    @Override
+    public void error(Exception e){
+        e.printStackTrace();
+        System.err.println("Error");
+    }
+
+    @Override
+    public void receiverError(Exception e){
+        e.printStackTrace();
+        System.err.println("Message corrupted");
+        System.exit(-7);
+    }
+
+    @Override
+    public void senderError(Exception e){
+        e.printStackTrace();
+        System.err.println("Not valid parameter");
+    }
 }
