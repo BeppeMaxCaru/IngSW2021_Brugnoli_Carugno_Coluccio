@@ -29,6 +29,8 @@ public class MultiEchoServer {
     //GameModel
     private GameModel game;
 
+    //basta che abbiano nome diverso nella stessa partita
+    //Meglio nome diverso ovunque
     private HashSet<String> playersNicknames = new HashSet<>();
 
     //Chat
@@ -58,12 +60,13 @@ public class MultiEchoServer {
 
                     if (queueFIFO.isEmpty() || queueFIFO.size()<2) throw new Exception();
 
+                    //Passa hashset di nickname e verifica appena si connettono
                     GameController gameController = new GameController(queueFIFO);
                     //gameExecutor.execute(gameController);
 
                     System.out.println("New game started");
                 } catch (Exception e) {
-                    System.out.println("Not enough players");
+                    //System.out.println("Not enough players");
                 }
             }
         }, 0, 5000);
@@ -80,6 +83,7 @@ public class MultiEchoServer {
                 //if
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);
+                System.out.println(queueFIFO.size());
                 //this.playersNicknames.add(newPlayer.getNickName());
 
             } catch(IOException e) {
@@ -95,4 +99,6 @@ public class MultiEchoServer {
         MultiEchoServer echoServer = new MultiEchoServer(1234);
         echoServer.startServer();
     }
+
+
 }

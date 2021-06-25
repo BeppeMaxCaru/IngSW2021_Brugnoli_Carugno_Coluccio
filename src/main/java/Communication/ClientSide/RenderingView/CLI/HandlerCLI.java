@@ -71,14 +71,15 @@ public class HandlerCLI {
                 this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
                 this.msg = new SendingMessages(this.clientMain, this.cli, this.sender);
             } catch (Exception e) {
-                this.cli.error(e);
+                //Error connect
+                this.cli.connectionError(e);
             }
 
             //Send nickname message to server
             try {
                 this.msg.sendNickname();
             } catch (Exception e) {
-                this.cli.error(e);
+                this.cli.setupError(e);
                 return;
             }
 
@@ -88,7 +89,7 @@ public class HandlerCLI {
                 UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) this.receiver.readObject();
                 this.clientMain.setMarket(updateClientMarketMessage.getMarket());
             } catch (Exception e) {
-                this.cli.error(e);
+                this.cli.setupError(e);
                 return;
             }
 
@@ -96,7 +97,7 @@ public class HandlerCLI {
                 UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();
                 this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
             } catch (Exception e) {
-                this.cli.error(e);
+                this.cli.setupError(e);
                 return;
             }
 
@@ -116,7 +117,7 @@ public class HandlerCLI {
                     UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
                     this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
                 } catch (Exception e) {
-                    this.cli.error(e);
+                    this.cli.setupError(e);
                     return;
                 }
 
@@ -128,14 +129,14 @@ public class HandlerCLI {
                 this.msg.sendDiscardedLeader(cards[1]);
 
             } catch (Exception e) {
-                this.cli.error(e);
+                this.cli.setupError(e);
             }
 
             try {
                 UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                 this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
             } catch (Exception e) {
-                this.cli.error(e);
+                this.cli.setupError(e);
                 return;
             }
 

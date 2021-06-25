@@ -447,7 +447,9 @@ public class HandlerGUI extends Application implements RenderingView {
 
     @Override
     public void itsYourTurn() {
+
         Platform.runLater(this.plotScenarioGUI);
+        //Platform.runLater(this.playerBoardScenario);
     }
 
 
@@ -464,6 +466,7 @@ public class HandlerGUI extends Application implements RenderingView {
     @Override
     public void endTurn() {
         Platform.runLater(this.waitForYourTurnScenario);
+        //Platform.runLater(this.playerBoardScenario);
     }
 
     @Override

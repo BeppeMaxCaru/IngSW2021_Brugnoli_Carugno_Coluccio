@@ -28,6 +28,7 @@ public class SendingMessages {
             NicknameMessage nicknameMessage = new NicknameMessage(this.clientMain.getNickname());
             this.sender.writeObject(nicknameMessage);
         } catch (Exception e) {
+            this.view.gameError(e);
             e.printStackTrace();
         }
     }

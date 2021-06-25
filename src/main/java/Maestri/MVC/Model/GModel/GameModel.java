@@ -128,16 +128,21 @@ public class GameModel{
      */
     public int checkWinner() {
         int maxVictoryPoints = 0;
-        int playerWithMaxVictoryPoints = 0;
+        int playerWithMaxVictoryPoints = -1;
 
+        //Caso in cui resta solo un player
         for(int i = 0; i < this.players.length; i++) {
             if (this.players[i]!=null) {
-                if (maxVictoryPoints < getPlayers()[i].sumAllVictoryPoints()) {
-                    maxVictoryPoints = getPlayers()[i].sumAllVictoryPoints();
+                if (maxVictoryPoints < this.players[i].sumAllVictoryPoints()) {
+                    maxVictoryPoints = this.players[i].sumAllVictoryPoints();
                     playerWithMaxVictoryPoints = i;
-                } else if (maxVictoryPoints == getPlayers()[i].sumAllVictoryPoints()) {
-                    if (getPlayers()[i].numResourcesReserve() > getPlayers()[playerWithMaxVictoryPoints].numResourcesReserve())
+                } else if (maxVictoryPoints == this.players[i].sumAllVictoryPoints()) {
+                    if (playerWithMaxVictoryPoints < 0) {
                         playerWithMaxVictoryPoints = i;
+                    } else {
+                        if (this.players[i].numResourcesReserve() > this.players[playerWithMaxVictoryPoints].numResourcesReserve())
+                            playerWithMaxVictoryPoints = i;
+                    }
                 }
             }
         }

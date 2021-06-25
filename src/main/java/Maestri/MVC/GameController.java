@@ -407,6 +407,7 @@ public class GameController{
 
             try {
                 playerThread.getSender().writeObject(new UpdateClientPlayerBoardMessage(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard()));
+                System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("Player boards broadcast not working");

@@ -200,8 +200,8 @@ public class ServerSender extends Thread {
                         //Player writes quit
                     }
                 } catch (Exception e) {
-                    this.cli.senderError(e);
-                    System.exit(1);
+                    this.cli.gameError(e);
+                    //System.exit(1);
                 }
             } while (!this.endLocalGame(this.clientMain.getLocalPlayers()));
     }

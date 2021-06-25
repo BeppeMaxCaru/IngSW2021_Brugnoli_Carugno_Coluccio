@@ -37,7 +37,7 @@ public class PlotScenarioGUI implements Runnable{
         choiceAction( );
     }
 
-    public void choiceAction( ) {
+    public void choiceAction() {
        if(this.handlerGUI.getGameMode() == 0) {
            Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
        }

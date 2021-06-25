@@ -3,6 +3,7 @@ package Communication.ClientSide;
 import Communication.ClientSide.RenderingView.RenderingView;
 import Message.Message;
 import Message.MessageReceived.*;
+import Message.MessageSent.PingMessage;
 import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectInputStream;
@@ -33,9 +34,17 @@ public class ServerReceiver extends Thread {
             try {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
-                e.printStackTrace();
-                this.view.receiverError(e);
+                //e.printStackTrace();
+                this.view.serverError(e);
                 break;
+            }
+
+            if (object instanceof PingMessage) {
+                try {
+                    System.out.println("ping ok -> connection stable");
+                } catch (Exception e) {
+                    break;
+                }
             }
 
             if(object instanceof YourTurnMessage){
@@ -107,6 +116,7 @@ public class ServerReceiver extends Thread {
                     this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
 
                     this.view.update();
+                    //System.out.println("Ricevuta playerboard");
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -118,6 +128,7 @@ public class ServerReceiver extends Thread {
 
                 try {
                     GameOverMessage gameOverMessage = (GameOverMessage) object;
+                    System.out.println("Received game over mex");
                     this.view.endMultiplayerGame(gameOverMessage);
 
                     //SHUT BOTH THREAD AND STREAM

@@ -1,16 +1,22 @@
 package Communication.ClientSide.RenderingView;
 
+import Message.Message;
 import Message.MessageReceived.GameOverMessage;
+
+import java.io.ObjectInputStream;
 
 public interface RenderingView {
 
     default void error(Exception e){
+        e.printStackTrace();
     }
 
     default void receiverError(Exception e){
+        e.printStackTrace();
     }
 
     default void senderError(Exception e){
+        e.printStackTrace();
     }
 
     default void endTurn(){
@@ -34,5 +40,27 @@ public interface RenderingView {
     default void itsYourTurn(){}
 
     default void update(){}
+
+    default void connectionError(Exception e){
+        e.printStackTrace();
+    }
+
+    default void setupError(Exception e){
+        e.printStackTrace();
+    }
+
+    default void gameError(Exception e){
+        e.printStackTrace();
+    }
+
+    default void serverError(Exception e){
+        e.printStackTrace();
+    }
+
+    default void invalidInputError(Exception e){
+        e.printStackTrace();
+    }
+
+    default void receivePing(ObjectInputStream objectInputStream) {}
 
 }
