@@ -555,51 +555,108 @@ public class CLI implements RenderingView {
             System.out.println("Write e1 if you want to activate the second extra production power, if it's available");
         System.out.println("Write STOP if you don't want to activate production powers");
         prodPower = input.nextLine().toUpperCase();
-        while(this.checkProduction(prodPower, activation) == -1){
+        int check = this.checkProduction(prodPower, activation);
+        while(check == -1){
             System.err.println("Not valid input.");
             System.out.println("Write a correct production power code.");
             prodPower = input.nextLine().toUpperCase();
+            check = this.checkProduction(prodPower, activation);
         }
-
-        return this.checkProduction(prodPower, activation);
+        return check;
     }
 
     public int checkProduction(String prodPower, int[] activation){
         switch(prodPower){
-            case "PO":
+            case "P0":
             {
+                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0]==null)
+                    return -1;
+
                 if(activation[0]==0)
+                {
+                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0].printCardProductionPower());
+                        else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0]!=null)
+                            System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0].printCardProductionPower());
                     return 0;
+                }
                 else return -1;
             }
             case "P1":
             {
+                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1]==null)
+                    return -1;
+
                 if(activation[1]==0)
+                {
+                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1].printCardProductionPower());
                     return 1;
+                }
                 else return -1;
             }
             case "P2":
             {
+                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2]==null &&
+                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2]==null)
+                    return -1;
+
                 if(activation[2]==0)
+                {
+                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2].printCardProductionPower());
                     return 2;
+                }
                 else return -1;
             }
             case "B":
             {
                 if(activation[3]==0)
+                {
+                    System.out.println("1? 1? } 1? (NO FP)");
                     return 3;
+                }
                 else return -1;
             }
             case "EO":
             {
+                if(this.main.getPlayerboard().getExtraProductionPowerInput()[0]==null)
+                    return -1;
+
                 if(activation[4]==0)
-                    return 4;
+                {
+                    {
+                        System.out.println("1"+this.main.getPlayerboard().getExtraProductionPowerInput()[0].substring(0,2)+" } 1? 1FP");
+                        return 4;
+                    }
+                }
                 else return -1;
             }
             case "E1":
             {
+                if(this.main.getPlayerboard().getExtraProductionPowerInput()[1]==null)
+                    return -1;
+
                 if(activation[5]==0)
+                {
+                    System.out.println("1"+this.main.getPlayerboard().getExtraProductionPowerInput()[1].substring(0,2)+" } 1? 1FP");
                     return 5;
+                }
                 else return -1;
             }
             case "STOP":
@@ -621,11 +678,13 @@ public class CLI implements RenderingView {
 
             System.out.println("Which input resource do you want to spend?");
             System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
+            System.out.println("Write STOP at the end.");
             res = input.nextLine().toUpperCase();
             while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("STOP")) {
                 System.out.println("Choose a correct resource");
                 System.out.println("Which starting resource do you want to pick?");
                 System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
+                System.out.println("Write STOP at the end.");
                 res = input.nextLine().toUpperCase();
             }
 
