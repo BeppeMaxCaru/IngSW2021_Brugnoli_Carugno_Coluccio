@@ -52,8 +52,14 @@ public class GenericClassGUI {
                             case "matchHasStarted":
                                 handlerGUI.getSyncScenarioGUI().matchHasStarted();
                                 break;
-                            case "quit":
+                            case "quit0":
                                 System.exit(0);
+                                break;
+                            case "quit1":
+                                handlerGUI.getMsg().sendQuitMessage();
+                                break;
+                            case "exit":
+                                Platform.exit();
                                 break;
                         }
 
@@ -65,7 +71,7 @@ public class GenericClassGUI {
         };
 
         Timer timer = new Timer("Timer");
-        long delay = 3000L;
+        long delay = 4000L;
         timer.schedule(task, delay);
     }
 

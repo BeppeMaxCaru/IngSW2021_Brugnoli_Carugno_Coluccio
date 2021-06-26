@@ -105,7 +105,8 @@ public class PlotScenarioGUI implements Runnable{
 
         quitButton.setOnAction(e -> {
             this.handlerGUI.getGenericClassGUI().addLabelByCode("You left the game\nBye bye!", this.stage);
-            this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("quit");
+            if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("quit1");
+            else this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("quit0");
         });
 
         this.stage.setTitle("Player " + this.handlerGUI.getClientMain().getPlayerNumber() + ": choose the action!");
@@ -786,7 +787,7 @@ public class PlotScenarioGUI implements Runnable{
                 Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i].getImage());
                 arrayButtons[i] = new Button();
                 this.handlerGUI.getGenericClassGUI().createIconButton(x, 100, img, arrayButtons[i], 250, 200);
-                x = x + 200;
+                x = x + 190;
                 root.getChildren().add(arrayButtons[i]);
             }
         }
@@ -829,14 +830,14 @@ public class PlotScenarioGUI implements Runnable{
                         if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("COINS") > 1)
                             num = "2";
                     }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") != 0) {
                         string.append("1");
-                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") > 1)
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") > 1)
                             num = "2";
                     }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") != 0) {
+                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") != 0) {
                         string.append("2");
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") > 1)
+                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") > 1)
                             num = "2";
                     }
                     if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("STONES") != 0) {

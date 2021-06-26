@@ -1,5 +1,6 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 public class EndGameScenario implements Runnable{
@@ -22,5 +23,6 @@ public class EndGameScenario implements Runnable{
         if(this.handlerGUI.getClientMain().getWinner().equals(this.handlerGUI.getClientMain().getNickname())) s = "you";
         else s = this.handlerGUI.getClientMain().getWinner();
         this.handlerGUI.getGenericClassGUI().addLabelByCode("The winner is " + s + "!\nYour victory points: " + this.handlerGUI.getClientMain().getVictoryPoints(), this.anotherStage);
+        this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("exit");
     }
 }

@@ -35,7 +35,7 @@ public class PlayerBoardScenario implements Runnable {
         putResourcesInWarehouse(root);
 
         Scene scene = new Scene(root, 700, 500);
-        this.anotherStage.setTitle("Player" + this.handlerGUI.getClientMain().getPlayerNumber() + ": your playerboard");
+        this.anotherStage.setTitle("Player " + this.handlerGUI.getClientMain().getPlayerNumber() + ": your playerboard!");
         this.anotherStage.setScene(scene);
         this.anotherStage.show();
 
