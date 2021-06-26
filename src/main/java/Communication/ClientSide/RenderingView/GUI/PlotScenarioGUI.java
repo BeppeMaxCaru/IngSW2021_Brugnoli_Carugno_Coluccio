@@ -558,11 +558,20 @@ public class PlotScenarioGUI implements Runnable{
             y += 300;
         }
 
+        Button decline = new Button("Decline");
+        decline.setLayoutX(700);
+        decline.setLayoutY(870);
+        root.getChildren().add(decline);
+
         //Setting the this.stage
         Scene scene = new Scene(root, 800, 900);
         this.stage.setTitle("Buy development card.");
         this.stage.setScene(scene);
         this.stage.show();
+
+        decline.setOnAction(e -> {
+            choiceAction();
+        });
 
         int row = 0, column = 0;
         int[] coordinates = new int[2];

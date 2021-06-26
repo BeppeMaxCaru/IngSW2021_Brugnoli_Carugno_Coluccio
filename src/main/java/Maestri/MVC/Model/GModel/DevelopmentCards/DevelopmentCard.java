@@ -99,6 +99,7 @@ public class DevelopmentCard implements Serializable {
         this.output.put("STONES", stonesOutput);
         this.output.put("SERVANTS", servantsOutput);
         this.output.put("SHIELDS", shieldsOutput);
+        this.output.put("REDCROSS", faithPoints);
 
         this.faithPoints = faithPoints;
         this.victoryPoints = victoryPoints;

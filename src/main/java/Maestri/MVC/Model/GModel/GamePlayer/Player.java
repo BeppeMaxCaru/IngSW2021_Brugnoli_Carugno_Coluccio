@@ -207,7 +207,7 @@ public class Player
                         if(s.equals("REDCROSS"))
                         {
                             if(this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s)!=0)
-                            redCross = redCross + this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s);
+                                redCross = redCross + this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s);
                         }
                         else
                         {

@@ -533,7 +533,6 @@ public class PlayerThread implements Runnable {
 
         //Il thread termina
         this.removePlayer();
-
     }
 
     public void removePlayer () {
