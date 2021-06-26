@@ -8,6 +8,7 @@ import Message.MessageSent.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -89,13 +90,14 @@ public class PlayerThread implements Runnable {
 
         //SYNC PHASE
         try {
+            this.playerSocket.setSoTimeout(45000);
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName);
             //System.out.println("Nickname received " + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("No nickname");
             return;
         }
@@ -110,12 +112,17 @@ public class PlayerThread implements Runnable {
             //System.out.println("Market sent");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("Non viene broadcastato mercato in PlayerThread");
             return;
         }
 
         //this.ping();
+        /*try {
+            this.playerSocket.setSoTimeout(10000);
+        } catch (Exception e) {
+            System.out.println("Timeout scaduto");
+        }*/
 
         //SECOND MESSAGE TO SETUP CLIENT MARKET
         try {
@@ -124,7 +131,7 @@ public class PlayerThread implements Runnable {
             //System.out.println("DevCards sent");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("Non viene broadcastata grid in PlayerThread");
             return;
         }
@@ -138,7 +145,7 @@ public class PlayerThread implements Runnable {
             //System.out.println("Player number and leaders sent");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("No starting message");
             return;
         }
@@ -146,6 +153,7 @@ public class PlayerThread implements Runnable {
         //this.ping();
 
         try {
+            this.playerSocket.setSoTimeout(45000);
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
             while (!startingResourcesMessage.getStartingRes().isEmpty())
                 currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
@@ -153,7 +161,7 @@ public class PlayerThread implements Runnable {
             //System.out.println("Starting res received");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("No starting resources message");
             return;
         }
@@ -166,7 +174,7 @@ public class PlayerThread implements Runnable {
             //System.out.println("Playerboard sent");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("Not playerBoard sent");
             return;
         }
@@ -176,14 +184,17 @@ public class PlayerThread implements Runnable {
         for(int cards=0; cards<2; cards++)
         {
             try {
+                this.playerSocket.setSoTimeout(45000);
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
+                //this.playerSocket.setSoTimeout(0);
                 //this.sender.writeObject(new ActionOutcomeMessage(true));
                 //System.out.println("Leader received");
 
             } catch (Exception e) {
                 this.sendErrorMessage();
-                //this.removePlayer();
+                this.removePlayer();
+                e.printStackTrace();
                 System.out.println("No discard leader card message");
                 return;
             }
@@ -198,7 +209,7 @@ public class PlayerThread implements Runnable {
             //System.out.println("Leaders sent");
         } catch (Exception e) {
             this.sendErrorMessage();
-            //this.removePlayer();
+            this.removePlayer();
             System.out.println("Not leader cards sent");
             return;
         }
@@ -208,13 +219,26 @@ public class PlayerThread implements Runnable {
         try {
             if(this.playerThreadNumber==0)
             {
-                System.out.println("Turn of player "+this.playerThreadNumber);
+                System.out.println("Turn of player " + this.playerThreadNumber);
                 this.sender.writeObject(new YourTurnMessage());
-            } else this.sender.writeObject(new TurnOverMessage());
+                //this.playerSocket.setSoTimeout(10000);
+            } else {
+                this.sender.writeObject(new TurnOverMessage());
+                //this.playerSocket.setSoTimeout(0);
+            }
         } catch (Exception e) {
+            //e.printStackTrace();
+            this.removePlayer();
+        }
+
+
+        try {
+            this.playerSocket.setSoTimeout(0);
+        } catch (SocketException e) {
             e.printStackTrace();
         }
 
+        //this.playerSocket.setSoTimeout(10000);
 
         //BISOGNA ANCORA GESTIRE IL BREAK
         //ASYNC PHASE
@@ -231,6 +255,25 @@ public class PlayerThread implements Runnable {
                 this.sendErrorMessage();
                 //this.removePlayer();
                 System.out.println("Reset sender not working");
+                break;
+            }
+
+            if (this.gameController.getCurrentPlayerNumber() == this.playerThreadNumber) {
+                try {
+                    this.playerSocket.setSoTimeout(45000);
+                } catch (Exception e) {
+                    //e.printStackTrace();
+                    System.out.println("Player inactive [PlayerThread: line 264]");
+                    //Lo espello
+                    break;
+                }
+            } else if (this.gameController.getCurrentPlayerNumber() != this.playerThreadNumber) {
+                try {
+                    this.playerSocket.setSoTimeout(0);
+                } catch (Exception e) {
+                    //e.printStackTrace();
+                    break;
+                }
             }
 
             Message object;
@@ -249,7 +292,8 @@ public class PlayerThread implements Runnable {
             } catch (Exception e) {
                 this.sendErrorMessage();
                 //this.removePlayer();
-                System.out.println("Error in receiving in PlayerThread");
+                //e.printStackTrace();
+                System.out.println("Error in receiving in PlayerThread or current player inactive [PlayerThread: line 293]");
                 break;
             }
 
@@ -446,6 +490,7 @@ public class PlayerThread implements Runnable {
                 if(this.mainAction)
                 {
                     try {
+                        //this.playerSocket.setSoTimeout(0);
                         this.sender.writeObject(new TurnOverMessage());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -512,7 +557,7 @@ public class PlayerThread implements Runnable {
             this.sender.reset();
             this.sender.writeObject(new ServerErrorMessage());
         } catch (Exception e) {
-            System.out.println("Sending error message");
+            System.out.println("Sending error message exception");
             //e.printStackTrace();
         }
     }
@@ -522,6 +567,7 @@ public class PlayerThread implements Runnable {
             this.sender.reset();
             this.sender.writeObject(new PingMessage());
         } catch (Exception e) {
+            this.removePlayer();
             System.out.println("Player lost");
         }
     }

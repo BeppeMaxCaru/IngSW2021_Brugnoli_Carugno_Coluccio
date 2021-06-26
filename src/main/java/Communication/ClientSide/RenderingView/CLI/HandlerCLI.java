@@ -75,6 +75,9 @@ public class HandlerCLI {
                 this.cli.connectionError(e);
             }
 
+            //this.cli.receivePing(this.receiver);
+            //System.out.println("Ping received");
+
             //Send nickname message to server
             try {
                 this.msg.sendNickname();
@@ -82,6 +85,8 @@ public class HandlerCLI {
                 this.cli.setupError(e);
                 return;
             }
+
+            //this.cli.receivePing(this.receiver);
 
             this.cli.setClientStarted();
 
@@ -92,6 +97,8 @@ public class HandlerCLI {
                 this.cli.setupError(e);
                 return;
             }
+
+            //this.cli.receivePing(this.receiver);
 
             try {
                 UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();

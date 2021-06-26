@@ -867,4 +867,13 @@ public class CLI implements RenderingView {
         System.err.println("Not valid parameter");
     }
 
+    @Override
+    public void receivePing(ObjectInputStream objectInputStream) {
+        try {
+            objectInputStream.readObject();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("ping failed");
+        }
+    }
 }
