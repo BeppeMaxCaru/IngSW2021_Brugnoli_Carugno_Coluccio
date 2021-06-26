@@ -63,9 +63,20 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
         boolean check = false;
         for(int i = 0; i < 3; i++)
         {
-            if ((playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour())))
+            /*if ((playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour()))) {
                 check = true;
+            }*/
+
+            if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null) {
+                System.out.println(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardLevel());
+                if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour())) {
+                    System.out.println(this.requisite.getDevelopmentCardColour());
+                    System.out.println(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour());
+                    check = true;
+                }
+            }
         }
+        System.out.println(check);
         return check;
     }
 

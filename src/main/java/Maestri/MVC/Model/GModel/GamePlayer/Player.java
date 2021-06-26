@@ -42,6 +42,7 @@ public class Player
 
     private Socket clientSocket;
 
+    private int discarded = 0;
 
     /**
      * Initializes a new player
@@ -244,11 +245,36 @@ public class Player
      */
     public boolean playLeaderCard(int var) {
 
-        if(!this.playerLeaderCards[var].checkRequisites(this.playerBoard))
+        int check;
+
+        if (var == 0) {
+            if (this.playerLeaderCards[var] != null) {
+                check = 0;
+            } else {
+                return false;
+            }
+        } else if (var == 1) {
+            if (this.playerLeaderCards[var] != null) {
+                check = 1;
+            } else {
+                if (this.playerLeaderCards[var - 1] != null) {
+                    check = 0;
+                } else {
+                    return false;
+                }
+            }
+        } else return false;
+
+        if(!this.playerLeaderCards[check].checkRequisites(this.playerBoard))
             return false;
 
-        this.playerLeaderCards[var].activateAbility(this.playerBoard);
-        this.playerBoard.sumVictoryPoints(this.playerLeaderCards[var].getVictoryPoints());
+        //System.out.println("Esplode");
+
+        this.playerLeaderCards[check].activateAbility(this.playerBoard);
+        this.playerBoard.sumVictoryPoints(this.playerLeaderCards[check].getVictoryPoints());
+
+        //System.out.println("Esplode");
+
 
         return true;
     }
@@ -264,13 +290,25 @@ public class Player
             if(this.playerLeaderCards[k]!=null)
                 cards++;
 
+
         List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
         updatedPlayerLeaderCardList.remove(var);
+        //System.out.println(updatedPlayerLeaderCardList.size());
+
+        //System.out.println(this.playerLeaderCards[0]);
+        //System.out.println(this.playerLeaderCards[1]);
+        //System.out.println(this.playerLeaderCards[2]);
+        //System.out.println(this.playerLeaderCards[3]);
+
+        // this.playerLeaderCards = new LeaderCard[updatedPlayerLeaderCardList.size()];
         this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
+        //System.out.println(this.playerLeaderCards.length);
 
         if(cards<=2)
             this.playerBoard.getFaithPath().moveCross(1);
 
+
+        //System.out.println(this.playerLeaderCards.length);
         return true;
     }
 

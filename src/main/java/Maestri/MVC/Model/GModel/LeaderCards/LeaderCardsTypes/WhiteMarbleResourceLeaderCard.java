@@ -79,6 +79,8 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         }
         else check = false;
 
+        System.out.println(check);
+
         return check;
     }
 
