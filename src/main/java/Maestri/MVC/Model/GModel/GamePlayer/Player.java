@@ -202,16 +202,17 @@ public class Player
                         if(this.playerBoard.getPlayerboardDevelopmentCards()[i][j]!=null)
                             break;
                     }
-                    for(String s : this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().keySet())
+                    for(String s : this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().keySet())
                     {
-                        if(!s.equals("REDCROSS"))
+                        if(s.equals("REDCROSS"))
                         {
-                            redCross = redCross + this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(s);
+                            if(this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s)!=0)
+                            redCross = redCross + this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s);
                         }
                         else
                         {
                             if(this.playerBoard.getChest().getChestResources().get(s)!=null)
-                                this.playerBoard.getChest().getChestResources().put(s, this.playerBoard.getChest().getChestResources().get(s) +  this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardInput().get(s));
+                                this.playerBoard.getChest().getChestResources().put(s, this.playerBoard.getChest().getChestResources().get(s) +  this.playerBoard.getPlayerboardDevelopmentCards()[i][j].getDevelopmentCardOutput().get(s));
                         }
                     }
                 }
@@ -232,7 +233,8 @@ public class Player
         }
 
         // RedCross
-        getPlayerBoard().getFaithPath().moveCross(redCross);
+        if(redCross!=0)
+            getPlayerBoard().getFaithPath().moveCross(redCross);
 
         return true;
     }
