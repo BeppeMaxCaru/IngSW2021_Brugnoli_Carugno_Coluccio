@@ -79,18 +79,10 @@ public class ServerSender extends Thread {
                                 String wlChoice = this.cli.getResourcesDestination(parameter);
                                 String chosenMarble = this.cli.getWhiteMarbleChoice();
 
-                                if(this.gameMode==0){
-                                    if(this.checkLocalMarketAction(this.clientMain.getLocalPlayers()[0].getPlayerBoard(), parameter, index, wlChoice, chosenMarble))
-                                        if(parameter.equals("ROW"))
-                                        {
-                                            if(this.clientMain.getMarket().updateRow(index, this.clientMain.getLocalPlayers(), 0, wlChoice, chosenMarble))
-                                                mainAction++;
-                                            else this.cli.notValidAction();
-                                        } else {
-                                            if(this.clientMain.getMarket().updateColumn(index, this.clientMain.getLocalPlayers(), 0, wlChoice, chosenMarble))
-                                                mainAction++;
-                                            else this.cli.notValidAction();
-                                        }
+                                if(this.gameMode==0) {
+                                    if (this.checkLocalMarketAction(this.clientMain.getLocalPlayers()[0].getPlayerBoard(), parameter, index, wlChoice, chosenMarble))
+                                        mainAction++;
+                                    else this.cli.notValidAction();
                                 } else {
                                     this.msg.sendMarketAction(parameter, index, wlChoice, chosenMarble);
                                 }

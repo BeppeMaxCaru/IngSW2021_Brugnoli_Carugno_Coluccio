@@ -209,7 +209,8 @@ public class DevelopmentCard implements Serializable {
             if(this.cost.get(key)!=0) {
                 int resourcesToRemove = this.cost.get(key);
                 for (int i=0;i<resourcesToRemove;i++) {
-                    playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);
+                    if(wclChoice!=null)
+                        playerboard.pickResource(key, String.valueOf(wclChoice[resources.get(key)].charAt(i)), 1);
                 }
             }
         }
