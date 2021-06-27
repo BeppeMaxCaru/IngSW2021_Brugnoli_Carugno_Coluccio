@@ -210,7 +210,8 @@ public class ClientMain{
         }
     }
 
-    public boolean checkLocalBuyCard(Player player, int column, int level, int[] quantity, String[] wclChoice) {
+    public boolean checkLocalBuyCard(Player currentPlayer, int column, int l, int[] quantity, String[] wclChoice) {
+
         Map<String, Integer> paidResources = new HashMap<>();
         paidResources.put("COINS", quantity[0]);
         paidResources.put("SERVANTS", quantity[1]);
@@ -223,30 +224,25 @@ public class ClientMain{
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
-        if(wclChoice[0].length() + wclChoice[1].length() + wclChoice[2].length() + wclChoice[3].length() == 0)
-            return false;
-
-        if (quantity[0] + quantity[1] + quantity[2] + quantity[3] ==0)
-            return false;
-
-        if (getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0] != null) {
+        if (this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0] != null) {
 
             //Control on quantity and possibly discounts
             //If paidResources hashMap isn't equals to cardCost hashMap
-            if (!paidResources.equals(getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+            if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                 //Check for discounts
-                if (player.getPlayerBoard().getDevelopmentCardDiscount()[0] != null && player.getPlayerLeaderCards()[0].isPlayed()) {
-                    paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[0]) + 1);
+                if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0] != null && currentPlayer.getPlayerLeaderCards()[0].isPlayed()) {
+                    paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) + 1);
                     //Check if player has activated only first discount
-                    if (!paidResources.equals(getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
-                        if (player.getPlayerBoard().getDevelopmentCardDiscount()[1] != null && player.getPlayerLeaderCards()[1].isPlayed()) {
-                            paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[1], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[1]) + 1);
+                    if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
+                        if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1] != null && currentPlayer.getPlayerLeaderCards()[1].isPlayed()) {
+                            paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1]) + 1);
                             //Check if player has activated both first and second discounts
-                            if (!paidResources.equals(getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                            if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                 //Check if player has activated only second discount
-                                paidResources.put(player.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(player.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
-                                if (!paidResources.equals(getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[level][column][0].getDevelopmentCardCost())) {
+                                paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
+                                if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                     //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
+                                    //System.out.println("1");
                                     return false;
                                 }
                             }
@@ -254,151 +250,162 @@ public class ClientMain{
                     }
                 }
             }
-        }
+        } else System.out.println("Card null");
 
         for (int k = 0; k < 4; k++) {
             int count = 0;
             for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("w"))
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("W"))
                     count++;
             }
-            if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != count) {
-                return false;
-            }
-
-            count = 0;
-            for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("c"))
-                    count++;
-            }
-            if (player.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != count) {
-                return false;
-            }
-
-            count = 0;
-            for (int z = 0; z < wclChoice[k].length(); z++) {
-                if (String.valueOf(wclChoice[k].charAt(z)).equalsIgnoreCase("l"))
-                    count++;
-            }
-
-            if(count>0 && player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) == null)
-                return false;
-
-            if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null)
-            {
-                if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != count) {
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != null) {
+                    if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
+                        //System.out.println("2");
+                        return false;
+                    }
+                } else {
+                    //System.out.println("3");
                     return false;
                 }
-            }
 
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("C"))
+                    count++;
+            }
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != null) {
+                    if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
+                        //System.out.println("4");
+                        return false;
+                    }
+                } else {
+                    //System.out.println("5");
+                    return false;
+                }
+
+            count = 0;
+            for (int z = 0; z < wclChoice[k].length(); z++) {
+                if (String.valueOf(wclChoice[k].charAt(z)).equals("L"))
+                    count++;
+            }
+            if(count>0)
+                if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null) {
+                    if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) < count) {
+                        //System.out.println("6");
+                        return false;
+                    }
+                } else {
+                    //System.out.println("7");
+                    return false;
+                }
         }
         return true;
     }
 
-    public boolean checkLocalActivateProd(Player player, int[] activate, String[] inputs, String[] outputs) {
+    public boolean checkLocalActivateProd(Player currentPlayer, int[] activation, String[] whichInput) {
 
-        Map<String, Integer> paidWarehouseResources = new HashMap<>();
-        paidWarehouseResources.put("COINS", 0);
-        paidWarehouseResources.put("SERVANTS", 0);
-        paidWarehouseResources.put("SHIELDS", 0);
-        paidWarehouseResources.put("STONES", 0);
-
-        Map<String, Integer> paidChestResources = new HashMap<>();
-        paidChestResources.put("COINS", 0);
-        paidChestResources.put("SERVANTS", 0);
-        paidChestResources.put("SHIELDS", 0);
-        paidChestResources.put("STONES", 0);
-
-        Map<Integer, String> resources = new HashMap<>();
-        resources.put(0, "COINS");
-        resources.put(1, "SERVANTS");
-        resources.put(2, "SHIELDS");
-        resources.put(3, "STONES");
-
-        int j;
+        int act = 0;
+        for (int i : activation) act = act + i;
+        System.out.println("Powers activated: "+act);
+        if(act==0)
+            return false;
 
 
-        int activated=0;
-        for (int index = 0; index < 6; index++) {
-            if (activate[index] == 1) {
-                j = 0;
-                for (int i = 0; i < inputs[index].length() / 3; i++) {
-                    if (inputs[index].charAt(j) != '0' && inputs[index].charAt(j) != '1' && inputs[index].charAt(j) != '2' && inputs[index].charAt(j) != '3') {
-                        return false;
-                    }
-                    if (inputs[index].charAt(j + 1) != '1' && inputs[index].charAt(j + 1) != '2') {
-                        return false;
-                    }
-                    if (inputs[index].charAt(j + 2) != 'c' && inputs[index].charAt(j + 2) != 'w' && inputs[index].charAt(j + 2) != 'e') {
-                        return false;
-                    }
-                    j++;
-                }
-                activated++;
-            }
-        }
-
-        if(activated==0) return false;
-
-        for (String s : outputs) {
-            if (s != null) {
-                if (!s.equals("0") && !s.equals("1") && !s.equals("2") && !s.equals("3") && !s.equals("4")) {
-                    return false;
-                }
-            }
-        }
-
-        for(int k=0; k<activate.length; k++)
+        for(int k=0; k<activation.length; k++)
         {
-            if(activate[k]==1) {
+            if(activation[k]==1) {
+                String in = whichInput[k];
 
-                j=2;
+                Map<String, Integer> paidWarehouseResources = new HashMap<>();
+                paidWarehouseResources.put("COINS", 0);
+                paidWarehouseResources.put("SERVANTS", 0);
+                paidWarehouseResources.put("SHIELDS", 0);
+                paidWarehouseResources.put("STONES", 0);
+
+                Map<String, Integer> paidChestResources = new HashMap<>();
+                paidChestResources.put("COINS", 0);
+                paidChestResources.put("SERVANTS", 0);
+                paidChestResources.put("SHIELDS", 0);
+                paidChestResources.put("STONES", 0);
+
+                Map<Integer, String> resources = new HashMap<>();
+                resources.put(0, "COINS");
+                resources.put(1, "SERVANTS");
+                resources.put(2, "SHIELDS");
+                resources.put(3, "STONES");
+
+                int j=2;
                 if (k < 3) {
 
                     //Check if player has any cards into the indicated position
                     for (j = 2; j > 0; j--)
-                        if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                        if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
                             break;
 
-                    if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                    if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
                         return false;
                     }
 
                     //Check how many resources player has to spend
                     int totalResources = 0;
-                    for(String keys : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
-                        totalResources=totalResources+player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(keys);
+                    for(String keys : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    {
+                        System.out.println(keys);
+                        System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
+                        totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
+                        System.out.println(totalResources);
+                    }
+
+
+                    int paidRes = 0;
+                    for(int r=0; r<in.length(); r=r+3) {
+                        paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
+                    }
+
+                    System.out.println("Resources to pay: " + totalResources);
+                    System.out.println("Resources paid: " + paidRes);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
-                    if(inputs.length<totalResources*3) return false;
+                    if(paidRes<totalResources) return false;
 
                 } else {
                     if(k != 3) {
                         //Check if player has any cards into the indicated position and it is activated
-                        if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !player.getPlayerLeaderCards()[k-4].isPlayed()) {
+                        if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
                             return false;
                         }
                     }
                 }
 
                 //Save all resources player has to pay in temporary maps
-                for(int z=0; z<inputs.length-2; z=z+3) {
-                    switch (String.valueOf(inputs[z+2]).toUpperCase()) {
+                for(int z=0; z<in.length(); z=z+3) {
+                    int value = Integer.parseInt(String.valueOf(in.charAt(z)));
+                    int quantity = Integer.parseInt(String.valueOf(in.charAt(z + 1)));
+                    switch (String.valueOf(in.charAt(z+2))) {
                         case "W": {
-                            paidWarehouseResources.put(resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                            paidWarehouseResources.put(resources.get(value),
+                                    paidWarehouseResources.get(resources.get(value)) + quantity);
                             break;
                         }
                         case "C": {
-                            paidChestResources.put(resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                            paidChestResources.put(resources.get(value),
+                                    paidChestResources.get(resources.get(value)) + quantity);
                             break;
                         }
                         case "L": {
-                            if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(Integer.parseInt(inputs[z])))==null) {
+                            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(value))==null) {
+                                System.out.println("Extra warehouse error");
                                 return false;
                             }
                             else
-                                paidWarehouseResources.put("extra"+resources.get(Integer.parseInt(inputs[z])), Integer.parseInt(inputs[z+1]));
+                                paidWarehouseResources.put("extra"+resources.get(value),
+                                        paidWarehouseResources.get(resources.get(value)) + quantity);
                             break;
+                        }
+                        default: {
+                            return false;
                         }
                     }
                 }
@@ -406,11 +413,13 @@ public class ClientMain{
                 //Check if player has each correct resource in each correct storage
 
                 for(String keys : paidWarehouseResources.keySet())
-                    if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
+                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
+                        System.out.println("Incorrect warehouse resources");
                         return false;
                     }
                 for(String keys : paidChestResources.keySet())
-                    if(player.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys)) {
+                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
+                        System.out.println("Incorrect chest resources");
                         return false;
                     }
 
@@ -421,23 +430,27 @@ public class ClientMain{
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
                     for(String extraRes : paidWarehouseResources.keySet())
                     {
-                        if(extraRes.contains(res))
-                            paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                        // if(extraRes.contains(res))
+                        // paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
                     }
                 }
 
                 if(k<3)
                 {
-                    for(String res : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().keySet())
+                    for(String res : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardCost().get(res)) {
+                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
+                            System.out.println(res);
+                            System.out.println(paidChestResources.get(res));
+                            System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
+                            System.out.println("Not enough resources");
                             return false;
                         }
                     }
                 } else {
-                    if (paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
-                        return false;
-                    }
+                    //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
+                    //return false;
+                    // }
                 }
             }
         }

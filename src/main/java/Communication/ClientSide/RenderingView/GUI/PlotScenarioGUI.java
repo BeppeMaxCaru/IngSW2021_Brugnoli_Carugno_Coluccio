@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -1075,7 +1074,7 @@ public class PlotScenarioGUI implements Runnable{
                 if(activate[4] == 0 && activate[5] == 0) {
                     if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                     else if(!this.mainAction) {
-                        if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                        if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
                             for (int k = 0; k < whichOutput.length; k++) {
                                 if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                                 else outputs[k] = -1;
@@ -1104,7 +1103,7 @@ public class PlotScenarioGUI implements Runnable{
                 whichOutput[2] = "-1";
                 if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                 else if(!this.mainAction) {
-                    if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                    if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
                         for (int k = 0; k < whichOutput.length; k++) {
                             if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                             else outputs[k] = -1;
@@ -1129,7 +1128,7 @@ public class PlotScenarioGUI implements Runnable{
         else {
             if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
             else if(!this.mainAction) {
-                if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
                     for (int k = 0; k < whichOutput.length; k++) {
                         if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                         else outputs[k] = -1;
@@ -1185,7 +1184,7 @@ public class PlotScenarioGUI implements Runnable{
                     for (int k = 0; k < 6; k++) {
                         if (this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                         else if (!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                            if (this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
                                 for (int i = 0; i < whichOutput.length; i++) {
                                     if (whichOutput[i] != null) outputs[i] = Integer.parseInt(whichOutput[i]);
                                     else outputs[i] = -1;

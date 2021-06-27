@@ -2,11 +2,7 @@ package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Message.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ServerSender extends Thread {
 
@@ -155,7 +151,7 @@ public class ServerSender extends Thread {
 
                                 if(this.gameMode==0)
                                 {
-                                    if(this.clientMain.checkLocalActivateProd(this.clientMain.getLocalPlayers()[0], activation, whichInput, whichOutput))
+                                    if(this.clientMain.checkLocalActivateProd(this.clientMain.getLocalPlayers()[0], activation, whichInput))
                                         if(this.clientMain.getLocalPlayers()[0].activateProduction(activation, whichInput, outputs))
                                             mainAction++;
                                         else this.cli.notValidAction();
