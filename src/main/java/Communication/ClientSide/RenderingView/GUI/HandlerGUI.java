@@ -47,13 +47,14 @@ public class HandlerGUI extends Application implements RenderingView {
         this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
         this.genericClassGUI = new GenericClassGUI(this);
-        this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
+        //this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
         this.syncScenarioGUI = new SyncScenarioGUI(this, this.stage);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.stage);
         this.playerBoardScenario = new PlayerBoardScenario(this, new Stage());
         this.waitForYourTurnScenario = new WaitForYourTurnScenario(this, this.stage);
         this.endGameScenario = new EndGameScenario(this, this.stage);
 
+        this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
         this.initialScenarioGUI.nickname();
     }
 

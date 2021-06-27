@@ -47,11 +47,15 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
     public boolean checkRequisites(Playerboard playerboard) {
         int totalResources=0;
         //Collection of Warehouse+Chest Resources
-        totalResources=totalResources+playerboard.getWareHouse().getWarehouseResources().get(this.requisite);
-        totalResources=totalResources+playerboard.getChest().getChestResources().get(this.requisite);
+        totalResources = totalResources+playerboard.getWareHouse().getWarehouseResources().get(this.requisite);
+        System.out.println("Resources in warehouse " + totalResources);
+        totalResources = totalResources+playerboard.getChest().getChestResources().get(this.requisite);
+        System.out.println("Resources in warehouse + chest");
         //Control if Player stored the required Resource in LeaderCard extra space
-        if(playerboard.getWareHouse().getWarehouseResources().containsKey("extra"+this.requisite))
-            totalResources=totalResources+playerboard.getWareHouse().getWarehouseResources().get("extra"+this.requisite);
+        if(playerboard.getWareHouse().getWarehouseResources().containsKey("extra"+this.requisite)) {
+            totalResources = totalResources + playerboard.getWareHouse().getWarehouseResources().get("extra" + this.requisite);
+            System.out.println("Resources in warehouse + chest + extra " + totalResources);
+        }
         //Player needs 5 of the required Resource
         return totalResources >= 5;
     }

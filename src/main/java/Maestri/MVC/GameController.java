@@ -99,10 +99,15 @@ public class GameController{
     }
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
-
+        System.out.println("Check if you can play the card");
+        //If not working add this in if:  && currentPlayer.getPlayerLeaderCards()[c].checkRequisites(currentPlayer.getPlayerBoard())
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
+            System.out.println("You can play it");
             return currentPlayer.playLeaderCard(c);
-        } else return false;
+        } else {
+            System.out.println("You cannot play it");
+            return false;
+        }
 
     }
 

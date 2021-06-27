@@ -90,7 +90,7 @@ public class PlayerThread implements Runnable {
 
         //SYNC PHASE
         try {
-            this.playerSocket.setSoTimeout(120000);
+            this.playerSocket.setSoTimeout(300000);
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName);
@@ -153,7 +153,7 @@ public class PlayerThread implements Runnable {
         //this.ping();
 
         try {
-            this.playerSocket.setSoTimeout(120000);
+            this.playerSocket.setSoTimeout(300000);
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
             while (!startingResourcesMessage.getStartingRes().isEmpty())
                 currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
@@ -184,7 +184,7 @@ public class PlayerThread implements Runnable {
         for(int cards=0; cards<2; cards++)
         {
             try {
-                this.playerSocket.setSoTimeout(120000);
+                this.playerSocket.setSoTimeout(300000);
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
                 //this.playerSocket.setSoTimeout(0);
@@ -260,7 +260,7 @@ public class PlayerThread implements Runnable {
 
             if (this.gameController.getCurrentPlayerNumber() == this.playerThreadNumber) {
                 try {
-                    this.playerSocket.setSoTimeout(120000);
+                    this.playerSocket.setSoTimeout(300000);
                 } catch (Exception e) {
                     //e.printStackTrace();
                     System.out.println("Player inactive [PlayerThread: line 264]");
