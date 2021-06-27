@@ -1,5 +1,7 @@
 package Communication.ClientSide.RenderingView.GUI;
 
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -33,8 +35,11 @@ public class PlayerBoardScenario implements Runnable {
         putDevCards(root);
         putResourcesInChest(root);
         putResourcesInWarehouse(root);
+        putExtraWarehouse(root);
+        putResourceInExtraWarehouse(root);
 
-        Scene scene = new Scene(root, 700, 500);
+
+        Scene scene = new Scene(root, 700, 600);
         this.anotherStage.setTitle("Player " + this.handlerGUI.getClientMain().getPlayerNumber() + ": your playerboard!");
         this.anotherStage.setScene(scene);
         this.anotherStage.show();
@@ -201,6 +206,74 @@ public class PlayerBoardScenario implements Runnable {
                 imageView(image,40, 305, root);
                 imageView(image,73, 305, root);
                 imageView(image,106, 305, root);
+            }
+        }
+    }
+
+    public void putExtraWarehouse(Group root) {
+        Image image;
+        int x = 25;
+
+        for(int i = 0; i < 2; i++) {
+            LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i];
+            if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i].isPlayed()) {
+                // Extra warehouse
+                if (leaderCard instanceof ExtraWarehouseSpaceLeaderCard) {
+                    switch (((ExtraWarehouseSpaceLeaderCard) leaderCard).getResourceSpace()) {
+                        case "COINS":
+                            image = new Image("coinExtra.png");
+                            break;
+                        case "SHIELDS":
+                            image = new Image("shieldExtra.png");
+                            break;
+                        case "SERVANTS":
+                            image = new Image("servantExtra.png");
+                            break;
+                        default:
+                            image = new Image("stoneExtra.png");
+                            break;
+                    }
+
+                    ImageView imageView = new ImageView();
+                    imageView.setImage(image);
+                    imageView.setX(x);
+                    imageView.setY(520);
+                    imageView.setFitWidth(150);
+                    imageView.setPreserveRatio(true);
+                    root.getChildren().add(imageView);
+                    x = 200;
+                }
+            }
+        }
+    }
+
+    public void putResourceInExtraWarehouse(Group root) {
+        Image image;
+        int num = 0;
+
+        int x = 55;
+        for(String key: this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
+            if(key.contains("extra")) {
+                num++;
+                for (int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(key); i++) {
+                    switch (key) {
+                        case "COINS":
+                            image = new Image("coin.png");
+                            break;
+                        case "SHIELDS":
+                            image = new Image("shield.png");
+                            break;
+                        case "SERVANTS":
+                            image = new Image("servant.png");
+                            break;
+                        default:
+                            image = new Image("stone.png");
+                            break;
+                    }
+                    imageView(image, x, 500, root);
+                    if(num == 1) x = +200;
+                    x += 60;
+                }
             }
         }
     }

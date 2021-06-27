@@ -356,16 +356,19 @@ public class GameController{
 
                 //Check if player has each correct resource in each correct storage
 
-                for(String keys : paidWarehouseResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
+                for(String keys : paidWarehouseResources.keySet()) {
+                    if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys) < paidWarehouseResources.get(keys)) {
                         System.out.println("Incorrect warehouse resources");
                         return false;
                     }
-                for(String keys : paidChestResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
+                }
+
+                for(String keys : paidChestResources.keySet()) {
+                    if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
                         System.out.println("Incorrect chest resources");
                         return false;
                     }
+                }
 
                 //Check if player inserted all necessary resources to activate the production
 

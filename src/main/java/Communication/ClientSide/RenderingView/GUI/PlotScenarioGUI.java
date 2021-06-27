@@ -205,7 +205,7 @@ public class PlotScenarioGUI implements Runnable{
 
     public void market() {
         int x = 0, y;
-        String[] whichWl = new String[4];
+        StringBuilder whichWl = new StringBuilder();
         //creating the image object
         Image image = new Image("plancia portabiglie.png");
         ImageView imageView = new ImageView();
@@ -288,7 +288,7 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
-    public void putResources(int[] coordinates, String[] resource, int index, String[] whichWl, String whiteMarble) {
+    public void putResources(int[] coordinates, String[] resource, int index, StringBuilder whichWl, String whiteMarble) {
         boolean checkExtraSpace = false;
         int numIndex = index + 1;
         String parameter;
@@ -304,7 +304,7 @@ public class PlotScenarioGUI implements Runnable{
         }
 
         if(checkExtraSpace) {
-            if (!resource[index].equals(" ")) {
+            if (!(resource[index].equals("white"))) {
                 Image image = new Image(resource[index]);
                 ImageView imageView = new ImageView();
                 Pane root = new Pane(imageView);
@@ -318,8 +318,8 @@ public class PlotScenarioGUI implements Runnable{
                 warehouse.setLayoutX(300);
                 warehouse.setLayoutY(60);
                 Button extra = new Button("Extra Warehouse");
-                warehouse.setLayoutX(300);
-                warehouse.setLayoutY(100);
+                extra.setLayoutX(300);
+                extra.setLayoutY(100);
                 root.getChildren().addAll(warehouse, extra);
 
                 Scene scene = new Scene(root, 595, 355);
@@ -328,27 +328,13 @@ public class PlotScenarioGUI implements Runnable{
                 this.stage.show();
 
                 warehouse.setOnAction(e -> {
-                    whichWl[index] = "W";
+                    whichWl.append("W");
                     if(index == resource.length - 1) {
-                        String whichWl2 = null;
-                        for (String s : whichWl) {
-                            if (s != null && whichWl2 == null) whichWl2 = s;
-                            else if(s != null) whichWl2 += s;
-                        }
-
                         if(this.handlerGUI.getGameMode() == 1)
-                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl.toString(), whiteMarble);
                         else if(!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
-                                if (parameter.equals("ROW")) {
-                                    if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
-                                        mainAction = true;
-                                    else this.handlerGUI.notValidAction();
-                                } else {
-                                    if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
-                                        mainAction = true;
-                                    else this.handlerGUI.notValidAction();
-                                }
+                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], whichWl.toString(), whiteMarble)) {
+                                mainAction = true;
                             }
                         }
                         else this.handlerGUI.notValidAction();
@@ -358,26 +344,13 @@ public class PlotScenarioGUI implements Runnable{
                 });
 
                 extra.setOnAction(e -> {
-                    whichWl[index] = "L";
+                    whichWl.append("L");
                     if(index == resource.length - 1) {
-                        String whichWl2 = null;
-                        for (String s : whichWl) {
-                            if (s != null && whichWl2 == null) whichWl2 = s;
-                            else if(s != null) whichWl2 += s;
-                        }
                         if(this.handlerGUI.getGameMode() == 1)
-                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
+                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl.toString(), whiteMarble);
                         else if(!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
-                                if (parameter.equals("ROW")) {
-                                    if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
-                                        mainAction = true;
-                                    else this.handlerGUI.notValidAction();
-                                } else {
-                                    if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
-                                        mainAction = true;
-                                    else this.handlerGUI.notValidAction();
-                                }
+                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], whichWl.toString(), whiteMarble)) {
+                                mainAction = true;
                             }
                         }
                         else this.handlerGUI.notValidAction();
@@ -387,8 +360,11 @@ public class PlotScenarioGUI implements Runnable{
                 });
             }
             else {
-                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
+                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null)
                     whiteMarble(coordinates, resource, index, whichWl);
+                else {
+                    whichWl.append("W");
+                    putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
                 }
             }
         }
@@ -401,15 +377,7 @@ public class PlotScenarioGUI implements Runnable{
                     this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
                 else if(!this.mainAction) {
                     if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
-                        if (parameter.equals("ROW")) {
-                            if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWW", whiteMarble))
-                                mainAction = true;
-                            else this.handlerGUI.notValidAction();
-                        } else {
-                            if (this.handlerGUI.getClientMain().getMarket().updateColumn(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWW", whiteMarble))
-                                mainAction = true;
-                            else this.handlerGUI.notValidAction();
-                        }
+                        mainAction = true;
                     }
                 }
                 else this.handlerGUI.notValidAction();
@@ -429,7 +397,7 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
-    public void whiteMarble(int[] coordinates, String[] resource, int numIndex, String[] whichWl) {
+    public void whiteMarble(int[] coordinates, String[] resource, int numIndex, StringBuilder whichWl) {
 
         for(int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles().length; i++) {
             if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1] == null) {
@@ -509,7 +477,7 @@ public class PlotScenarioGUI implements Runnable{
                 resource = "coin.png";
                 break;
             case " BLUE ":
-                resource = "schield.png";
+                resource = "shield.png";
                 break;
             case " GREY ":
                 resource = "stone.png";
@@ -521,7 +489,7 @@ public class PlotScenarioGUI implements Runnable{
                 resource = "redCross.png";
                 break;
             default:
-                resource = " ";
+                resource = "white";
                 break;
         }
         return resource;

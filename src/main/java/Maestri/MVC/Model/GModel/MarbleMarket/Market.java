@@ -167,7 +167,7 @@ public class Market implements Serializable {
         return true;
     }
 
-    public void printMarket(){
+    public void printMarket() {
         for (int i=0; i<this.row; i++){
             System.out.print("|");
             for (int k=0; k<this.column; k++)
