@@ -47,6 +47,7 @@ public class SendingMessages {
     public void sendDiscardedLeader(int leader){
         try {
             this.sender.reset();
+            //System.out.println(leader);
             DiscardLeaderMessage discardLeaderMessage = new DiscardLeaderMessage(this.clientMain.getPlayerNumber(), leader);
             this.sender.writeObject(discardLeaderMessage);
         } catch (Exception e) {

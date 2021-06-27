@@ -290,18 +290,24 @@ public class Player
             if(this.playerLeaderCards[k]!=null)
                 cards++;
 
+        for (int k = 0; k < this.playerLeaderCards.length - 1; k++) {
+            if (k < var) {
+                this.playerLeaderCards[k] = this.playerLeaderCards[k];
+            } else if (k >= var) {
+                this.playerLeaderCards[k] = this.playerLeaderCards[k + 1];
+            }
+        }
 
-        List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
-        updatedPlayerLeaderCardList.remove(var);
+        this.playerLeaderCards[this.playerLeaderCards.length - 1] = null;
+
+        //List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
+        //updatedPlayerLeaderCardList.remove(var);
         //System.out.println(updatedPlayerLeaderCardList.size());
 
-        //System.out.println(this.playerLeaderCards[0]);
-        //System.out.println(this.playerLeaderCards[1]);
-        //System.out.println(this.playerLeaderCards[2]);
-        //System.out.println(this.playerLeaderCards[3]);
+        //System.out.println(Arrays.toString(this.playerLeaderCards));
 
         // this.playerLeaderCards = new LeaderCard[updatedPlayerLeaderCardList.size()];
-        this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
+        //this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
         //System.out.println(this.playerLeaderCards.length);
 
         if(cards<=2)

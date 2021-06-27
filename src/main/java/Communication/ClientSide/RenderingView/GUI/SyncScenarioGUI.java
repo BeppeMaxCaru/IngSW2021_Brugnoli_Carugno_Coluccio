@@ -8,9 +8,11 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SyncScenarioGUI {
 
@@ -89,6 +91,80 @@ public class SyncScenarioGUI {
         }
     }
 
+    public void nuovoscarto() {
+
+        Group group = new Group();
+
+        LeaderCard[] leaderCards = this.handlerGUI.getClientMain().getLeaderCards();
+
+        int x = 0;
+        int numButtons = 0;
+
+        for (int i = 0;i < leaderCards.length; i++) {
+            if (leaderCards[i] != null) {
+                Image image = new Image(leaderCards[i].getImage());
+
+                Button button = new Button();
+                numButtons++;
+
+                ImageView view = new ImageView(image);
+                view.setFitHeight(450);
+                view.setFitWidth(150);
+                view.setPreserveRatio(true);
+                //Setting the location of the button
+                button.setTranslateX(x);
+                button.setTranslateY(20);
+
+                //Setting the size of the button
+                button.setPrefSize(80, 80);
+
+                //Setting a graphic to the button
+                button.setGraphic(view);
+
+                x = x + 200;
+                group.getChildren().add(button);
+
+                int finalI = i;
+                int finalNumButtons = numButtons;
+
+                button.setOnAction(e -> {
+                    //Multi
+                    if(this.handlerGUI.getGameMode() == 1) {
+                        this.handlerGUI.getMsg().sendDiscardedLeader(finalNumButtons - 1);
+                        this.handlerGUI.updateLeaderCard();
+                        System.out.println(this.handlerGUI.getClientMain().getLeaderCards().toString());
+
+                        if (finalNumButtons == 2) {
+                            //this.handlerGUI.updateLeaderCard();
+                            this.handlerGUI.AsyncReceiver();
+                            Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
+                        }
+                        else nuovoscarto();
+                    } //Sin
+                        else {
+
+                        if (finalNumButtons == 2) {
+                            //this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
+                            //this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
+                            this.handlerGUI.getPlotScenarioGUI().choiceAction();
+                        }
+                        else {
+                            this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
+                            nuovoscarto();
+                        }
+                    }
+                });
+
+            }
+        }
+
+        Scene scene = new Scene(group, x, 300);
+        stage.setTitle("Discard initial leader cards");
+        stage.setScene(scene);
+        stage.show();
+
+    }
+
     public void discardStartingLeaders(int times, int cardDiscarded) {
         Group root = new Group();
         //Creating buttons
@@ -100,16 +176,19 @@ public class SyncScenarioGUI {
         int x = 0;
         int index = 0;
         LeaderCard[] leaderCards = this.handlerGUI.getClientMain().getLeaderCards();
+        System.out.println(Arrays.toString(this.handlerGUI.getClientMain().getLeaderCards()));
         for (int i = 0; i < leaderCards.length; i++) {
-            LeaderCard startingLeader = leaderCards[i];
-            //Creating a graphic (image)
-            if (cardDiscarded != i) {
-                Image img = new Image(startingLeader.getImage());
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 450, 150);
-                x += 200;
-                root.getChildren().add(arrayButtons[index]);
-                index++;
+            if (leaderCards[i] != null) {
+                LeaderCard startingLeader = leaderCards[i];
+                //Creating a graphic (image)
+                if (cardDiscarded != i) {
+                    Image img = new Image(startingLeader.getImage());
+                    arrayButtons[index] = new Button();
+                    this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 450, 150);
+                    x += 200;
+                    root.getChildren().add(arrayButtons[index]);
+                    index++;
+                }
             }
         }
 
@@ -123,8 +202,12 @@ public class SyncScenarioGUI {
             int finalI = i;
             arrayButtons[i].setOnAction(e -> {
                 // MultiPlayer
+                //int bt = i;
+
                 if(this.handlerGUI.getGameMode() == 1) {
                     this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
+                    //this.handlerGUI.updateLeaderCard();
+
                     if (times == 2) {
                         this.handlerGUI.updateLeaderCard();
                         this.handlerGUI.AsyncReceiver();

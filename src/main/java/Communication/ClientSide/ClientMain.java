@@ -101,7 +101,11 @@ public class ClientMain{
     }
 
     public void setLeaderCards(LeaderCard[] leaderCards) {
-        this.leaderCards = leaderCards;
+        //this.leaderCards = new LeaderCard[4];
+        //this.leaderCards = leaderCards;
+        for (int i = 0; i < this.leaderCards.length; i++) {
+            this.leaderCards[i] = leaderCards[i];
+        }
     }
 
     public LeaderCard[] getLeaderCards() {

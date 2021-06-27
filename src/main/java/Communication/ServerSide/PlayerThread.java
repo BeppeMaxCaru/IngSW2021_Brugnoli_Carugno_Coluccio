@@ -9,10 +9,7 @@ import Message.MessageSent.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class PlayerThread implements Runnable {
 
@@ -187,6 +184,11 @@ public class PlayerThread implements Runnable {
                 this.playerSocket.setSoTimeout(300000);
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
+                System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
+
+
+                this.sender.reset();
+                this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                 //this.playerSocket.setSoTimeout(0);
                 //this.sender.writeObject(new ActionOutcomeMessage(true));
                 //System.out.println("Leader received");
@@ -202,7 +204,7 @@ public class PlayerThread implements Runnable {
 
         //this.ping();
 
-        try {
+        /*try {
             this.sender.reset();
             UpdateClientLeaderCardsMessage leaderCardsMessage = new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards());
             this.sender.writeObject(leaderCardsMessage);
@@ -212,7 +214,7 @@ public class PlayerThread implements Runnable {
             this.removePlayer();
             System.out.println("Not leader cards sent");
             return;
-        }
+        }*/
 
         //this.ping();
 

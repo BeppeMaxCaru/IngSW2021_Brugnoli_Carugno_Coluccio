@@ -9,10 +9,7 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import Message.MessageReceived.GameOverMessage;
 
 import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class CLI implements RenderingView {
 
@@ -121,6 +118,246 @@ public class CLI implements RenderingView {
             this.error(e);
         }
         return discarded;
+    }
+
+    public int discardStartingCard() {
+
+        int index = 0;
+        Integer integer = 0;
+
+        System.out.println("Which starting leader card do you want to discard?\n");
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] != null) {
+                System.out.println("Write " + i + " for this: ");
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
+            }
+        }
+        String card;
+        try {
+            card = this.input.nextLine();
+            while (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) {
+                System.out.println("Choose a correct card");
+                card = this.input.nextLine();
+            }
+
+            if (this.main.getLeaderCards()[Integer.parseInt(card)] == null) {
+                System.out.println("Choose a correct card");
+                card = this.input.nextLine();
+                while (!card.equals("0") && !card.equals("1") && !card.equals("2")) {
+                    //integer = Integer.parseInt(card);
+                    //if (this.main.getLeaderCards()[integer] != null) break;
+                    System.out.println("Choose a correct card");
+                    card = this.input.nextLine();
+                }
+
+            }
+
+            System.out.println(Integer.parseInt(card));
+            return Integer.parseInt(card);
+
+
+        } catch (Exception e) {
+            System.out.println("Errore conversione numero starting leader card to discard");
+            e.printStackTrace();
+            this.error(e);
+        }
+
+        return index;
+
+    }
+
+    public int genericDiscardLeaderCardTest() {
+
+        int index;
+
+        System.out.println("Which starting leader card do you want to discard?\n");
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] != null) {
+                System.out.println("Write " + i + " for this: ");
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
+            }
+        }
+
+        try {
+            String card = this.input.nextLine();
+            if (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) throw new Exception();
+            index = Integer.parseInt(card);
+            if (this.main.getLeaderCards()[index] != null) return index;
+            else throw new Exception();
+
+        } catch (Exception e) {
+            System.err.println("Choose a card!");
+            this.genericDiscardLeaderCardTest();
+        }
+
+        return 0;
+
+    }
+
+
+    //OFFCIAL VERSION DISCARDER
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public int lastDisacrdTre() {
+
+        //int availableCards = 4;
+        if (this.main.getLeaderCards()[0] == null) {
+            System.out.println("You have no leader cards left");
+            return 0;
+        }
+
+        System.out.println("Which starting leader card do you want to discard?\n");
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] != null) {
+                System.out.println("Write " + i + " for this: ");
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
+            }
+        }
+
+        String card;
+        int index;
+
+        /*do {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) return index;
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+
+        } while (true);*/
+
+        while (true) {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
+                    System.out.println("Valid input");
+                    return index;
+                }
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+        }
+
+    }
+
+    //OFFICIAL VERSION SUMMONER
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public int NYPLDldearcatfdSimone() {
+
+        //int availableCards = 4;
+        if (this.main.getLeaderCards()[0] == null) {
+            System.out.println("You have no leader cards left");
+            return 0;
+        }
+
+        System.out.println("Which starting leader card do you want to play?\n");
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] != null) {
+                System.out.println("Write " + i + " for this: ");
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
+            }
+        }
+
+        String card;
+        int index;
+
+        /*do {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) return index;
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+
+        } while (true);*/
+
+        while (true) {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
+                    System.out.println("Valid input");
+                    return index;
+                }
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+        }
+
+    }
+
+    public int dcsrdgeneralfromISmo() {
+
+        if (this.printldrswicth("discard")) return 0;
+
+        String card;
+        int index;
+
+        while (true) {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
+                    System.out.println("Valid input");
+                    return index;
+                }
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+        }
+    }
+
+    public int plygrlstt() {
+        if (this.printldrswicth("play")) return 0;
+
+        String card;
+        int index;
+
+        while (true) {
+            card = this.input.nextLine();
+            try {
+                index = Integer.parseInt(card);
+                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
+                    System.out.println("Valid input");
+                    return index;
+                }
+                else throw new Exception();
+            } catch (Exception e) {
+                System.err.println("Choose a card!");
+                //e.printStackTrace();
+            }
+        }
+    }
+
+    public boolean printldrswicth(String action) {
+        if (this.main.getLeaderCards()[0] == null) {
+            System.out.println("You have no leader cards left");
+            return false;
+        }
+
+        System.out.println("Which leader card do you want to " + action + " ?\n");
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] != null) {
+                System.out.println("Write " + i + " for this: ");
+                this.printLeaderCard(this.main.getLeaderCards()[i]);
+            }
+        }
+
+        return true;
+
     }
 
     public String getActionChoice() {

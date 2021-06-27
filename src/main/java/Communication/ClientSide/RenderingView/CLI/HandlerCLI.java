@@ -19,6 +19,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HandlerCLI {
 
@@ -128,24 +129,57 @@ public class HandlerCLI {
                     return;
                 }
 
+                try {
+
+                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+
+                    //Before
+                    //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
+
+                    //After
+                    this.msg.sendDiscardedLeader(this.cli.lastDisacrdTre());
+
+                    UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
+                    this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
+
+                    //Check
+                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+
+                    //Before
+                    //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
+
+                    //After
+                    this.msg.sendDiscardedLeader(this.cli.lastDisacrdTre());
+
+                    updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
+                    this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
+
+                    //Check
+                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    this.cli.setupError(e);
+                }
+
                 //Receive from input 2 leader cards to be discarded
-                int[] cards = this.cli.getDiscardedStartingLeaders();
+                /*int[] cards = this.cli.getDiscardedStartingLeaders();
 
                 //Sends starting excess leader card to discard
                 this.msg.sendDiscardedLeader(cards[0]);
-                this.msg.sendDiscardedLeader(cards[1]);
+                this.msg.sendDiscardedLeader(cards[1]);*/
 
             } catch (Exception e) {
                 this.cli.setupError(e);
             }
 
-            try {
+            /*try {
                 UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                 this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
             } catch (Exception e) {
                 this.cli.setupError(e);
                 return;
-            }
+            }*/
 
             //Starts async phase
             new ServerSender(this.clientMain, gameMode, this.msg).start();

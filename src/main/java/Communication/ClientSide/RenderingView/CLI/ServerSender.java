@@ -36,7 +36,14 @@ public class ServerSender extends Thread {
                         switch (action) {
                             case "P":
                             case "PLAY LEADER CARD": {
-                                int leader = this.cli.getPlayedLeader();
+
+                                //Before
+                                //int leader = this.cli.getPlayedLeader();
+
+                                //After
+                                //Test
+                                int leader = this.cli.NYPLDldearcatfdSimone();
+
                                 if(gameMode==0) {
                                     if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
                                     {
@@ -48,7 +55,14 @@ public class ServerSender extends Thread {
                             }
                             case "D":
                             case "DISCARD LEADER CARD": {
-                                int leader = this.cli.getDiscardedLeader();
+
+                                //Before
+                                //int leader = this.cli.getDiscardedLeader();
+
+                                //After
+                                //Test
+                                int leader = this.cli.lastDisacrdTre();
+
                                 if(this.gameMode==0){
                                     if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){
                                         if(!this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader))
