@@ -250,24 +250,6 @@ public class GameController{
 
     public boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
 
-        Map<String, Integer> paidWarehouseResources = new HashMap<>();
-        paidWarehouseResources.put("COINS", 0);
-        paidWarehouseResources.put("SERVANTS", 0);
-        paidWarehouseResources.put("SHIELDS", 0);
-        paidWarehouseResources.put("STONES", 0);
-
-        Map<String, Integer> paidChestResources = new HashMap<>();
-        paidChestResources.put("COINS", 0);
-        paidChestResources.put("SERVANTS", 0);
-        paidChestResources.put("SHIELDS", 0);
-        paidChestResources.put("STONES", 0);
-
-        Map<Integer, String> resources = new HashMap<>();
-        resources.put(0, "COINS");
-        resources.put(1, "SERVANTS");
-        resources.put(2, "SHIELDS");
-        resources.put(3, "STONES");
-
         int act = 0;
         for (int i : activation) act = act + i;
         System.out.println("Powers activated: "+act);
@@ -279,6 +261,24 @@ public class GameController{
         {
             if(activation[k]==1) {
                 String in = whichInput[k];
+
+                Map<String, Integer> paidWarehouseResources = new HashMap<>();
+                paidWarehouseResources.put("COINS", 0);
+                paidWarehouseResources.put("SERVANTS", 0);
+                paidWarehouseResources.put("SHIELDS", 0);
+                paidWarehouseResources.put("STONES", 0);
+
+                Map<String, Integer> paidChestResources = new HashMap<>();
+                paidChestResources.put("COINS", 0);
+                paidChestResources.put("SERVANTS", 0);
+                paidChestResources.put("SHIELDS", 0);
+                paidChestResources.put("STONES", 0);
+
+                Map<Integer, String> resources = new HashMap<>();
+                resources.put(0, "COINS");
+                resources.put(1, "SERVANTS");
+                resources.put(2, "SHIELDS");
+                resources.put(3, "STONES");
 
                 int j=2;
                 if (k < 3) {
@@ -362,7 +362,7 @@ public class GameController{
                         return false;
                     }
                 for(String keys : paidChestResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys)<paidChestResources.get(keys)) {
+                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
                         System.out.println("Incorrect chest resources");
                         return false;
                     }
