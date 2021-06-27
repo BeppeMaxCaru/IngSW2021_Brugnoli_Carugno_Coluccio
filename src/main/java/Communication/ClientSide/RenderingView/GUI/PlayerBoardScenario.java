@@ -77,6 +77,7 @@ public class PlayerBoardScenario implements Runnable {
         imageView(image, x, y, root);
 
         if(this.handlerGUI.getGameMode() == 0) {
+            x = 25;
             int blackCross = this.handlerGUI.getClientMain().getLocalPlayers()[1].getPlayerBoard().getFaithPath().getCrossPosition();
             // y
             if(blackCross < 3 || (blackCross > 10 && blackCross < 17)) y = 90;

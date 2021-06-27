@@ -171,6 +171,10 @@ public class ClientMain{
 
     public boolean checkLocalMarketAction(Playerboard board,  String choice, int i, String wlChoice, String leader) {
 
+        System.out.println("Choice: " + choice);
+        System.out.println("i: " + i);
+        System.out.println("wlChoice: " + wlChoice);
+
         if(leader.contains("1"))
             if (board.getResourceMarbles()[1]==null) return false;
 
@@ -189,6 +193,7 @@ public class ClientMain{
                 for(int k = cBuilder.length(); k<4; k++)
                     cBuilder.append("X");
                 leader = cBuilder.toString();
+                System.out.println("leader: " + leader);
             }
             return this.market.updateRow(i, this.localPlayers, 0, wlChoice, leader);
         }
@@ -199,6 +204,7 @@ public class ClientMain{
                 for(int k = cBuilder.length(); k<3; k++)
                     cBuilder.append("X");
                 leader = cBuilder.toString();
+                System.out.println("leader: " + leader);
             }
             return this.market.updateColumn(i, this.localPlayers, 0, wlChoice, leader);
         }

@@ -420,7 +420,7 @@ public class PlotScenarioGUI implements Runnable{
                 if(this.handlerGUI.getGameMode() == 1)
                     this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
                 else if(!this.mainAction) {
-                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
+                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWWW", whiteMarble)) {
                         if (parameter.equals("ROW")) {
                             if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWWW", whiteMarble))
                                 mainAction = true;
