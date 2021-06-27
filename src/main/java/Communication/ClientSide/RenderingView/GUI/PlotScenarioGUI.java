@@ -39,7 +39,10 @@ public class PlotScenarioGUI implements Runnable{
 
     public void choiceAction() {
        if(this.handlerGUI.getGameMode() == 0) {
-           Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
+           if(this.handlerGUI.endLocalGame(this.handlerGUI.getClientMain().getLocalPlayers())) {
+               Platform.runLater(this.handlerGUI.getEndGameScenario());
+           }
+           else Platform.runLater(this.handlerGUI.getPlayerBoardScenario());
        }
 
         Group root = new Group();
@@ -161,13 +164,13 @@ public class PlotScenarioGUI implements Runnable{
             // Single player
             else {
                 if (action.equals("PLAY LEADER CARD")) {
-                    if (this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)) {
+                    if (this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)) {
                         if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(0))
                             this.handlerGUI.notValidAction();
                     }
                 }
                 else {
-                    if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)){
+                    if(this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)){
                         if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(0))
                             this.handlerGUI.notValidAction();
                     }
@@ -185,13 +188,13 @@ public class PlotScenarioGUI implements Runnable{
             // Single player
             else {
                 if (action.equals("PLAY LEADER CARD")) {
-                    if (this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)) {
+                    if (this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)) {
                         if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(1))
                             this.handlerGUI.notValidAction();
                     }
                 }
                 else {
-                    if(this.handlerGUI.checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)){
+                    if(this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)){
                         if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(1))
                             this.handlerGUI.notValidAction();
                     }
@@ -337,7 +340,7 @@ public class PlotScenarioGUI implements Runnable{
                         if(this.handlerGUI.getGameMode() == 1)
                             this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
                         else if(!this.mainAction) {
-                            if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), whichWl2, whiteMarble)) {
+                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
                                 if (parameter.equals("ROW")) {
                                     if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
                                         mainAction = true;
@@ -349,6 +352,7 @@ public class PlotScenarioGUI implements Runnable{
                                 }
                             }
                         }
+                        else this.handlerGUI.notValidAction();
                         choiceAction();
                     }
                     else putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
@@ -365,7 +369,7 @@ public class PlotScenarioGUI implements Runnable{
                         if(this.handlerGUI.getGameMode() == 1)
                             this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl2, whiteMarble);
                         else if(!this.mainAction) {
-                            if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), whichWl2, whiteMarble)) {
+                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
                                 if (parameter.equals("ROW")) {
                                     if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, whichWl2, whiteMarble))
                                         mainAction = true;
@@ -377,6 +381,7 @@ public class PlotScenarioGUI implements Runnable{
                                 }
                             }
                         }
+                        else this.handlerGUI.notValidAction();
                         choiceAction();
                     }
                     else putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
@@ -396,7 +401,7 @@ public class PlotScenarioGUI implements Runnable{
                 if(this.handlerGUI.getGameMode() == 1)
                     this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
                 else if(!this.mainAction) {
-                    if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), "WWW", whiteMarble)) {
+                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
                         if (parameter.equals("ROW")) {
                             if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWW", whiteMarble))
                                 mainAction = true;
@@ -408,13 +413,14 @@ public class PlotScenarioGUI implements Runnable{
                         }
                     }
                 }
+                else this.handlerGUI.notValidAction();
                 choiceAction();
             }
             else {
                 if(this.handlerGUI.getGameMode() == 1)
                     this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
                 else if(!this.mainAction) {
-                    if (this.handlerGUI.checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), "WWWW", whiteMarble)) {
+                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
                         if (parameter.equals("ROW")) {
                             if (this.handlerGUI.getClientMain().getMarket().updateRow(coordinates[1], this.handlerGUI.getClientMain().getLocalPlayers(), 0, "WWWW", whiteMarble))
                                 mainAction = true;
@@ -426,6 +432,7 @@ public class PlotScenarioGUI implements Runnable{
                         }
                     }
                 }
+                else this.handlerGUI.notValidAction();
                 choiceAction();
             }
         }
@@ -748,7 +755,7 @@ public class PlotScenarioGUI implements Runnable{
                 if(this.handlerGUI.getGameMode() == 1)
                     this.handlerGUI.getMsg().sendBuyCardAction(coordinates[1], 3 - coordinates[0], quantity, pickedResources[1], finalJ);
                 else if(!this.mainAction) {
-                    if(this.handlerGUI.checkLocalBuyCard(this.handlerGUI.getClientMain().getLocalPlayers()[0], coordinates[1], 3 - coordinates[0], quantity, pickedResources[1])) {
+                    if(this.handlerGUI.getClientMain().checkLocalBuyCard(this.handlerGUI.getClientMain().getLocalPlayers()[0], coordinates[1], 3 - coordinates[0], quantity, pickedResources[1])) {
                         if(this.handlerGUI.getClientMain().getLocalPlayers()[0].buyDevelopmentCard(this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid(), coordinates[1], 3 - coordinates[0], finalJ, pickedResources[1]))
                             this.mainAction = true;
                         else this.handlerGUI.notValidAction();
@@ -1076,7 +1083,7 @@ public class PlotScenarioGUI implements Runnable{
                 if(activate[4] == 0 && activate[5] == 0) {
                     if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                     else if(!this.mainAction) {
-                        if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                        if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
                             for (int k = 0; k < whichOutput.length; k++) {
                                 if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                                 else outputs[k] = -1;
@@ -1105,7 +1112,7 @@ public class PlotScenarioGUI implements Runnable{
                 whichOutput[2] = "-1";
                 if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                 else if(!this.mainAction) {
-                    if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                    if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
                         for (int k = 0; k < whichOutput.length; k++) {
                             if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                             else outputs[k] = -1;
@@ -1130,7 +1137,7 @@ public class PlotScenarioGUI implements Runnable{
         else {
             if(this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
             else if(!this.mainAction) {
-                if(this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                if(this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
                     for (int k = 0; k < whichOutput.length; k++) {
                         if (whichOutput[k] != null) outputs[k] = Integer.parseInt(whichOutput[k]);
                         else outputs[k] = -1;
@@ -1186,7 +1193,7 @@ public class PlotScenarioGUI implements Runnable{
                     for (int k = 0; k < 6; k++) {
                         if (this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
                         else if (!this.mainAction) {
-                            if (this.handlerGUI.checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
+                            if (this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput, whichOutput)) {
                                 for (int i = 0; i < whichOutput.length; i++) {
                                     if (whichOutput[i] != null) outputs[i] = Integer.parseInt(whichOutput[i]);
                                     else outputs[i] = -1;

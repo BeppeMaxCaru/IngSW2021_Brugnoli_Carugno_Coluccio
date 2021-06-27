@@ -58,9 +58,6 @@ public class GenericClassGUI {
                             case "quit1":
                                 handlerGUI.getMsg().sendQuitMessage();
                                 break;
-                            case "exit":
-                                Platform.exit();
-                                break;
                         }
 
                     } catch (Exception e) {
