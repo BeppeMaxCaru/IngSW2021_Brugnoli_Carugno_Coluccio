@@ -217,6 +217,7 @@ public class SyncScenarioGUI {
                 }
                 // Single Player
                 else {
+
                     if (times == 2) {
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(cardDiscarded);
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);

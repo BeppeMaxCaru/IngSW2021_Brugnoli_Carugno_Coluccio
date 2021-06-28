@@ -58,9 +58,21 @@ public class HandlerCLI {
                 this.clientMain.getLocalPlayers()[0].setPlayerLeaderCard(index, this.clientMain.getLeaderCardDeck().drawOneLeaderCard());
             this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
 
-            int[] discard = this.cli.getDiscardedStartingLeaders();
-            this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
-            this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[1]);
+            //Before
+            //int[] discard = this.cli.getDiscardedStartingLeaders();
+            //this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
+            //this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[1]);
+            //System.out.println("QUi");
+            //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+
+
+            //After
+            this.clientMain.getLocalPlayers()[0].discardLeaderCard(this.cli.discarder());
+            this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
+            //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+            this.clientMain.getLocalPlayers()[0].discardLeaderCard(this.cli.discarder());
+            this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
+            //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
             new ServerSender(this.clientMain, 0, null).start();
 

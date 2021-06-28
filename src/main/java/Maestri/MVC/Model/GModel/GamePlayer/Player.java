@@ -279,7 +279,7 @@ public class Player
         return true;
     }
 
-    public boolean playLeaderCard2(int position) {
+    public boolean playLeaderCardUpdated(int position) {
 
         if(!this.playerLeaderCards[position].checkRequisites(this.playerBoard))
             return false;
@@ -313,15 +313,8 @@ public class Player
 
         this.playerLeaderCards[this.playerLeaderCards.length - 1] = null;
 
-        //List<LeaderCard> updatedPlayerLeaderCardList = new ArrayList<>(Arrays.asList(this.playerLeaderCards));
-        //updatedPlayerLeaderCardList.remove(var);
-        //System.out.println(updatedPlayerLeaderCardList.size());
-
+        //For testing
         //System.out.println(Arrays.toString(this.playerLeaderCards));
-
-        // this.playerLeaderCards = new LeaderCard[updatedPlayerLeaderCardList.size()];
-        //this.playerLeaderCards = updatedPlayerLeaderCardList.toArray(this.playerLeaderCards);
-        //System.out.println(this.playerLeaderCards.length);
 
         if(cards<=2)
             this.playerBoard.getFaithPath().moveCross(1);

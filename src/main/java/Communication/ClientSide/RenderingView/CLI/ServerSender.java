@@ -4,6 +4,8 @@ import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 
+import java.util.Arrays;
+
 public class ServerSender extends Thread {
 
     private final ClientMain clientMain;
@@ -45,11 +47,13 @@ public class ServerSender extends Thread {
                                 int leader = this.cli.cardPlayer();
 
                                 if(gameMode==0) {
-                                    if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
+                                    this.clientMain.getLocalPlayers()[0].playLeaderCardUpdated(leader);
+                                    this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
+                                    /*if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
                                     {
                                         if(!this.clientMain.getLocalPlayers()[0].playLeaderCard(leader))
                                             this.cli.notValidAction();
-                                    }
+                                    }*/
                                 } else this.msg.sendPlayedLeader(leader);
                                 break;
                             }
@@ -61,14 +65,36 @@ public class ServerSender extends Thread {
 
                                 //After
                                 //Test
-                                int leader = this.cli.discarder();
+                                //int leader = this.cli.discarder();
+
+                                //After after
+                                int leader;
 
                                 if(this.gameMode==0){
-                                    if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){
+                                    //leader = this.cli.getDiscardedLeader();
+                                    leader = this.cli.discarder();
+                                    this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader);
+                                    this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
+                                    //this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards();
+                                    //System.out.println(leader);
+
+
+                                    //For testing
+                                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+
+
+
+                                    //leader = this.cli.getDiscardedLeader();
+                                    //this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader);
+                                    /*if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){
                                         if(!this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader))
                                             this.cli.notValidAction();
-                                    }
-                                } else this.msg.sendDiscardedLeader(leader);
+                                    }*/
+                                    //System.out.println(Arrays.toString(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards()));
+                                } else {
+                                    leader = this.cli.discarder();
+                                    this.msg.sendDiscardedLeader(leader);
+                                }
                                 break;
                             }
                             case "M":
