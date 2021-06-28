@@ -279,6 +279,19 @@ public class Player
         return true;
     }
 
+    public boolean playLeaderCard2(int position) {
+
+        if(!this.playerLeaderCards[position].checkRequisites(this.playerBoard))
+            return false;
+
+        //System.out.println("Esplode");
+
+        this.playerLeaderCards[position].activateAbility(this.playerBoard);
+        this.playerBoard.sumVictoryPoints(this.playerLeaderCards[position].getVictoryPoints());
+        return true;
+
+    }
+
     /**
      * Discards a leader card
      */

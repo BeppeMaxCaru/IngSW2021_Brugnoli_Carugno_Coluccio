@@ -102,10 +102,14 @@ public class GameController{
         System.out.println("Check if you can play the card");
         //If not working add this in if:  && currentPlayer.getPlayerLeaderCards()[c].checkRequisites(currentPlayer.getPlayerBoard())
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
-            System.out.println("You can play it");
+
+            //Before
             return currentPlayer.playLeaderCard(c);
+
+            //After
+            //return currentPlayer.playLeaderCard2(c);
         } else {
-            System.out.println("You cannot play it");
+            System.out.println("Already played or discarded");
             return false;
         }
 

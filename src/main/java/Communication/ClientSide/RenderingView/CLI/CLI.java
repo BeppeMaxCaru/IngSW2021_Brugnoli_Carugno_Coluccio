@@ -197,17 +197,27 @@ public class CLI implements RenderingView {
 
     //OFFCIAL VERSION DISCARDER
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public int lastDisacrdTre() {
+    public int discarder() {
 
-        //int availableCards = 4;
-        if (this.main.getLeaderCards()[0] == null) {
+        int discardedCards = 4;
+        /*if (this.main.getLeaderCards()[0] == null) {
             System.out.println("You have no leader cards left");
             return 0;
+        }*/
+
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] == null) {
+                discardedCards = discardedCards - 1;
+            }
         }
 
+        if (discardedCards == 0) {
+            System.out.println("You discarded all your leader cards");
+            return 0;
+        }
         System.out.println("Which starting leader card do you want to discard?\n");
         for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if (this.main.getLeaderCards()[i] != null) {
+            if (this.main.getLeaderCards()[i] != null && !this.main.getLeaderCards()[i].isPlayed()) {
                 System.out.println("Write " + i + " for this: ");
                 this.printLeaderCard(this.main.getLeaderCards()[i]);
             }
@@ -248,17 +258,28 @@ public class CLI implements RenderingView {
 
     //OFFICIAL VERSION SUMMONER
     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    public int NYPLDldearcatfdSimone() {
+    public int cardPlayer() {
 
-        //int availableCards = 4;
-        if (this.main.getLeaderCards()[0] == null) {
+        int discardedCards = 4;
+        /*if (this.main.getLeaderCards()[0] == null) {
             System.out.println("You have no leader cards left");
+            return 0;
+        }*/
+
+        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
+            if (this.main.getLeaderCards()[i] == null) {
+                discardedCards = discardedCards - 1;
+            }
+        }
+
+        if (discardedCards == 0) {
+            System.out.println("You discarded all your leader cards");
             return 0;
         }
 
         System.out.println("Which starting leader card do you want to play?\n");
         for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if (this.main.getLeaderCards()[i] != null) {
+            if (this.main.getLeaderCards()[i] != null && !this.main.getLeaderCards()[i].isPlayed()) {
                 System.out.println("Write " + i + " for this: ");
                 this.printLeaderCard(this.main.getLeaderCards()[i]);
             }

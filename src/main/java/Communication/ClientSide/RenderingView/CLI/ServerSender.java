@@ -42,7 +42,7 @@ public class ServerSender extends Thread {
 
                                 //After
                                 //Test
-                                int leader = this.cli.NYPLDldearcatfdSimone();
+                                int leader = this.cli.cardPlayer();
 
                                 if(gameMode==0) {
                                     if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
@@ -61,7 +61,7 @@ public class ServerSender extends Thread {
 
                                 //After
                                 //Test
-                                int leader = this.cli.lastDisacrdTre();
+                                int leader = this.cli.discarder();
 
                                 if(this.gameMode==0){
                                     if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){

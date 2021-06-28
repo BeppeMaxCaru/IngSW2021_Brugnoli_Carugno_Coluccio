@@ -137,7 +137,7 @@ public class HandlerCLI {
                     //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
 
                     //After
-                    this.msg.sendDiscardedLeader(this.cli.lastDisacrdTre());
+                    this.msg.sendDiscardedLeader(this.cli.discarder());
 
                     UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
@@ -149,7 +149,7 @@ public class HandlerCLI {
                     //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
 
                     //After
-                    this.msg.sendDiscardedLeader(this.cli.lastDisacrdTre());
+                    this.msg.sendDiscardedLeader(this.cli.discarder());
 
                     updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());

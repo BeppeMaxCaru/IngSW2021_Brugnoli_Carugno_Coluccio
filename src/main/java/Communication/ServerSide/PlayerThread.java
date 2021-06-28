@@ -317,6 +317,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         System.out.println("Leaders sent");
                     }
+                    System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
                 } catch (Exception e) {
                     this.sendErrorMessage();
@@ -341,6 +342,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         System.out.println("Leaders sent");
                     }
+                    System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
                 } catch (Exception e) {
                     this.sendErrorMessage();
