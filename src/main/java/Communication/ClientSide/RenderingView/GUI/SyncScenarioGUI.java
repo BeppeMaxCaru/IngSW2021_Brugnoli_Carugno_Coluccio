@@ -221,6 +221,7 @@ public class SyncScenarioGUI {
                     if (times == 2) {
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(cardDiscarded);
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);
+                        this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
                         this.handlerGUI.getPlotScenarioGUI().choiceAction();
                     }
                     else {
