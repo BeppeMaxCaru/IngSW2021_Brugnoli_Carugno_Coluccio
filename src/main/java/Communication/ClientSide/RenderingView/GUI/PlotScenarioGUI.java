@@ -205,6 +205,7 @@ public class PlotScenarioGUI implements Runnable{
 
     public void market() {
         int x = 0, y;
+        boolean checkExtraSpace = false;
         StringBuilder whichWl = new StringBuilder();
         //creating the image object
         Image image = new Image("plancia portabiglie.png");
@@ -215,6 +216,15 @@ public class PlotScenarioGUI implements Runnable{
         imageView.setFitWidth(575);
         imageView.setPreserveRatio(true);
         Group root = new Group(imageView);
+
+        for(int i = 0; i < 2; i++) {
+            if(this.handlerGUI.getClientMain().getLeaderCards()[i] != null){
+                if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
+                    checkExtraSpace = true;
+                    break;
+                }
+            }
+        }
 
         Canvas canvas = new Canvas(600, 800);
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -262,6 +272,7 @@ public class PlotScenarioGUI implements Runnable{
             int finalY = y;
             int finalX = x;
             int finalK = k;
+            boolean finalCheckExtraSpace = checkExtraSpace;
             buttonClick[k].setOnAction(e -> {
                 coordinates[0] = finalX;
                 coordinates[1] = finalY;
@@ -278,7 +289,35 @@ public class PlotScenarioGUI implements Runnable{
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
-                putResources(coordinates, resource, 0, whichWl, "X");
+                // Se è stata attivata la carta leader delle white marble
+                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
+                    int i;
+                    for(i = 0; i < resource.length; i++) {
+                        if(resource[i].equals("white"))
+                            break;
+                    }
+                    // Se ci sono white marble nella riga/colonna scelta
+                    if(i != resource.length) whiteMarble(coordinates, resource, i, whichWl, new StringBuilder());
+                    // Se non ci sono white marble
+                }
+                // Se è stata attivata solo la carta leader di extra warehouse
+                if(finalCheckExtraSpace) {
+                    int j = 0;
+                    while(j < resource.length && (resource[j].equals("white") || resource[j].equals("redCross"))) j++;
+                    if(j == resource.length) {
+                        if(coordinates[0] == 0) sendMessageMarket("ROW", coordinates, "WWWW", "X");
+                        else sendMessageMarket("COLUMN", coordinates, "WWWW", "X");
+                    }
+                    else putResources(coordinates, resource, j, whichWl, new StringBuilder("X"));
+                }
+                // Se non sono state attivate carte leader
+                else {
+                    String parameter;
+                    if(coordinates[0] == 0) parameter = "ROW";
+                    else parameter = "COLUMN";
+                    if(resource.length == 3) sendMessageMarket(parameter, coordinates, "WWW", "X");
+                    else sendMessageMarket(parameter, coordinates, "WWWW", "X");
+                }
             });
             if(k == 3) {
                 x = 0;
@@ -288,161 +327,153 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
-    public void putResources(int[] coordinates, String[] resource, int index, StringBuilder whichWl, String whiteMarble) {
-        boolean checkExtraSpace = false;
-        int numIndex = index + 1;
+    public void whiteMarble(int[] coordinates, String[] resource, int numIndex, StringBuilder whichWl, StringBuilder whiteMarble) {
+
+        Group root = new Group();
+        Button button1 = new Button();
+        Button button2 = new Button();
+
+        String resource1 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+        Image image1 = new Image(resource1);
+        this.handlerGUI.getGenericClassGUI().createIconButton(10,50, image1, button1, 80, 80);
+
+        if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1] != null) {
+            String resource2 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
+            Image image2 = new Image(resource2);
+            this.handlerGUI.getGenericClassGUI().createIconButton(210, 50, image2, button2, 80, 80);
+            root.getChildren().add(button2);
+        }
+
+        Button declineButton = new Button("Decline");
+        declineButton.setLayoutX(10);
+        declineButton.setLayoutY(150);
+
+        root.getChildren().addAll(button1, declineButton);
+
+        Scene scene = new Scene(root, 595, 355);
+        this.stage.setTitle("Choose the resource for the white marble.");
+        this.stage.setScene(scene);
+        this.stage.show();
+
+        button1.setOnAction(e -> {
+            resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+            whiteMarble.append("0");
+            int i;
+            for(i = numIndex + 1; i < resource.length; i++) {
+                if(resource[i].equals("white"))
+                    break;
+            }
+            if(i != resource.length) whiteMarble(coordinates, resource, i, whichWl, whiteMarble);
+            else {
+                int k = 0;
+                while(k < resource.length && (resource[k].equals("white") || resource[k].equals("redCross"))) k++;
+                putResources(coordinates, resource, k, whichWl, whiteMarble);
+            }
+        });
+
+        button2.setOnAction(e -> {
+            resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
+            whiteMarble.append("1");
+            int i;
+            for(i = numIndex + 1; i < resource.length; i++) {
+                if(resource[i].equals("white"))
+                    break;
+            }
+            if(i != resource.length) whiteMarble(coordinates, resource, i, whichWl, whiteMarble);
+            else {
+                int k = 0;
+                while(k < resource.length && (resource[k].equals("white") || resource[k].equals("redCross"))) k++;
+                putResources(coordinates, resource, k, whichWl, whiteMarble);
+            }
+        });
+
+        declineButton.setOnAction(e -> {
+            int i = 0;
+            while(i < resource.length && (resource[i].equals("white") || resource[i].equals("redCross"))) i++;
+            if(i == resource.length && whiteMarble.toString().equals("X")) {
+                if(coordinates[0] == 0) sendMessageMarket("ROW", coordinates, "WWWW", whiteMarble.toString());
+                else sendMessageMarket("COLUMN", coordinates, "WWWW", whiteMarble.toString());
+            }
+            else putResources(coordinates, resource, i, whichWl, whiteMarble);
+        });
+    }
+
+    public void putResources(int[] coordinates, String[] resource, int index, StringBuilder whichWl, StringBuilder whiteMarble) {
         String parameter;
         if(coordinates[0] == 0) parameter = "ROW";
         else parameter = "COLUMN";
+        boolean checkExtraSpace = false;
 
         for(int i = 0; i < 2; i++) {
             if(this.handlerGUI.getClientMain().getLeaderCards()[i] != null){
                 if (this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed() && this.handlerGUI.getClientMain().getLeaderCards()[i] instanceof ExtraWarehouseSpaceLeaderCard) {
                     checkExtraSpace = true;
+                    break;
                 }
             }
         }
 
         if(checkExtraSpace) {
-            if (!(resource[index].equals("white"))) {
-                Image image = new Image(resource[index]);
-                ImageView imageView = new ImageView();
-                Pane root = new Pane(imageView);
-                imageView.setImage(image);
-                imageView.setLayoutX(10);
-                imageView.setLayoutY(10);
-                imageView.setFitWidth(200);
-                imageView.setPreserveRatio(true);
+            Image image = new Image(resource[index]);
+            ImageView imageView = new ImageView();
+            Pane root = new Pane(imageView);
+            imageView.setImage(image);
+            imageView.setLayoutX(10);
+            imageView.setLayoutY(10);
+            imageView.setFitWidth(200);
+            imageView.setPreserveRatio(true);
 
-                Button warehouse = new Button("Warehouse");
-                warehouse.setLayoutX(300);
-                warehouse.setLayoutY(60);
-                Button extra = new Button("Extra Warehouse");
-                extra.setLayoutX(300);
-                extra.setLayoutY(100);
-                root.getChildren().addAll(warehouse, extra);
+            Button warehouse = new Button("Warehouse");
+            warehouse.setLayoutX(300);
+            warehouse.setLayoutY(60);
+            Button extra = new Button("Extra Warehouse");
+            extra.setLayoutX(300);
+            extra.setLayoutY(100);
+            root.getChildren().addAll(warehouse, extra);
 
-                Scene scene = new Scene(root, 595, 355);
-                this.stage.setTitle("Put the resources in the stores.");
-                this.stage.setScene(scene);
-                this.stage.show();
+            Scene scene = new Scene(root, 595, 355);
+            this.stage.setTitle("Put the resources in the stores.");
+            this.stage.setScene(scene);
+            this.stage.show();
 
-                warehouse.setOnAction(e -> {
+            warehouse.setOnAction(e -> {
+                whichWl.append("W");
+                int i = index + 1;
+                while(i < resource.length && (resource[i].equals("white") || resource[i].equals("redCross"))) {
                     whichWl.append("W");
-                    if(index == resource.length - 1) {
-                        if(this.handlerGUI.getGameMode() == 1)
-                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl.toString(), whiteMarble);
-                        else if(!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], whichWl.toString(), whiteMarble)) {
-                                mainAction = true;
-                            }
-                        }
-                        else this.handlerGUI.notValidAction();
-                        choiceAction();
-                    }
-                    else putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
-                });
-
-                extra.setOnAction(e -> {
-                    whichWl.append("L");
-                    if(index == resource.length - 1) {
-                        if(this.handlerGUI.getGameMode() == 1)
-                            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], whichWl.toString(), whiteMarble);
-                        else if(!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], whichWl.toString(), whiteMarble)) {
-                                mainAction = true;
-                            }
-                        }
-                        else this.handlerGUI.notValidAction();
-                        choiceAction();
-                    }
-                    else putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
-                });
-            }
-            else {
-                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null)
-                    whiteMarble(coordinates, resource, index, whichWl);
-                else {
-                    whichWl.append("W");
-                    putResources(coordinates, resource, numIndex, whichWl, whiteMarble);
+                    i++;
                 }
-            }
+                if (i == resource.length) sendMessageMarket(parameter, coordinates, whichWl.toString(), whiteMarble.toString());
+                else putResources(coordinates, resource, i, whichWl, whiteMarble);
+            });
+
+            extra.setOnAction(e -> {
+                whichWl.append("L");
+                int i = index + 1;
+                while(i < resource.length && (resource[i].equals("white") || resource[i].equals("redCross"))) {
+                    whichWl.append("W");
+                    i++;
+                }
+                if (i == resource.length) sendMessageMarket(parameter, coordinates, whichWl.toString(), whiteMarble.toString());
+                else putResources(coordinates, resource, i, whichWl, whiteMarble);
+            });
         }
         else {
-            if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
-                whiteMarble(coordinates, resource, index, whichWl);
-            }
-            if(resource.length == 3) {
-                if(this.handlerGUI.getGameMode() == 1)
-                    this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWW", whiteMarble);
-                else if(!this.mainAction) {
-                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWW", whiteMarble)) {
-                        mainAction = true;
-                    }
-                }
-                else this.handlerGUI.notValidAction();
-                choiceAction();
-            }
-            else {
-                if(this.handlerGUI.getGameMode() == 1)
-                    this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], "WWWW", whiteMarble);
-                else if(!this.mainAction) {
-                    if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWWW", whiteMarble)) {
-                        mainAction = true;
-                    }
-                }
-                else this.handlerGUI.notValidAction();
-                choiceAction();
-            }
+            if(resource.length == 3) sendMessageMarket(parameter, coordinates, "WWW", whiteMarble.toString());
+            else sendMessageMarket(parameter, coordinates, "WWWW", whiteMarble.toString());
         }
     }
 
-    public void whiteMarble(int[] coordinates, String[] resource, int numIndex, StringBuilder whichWl) {
-
-        for(int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles().length; i++) {
-            if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1] == null) {
-                resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
-                putResources(coordinates, resource, numIndex, whichWl, "0");
-            }
-            else {
-                Group root = new Group();
-                String resource1 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
-                Image image1 = new Image(resource1);
-                Button button1 = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(10,50, image1, button1, 80, 80);
-
-                String resource2 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
-                Image image2 = new Image(resource2);
-                Button button2 = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(210,50, image2, button2, 80, 80);
-
-                Button declineButton = new Button("I don't want to activate any leader cards.");
-                declineButton.setLayoutX(220);
-                declineButton.setLayoutY(70);
-
-                root.getChildren().addAll(button1, button2, declineButton);
-
-                Scene scene = new Scene(root, 595, 355);
-                this.stage.setTitle("Choose the resource for the white marble.");
-                this.stage.setScene(scene);
-                this.stage.show();
-
-                button1.setOnAction(e -> {
-                    resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
-                    putResources(coordinates, resource, numIndex, whichWl, "0");
-                });
-
-                button2.setOnAction(e -> {
-                    resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[1].getColour());
-                    putResources(coordinates, resource, numIndex, whichWl, "1");
-                });
-
-                declineButton.setOnAction(e -> {
-                    resource[numIndex] = "x";
-                    putResources(coordinates, resource, numIndex + 1, whichWl, "X");
-                });
+    public void sendMessageMarket(String parameter, int[] coordinates, String choice, String whiteMarble) {
+        if(this.handlerGUI.getGameMode() == 1)
+            this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], choice, whiteMarble);
+        else if(!this.mainAction) {
+            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWWW", whiteMarble.toString())) {
+                mainAction = true;
             }
         }
+        else this.handlerGUI.notValidAction();
+        choiceAction();
     }
 
 
@@ -486,7 +517,7 @@ public class PlotScenarioGUI implements Runnable{
                 resource = "servant.png";
                 break;
             case " RED ":
-                resource = "redCross.png";
+                resource = "redCross";
                 break;
             default:
                 resource = "white";

@@ -46,26 +46,6 @@ public class PlayerBoardScenario implements Runnable {
 
     }
 
-    //Usa thread al suo posto
-    /*public void PlayerBoard() {
-        Image image = new Image("playerBoard.png");
-        ImageView imageView = new ImageView();
-        imageView.setImage(image);
-        imageView.setFitWidth(700);
-        imageView.setPreserveRatio(true);
-        Group root = new Group(imageView);
-
-        putRedCross(root);
-        putDevCards(root);
-        putResourcesInChest(root);
-        putResourcesInWarehouse(root);
-
-        Scene scene = new Scene(root, 700, 500);
-        this.anotherStage.setTitle("Your playerboard");
-        this.anotherStage.setScene(scene);
-        this.anotherStage.show();
-    }*/
-
     public void putRedCross(Group root) {
         int x = 25, y;
         int redCross = this.handlerGUI.getClientMain().getPlayerboard().getFaithPath().getCrossPosition();
@@ -215,35 +195,34 @@ public class PlayerBoardScenario implements Runnable {
         int x = 25;
 
         for(int i = 0; i < 2; i++) {
-            //LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i];
-            LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCards()[i];
-            //if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i].isPlayed())
-            if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed()) {
-                // Extra warehouse
-                if (leaderCard instanceof ExtraWarehouseSpaceLeaderCard) {
-                    switch (((ExtraWarehouseSpaceLeaderCard) leaderCard).getResourceSpace()) {
-                        case "COINS":
-                            image = new Image("coinExtra.png");
-                            break;
-                        case "SHIELDS":
-                            image = new Image("shieldExtra.png");
-                            break;
-                        case "SERVANTS":
-                            image = new Image("servantExtra.png");
-                            break;
-                        default:
-                            image = new Image("stoneExtra.png");
-                            break;
-                    }
+            if(this.handlerGUI.getClientMain().getLeaderCards()[i] != null) {
+                LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCards()[i];
+                if (leaderCard.isPlayed()) {
+                    if (leaderCard instanceof ExtraWarehouseSpaceLeaderCard) {
+                        switch (((ExtraWarehouseSpaceLeaderCard) leaderCard).getResourceSpace()) {
+                            case "COINS":
+                                image = new Image("coinExtra.png");
+                                break;
+                            case "SHIELDS":
+                                image = new Image("shieldExtra.png");
+                                break;
+                            case "SERVANTS":
+                                image = new Image("servantExtra.png");
+                                break;
+                            default:
+                                image = new Image("stoneExtra.png");
+                                break;
+                        }
 
-                    ImageView imageView = new ImageView();
-                    imageView.setImage(image);
-                    imageView.setX(x);
-                    imageView.setY(520);
-                    imageView.setFitWidth(150);
-                    imageView.setPreserveRatio(true);
-                    root.getChildren().add(imageView);
-                    x = 200;
+                        ImageView imageView = new ImageView();
+                        imageView.setImage(image);
+                        imageView.setX(x);
+                        imageView.setY(520);
+                        imageView.setFitWidth(150);
+                        imageView.setPreserveRatio(true);
+                        root.getChildren().add(imageView);
+                        x = 200;
+                    }
                 }
             }
         }
@@ -272,7 +251,7 @@ public class PlayerBoardScenario implements Runnable {
                             image = new Image("stone.png");
                             break;
                     }
-                    imageView(image, x, 500, root);
+                    imageView(image, x, 550, root);
                     if(num == 1) x = +200;
                     x += 60;
                 }
