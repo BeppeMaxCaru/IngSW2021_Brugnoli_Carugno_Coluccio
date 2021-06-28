@@ -166,12 +166,14 @@ public class PlotScenarioGUI implements Runnable{
                     if (this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)) {
                         if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(0))
                             this.handlerGUI.notValidAction();
+                        else this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
                     }
                 }
                 else {
                     if(this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 0)){
                         if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(0))
                             this.handlerGUI.notValidAction();
+                        else this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
                     }
                 }
             }
@@ -190,12 +192,14 @@ public class PlotScenarioGUI implements Runnable{
                     if (this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)) {
                         if (!this.handlerGUI.getClientMain().getLocalPlayers()[0].playLeaderCard(1))
                             this.handlerGUI.notValidAction();
+                        else this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
                     }
                 }
                 else {
                     if(this.handlerGUI.getClientMain().checkLocalLeaders(this.handlerGUI.getClientMain().getLocalPlayers()[0], 1)){
                         if(!this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(1))
                             this.handlerGUI.notValidAction();
+                        else this.handlerGUI.getClientMain().setLeaderCards(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerLeaderCards());
                     }
                 }
             }
