@@ -142,6 +142,7 @@ public class PlayerBoardScenario implements Runnable {
 
     public void putResourcesInWarehouse(Group root) {
         Image image;
+        int num;
         boolean first = false;
         boolean second = false;
 
@@ -160,7 +161,12 @@ public class PlayerBoardScenario implements Runnable {
                     image = new Image("stone.png");
                     break;
             }
-            if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 1) {
+
+            if(s.contains("extra"))
+                num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) -
+                        this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get("extra" + s);
+            else num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s);
+            if(num == 1) {
                 if(!first) {
                     imageView(image, 70, 215, root);
                     first = true;
@@ -171,7 +177,7 @@ public class PlayerBoardScenario implements Runnable {
                 }
                 else imageView(image,40, 305, root);
             }
-            else if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 2) {
+            else if(num == 2) {
                 if(!second) {
                     imageView(image,50, 260, root);
                     imageView(image,90, 260, root);
@@ -182,7 +188,7 @@ public class PlayerBoardScenario implements Runnable {
                     imageView(image,73, 305, root);
                 }
             }
-            else if (this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 3) {
+            else if (num == 3) {
                 imageView(image,40, 305, root);
                 imageView(image,73, 305, root);
                 imageView(image,106, 305, root);
@@ -251,9 +257,9 @@ public class PlayerBoardScenario implements Runnable {
                             image = new Image("stone.png");
                             break;
                     }
-                    imageView(image, x, 550, root);
-                    if(num == 1) x = +200;
-                    x += 60;
+                    imageView(image, x, 525, root);
+                    if(num == 2) x = +200;
+                    else x += 60;
                 }
             }
         }
