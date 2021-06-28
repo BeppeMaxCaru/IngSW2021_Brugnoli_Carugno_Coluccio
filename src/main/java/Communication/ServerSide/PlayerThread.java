@@ -314,6 +314,8 @@ public class PlayerThread implements Runnable {
 
                     if(this.gameController.checkPlayCards(currentPlayer, position))
                     {
+                        this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                        System.out.println("Playerboard sent");
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         System.out.println("Leaders sent");
                     }

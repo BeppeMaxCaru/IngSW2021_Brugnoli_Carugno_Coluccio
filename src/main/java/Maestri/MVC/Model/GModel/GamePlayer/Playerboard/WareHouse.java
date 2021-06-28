@@ -70,15 +70,18 @@ public class WareHouse implements Serializable {
         Integer extraSpace = this.warehouseResources.get(extraRes);
 
         //if LeaderCard extra space is available
-        if(wlChoice.equals("l")) {
+        if(wlChoice.equals("L")) {
             if (this.warehouseResources.get((extraRes)) == null)
-                return false;
+                return true;
             else if (this.warehouseResources.get((extraRes)) >= 2)
-                return false;
+                return true;
+            /*
             else {
                 this.warehouseResources.put(extraRes, extraSpace + 1);
                 discard=true;
             }
+
+             */
         } else {
             switch (numOfResources) {
                 case 0:

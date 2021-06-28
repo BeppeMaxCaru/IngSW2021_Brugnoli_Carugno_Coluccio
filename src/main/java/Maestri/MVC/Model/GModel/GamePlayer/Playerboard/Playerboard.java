@@ -280,14 +280,31 @@ public class Playerboard implements Serializable {
 
     public void printAll(){
         System.out.println("YOUR RESOURCES:");
-        System.out.println("COINS   : "+this.getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
-                +this.getChest().getChestResources().get("COINS")+" in chest");
-        System.out.println("SERVANTS: "+this.getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
-                +this.getChest().getChestResources().get("SERVANTS")+" in chest");
-        System.out.println("SHIELDS : "+this.getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
-                +this.getChest().getChestResources().get("SHIELDS")+" in chest");
-        System.out.println("STONES  : "+this.getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
-                +this.getChest().getChestResources().get("STONES")+" in chest");
+
+        System.out.print("COINS   : "+this.getWareHouse().getWarehouseResources().get("COINS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("COINS")+" in chest. ");
+        if(this.getWareHouse().getWarehouseResources().get("extraCOINS") != null)
+            System.out.println(this.getWareHouse().getWarehouseResources().get("extraCOINS") + " in extra space.");
+        else System.out.println();
+
+        System.out.print("SERVANTS: "+this.getWareHouse().getWarehouseResources().get("SERVANTS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("SERVANTS")+" in chest. ");
+        if(this.getWareHouse().getWarehouseResources().get("extraSERVANTS") != null)
+            System.out.println(this.getWareHouse().getWarehouseResources().get("extraSERVANTS") + " in extra space.");
+        else System.out.println();
+
+        System.out.print("SHIELDS : "+this.getWareHouse().getWarehouseResources().get("SHIELDS")+" in warehouse, "+
+                +this.getChest().getChestResources().get("SHIELDS")+" in chest. ");
+        if(this.getWareHouse().getWarehouseResources().get("extraSHIELDS") != null)
+            System.out.println(this.getWareHouse().getWarehouseResources().get("extraSHIELDS") + " in extra space.");
+        else System.out.println();
+
+        System.out.print("STONES  : "+this.getWareHouse().getWarehouseResources().get("STONES")+" in warehouse, "+
+                +this.getChest().getChestResources().get("STONES")+" in chest. ");
+        if(this.getWareHouse().getWarehouseResources().get("extraSTONES") != null)
+            System.out.println(this.getWareHouse().getWarehouseResources().get("extraSTONES") + " in extra space.");
+        else System.out.println();
+
         System.out.println();
 
         System.out.println("YOUR DEVELOPMENT CARDS: ");

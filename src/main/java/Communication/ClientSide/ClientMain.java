@@ -181,10 +181,13 @@ public class ClientMain{
         if(leader.contains("0"))
             if (board.getResourceMarbles()[0]==null) return false;
 
+        int extraSpaces=0;
         if(wlChoice.contains("L"))
+        {
             for(String keys : board.getWareHouse().getWarehouseResources().keySet())
-                if (!keys.contains("extra")) return false;
-        //return true;
+                if (keys.contains("extra")) extraSpaces++;
+            if(extraSpaces==0) return false;
+        }
 
         if(choice.equalsIgnoreCase("ROW"))
         {

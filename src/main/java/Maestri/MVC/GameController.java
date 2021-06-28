@@ -131,9 +131,13 @@ public class GameController{
         if(c.contains("0"))
             if (currentPlayer.getPlayerBoard().getResourceMarbles()[0]==null) return false;
 
+        int extraSpaces=0;
         if(wlChoice.contains("L"))
+        {
             for(String keys : currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().keySet())
-                if (!keys.contains("extra")) return false;
+                if (keys.contains("extra")) extraSpaces++;
+            if(extraSpaces==0) return false;
+        }
 
         //If player picks row
         if(choice.equalsIgnoreCase("ROW"))

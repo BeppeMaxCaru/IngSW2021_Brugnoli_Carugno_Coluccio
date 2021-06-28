@@ -242,7 +242,7 @@ public class DevelopmentCard implements Serializable {
             }
         req.append("} ");
         for(String str:this.output.keySet())
-            if(this.output.get(str)!=0)
+            if(this.output.get(str)!=0 && !str.equals("REDCROSS"))
             {
                 req.append(this.output.get(str));
                 req.append(str, 0, 2);

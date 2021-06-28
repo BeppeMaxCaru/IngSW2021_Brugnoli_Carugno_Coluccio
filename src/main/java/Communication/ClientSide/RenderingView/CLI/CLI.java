@@ -506,15 +506,15 @@ public class CLI implements RenderingView {
 
         String wlChoice;
 
-        boolean extraSpace=false;
+        int extraSpace=0;
         for(String res : this.main.getPlayerboard().getWareHouse().getWarehouseResources().keySet())
         {
             if (res.contains("extra")) {
-                extraSpace = true;
-                break;
+                extraSpace ++;
             }
         }
-        if(!extraSpace){
+        if(extraSpace == 0){
+            System.out.println("No extra spaces");
             if(parameter.equals("ROW"))
                 return "WWWW";
             else return "WWW";
