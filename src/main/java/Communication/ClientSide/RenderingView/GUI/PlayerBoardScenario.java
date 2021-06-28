@@ -215,8 +215,10 @@ public class PlayerBoardScenario implements Runnable {
         int x = 25;
 
         for(int i = 0; i < 2; i++) {
-            LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i];
-            if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i].isPlayed()) {
+            //LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i];
+            LeaderCard leaderCard = this.handlerGUI.getClientMain().getLeaderCards()[i];
+            //if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCardDeck().getLeaderCardsDeck()[i].isPlayed())
+            if (leaderCard != null && this.handlerGUI.getClientMain().getLeaderCards()[i].isPlayed()) {
                 // Extra warehouse
                 if (leaderCard instanceof ExtraWarehouseSpaceLeaderCard) {
                     switch (((ExtraWarehouseSpaceLeaderCard) leaderCard).getResourceSpace()) {
