@@ -488,7 +488,7 @@ public class PlotScenarioGUI implements Runnable{
         if(this.handlerGUI.getGameMode() == 1)
             this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], choice, whiteMarble);
         else if(!this.mainAction) {
-            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], "WWWW", whiteMarble.toString())) {
+            if (this.handlerGUI.getClientMain().checkLocalMarketAction(this.handlerGUI.getClientMain().getLocalPlayers()[0].getPlayerBoard(), parameter, coordinates[1], choice, whiteMarble)) {
                 mainAction = true;
             }
         }
@@ -994,6 +994,7 @@ public class PlotScenarioGUI implements Runnable{
         else if(index < 3) activateBasicProductionPower(activate, whichInput, 0);
         else if(index == 3) activateExtraProdPower(activate, whichOutput, whichInput);
         else if(activate[4] != 1 || activate[5] != 1) activateExtraProdPower(activate, whichOutput, whichInput);
+        else pickResourceExtraProdPower(activate, whichOutput, whichInput,2);
     }
 
     public void activateBasicProductionPower(int[] activate, String[] whichInput, int index) {
@@ -1087,8 +1088,7 @@ public class PlotScenarioGUI implements Runnable{
             Button[] arrayButtons = new Button[numBottons];
             for (int i = 0; i < numBottons; i++) {
                 //Creating a graphic (image)
-                if (numBottons == 1)
-                    img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[indexLeader].getImage());
+                if (numBottons == 1) img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[indexLeader].getImage());
                 else img = new Image(this.handlerGUI.getClientMain().getLeaderCards()[i].getImage());
                 arrayButtons[index] = new Button();
                 this.handlerGUI.getGenericClassGUI().createIconButton(x, 20, img, arrayButtons[index], 250, 200);
@@ -1098,17 +1098,17 @@ public class PlotScenarioGUI implements Runnable{
             }
 
             Button okBtn = new Button("Submit");
-            okBtn.setLayoutX(300);
+            okBtn.setLayoutX(10);
             okBtn.setLayoutY(300);
             root.getChildren().add(okBtn);
 
             Button noBtn = new Button("I don't want to activate this production power!");
-            noBtn.setLayoutX(350);
+            noBtn.setLayoutX(100);
             noBtn.setLayoutY(300);
             root.getChildren().add(noBtn);
 
             //Setting the this.stage
-            Scene scene = new Scene(root, 740, 130);
+            Scene scene = new Scene(root, 740, 500);
             this.stage.setTitle("Activate extra production power");
             this.stage.setScene(scene);
             this.stage.show();
@@ -1164,6 +1164,20 @@ public class PlotScenarioGUI implements Runnable{
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ + 4] = 1;
                     whichInput[finalJ + 4] = this.handlerGUI.getClientMain().getPlayerboard().getExtraProductionPowerInput()[finalJ];
+                    switch (whichInput[finalJ + 4]) {
+                        case "COINS":
+                            whichInput[finalJ + 4] = "0";
+                            break;
+                        case "SERVANTS":
+                            whichInput[finalJ + 4] = "1";
+                            break;
+                        case "SHIELDS":
+                            whichInput[finalJ + 4] = "2";
+                            break;
+                        case "STONES":
+                            whichInput[finalJ + 4] = "3";
+                            break;
+                    }
                     putResourcePayedDevCard(activate, whichInput, finalJ + 4, "1", 0, whichOutput);
                 });
             }
@@ -1194,7 +1208,7 @@ public class PlotScenarioGUI implements Runnable{
                 "servant.png",
                 "shield.png",
                 "stone.png",
-                "redCross"
+                "redCross.png"
         };
         Group root = new Group();
         //Creating buttons
@@ -1213,7 +1227,7 @@ public class PlotScenarioGUI implements Runnable{
         }
 
         //Setting the this.stage
-        Scene scene = new Scene(root, 740, 130);
+        Scene scene = new Scene(root, 900, 130);
         this.stage.setTitle("Choose the resource you want to have.");
         this.stage.setScene(scene);
         this.stage.show();
@@ -1221,21 +1235,19 @@ public class PlotScenarioGUI implements Runnable{
         for(int j = 0; j < 5; j++) {
             int finalJ = j;
             arrayButtons[j].setOnAction(e -> {
-                if(num == 2) whichOutput[1] = String.valueOf(finalJ);
-                else if(num == 1) whichOutput[2] = String.valueOf(finalJ);
+                if(whichOutput[1] == null) whichOutput[1] = String.valueOf(finalJ);
+                else whichOutput[2] = String.valueOf(finalJ);
                 if(numPar == 0) {
-                    for (int k = 0; k < 6; k++) {
-                        if (this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
-                        else if (!this.mainAction) {
-                            if (this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
-                                for (int i = 0; i < whichOutput.length; i++) {
-                                    if (whichOutput[i] != null) outputs[i] = Integer.parseInt(whichOutput[i]);
-                                    else outputs[i] = -1;
-                                }
-                                if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
-                                    this.mainAction = true;
-                            } else this.handlerGUI.notValidAction();
-                        }
+                    if (this.handlerGUI.getGameMode() == 1) this.handlerGUI.getMsg().sendActivationProdAction(activate, whichInput, whichOutput);
+                    else if (!this.mainAction) {
+                        if (this.handlerGUI.getClientMain().checkLocalActivateProd(this.handlerGUI.getClientMain().getLocalPlayers()[0], activate, whichInput)) {
+                            for (int i = 0; i < whichOutput.length; i++) {
+                                if (whichOutput[i] != null) outputs[i] = Integer.parseInt(whichOutput[i]);
+                                else outputs[i] = -1;
+                            }
+                            if (this.handlerGUI.getClientMain().getLocalPlayers()[0].activateProduction(activate, whichInput, outputs))
+                                this.mainAction = true;
+                        } else this.handlerGUI.notValidAction();
                     }
                     choiceAction();
                 }
