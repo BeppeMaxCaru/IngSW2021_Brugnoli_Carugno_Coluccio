@@ -597,9 +597,16 @@ public class PlotScenarioGUI implements Runnable{
         int row = 0, column = 0;
         int[] coordinates = new int[2];
         for(int i = 0; i < 12; i++) {
-            while(nonButton.contains(i) && i < 11) i++;
-            if(i == 4) { column = 0; row = 1; }
-            else if(i == 8) { column = 0; row = 2; }
+            while(nonButton.contains(i) && i < 11) {
+                i++;
+                if (i == 4) {
+                    column = 0;
+                    row = 1;
+                } else if (i == 8) {
+                    column = 0;
+                    row = 2;
+                }
+            }
             int finalRow = row;
             int finalColumn = column;
             arrayButtons[i].setOnAction(e -> {

@@ -415,9 +415,9 @@ public class GameController{
                         }
                     }
                 } else {
-                        //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
-                            //return false;
-                       // }
+                       //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
+                           //return false;
+                        //}
                 }
             }
         }
