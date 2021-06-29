@@ -111,21 +111,25 @@ public class PlayerBoardScenario implements Runnable {
         int x = 25;
         int y = 370;
         int numResource = 0;
-        Image image;
+        Image image = null;
         for(String s: this.handlerGUI.getClientMain().getPlayerboard().getChest().getChestResources().keySet()) {
             switch (s) {
-                case "COINS":
+                case "COINS": {
                     image = new Image("coin.png");
                     break;
-                case "SHIELDS":
+                }
+                case "SHIELDS": {
                     image = new Image("shield.png");
                     break;
-                case "SERVANTS":
+                }
+                case "SERVANTS": {
                     image = new Image("servant.png");
                     break;
-                default:
+                }
+                case "STONES": {
                     image = new Image("stone.png");
                     break;
+                }
             }
             for(int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getChest().getChestResources().get(s); i++) {
                 if(numResource == 4) {
@@ -141,26 +145,36 @@ public class PlayerBoardScenario implements Runnable {
     }
 
     public void putResourcesInWarehouse(Group root) {
-        Image image;
+        Image image = null;
+        int num;
         boolean first = false;
         boolean second = false;
 
         for(String s: this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
             switch (s) {
-                case "COINS":
+                case "COINS": {
                     image = new Image("coin.png");
                     break;
-                case "SHIELDS":
+                }
+                case "SHIELDS": {
                     image = new Image("shield.png");
                     break;
-                case "SERVANTS":
+                }
+                case "SERVANTS": {
                     image = new Image("servant.png");
                     break;
-                default:
+                }
+                case "STONES": {
                     image = new Image("stone.png");
                     break;
+                }
             }
-            if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 1) {
+
+            if(s.contains("extra"))
+                num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) -
+                        this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get("extra" + s);
+            else num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s);
+            if(num == 1) {
                 if(!first) {
                     imageView(image, 70, 215, root);
                     first = true;
@@ -171,7 +185,7 @@ public class PlayerBoardScenario implements Runnable {
                 }
                 else imageView(image,40, 305, root);
             }
-            else if(this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 2) {
+            else if(num == 2) {
                 if(!second) {
                     imageView(image,50, 260, root);
                     imageView(image,90, 260, root);
@@ -182,7 +196,7 @@ public class PlayerBoardScenario implements Runnable {
                     imageView(image,73, 305, root);
                 }
             }
-            else if (this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) == 3) {
+            else if (num == 3) {
                 imageView(image,40, 305, root);
                 imageView(image,73, 305, root);
                 imageView(image,106, 305, root);
@@ -191,7 +205,7 @@ public class PlayerBoardScenario implements Runnable {
     }
 
     public void putExtraWarehouse(Group root) {
-        Image image;
+        Image image = null;
         int x = 25;
 
         for(int i = 0; i < 2; i++) {
@@ -200,18 +214,22 @@ public class PlayerBoardScenario implements Runnable {
                 if (leaderCard.isPlayed()) {
                     if (leaderCard instanceof ExtraWarehouseSpaceLeaderCard) {
                         switch (((ExtraWarehouseSpaceLeaderCard) leaderCard).getResourceSpace()) {
-                            case "COINS":
+                            case "COINS": {
                                 image = new Image("coinExtra.png");
                                 break;
-                            case "SHIELDS":
+                            }
+                            case "SHIELDS": {
                                 image = new Image("shieldExtra.png");
                                 break;
-                            case "SERVANTS":
+                            }
+                            case "SERVANTS": {
                                 image = new Image("servantExtra.png");
                                 break;
-                            default:
+                            }
+                            case "STONES": {
                                 image = new Image("stoneExtra.png");
                                 break;
+                            }
                         }
 
                         ImageView imageView = new ImageView();
@@ -251,9 +269,9 @@ public class PlayerBoardScenario implements Runnable {
                             image = new Image("stone.png");
                             break;
                     }
-                    imageView(image, x, 550, root);
-                    if(num == 1) x = +200;
-                    x += 60;
+                    imageView(image, x, 525, root);
+                    if(num == 2) x = +200;
+                    else x += 60;
                 }
             }
         }
