@@ -100,4 +100,8 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
     public String getImage() {
         return this.image;
     }
+
+    public String getDiscount() {
+        return this.discount;
+    }
 }

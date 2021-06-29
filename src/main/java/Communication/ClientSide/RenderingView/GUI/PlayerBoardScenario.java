@@ -151,55 +151,50 @@ public class PlayerBoardScenario implements Runnable {
         boolean second = false;
 
         for(String s: this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
-            switch (s) {
-                case "COINS": {
-                    image = new Image("coin.png");
-                    break;
+            if (!s.contains("extra")) {
+                switch (s) {
+                    case "COINS": {
+                        image = new Image("coin.png");
+                        break;
+                    }
+                    case "SHIELDS": {
+                        image = new Image("shield.png");
+                        break;
+                    }
+                    case "SERVANTS": {
+                        image = new Image("servant.png");
+                        break;
+                    }
+                    case "STONES": {
+                        image = new Image("stone.png");
+                        break;
+                    }
                 }
-                case "SHIELDS": {
-                    image = new Image("shield.png");
-                    break;
-                }
-                case "SERVANTS": {
-                    image = new Image("servant.png");
-                    break;
-                }
-                case "STONES": {
-                    image = new Image("stone.png");
-                    break;
-                }
-            }
 
-            if(s.contains("extra"))
-                num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s) -
-                        this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get("extra" + s);
-            else num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s);
-            if(num == 1) {
-                if(!first) {
-                    imageView(image, 70, 215, root);
-                    first = true;
+                num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s);
+                System.out.println(s + " " + num);
+                if (num == 1) {
+                    if (!first) {
+                        imageView(image, 70, 215, root);
+                        first = true;
+                    } else if (!second) {
+                        imageView(image, 50, 260, root);
+                        second = true;
+                    } else imageView(image, 40, 305, root);
+                } else if (num == 2) {
+                    if (!second) {
+                        imageView(image, 50, 260, root);
+                        imageView(image, 90, 260, root);
+                        second = true;
+                    } else {
+                        imageView(image, 40, 305, root);
+                        imageView(image, 73, 305, root);
+                    }
+                } else if (num == 3) {
+                    imageView(image, 40, 305, root);
+                    imageView(image, 73, 305, root);
+                    imageView(image, 106, 305, root);
                 }
-                else if(!second) {
-                    imageView(image,50, 260, root);
-                    second = true;
-                }
-                else imageView(image,40, 305, root);
-            }
-            else if(num == 2) {
-                if(!second) {
-                    imageView(image,50, 260, root);
-                    imageView(image,90, 260, root);
-                    second = true;
-                }
-                else {
-                    imageView(image,40, 305, root);
-                    imageView(image,73, 305, root);
-                }
-            }
-            else if (num == 3) {
-                imageView(image,40, 305, root);
-                imageView(image,73, 305, root);
-                imageView(image,106, 305, root);
             }
         }
     }
@@ -247,7 +242,7 @@ public class PlayerBoardScenario implements Runnable {
     }
 
     public void putResourceInExtraWarehouse(Group root) {
-        Image image;
+        Image image = null;
         int num = 0;
 
         int x = 55;
@@ -256,16 +251,16 @@ public class PlayerBoardScenario implements Runnable {
                 num++;
                 for (int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(key); i++) {
                     switch (key) {
-                        case "COINS":
+                        case "extraCOINS":
                             image = new Image("coin.png");
                             break;
-                        case "SHIELDS":
+                        case "extraSHIELDS":
                             image = new Image("shield.png");
                             break;
-                        case "SERVANTS":
+                        case "extraSERVANTS":
                             image = new Image("servant.png");
                             break;
-                        default:
+                        case "extraSTONES":
                             image = new Image("stone.png");
                             break;
                     }
