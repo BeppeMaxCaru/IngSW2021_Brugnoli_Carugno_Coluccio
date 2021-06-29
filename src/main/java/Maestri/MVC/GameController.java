@@ -439,6 +439,7 @@ public class GameController{
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {
+                playerThread.getSender().reset();
                 //Reset avviene a inizio while in playerThread
                 //playerThread.getSender().reset();
                 playerThread.getSender().writeObject(updateClientMarketMessage);
@@ -455,6 +456,7 @@ public class GameController{
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {
+                playerThread.getSender().reset();
                 playerThread.getSender().writeObject(updateClientDevCardGridMessage);
             } catch (Exception e) {
                 e.printStackTrace();
