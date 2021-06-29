@@ -451,6 +451,24 @@ public class GameController{
 
     }
 
+    public void broadCastMarketUpdated () {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+            try {
+                playerThread.getSender().reset();
+                playerThread.getSender().writeObject(new UpdateClientMarketMessage(this.gameModel.getMarket()));
+                //System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
+                //System.out.println(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Market boards broadcast not working");
+            }
+
+        }
+
+
+    }
+
     public void broadcastDevCardsGrid (UpdateClientDevCardGridMessage updateClientDevCardGridMessage) {
 
         for (PlayerThread playerThread : this.playerThreads) {
@@ -464,6 +482,19 @@ public class GameController{
             }
         }
 
+    }
+
+    public void broadcastDeveCardGridUpdated () {
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().reset();
+                playerThread.getSender().writeObject(new UpdateClientDevCardGridMessage(this.gameModel.getDevelopmentCardsDecksGrid()));
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Grid broadcast not working for " + playerThread.getNickName());
+            }
+        }
     }
 
     public void broadcastPlayerBoards() {

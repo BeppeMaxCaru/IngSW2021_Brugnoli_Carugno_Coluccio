@@ -385,7 +385,8 @@ public class PlayerThread implements Runnable {
 
                             //System.out.println("Playerboard sent");
                             UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
-                            this.gameController.broadcastMarket(updateMarket);
+                            //this.gameController.broadcastMarket(updateMarket);
+                            this.gameController.broadCastMarketUpdated();
 
                             //BROADCAST WORKS BUT CHECK MESSAGE ORDERS
                             //Before -> ajva passes arguments by value!
@@ -451,11 +452,21 @@ public class PlayerThread implements Runnable {
 
                             if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[row][column][0])) {
                                 if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+
+                                    this.sender.reset();
                                     this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                                    System.out.println("Playerboard sent");
+
+                                    //System.out.println("Playerboard sent");
+
+                                    this.sender.reset();
                                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
+
                                     this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
-                                    System.out.println("DevCards sent");
+
+                                    //this.gameController.broadcastPlayerBoards();
+
+
+                                    //System.out.println("DevCards sent");
                                     this.mainAction = true;
                                 } else System.out.println("Not valid model action");
                             } else System.out.println("Not valid isCardBelowCompatible");
@@ -495,6 +506,7 @@ public class PlayerThread implements Runnable {
                         }
                          */
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
+                            this.sender.reset();
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                             System.out.println("Playerboard sent");
                             this.mainAction = true;
