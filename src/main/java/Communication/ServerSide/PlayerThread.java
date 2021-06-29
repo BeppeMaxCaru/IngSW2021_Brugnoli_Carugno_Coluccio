@@ -415,11 +415,13 @@ public class PlayerThread implements Runnable {
                 }
             }
 
+            /*
             Map<Integer, String> resources = new HashMap<>();
             resources.put(0, "COINS");
             resources.put(1, "SERVANTS");
             resources.put(2, "SHIELDS");
             resources.put(3, "STONES");
+             */
             //BUY DEVELOPMENT CARD
             if (object instanceof BuyCardMessage) {
                 try {
@@ -438,10 +440,11 @@ public class PlayerThread implements Runnable {
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
-                        /*for(int i =0; i<4; i++){
-                            //System.out.println(resources.get(i));
-                            //System.out.println(quantity[i]);
-                            //System.out.println(deposit[i]);
+                        /*
+                        for(int i =0; i<4; i++){
+                            System.out.println(resources.get(i));
+                            System.out.println(quantity[i]);
+                            System.out.println(deposit[i]);
                             }
                          */
 
