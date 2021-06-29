@@ -83,7 +83,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
     @Override
     public void printLeaderCard(){
         System.out.println("EXTRA PRODUCTION POWER");
-        System.out.println("req: 1 "+this.requisite.getDevelopmentCardColour()+" lev.2");
+        System.out.println("req: 1 "+this.requisite.getDevelopmentCardColour()+" lev."+this.requisite.getDevelopmentCardLevel());
         System.out.println("Victory Points: "+this.getVictoryPoints());
         System.out.println("1 "+this.input+" } 1? 1FaithPoint");
         System.out.println();

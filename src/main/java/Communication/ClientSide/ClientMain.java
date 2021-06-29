@@ -175,6 +175,15 @@ public class ClientMain{
 
     public boolean checkLocalMarketAction(Playerboard board,  String choice, int i, String wlChoice, String leader) {
 
+        if(choice.equalsIgnoreCase("ROW"))
+        {
+            if(wlChoice.length()!=4) return false;
+        }
+        else
+        {
+            if(wlChoice.length()!=3) return false;
+        }
+
         if(leader.contains("1"))
             if (board.getResourceMarbles()[1]==null) return false;
 

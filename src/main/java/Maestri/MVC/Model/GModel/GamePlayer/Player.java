@@ -227,6 +227,7 @@ public class Player
                                 redCross++;
                             else if(whichOutput[z] != -1)
                                 this.playerBoard.getChest().getChestResources().put(resources.get(whichOutput[z]) , this.playerBoard.getChest().getChestResources().get(resources.get(whichOutput[z])) + 1);
+                            redCross++;
                         }
                     }
                 }

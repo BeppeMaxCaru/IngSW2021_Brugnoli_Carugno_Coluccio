@@ -599,6 +599,7 @@ public class CLI implements RenderingView {
 
         this.printPlayerboard(this.main.getPlayerboard());
         this.printDevCardGrid(this.main.getDevelopmentCardsDecksGrid());
+        this.printActivatedLeaderCard(this.main.getLeaderCards());
 
         System.out.println("Which card do you want to buy?");
         System.out.println("Write the correct colour: GREEN, YELLOW, BLUE or PURPLE, if existing in the grid");
@@ -681,9 +682,6 @@ public class CLI implements RenderingView {
                     this.senderError(e);
                     break;
                 }
-
-                //Player available leader cards
-                this.printActivatedLeaderCard(this.main.getLeaderCards());
 
                 String shelf;
                 //Keeps asking a place to take from resources
@@ -874,7 +872,7 @@ public class CLI implements RenderingView {
                 }
                 else return -1;
             }
-            case "EO":
+            case "E0":
             {
                 if(this.main.getPlayerboard().getExtraProductionPowerInput()[0]==null)
                     return -1;
@@ -959,15 +957,11 @@ public class CLI implements RenderingView {
                 }
                 whichInput.append(quant);
 
-                this.printActivatedLeaderCard(this.main.getLeaderCards());
-
                 if (quant.equals("1"))
                     System.out.println("From which store do you want to pick this resource?");
                 else
                     System.out.println("From which store do you want to pick these resources?");
-                System.out.println("Write 'WAREHOUSE' if you want to pick resources from warehouse");
-                System.out.println("Write 'CHEST' if you want to pick resources from chest");
-                System.out.println("Write 'LEADER CARD' if you want to pick resources from your extra space leader card, if it's available");
+                System.out.println("Write WAREHOUSE, CHEST, or LEADER CARD if you activate your extra warehouse space leader card.");
 
                 String shelf = input.nextLine().toUpperCase();
 

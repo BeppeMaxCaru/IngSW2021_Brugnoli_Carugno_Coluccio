@@ -373,10 +373,10 @@ public class PlayerThread implements Runnable {
                         //System.out.println(index);
                         //Warehouse/leaderCard choice
                         String wlChoice = marketResourcesMessage.getWarehouseLeaderChoice();
-                        //System.out.println(wlChoice);
+                        System.out.println(wlChoice);
                         //If he has 2 whiteMarbleLeaderCards
                         String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
-                        //System.out.println(chosenMarble);
+                        System.out.println(chosenMarble);
 
                         //Qui invece che outcome vanno messi i broadcast
                         //IN MARKET, GRID E ACTIVATE PRODUCTION

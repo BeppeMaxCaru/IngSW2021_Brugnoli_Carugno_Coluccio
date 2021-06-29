@@ -128,6 +128,15 @@ public class GameController{
 
     public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c) {
 
+        if(choice.equalsIgnoreCase("ROW"))
+        {
+            if(wlChoice.length()!=4) return false;
+        }
+        else
+        {
+            if(wlChoice.length()!=3) return false;
+        }
+
         if(c.contains("1"))
             if (currentPlayer.getPlayerBoard().getResourceMarbles()[1]==null) return false;
 

@@ -11,6 +11,11 @@ import java.io.Serializable;
 public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Serializable {
 
     /**
+     * Quantity of the resource required for the activation
+     */
+    private final int quantity = 5;
+
+    /**
      * Resource cost of the leader card
      */
     private final String requisite;
@@ -57,7 +62,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
             System.out.println("Resources in warehouse + chest + extra " + totalResources);
         }
         //Player needs 5 of the required Resource
-        return totalResources >= 5;
+        return totalResources >= this.quantity;
     }
 
     /**
@@ -74,7 +79,7 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
     @Override
     public void printLeaderCard() {
         System.out.println("EXTRA WAREHOUSE SPACE");
-        System.out.println("req: 5 " + this.requisite);
+        System.out.println("req: " + this.quantity + " " + this.requisite);
         System.out.println("Victory Points: " + this.getVictoryPoints());
         System.out.println("extra " + this.resourceSpace);
         System.out.println();
