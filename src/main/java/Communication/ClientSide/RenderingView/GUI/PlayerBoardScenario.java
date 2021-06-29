@@ -172,7 +172,6 @@ public class PlayerBoardScenario implements Runnable {
                 }
 
                 num = this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(s);
-                System.out.println(s + " " + num);
                 if (num == 1) {
                     if (!first) {
                         imageView(image, 70, 215, root);
