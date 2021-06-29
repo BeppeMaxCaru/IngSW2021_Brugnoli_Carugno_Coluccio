@@ -798,10 +798,11 @@ public class PlotScenarioGUI implements Runnable{
     }
 
     public void activateProductionDevCards(int[] activate, String[] whichInput) {
-        int i;
+        int i, index = 0;
         int numBottons = 0;
         int x = 10;
         StringBuilder string = new StringBuilder();
+
         int[] dimPile = new int[3];
         for(int col = 0; col < 3; col++) {
             int row;
@@ -828,15 +829,16 @@ public class PlotScenarioGUI implements Runnable{
 
         //Creating buttons
         Button[] arrayButtons = new Button[numBottons];
-        for (i = 0; i < numBottons; i++) {
+        for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
             if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i] != null) {
                 Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i].getImage());
-                arrayButtons[i] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 100, img, arrayButtons[i], 250, 200);
-                x = x + 190;
-                root.getChildren().add(arrayButtons[i]);
+                arrayButtons[index] = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 100, img, arrayButtons[index], 250, 200);
+                root.getChildren().add(arrayButtons[index]);
+                index++;
             }
+            x = x + 190;
         }
 
         Button okBtn = new Button("Submit");
