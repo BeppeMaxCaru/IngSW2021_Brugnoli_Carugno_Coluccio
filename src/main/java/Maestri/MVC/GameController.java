@@ -214,7 +214,10 @@ public class GameController{
                     }
                 }
             }
-        } else System.out.println("Card null");
+        } else {
+            System.out.println("Card null");
+            return false;
+        }
 
         for (int k = 0; k < 4; k++) {
             int count = 0;
