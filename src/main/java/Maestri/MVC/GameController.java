@@ -3,6 +3,7 @@ package Maestri.MVC;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
+import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageReceived.UpdateClientPlayerBoardMessage;
@@ -14,7 +15,7 @@ import java.util.concurrent.Executors;
 
 public class GameController{
 
-    private final GameModel gameModel;
+    private GameModel gameModel;
     private int currentPlayerNumber;
 
     private Set<PlayerThread> playerThreads = new HashSet<>();
@@ -97,6 +98,8 @@ public class GameController{
     public Set<PlayerThread> getPlayerThreads() {
         return this.playerThreads;
     }
+
+
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
         System.out.println("Check if you can play the card");
@@ -418,6 +421,10 @@ public class GameController{
         return this.gameModel;
     }
 
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
+
     public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
 
         for (PlayerThread playerThread : this.playerThreads) {
@@ -450,15 +457,19 @@ public class GameController{
 
     public void broadcastPlayerBoards() {
 
-        for (PlayerThread playerThread : this.playerThreads) {
+        //this.gameModel = gameModel;
 
+        for (PlayerThread playerThread : this.playerThreads) {
             try {
+                playerThread.getSender().reset();
                 playerThread.getSender().writeObject(new UpdateClientPlayerBoardMessage(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard()));
-                System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
+                //System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
+                //System.out.println(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("Player boards broadcast not working");
             }
+
         }
 
     }

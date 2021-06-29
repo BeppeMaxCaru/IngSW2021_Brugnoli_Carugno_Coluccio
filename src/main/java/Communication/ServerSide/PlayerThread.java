@@ -62,6 +62,10 @@ public class PlayerThread implements Runnable {
         this.playerThreadNumber = playerThreadNumber;
     }
 
+    public GameController getGameController() {
+        return this.gameController;
+    }
+
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
@@ -378,15 +382,29 @@ public class PlayerThread implements Runnable {
                         //IN MARKET, GRID E ACTIVATE PRODUCTION
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
-                            this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                            //this.gameController.broadcastPlayerBoards();
+
                             //System.out.println("Playerboard sent");
                             UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
                             this.gameController.broadcastMarket(updateMarket);
 
+                            //BROADCAST WORKS BUT CHECK MESSAGE ORDERS
+                            //Before -> ajva passes arguments by value!
+                            //this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                            //this.gameController.broadcastPlayerBoards(this);
+
+                            //this.broadcastPlayerBoards();
+                            //System.out.println(this.gameController.getGameModel().getPlayers()[0].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
+                            //System.out.println(this.gameController.getGameModel().getPlayers()[1].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
+
+                            this.gameController.broadcastPlayerBoards();
+
+
                             this.mainAction = true;
                         }
                     }
+
+                    //this.gameController.broadcastPlayerBoards();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.sendErrorMessage();
@@ -576,5 +594,7 @@ public class PlayerThread implements Runnable {
             System.out.println("Player lost");
         }
     }
+
+
 
 }

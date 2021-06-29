@@ -32,6 +32,7 @@ public class ServerReceiver extends Thread {
             Message object;
 
             try {
+                //this.receiver.reset();
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 //e.printStackTrace();
@@ -41,7 +42,7 @@ public class ServerReceiver extends Thread {
 
             if (object instanceof PingMessage) {
                 try {
-                    System.out.println("ping ok -> connection stable");
+                    //System.out.println("ping ok -> connection stable");
                 } catch (Exception e) {
                     break;
                 }
@@ -79,8 +80,11 @@ public class ServerReceiver extends Thread {
 
             if (object instanceof UpdateClientMarketMessage) {
                 try {
+
                     UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) object;
                     this.clientMain.setMarket(updateClientMarketMessage.getMarket());
+
+                    //UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage)
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -90,6 +94,7 @@ public class ServerReceiver extends Thread {
 
             if (object instanceof UpdateClientDevCardGridMessage) {
                 try {
+
                     UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) object;
                     this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
 
@@ -101,8 +106,10 @@ public class ServerReceiver extends Thread {
 
             if (object instanceof UpdateClientLeaderCardsMessage) {
                 try {
+
                     UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) object;
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
+
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;
@@ -115,6 +122,10 @@ public class ServerReceiver extends Thread {
                     UpdateClientPlayerBoardMessage updateClientPlayerBoardMessage = (UpdateClientPlayerBoardMessage) object;
                     this.clientMain.setPlayerboard(updateClientPlayerBoardMessage.getPlayerboard());
 
+                    //System.out.println(this.clientMain.getPlayerboard().getWareHouse().getWarehouseResources().toString());
+                    //System.out.println("Ricevuto " + updateClientPlayerBoardMessage.getPlayerboard().getWareHouse().getWarehouseResources().toString());
+
+                    //System.out.println("Qui viene fatto update singolo");
                     this.view.update();
                     //System.out.println("Ricevuta playerboard");
 
@@ -133,6 +144,9 @@ public class ServerReceiver extends Thread {
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();
+                    //Using a simple return?
+                    //return
+
                     this.interrupt();
 
                 } catch (Exception e) {
@@ -158,6 +172,8 @@ public class ServerReceiver extends Thread {
                 }
 
             }
+
+            //this.view.update();
 
         }
     }
