@@ -224,15 +224,14 @@ public class Player
                 else
                 {
                     // Add outputResources to the chest
-                    for(int z=0; z<3; z++) {
-                        if(activateCards[3+z]==1)
-                        {
-                            if (whichOutput[z]==4)
-                                redCross++;
-                            else if(whichOutput[z] != -1)
-                                this.playerBoard.getChest().getChestResources().put(resources.get(whichOutput[z]) , this.playerBoard.getChest().getChestResources().get(resources.get(whichOutput[z])) + 1);
+                    if(activateCards[j]==1)
+                    {
+                        if (whichOutput[j-3]==4)
                             redCross++;
-                        }
+                        else if(whichOutput[j-3] != -1)
+                            this.playerBoard.getChest().getChestResources().put(resources.get(whichOutput[j-3]) , this.playerBoard.getChest().getChestResources().get(resources.get(whichOutput[j-3])) + 1);
+                        if(j!=3)
+                            redCross++;
                     }
                 }
             }
