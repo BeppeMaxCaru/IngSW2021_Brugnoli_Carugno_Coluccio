@@ -395,7 +395,7 @@ public class ClientMain{
                         if(paidRes!=2) return false;
                     } else {
                         //Check if player has any cards into the indicated position and it is activated
-                        if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !player.getPlayerLeaderCards()[k-4].isPlayed()) {
+                        if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null) {
                             System.out.println("Card not existing or not activated");
                             return false;
                         }

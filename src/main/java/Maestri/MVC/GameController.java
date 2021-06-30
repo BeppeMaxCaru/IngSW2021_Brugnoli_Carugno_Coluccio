@@ -351,7 +351,7 @@ public class GameController{
                         if(paidRes!=2) return false;
                     } else {
                         //Check if player has any cards into the indicated position and it is activated
-                        if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
+                        if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null) {
                             System.out.println("Card not existing or not activated");
                             return false;
                         }
