@@ -9,6 +9,7 @@ import Message.MessageSent.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.nio.channels.MulticastChannel;
 import java.util.*;
 
 public class PlayerThread implements Runnable {
@@ -94,7 +95,7 @@ public class PlayerThread implements Runnable {
             this.playerSocket.setSoTimeout(300000);
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
-            this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName);
+            this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName + " #" + this.playerThreadNumber);
             //System.out.println("Nickname received " + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
         } catch (Exception e) {
             this.sendErrorMessage();
@@ -155,6 +156,17 @@ public class PlayerThread implements Runnable {
 
         try {
             this.playerSocket.setSoTimeout(300000);
+            //StartingResourcesMessage startingResourcesMessage;
+            //QUI INIZIO
+            /*while (true) {
+                try {
+                    startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
+                    break;
+                } catch (ClassCastException c) {
+
+                }
+            }*/
+            //QUI FINE
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
             while (!startingResourcesMessage.getStartingRes().isEmpty())
                 currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
@@ -186,9 +198,20 @@ public class PlayerThread implements Runnable {
         {
             try {
                 this.playerSocket.setSoTimeout(300000);
+                //DiscardLeaderMessage discardLeaderMessage;
+
+                /*while (true) {
+                    try {
+                       discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
+                       break;
+                    } catch (ClassCastException c) {
+
+                    }
+                }*/
+
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
-                System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
+                //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
 
                 this.sender.reset();
@@ -206,23 +229,18 @@ public class PlayerThread implements Runnable {
             }
         }
 
-        //this.ping();
-
-        /*try {
+        try {
+            this.playerSocket.setSoTimeout(0);
             this.sender.reset();
-            UpdateClientLeaderCardsMessage leaderCardsMessage = new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards());
-            this.sender.writeObject(leaderCardsMessage);
-            //System.out.println("Leaders sent");
+            this.sender.writeObject(new TurnOverMessage());
         } catch (Exception e) {
-            this.sendErrorMessage();
-            this.removePlayer();
-            System.out.println("Not leader cards sent");
-            return;
-        }*/
+            e.printStackTrace();
+        }
 
-        //this.ping();
+        while (!this.gameController.checkSetupEnd());
 
         try {
+            this.sender.reset();
             if(this.playerThreadNumber==0)
             {
                 System.out.println("Turn of player " + this.playerThreadNumber);
@@ -238,11 +256,11 @@ public class PlayerThread implements Runnable {
         }
 
 
-        try {
+        /*try {
             this.playerSocket.setSoTimeout(0);
         } catch (SocketException e) {
             e.printStackTrace();
-        }
+        }*/
 
         //this.playerSocket.setSoTimeout(10000);
 
@@ -384,19 +402,9 @@ public class PlayerThread implements Runnable {
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
 
                             //System.out.println("Playerboard sent");
-                            UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
+                            //UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
                             //this.gameController.broadcastMarket(updateMarket);
                             this.gameController.broadCastMarketUpdated();
-
-                            //BROADCAST WORKS BUT CHECK MESSAGE ORDERS
-                            //Before -> ajva passes arguments by value!
-                            //this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                            //this.gameController.broadcastPlayerBoards(this);
-
-                            //this.broadcastPlayerBoards();
-                            //System.out.println(this.gameController.getGameModel().getPlayers()[0].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
-                            //System.out.println(this.gameController.getGameModel().getPlayers()[1].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
-
                             this.gameController.broadcastPlayerBoards();
 
 
@@ -458,16 +466,17 @@ public class PlayerThread implements Runnable {
 
                                     this.sender.reset();
                                     this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                                    this.gameController.broadcastDevCardGridUpdated();
+
+
 
                                     //System.out.println("Playerboard sent");
 
-                                    this.sender.reset();
-                                    UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
+                                    //this.sender.reset();
+                                    //UpdateClientDevCardGridMessage updateClientDevCardGridMessage = new UpdateClientDevCardGridMessage(this.gameController.getGameModel().getDevelopmentCardsDecksGrid());
+                                    //this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
 
-                                    this.gameController.broadcastDevCardsGrid(updateClientDevCardGridMessage);
-
-                                    //this.gameController.broadcastPlayerBoards();
-
+                                    //this.gameController.broadcastDevCardGridUpdated();
 
                                     //System.out.println("DevCards sent");
                                     this.mainAction = true;
@@ -530,6 +539,7 @@ public class PlayerThread implements Runnable {
                 {
                     try {
                         //this.playerSocket.setSoTimeout(0);
+                        this.sender.reset();
                         this.sender.writeObject(new TurnOverMessage());
                     } catch (IOException e) {
                         e.printStackTrace();

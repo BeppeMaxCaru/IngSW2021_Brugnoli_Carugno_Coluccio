@@ -4,6 +4,7 @@ import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Message.MessageReceived.UpdateClientDevCardGridMessage;
 import Message.MessageReceived.UpdateClientMarketMessage;
 import Message.MessageReceived.UpdateClientPlayerBoardMessage;
@@ -437,7 +438,22 @@ public class GameController{
         this.gameModel = gameModel;
     }
 
-    public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
+    public boolean checkSetupEnd() {
+
+        int allPlayerLeaderCards = 0;
+        for (PlayerThread playerThread : this.playerThreads) {
+            for (LeaderCard leaderCard : playerThread.getGameController().getGameModel().getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerLeaderCards()) {
+                if (leaderCard != null) allPlayerLeaderCards = allPlayerLeaderCards + 1;
+            }
+        }
+        //System.out.println(allPlayerLeaderCards);
+        if (allPlayerLeaderCards == this.playerThreads.size() * 2) {
+            return true;
+        } else return false;
+
+    }
+
+    /*public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
 
         for (PlayerThread playerThread : this.playerThreads) {
 
@@ -452,7 +468,7 @@ public class GameController{
             }
         }
 
-    }
+    }*/
 
     public void broadCastMarketUpdated () {
 
@@ -469,10 +485,9 @@ public class GameController{
 
         }
 
-
     }
 
-    public void broadcastDevCardsGrid (UpdateClientDevCardGridMessage updateClientDevCardGridMessage) {
+    /*public void broadcastDevCardsGrid (UpdateClientDevCardGridMessage updateClientDevCardGridMessage) {
 
         for (PlayerThread playerThread : this.playerThreads) {
 
@@ -485,9 +500,9 @@ public class GameController{
             }
         }
 
-    }
+    }*/
 
-    public void broadcastDeveCardGridUpdated () {
+    public void broadcastDevCardGridUpdated() {
         for (PlayerThread playerThread : this.playerThreads) {
 
             try {

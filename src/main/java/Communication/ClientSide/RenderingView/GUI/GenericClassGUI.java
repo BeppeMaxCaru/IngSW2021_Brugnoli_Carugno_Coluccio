@@ -49,11 +49,6 @@ public class GenericClassGUI {
                             case "discardStartingLeaders":
                                 //Before
                                 handlerGUI.getSyncScenarioGUI().discardStartingLeaders(1, -1);
-                                //Ali it seems that your code may be still actually better than mine :)
-                                //That's why i left your method
-
-                                //After
-                                //handlerGUI.getSyncScenarioGUI().nuovoscarto();
                                 break;
                             case "matchHasStarted":
                                 handlerGUI.getSyncScenarioGUI().matchHasStarted();
