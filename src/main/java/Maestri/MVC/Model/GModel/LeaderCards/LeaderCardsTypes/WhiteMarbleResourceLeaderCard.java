@@ -110,4 +110,8 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
     public String getImage() {
         return this.image;
     }
+
+    public Marble getWhiteMarbleResource() {
+        return this.whiteMarbleResource;
+    }
 }
