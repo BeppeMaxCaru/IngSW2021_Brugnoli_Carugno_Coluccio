@@ -313,6 +313,7 @@ public class GameController{
                             break;
 
                     if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                        System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
@@ -323,9 +324,7 @@ public class GameController{
                         System.out.println(keys);
                         System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
                         totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
-                        System.out.println(totalResources);
                     }
-
 
                     int paidRes = 0;
                     for(int r=0; r<in.length(); r=r+3) {
@@ -336,14 +335,37 @@ public class GameController{
                     System.out.println("Resources paid: " + paidRes);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
-                    if(paidRes<totalResources) return false;
+                    if(paidRes!=totalResources) return false;
 
                 } else {
-                    if(k != 3) {
+                    if(k == 3) {
+                        int paidRes = 0;
+                        for(int r=0; r<in.length(); r=r+3) {
+                            paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
+                        }
+
+                        System.out.println("Resources to pay: 2");
+                        System.out.println("Resources paid: " + paidRes);
+                        //Confront them with whichInput string: resourceCode - quantity - storage
+                        //If player indicated less resources than that he had to pay, error
+                        if(paidRes!=2) return false;
+                    } else {
                         //Check if player has any cards into the indicated position and it is activated
                         if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
+                            System.out.println("Card not existing or not activated");
                             return false;
                         }
+
+                        int paidRes = 0;
+                        for(int r=0; r<in.length(); r=r+3) {
+                            paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
+                        }
+
+                        System.out.println("Resources to pay: 1");
+                        System.out.println("Resources paid: " + paidRes);
+                        //Confront them with whichInput string: resourceCode - quantity - storage
+                        //If player indicated less resources than that he had to pay, error
+                        if(paidRes!=1) return false;
                     }
                 }
 
@@ -395,14 +417,14 @@ public class GameController{
                 }
 
                 //Check if player inserted all necessary resources to activate the production
-
+                System.out.println("Paid:");
                 for (String res : paidChestResources.keySet())
                 {
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
-                    for(String extraRes : paidWarehouseResources.keySet())
-                    {
-                        // if(extraRes.contains(res))
-                           // paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    if(paidWarehouseResources.get("extra"+res)!=null)
+                       paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    if(paidChestResources.get(res)!=0){
+                        System.out.println(paidChestResources.get(res)+" "+res);
                     }
                 }
 
@@ -419,9 +441,13 @@ public class GameController{
                         }
                     }
                 } else {
-                       //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
-                           //return false;
-                        //}
+                    if(k!=3){
+                        if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]) < 1) {
+                            System.out.println(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]);
+                            System.out.println("Paid: " + paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]));
+                            return false;
+                        }
+                    }
                 }
             }
         }
@@ -484,6 +510,7 @@ public class GameController{
             }
 
         }
+
 
     }
 

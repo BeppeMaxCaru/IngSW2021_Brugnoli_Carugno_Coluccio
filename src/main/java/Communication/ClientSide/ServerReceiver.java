@@ -70,7 +70,8 @@ public class ServerReceiver extends Thread {
 
             if(object instanceof TurnOverMessage) {
                 try {
-                    this.view.endTurn();
+                    TurnOverMessage turnOverMessage = (TurnOverMessage) object;
+                    this.view.endTurn(turnOverMessage.getTurn());
                 } catch (Exception e) {
                     e.printStackTrace();
                     this.view.receiverError(e);

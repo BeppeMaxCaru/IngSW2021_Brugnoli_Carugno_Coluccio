@@ -232,7 +232,7 @@ public class PlayerThread implements Runnable {
         try {
             this.playerSocket.setSoTimeout(0);
             this.sender.reset();
-            this.sender.writeObject(new TurnOverMessage());
+            this.sender.writeObject(new TurnOverMessage("SETUP"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -247,7 +247,7 @@ public class PlayerThread implements Runnable {
                 this.sender.writeObject(new YourTurnMessage());
                 //this.playerSocket.setSoTimeout(10000);
             } else {
-                this.sender.writeObject(new TurnOverMessage());
+                this.sender.writeObject(new TurnOverMessage("TURN"));
                 //this.playerSocket.setSoTimeout(0);
             }
         } catch (Exception e) {
@@ -520,7 +520,7 @@ public class PlayerThread implements Runnable {
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.reset();
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                            System.out.println("Playerboard sent");
+                            System.out.println("PlayerBoard sent");
                             this.mainAction = true;
                         } else System.out.println("Not valid controller check");
                     }
@@ -540,7 +540,7 @@ public class PlayerThread implements Runnable {
                     try {
                         //this.playerSocket.setSoTimeout(0);
                         this.sender.reset();
-                        this.sender.writeObject(new TurnOverMessage());
+                        this.sender.writeObject(new TurnOverMessage("TURN"));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -317,8 +317,7 @@ public class ClientMain{
         return true;
     }
 
-    public boolean checkLocalActivateProd(Player currentPlayer, int[] activation, String[] whichInput) {
-
+    public boolean checkLocalActivateProd(Player player, int[] activation, String[] whichInput) {
         int act = 0;
         for (int i : activation) act = act + i;
         System.out.println("Powers activated: "+act);
@@ -354,23 +353,22 @@ public class ClientMain{
 
                     //Check if player has any cards into the indicated position
                     for (j = 2; j > 0; j--)
-                        if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                        if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
                             break;
 
-                    if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                    if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                        System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
                     //Check how many resources player has to spend
                     int totalResources = 0;
-                    for(String keys : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String keys : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
                         System.out.println(keys);
-                        System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
-                        totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
-                        System.out.println(totalResources);
+                        System.out.println(player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
+                        totalResources = totalResources + player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
                     }
-
 
                     int paidRes = 0;
                     for(int r=0; r<in.length(); r=r+3) {
@@ -381,14 +379,37 @@ public class ClientMain{
                     System.out.println("Resources paid: " + paidRes);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
-                    if(paidRes<totalResources) return false;
+                    if(paidRes!=totalResources) return false;
 
                 } else {
-                    if(k != 3) {
+                    if(k == 3) {
+                        int paidRes = 0;
+                        for(int r=0; r<in.length(); r=r+3) {
+                            paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
+                        }
+
+                        System.out.println("Resources to pay: 2");
+                        System.out.println("Resources paid: " + paidRes);
+                        //Confront them with whichInput string: resourceCode - quantity - storage
+                        //If player indicated less resources than that he had to pay, error
+                        if(paidRes!=2) return false;
+                    } else {
                         //Check if player has any cards into the indicated position and it is activated
-                        if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !currentPlayer.getPlayerLeaderCards()[k-4].isPlayed()) {
+                        if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null || !player.getPlayerLeaderCards()[k-4].isPlayed()) {
+                            System.out.println("Card not existing or not activated");
                             return false;
                         }
+
+                        int paidRes = 0;
+                        for(int r=0; r<in.length(); r=r+3) {
+                            paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
+                        }
+
+                        System.out.println("Resources to pay: 1");
+                        System.out.println("Resources paid: " + paidRes);
+                        //Confront them with whichInput string: resourceCode - quantity - storage
+                        //If player indicated less resources than that he had to pay, error
+                        if(paidRes!=1) return false;
                     }
                 }
 
@@ -408,7 +429,7 @@ public class ClientMain{
                             break;
                         }
                         case "L": {
-                            if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(value))==null) {
+                            if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(value))==null) {
                                 System.out.println("Extra warehouse error");
                                 return false;
                             }
@@ -425,45 +446,52 @@ public class ClientMain{
 
                 //Check if player has each correct resource in each correct storage
 
-                for(String keys : paidWarehouseResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys)<paidWarehouseResources.get(keys)) {
+                for(String keys : paidWarehouseResources.keySet()) {
+                    if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys) < paidWarehouseResources.get(keys)) {
                         System.out.println("Incorrect warehouse resources");
                         return false;
                     }
-                for(String keys : paidChestResources.keySet())
-                    if(currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
+                }
+
+                for(String keys : paidChestResources.keySet()) {
+                    if (player.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
                         System.out.println("Incorrect chest resources");
                         return false;
                     }
+                }
 
                 //Check if player inserted all necessary resources to activate the production
-
+                System.out.println("Paid:");
                 for (String res : paidChestResources.keySet())
                 {
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
-                    for(String extraRes : paidWarehouseResources.keySet())
-                    {
-                        // if(extraRes.contains(res))
-                        // paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    if(paidWarehouseResources.get("extra"+res)!=null)
+                        paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
+                    if(paidChestResources.get(res)!=0){
+                        System.out.println(paidChestResources.get(res)+" "+res);
                     }
                 }
 
                 if(k<3)
                 {
-                    for(String res : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String res : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
+                        if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
                             System.out.println(res);
                             System.out.println(paidChestResources.get(res));
-                            System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
+                            System.out.println(player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
                             System.out.println("Not enough resources");
                             return false;
                         }
                     }
                 } else {
-                    //if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[j-4]) < 1) {
-                    //return false;
-                    // }
+                    if(k!=3){
+                        if (paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]) < 1) {
+                            System.out.println(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]);
+                            System.out.println("Paid: " + paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]));
+                            return false;
+                        }
+                    }
                 }
             }
         }

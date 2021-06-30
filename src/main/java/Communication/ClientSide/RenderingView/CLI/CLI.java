@@ -458,12 +458,17 @@ public class CLI implements RenderingView {
         //Receives column or row
         System.out.println("Do you want to pick row resources or column resources?");
         System.out.println("Write 'ROW' or 'COLUMN'.");
+        System.out.println("Write BACK if you want to chose another action");
         String parameter = this.input.nextLine().toUpperCase();
-        while (!parameter.equals("ROW") && !parameter.equals("COLUMN")) {
+        while (!parameter.equals("ROW") && !parameter.equals("COLUMN") && !parameter.equals("BACK")) {
             System.err.println("Not valid parameter");
             System.out.println("Write 'ROW' or 'COLUMN'.");
+            System.out.println("Write BACK if you want to chose another action");
             parameter = this.input.nextLine().toUpperCase();
         }
+
+        if(parameter.equals("BACK"))
+                return new int[]{-1, 0};
 
         //Receives index
         if (parameter.equals("ROW")) {
@@ -921,7 +926,7 @@ public class CLI implements RenderingView {
             res = input.nextLine().toUpperCase();
             while (!res.equals("COINS") && !res.equals("STONES") && !res.equals("SERVANTS") && !res.equals("SHIELDS") && !res.equals("STOP")) {
                 System.out.println("Choose a correct resource");
-                System.out.println("Which starting resource do you want to pick?");
+                System.out.println("Which input resource do you want to spend?");
                 System.out.println("Write COINS, STONES, SERVANTS or SHIELDS.");
                 System.out.println("Write STOP at the end.");
                 res = input.nextLine().toUpperCase();
@@ -1024,8 +1029,19 @@ public class CLI implements RenderingView {
     }
 
     @Override
-    public void endTurn() {
-        System.out.println("Your turn has ended, wait for other players");
+    public void endTurn(String turn) {
+        switch (turn){
+            case "SETUP":
+            {
+                System.out.println("Your setup has ended, wait for other players setup.");
+                break;
+            }
+            case "TURN":
+            {
+                System.out.println("Your turn has ended, wait for other players.");
+                break;
+            }
+        }
     }
 
     @Override

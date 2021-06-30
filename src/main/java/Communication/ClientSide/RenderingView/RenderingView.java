@@ -1,6 +1,5 @@
 package Communication.ClientSide.RenderingView;
 
-import Message.Message;
 import Message.MessageReceived.GameOverMessage;
 
 import java.io.ObjectInputStream;
@@ -19,7 +18,7 @@ public interface RenderingView {
         e.printStackTrace();
     }
 
-    default void endTurn(){
+    default void endTurn(String turn){
     }
 
     default void quit(){

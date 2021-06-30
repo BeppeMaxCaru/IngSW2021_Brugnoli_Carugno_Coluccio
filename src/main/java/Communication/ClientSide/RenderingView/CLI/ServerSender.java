@@ -80,7 +80,7 @@ public class ServerSender extends Thread {
 
 
                                     //For testing
-                                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+                                    //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
 
 
@@ -109,6 +109,7 @@ public class ServerSender extends Thread {
                                 int[] coordinates = this.cli.getMarketCoordinates();
                                 String parameter;
                                 int index;
+                                if(coordinates[0] == -1) break;
                                 if(coordinates[0] == 0) parameter = "ROW";
                                 else parameter = "COLUMN";
                                 index = coordinates[1];

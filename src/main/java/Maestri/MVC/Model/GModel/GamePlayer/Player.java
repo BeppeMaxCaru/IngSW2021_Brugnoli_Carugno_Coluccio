@@ -4,6 +4,10 @@ import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.DiscountDevelopmentCardsLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraProductionPowerLeaderCard;
+import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.WhiteMarbleResourceLeaderCard;
+import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -273,6 +277,32 @@ public class Player
 
         this.playerLeaderCards[check].activateAbility(this.playerBoard);
         this.playerBoard.sumVictoryPoints(this.playerLeaderCards[check].getVictoryPoints());
+
+        if(this.playerLeaderCards[0].isPlayed() && this.playerLeaderCards[1].isPlayed()){
+            if(this.playerLeaderCards[0].getClass().equals(this.playerLeaderCards[1].getClass())){
+                if(this.playerLeaderCards[0] instanceof DiscountDevelopmentCardsLeaderCard){
+                    if(((DiscountDevelopmentCardsLeaderCard) this.playerLeaderCards[0]).getDiscount().equals(this.playerBoard.getDevelopmentCardDiscount()[1])){
+                        String temp = this.playerBoard.getDevelopmentCardDiscount()[1];
+                        this.playerBoard.getDevelopmentCardDiscount()[1]=this.playerBoard.getDevelopmentCardDiscount()[0];
+                        this.playerBoard.getDevelopmentCardDiscount()[0]=temp;
+                    }
+                }
+                if(this.playerLeaderCards[0] instanceof ExtraProductionPowerLeaderCard){
+                    if(((ExtraProductionPowerLeaderCard) this.playerLeaderCards[0]).getInput().equals(this.playerBoard.getExtraProductionPowerInput()[1])){
+                        String temp = this.playerBoard.getExtraProductionPowerInput()[1];
+                        this.playerBoard.getExtraProductionPowerInput()[1]=this.playerBoard.getExtraProductionPowerInput()[0];
+                        this.playerBoard.getExtraProductionPowerInput()[0]=temp;
+                    }
+                }
+                if(this.playerLeaderCards[0] instanceof WhiteMarbleResourceLeaderCard){
+                    if(((WhiteMarbleResourceLeaderCard) this.playerLeaderCards[0]).getWhiteMarbleResource().equals(this.playerBoard.getResourceMarbles()[1])){
+                        Marble temp = this.playerBoard.getResourceMarbles()[1];
+                        this.playerBoard.getResourceMarbles()[1]=this.playerBoard.getResourceMarbles()[0];
+                        this.playerBoard.getResourceMarbles()[0]=temp;
+                    }
+                }
+            }
+        }
 
         //System.out.println("Esplode");
 

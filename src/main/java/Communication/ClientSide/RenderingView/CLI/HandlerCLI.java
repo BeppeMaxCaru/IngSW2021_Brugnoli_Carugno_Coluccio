@@ -143,7 +143,7 @@ public class HandlerCLI {
 
                 try {
 
-                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+                    //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
                     //Before
                     //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());

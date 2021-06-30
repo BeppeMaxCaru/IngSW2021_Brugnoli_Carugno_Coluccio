@@ -211,7 +211,7 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     @Override
-    public void endTurn() {
+    public void endTurn(String turn) {
         Platform.runLater(this.waitForYourTurnScenario);
     }
 
