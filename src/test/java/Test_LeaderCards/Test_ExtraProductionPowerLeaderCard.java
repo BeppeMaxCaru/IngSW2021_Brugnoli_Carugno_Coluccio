@@ -88,7 +88,7 @@ public class Test_ExtraProductionPowerLeaderCard {
         ExtraProductionPowerLeaderCard card=new ExtraProductionPowerLeaderCard(new DevelopmentCard("YELLOW", 2 ), "SHIELDS",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-53-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
