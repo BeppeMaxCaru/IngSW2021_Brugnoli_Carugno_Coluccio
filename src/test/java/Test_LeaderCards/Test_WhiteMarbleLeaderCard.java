@@ -99,7 +99,7 @@ public class Test_WhiteMarbleLeaderCard {
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble(),
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-61-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -110,7 +110,7 @@ public class Test_WhiteMarbleLeaderCard {
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble(),
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-61-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertNull(players[0].getPlayerLeaderCards()[0]);
     }
 
@@ -119,14 +119,12 @@ public class Test_WhiteMarbleLeaderCard {
         players[0] = new Player("Beppe", 0);
 
         Market market = new Market();
-        for (int i = 0; i < 3; i++) {
-            System.out.println(market.getMarketArrangement()[i][0]);
-        }
+        market.printMarket();
 
         WhiteMarbleResourceLeaderCard card=new WhiteMarbleResourceLeaderCard("YELLOW", "BLUE", new PurpleMarble(),
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-61-1.jpg");
         card.activateAbility(players[0].getPlayerBoard());
-        //market.updateColumn(0, players, 0, new Scanner(System.in), new PrintWriter(System.out));
+        market.updateColumn(0, players, 0, "WWW", "000");
 
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
         System.out.println(players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("STONES"));

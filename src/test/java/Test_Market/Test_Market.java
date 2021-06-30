@@ -6,9 +6,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.MarbleMarket.Market;
 import org.junit.jupiter.api.Test;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
 public class Test_Market {
     Player[] players= new Player[2];
     Market market = new Market();

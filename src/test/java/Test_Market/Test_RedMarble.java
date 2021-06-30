@@ -23,7 +23,7 @@ public class Test_RedMarble {
     public void tryDrawMarble1(){
         players[0] = new Player("Beppe", 0);
         Marble marble = new RedMarble();
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, null, null);
         assertEquals(1,players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -33,7 +33,7 @@ public class Test_RedMarble {
         players[0] = new Player("Beppe", 0);
         players[1] = new Player("Simo", 1);
         Marble marble = new RedMarble();
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, null, null);
         assertEquals(0,players[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 }

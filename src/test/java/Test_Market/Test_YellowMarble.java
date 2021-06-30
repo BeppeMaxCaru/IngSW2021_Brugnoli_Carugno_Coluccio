@@ -30,7 +30,7 @@ public class Test_YellowMarble {
     public void tryDrawMarble1() {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(1,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
    }
 
@@ -39,9 +39,9 @@ public class Test_YellowMarble {
     public void tryDrawMarble2() {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(3,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
     }
 
@@ -51,9 +51,9 @@ public class Test_YellowMarble {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
         players[1] = new Player("Simo", 1);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(0,players[1].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
     }
 
@@ -63,10 +63,10 @@ public class Test_YellowMarble {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
         players[1] = new Player("Simo", 1);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(3,players[0].getPlayerBoard().getWareHouse().getWarehouseResources().get("COINS"));
     }
 
@@ -76,10 +76,10 @@ public class Test_YellowMarble {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
         players[1] = new Player("Simo", 1);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(1,players[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -89,10 +89,10 @@ public class Test_YellowMarble {
         Marble marble = new YellowMarble();
         players[0] = new Player("Beppe", 0);
         players[1] = new Player("Simo", 1);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
-        //marble.drawMarble(players,0);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
+        marble.drawMarble(players,0, "W", null);
         assertEquals(0,players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 

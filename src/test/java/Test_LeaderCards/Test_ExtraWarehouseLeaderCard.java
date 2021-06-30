@@ -6,10 +6,6 @@ import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
 import org.junit.jupiter.api.Test;
 
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-
 public class Test_ExtraWarehouseLeaderCard {
 
     Player[] players = new Player[3];
@@ -81,7 +77,7 @@ public class Test_ExtraWarehouseLeaderCard {
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -92,7 +88,7 @@ public class Test_ExtraWarehouseLeaderCard {
         ExtraWarehouseSpaceLeaderCard card=new ExtraWarehouseSpaceLeaderCard("C0INS", "STONES",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-57-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertNull(players[0].getPlayerLeaderCards()[0]);
     }
 

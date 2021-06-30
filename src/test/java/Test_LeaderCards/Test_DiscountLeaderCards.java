@@ -88,7 +88,7 @@ public class Test_DiscountLeaderCards {
         DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertEquals(1, players[0].getPlayerBoard().getFaithPath().getCrossPosition());
     }
 
@@ -99,7 +99,7 @@ public class Test_DiscountLeaderCards {
         DiscountDevelopmentCardsLeaderCard card=new DiscountDevelopmentCardsLeaderCard("YELLOW", "GREEN", "SERVANTS",
                 "Masters of Renaissance_Cards_FRONT_3mmBleed_1-49-1.jpg");
         players[0].getPlayerLeaderCards()[0]=card;
-        //players[0].discardLeaderCard(new Scanner(System.in), new PrintWriter(System.out));
+        players[0].discardLeaderCard(0);
         assertNull(players[0].getPlayerLeaderCards()[0]);
     }
 
