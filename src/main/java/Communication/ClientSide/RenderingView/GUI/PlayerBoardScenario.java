@@ -55,7 +55,7 @@ public class PlayerBoardScenario implements Runnable {
         else y = 20;
         // x
         for(int i = 0; i < redCross; i++) {
-             if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 33;
+             if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 34;
         }
 
         Image image = new Image("redCross.png");
@@ -70,7 +70,7 @@ public class PlayerBoardScenario implements Runnable {
             else y = 20;
             // x
             for(int i = 0; i < blackCross; i++) {
-                if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 35;
+                if(i != 2 && i != 3 && i != 9 && i != 10 && i != 16 && i != 17) x+= 34;
             }
 
             Image image2 = new Image("croce.png");
@@ -247,7 +247,6 @@ public class PlayerBoardScenario implements Runnable {
         int x = 55;
         for(String key: this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().keySet()) {
             if(key.contains("extra")) {
-                num++;
                 for (int i = 0; i < this.handlerGUI.getClientMain().getPlayerboard().getWareHouse().getWarehouseResources().get(key); i++) {
                     switch (key) {
                         case "extraCOINS":
@@ -264,8 +263,9 @@ public class PlayerBoardScenario implements Runnable {
                             break;
                     }
                     imageView(image, x, 525, root);
-                    if(num == 2) x = +200;
+                    if(num == 2) x += 260;
                     else x += 60;
+                    num++;
                 }
             }
         }

@@ -297,26 +297,23 @@ public class PlotScenarioGUI implements Runnable{
                         resource[i] = resourceMarbles(this.handlerGUI.getClientMain().getMarket().getMarketArrangement()[finalK - 4][i].getColour());
                     }
                 }
-                // Se è stata attivata la carta leader delle white marble
-                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null) {
-                    int i;
-                    for(i = 0; i < resource.length; i++) {
-                        if(resource[i].equals("white"))
-                            break;
-                    }
-                    // Se ci sono white marble nella riga/colonna scelta
-                    if(i != resource.length) whiteMarble(coordinates, resource, i, whichWl, new StringBuilder());
-                    // Se non ci sono white marble
+                int i;
+                for(i = 0; i < resource.length; i++) {
+                    if(resource[i].equals("white"))
+                        break;
                 }
-                // Se è stata attivata solo la carta leader di extra warehouse
-                if(finalCheckExtraSpace) {
+                // Se è stata attivata la carta leader delle white marble e ci sono white marble nella riga/colonna scelta
+                if(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0] != null && i < resource.length)
+                    whiteMarble(coordinates, resource, i, whichWl, new StringBuilder());
+                // Se è stata attivata la carta leader di extra warehouse
+                else if(finalCheckExtraSpace) {
                     int j = 0;
                     while(j < resource.length && (resource[j].equals("white") || resource[j].equals("redCross"))) {
                         whichWl.append("W");
                         j++;
                     }
                     if(j == resource.length) {
-                        if(coordinates[0] == 0) sendMessageMarket("ROW", coordinates, "WWWW", "X");
+                        if(coordinates[0] == 0) sendMessageMarket("ROW", coordinates, "WWW", "X");
                         else sendMessageMarket("COLUMN", coordinates, "WWWW", "X");
                     }
                     else putResources(coordinates, resource, j, whichWl, new StringBuilder("X"));
@@ -345,6 +342,7 @@ public class PlotScenarioGUI implements Runnable{
         Button button2 = new Button();
 
         String resource1 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
+        System.out.println(resource1);
         Image image1 = new Image(resource1);
         this.handlerGUI.getGenericClassGUI().createIconButton(10,50, image1, button1, 80, 80);
 
@@ -365,6 +363,8 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setTitle("Choose the resource for the white marble.");
         this.stage.setScene(scene);
         this.stage.show();
+
+        System.out.println(resource1);
 
         button1.setOnAction(e -> {
             resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
@@ -549,7 +549,6 @@ public class PlotScenarioGUI implements Runnable{
     public void buyDevelopmentCard() {
         Group root = new Group();
         //Creating buttons
-        ArrayList<Integer> nonButton = new ArrayList<>();
         Button[] arrayButtons = new Button[12];
         String[][] pickedResources = new String[2][4];
         for (int r = 0; r < 2; r++) {
@@ -571,7 +570,6 @@ public class PlotScenarioGUI implements Runnable{
                     this.handlerGUI.getGenericClassGUI().createIconButton(x, y, img, arrayButtons[index], 450, 150);
                     root.getChildren().add(arrayButtons[index]);
                 }
-                else nonButton.add(index);
                 index++;
                 x += 200;
             }
@@ -597,29 +595,28 @@ public class PlotScenarioGUI implements Runnable{
         int row = 0, column = 0;
         int[] coordinates = new int[2];
         for(int i = 0; i < 12; i++) {
-            while(nonButton.contains(i) && i < 11) {
-                i++;
-                if (i == 4) {
-                    column = 0;
-                    row = 1;
-                } else if (i == 8) {
-                    column = 0;
-                    row = 2;
-                }
+            if (i == 4) {
+                column = 0;
+                row = 1;
+            } else if (i == 8) {
+                column = 0;
+                row = 2;
             }
-            int finalRow = row;
-            int finalColumn = column;
-            arrayButtons[i].setOnAction(e -> {
-                coordinates[0] = finalRow;
-                coordinates[1] = finalColumn;
-                DevelopmentCard developmentCard = this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
-                int numResource;
-                if(developmentCard.getDevelopmentCardCost().get("COINS") != 0) numResource = 0;
-                else if(developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0) numResource = 1;
-                else if(developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0) numResource = 2;
-                else numResource = 3;
-                putPayedResource(coordinates, numResource, pickedResources, developmentCard, 0);
-            });
+            if (arrayButtons[i] != null) {
+                int finalRow = row;
+                int finalColumn = column;
+                arrayButtons[i].setOnAction(e -> {
+                    coordinates[0] = finalRow;
+                    coordinates[1] = finalColumn;
+                    DevelopmentCard developmentCard = this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[coordinates[0]][coordinates[1]][0];
+                    int numResource;
+                    if (developmentCard.getDevelopmentCardCost().get("COINS") != 0) numResource = 0;
+                    else if (developmentCard.getDevelopmentCardCost().get("SERVANTS") != 0) numResource = 1;
+                    else if (developmentCard.getDevelopmentCardCost().get("SHIELDS") != 0) numResource = 2;
+                    else numResource = 3;
+                    putPayedResource(coordinates, numResource, pickedResources, developmentCard, 0);
+                });
+            }
             column++;
         }
     }
@@ -1173,6 +1170,7 @@ public class PlotScenarioGUI implements Runnable{
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ + 4] = 1;
                     whichInput[finalJ + 4] = this.handlerGUI.getClientMain().getPlayerboard().getExtraProductionPowerInput()[finalJ];
+                    System.out.println(whichInput[finalJ + 4]);
                     switch (whichInput[finalJ + 4]) {
                         case "COINS":
                             whichInput[finalJ + 4] = "0";

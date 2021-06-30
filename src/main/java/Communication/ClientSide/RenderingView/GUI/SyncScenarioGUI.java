@@ -128,12 +128,8 @@ public class SyncScenarioGUI {
             int finalI = i;
             arrayButtons[i].setOnAction(e -> {
                 // MultiPlayer
-                //int bt = i;
-
                 if(this.handlerGUI.getGameMode() == 1) {
                     this.handlerGUI.getMsg().sendDiscardedLeader(finalI);
-                    //this.handlerGUI.updateLeaderCard();
-
                     if (times == 2) {
                         this.handlerGUI.updateLeaderCard();
                         this.handlerGUI.AsyncReceiver();
@@ -143,7 +139,6 @@ public class SyncScenarioGUI {
                 }
                 // Single Player
                 else {
-
                     if (times == 2) {
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(cardDiscarded);
                         this.handlerGUI.getClientMain().getLocalPlayers()[0].discardLeaderCard(finalI);

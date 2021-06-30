@@ -75,7 +75,6 @@ public class InitialScenarioGUI {
         this.stage.show();
 
         okBtn.setOnAction(e -> {
-            //this.clientMain.setNickname(field.getText());
             this.handlerGUI.getClientMain().setNickname(field.getText());
             multiOrSinglePlayers();
         });
