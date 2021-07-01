@@ -1095,7 +1095,7 @@ public class CLI implements RenderingView {
     public void setupError(Exception e) {
         //e.printStackTrace();
         System.err.println("Error during setup");
-        System.exit(-2);
+        System.exit(-1);
     }
 
     @Override
@@ -1126,14 +1126,14 @@ public class CLI implements RenderingView {
     public void receiverError(Exception e){
         //e.printStackTrace();
         System.err.println("Error occurred while receiving data");
-        System.exit(-1);
+        System.exit(-3);
     }
 
     @Override
     public void senderError(Exception e){
         //e.printStackTrace();
         System.err.println("Error occurred while sending data");
-        System.exit(-1);
+        System.exit(-2);
     }
 
     @Override

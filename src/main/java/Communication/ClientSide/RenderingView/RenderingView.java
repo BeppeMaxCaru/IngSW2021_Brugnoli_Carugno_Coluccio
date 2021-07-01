@@ -61,4 +61,6 @@ public interface RenderingView {
 
     default void receivePing(ObjectInputStream objectInputStream) {}
 
+    default void clientError(String clientError) {}
+
 }
