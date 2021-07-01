@@ -56,9 +56,11 @@ public class GenericClassGUI {
                             case "quit0":
                                 System.exit(0);
                                 break;
-                            case "quit1":
+                            case "quit1": {
                                 handlerGUI.getMsg().sendQuitMessage();
+                                LoadWTFOnTimer("quit0");
                                 break;
+                            }
                         }
 
                     } catch (Exception e) {
