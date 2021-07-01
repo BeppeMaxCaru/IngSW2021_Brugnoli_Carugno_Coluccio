@@ -12,26 +12,51 @@ import Message.MessageReceived.GameOverMessage;
 import java.io.ObjectInputStream;
 import java.util.*;
 
+/**
+ * Contains all the CLI messages and receives keyboard inputs from the user
+ */
 public class CLI implements RenderingView {
 
+    /**
+     * Contains the client-side game elements
+     */
     private final ClientMain main;
+
+    /**
+     * Source of user inputs
+     */
     private final Scanner input;
 
+    /**
+     * Initialized the CLI class
+     * @param main contains the client-side game elements
+     */
     public CLI(ClientMain main){
         this.main = main;
         this.input = new Scanner(System.in);
     }
 
+    /**
+     * Returns the nickname inserted by the player
+     * @return the nickname inserted by the player
+     */
     public String getNickName(){
         System.out.println("Insert your nickname");
         return this.input.nextLine();
     }
 
+    /**
+     * Prints the first welcome message
+     */
     public void setClientStarted(){
         System.out.println("Hi " + this.main.getNickname() + "!");
         System.out.println("Welcome to Master of Renaissance!");
     }
 
+    /**
+     * Returns the game mode
+     * @return the game mode
+     */
     public int getGameMode() {
         String gameMode;
 
@@ -45,10 +70,17 @@ public class CLI implements RenderingView {
         return Integer.parseInt(gameMode);
     }
 
+    /**
+     * Prints this message when the game started
+     */
     public void setGameStarted() {
         System.out.println("\nMatch has started, your player number is " + this.main.getPlayerNumber());
     }
 
+    /**
+     * Returns chosen starting resources
+     * @return chosen starting resources
+     */
     public ArrayList<String> getStartingResource(){
 
         ArrayList<String> playerStartingResources = new ArrayList<>();
@@ -77,134 +109,13 @@ public class CLI implements RenderingView {
         return playerStartingResources;
     }
 
-    public int[] getDiscardedStartingLeaders(){
-        int[] discarded = new int[2];
-
-        System.out.println("Which starting leader card do you want to discard?\n");
-        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            System.out.println("Write " + i + " for this: ");
-            this.printLeaderCard(this.main.getLeaderCards()[i]);
-        }
-        String card;
-        try {
-            card = this.input.nextLine();
-            while (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) {
-                System.out.println("Chose a correct card.");
-                card = this.input.nextLine();
-            }
-            discarded[0]=Integer.parseInt(card);
-        } catch (Exception e) {
-            this.error(e);
-        }
-
-        System.out.println("Which starting leader card do you want to discard?");
-        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if(i < discarded[0]) {
-                System.out.println("Write " + i + " for this: ");
-                this.printLeaderCard(this.main.getLeaderCards()[i]);
-            } else if (i>discarded[0]) {
-                int k=i-1;
-                System.out.println("Write " + k + " for this: ");
-                this.printLeaderCard(this.main.getLeaderCards()[i]);
-            }
-        }
-        try {
-            card = this.input.nextLine();
-            while (!card.equals("0") && !card.equals("1") && !card.equals("2")) {
-                System.out.println("Chose a correct card.");
-                card = this.input.nextLine();
-            }
-            discarded[1]=Integer.parseInt(card);
-        } catch (Exception e) {
-            this.error(e);
-        }
-        return discarded;
-    }
-
-    public int discardStartingCard() {
-
-        int index = 0;
-        Integer integer = 0;
-
-        System.out.println("Which starting leader card do you want to discard?\n");
-        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if (this.main.getLeaderCards()[i] != null) {
-                System.out.println("Write " + i + " for this: ");
-                this.printLeaderCard(this.main.getLeaderCards()[i]);
-            }
-        }
-        String card;
-        try {
-            card = this.input.nextLine();
-            while (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) {
-                System.out.println("Choose a correct card");
-                card = this.input.nextLine();
-            }
-
-            if (this.main.getLeaderCards()[Integer.parseInt(card)] == null) {
-                System.out.println("Choose a correct card");
-                card = this.input.nextLine();
-                while (!card.equals("0") && !card.equals("1") && !card.equals("2")) {
-                    //integer = Integer.parseInt(card);
-                    //if (this.main.getLeaderCards()[integer] != null) break;
-                    System.out.println("Choose a correct card");
-                    card = this.input.nextLine();
-                }
-
-            }
-
-            System.out.println(Integer.parseInt(card));
-            return Integer.parseInt(card);
-
-
-        } catch (Exception e) {
-            System.out.println("Errore conversione numero starting leader card to discard");
-            e.printStackTrace();
-            this.error(e);
-        }
-
-        return index;
-
-    }
-
-    public int genericDiscardLeaderCardTest() {
-
-        int index;
-
-        System.out.println("Which starting leader card do you want to discard?\n");
-        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if (this.main.getLeaderCards()[i] != null) {
-                System.out.println("Write " + i + " for this: ");
-                this.printLeaderCard(this.main.getLeaderCards()[i]);
-            }
-        }
-
-        try {
-            String card = this.input.nextLine();
-            if (!card.equals("0") && !card.equals("1") && !card.equals("2") && !card.equals("3")) throw new Exception();
-            index = Integer.parseInt(card);
-            if (this.main.getLeaderCards()[index] != null) return index;
-            else throw new Exception();
-
-        } catch (Exception e) {
-            System.err.println("Choose a card!");
-            this.genericDiscardLeaderCardTest();
-        }
-
-        return 0;
-
-    }
-
-
-    //OFFCIAL VERSION DISCARDER
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Returns the discarded leader card
+     * @return the discarded leader card
+     */
     public int discarder() {
 
         int discardedCards = 4;
-        /*if (this.main.getLeaderCards()[0] == null) {
-            System.out.println("You have no leader cards left");
-            return 0;
-        }*/
 
         for (int i = 0; i < this.main.getLeaderCards().length; i++) {
             if (this.main.getLeaderCards()[i] == null) {
@@ -227,45 +138,28 @@ public class CLI implements RenderingView {
         String card;
         int index;
 
-        /*do {
-            card = this.input.nextLine();
-            try {
-                index = Integer.parseInt(card);
-                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) return index;
-                else throw new Exception();
-            } catch (Exception e) {
-                System.err.println("Choose a card!");
-                //e.printStackTrace();
-            }
-
-        } while (true);*/
-
         while (true) {
             card = this.input.nextLine();
             try {
                 index = Integer.parseInt(card);
                 if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
-                    System.out.println("Valid input");
+                    //System.out.println("Valid input");
                     return index;
                 }
                 else throw new Exception();
             } catch (Exception e) {
                 System.err.println("Choose a card!");
-                //e.printStackTrace();
             }
         }
-
     }
 
-    //OFFICIAL VERSION SUMMONER
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    /**
+     * Returns the played leader card
+     * @return the played leader card
+     */
     public int cardPlayer() {
 
         int discardedCards = 4;
-        /*if (this.main.getLeaderCards()[0] == null) {
-            System.out.println("You have no leader cards left");
-            return 0;
-        }*/
 
         for (int i = 0; i < this.main.getLeaderCards().length; i++) {
             if (this.main.getLeaderCards()[i] == null) {
@@ -289,99 +183,25 @@ public class CLI implements RenderingView {
         String card;
         int index;
 
-        /*do {
-            card = this.input.nextLine();
-            try {
-                index = Integer.parseInt(card);
-                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) return index;
-                else throw new Exception();
-            } catch (Exception e) {
-                System.err.println("Choose a card!");
-                //e.printStackTrace();
-            }
-
-        } while (true);*/
-
         while (true) {
             card = this.input.nextLine();
             try {
                 index = Integer.parseInt(card);
                 if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
-                    System.out.println("Valid input");
+                    //System.out.println("Valid input");
                     return index;
                 }
                 else throw new Exception();
             } catch (Exception e) {
                 System.err.println("Choose a card!");
-                //e.printStackTrace();
-            }
-        }
-
-    }
-
-    public int dcsrdgeneralfromISmo() {
-
-        if (this.printldrswicth("discard")) return 0;
-
-        String card;
-        int index;
-
-        while (true) {
-            card = this.input.nextLine();
-            try {
-                index = Integer.parseInt(card);
-                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
-                    System.out.println("Valid input");
-                    return index;
-                }
-                else throw new Exception();
-            } catch (Exception e) {
-                System.err.println("Choose a card!");
-                //e.printStackTrace();
             }
         }
     }
 
-    public int plygrlstt() {
-        if (this.printldrswicth("play")) return 0;
-
-        String card;
-        int index;
-
-        while (true) {
-            card = this.input.nextLine();
-            try {
-                index = Integer.parseInt(card);
-                if (this.main.getLeaderCards()[index] != null && !this.main.getLeaderCards()[index].isPlayed()) {
-                    System.out.println("Valid input");
-                    return index;
-                }
-                else throw new Exception();
-            } catch (Exception e) {
-                System.err.println("Choose a card!");
-                //e.printStackTrace();
-            }
-        }
-    }
-
-    public boolean printldrswicth(String action) {
-        if (this.main.getLeaderCards()[0] == null) {
-            System.out.println("You have no leader cards left");
-            return false;
-        }
-
-        System.out.println("Which leader card do you want to " + action + " ?\n");
-        for (int i = 0; i < this.main.getLeaderCards().length; i++) {
-            if (this.main.getLeaderCards()[i] != null) {
-                System.out.println("Write " + i + " for this: ");
-                this.printLeaderCard(this.main.getLeaderCards()[i]);
-            }
-        }
-
-        return true;
-
-    }
-
+    /**
+     * Returns the action that the player wants to do
+     * @return the action that the player wants to do
+     */
     public String getActionChoice() {
         this.printActions();
         String action;
@@ -398,6 +218,9 @@ public class CLI implements RenderingView {
         return action;
     }
 
+    /**
+     * Prints the action that the player can do
+     */
     public void printActions(){
         System.out.println("Which action do you want to do?");
         System.out.println("Write 'Play leader card'");
@@ -408,49 +231,10 @@ public class CLI implements RenderingView {
         System.out.println("Write 'END TURN' at the end of your turn");
     }
 
-    public int getPlayedLeader() {
-
-        this.printLeaderRequest("play");
-        String parameter;
-
-        parameter = this.input.nextLine();
-
-        while (!parameter.equals("0") && !parameter.equals("1"))
-        {
-            System.err.println("Choose a correct card.");
-            this.printLeaderRequest("play");
-            parameter = this.input.nextLine();
-        }
-
-        return Integer.parseInt(parameter);
-    }
-
-    public int getDiscardedLeader() {
-
-        this.printLeaderRequest("discard");
-        String parameter = this.input.nextLine();
-
-        while (!parameter.equals("0") && !parameter.equals("1"))
-        {
-            System.err.println("Choose a correct card.");
-            this.printLeaderRequest("discard");
-            parameter = this.input.nextLine();
-        }
-        return Integer.parseInt(parameter);
-    }
-
-    public void printLeaderRequest(String action){
-        System.out.println("Which card do you want to "+action+"?");
-        for(int index =0; index<this.main.getLeaderCards().length; index++)
-        {
-            if(this.main.getLeaderCards()[index]!=null && !this.main.getLeaderCards()[index].isPlayed())
-            {
-                System.out.println("Write "+index+" for this");
-                this.printLeaderCard(this.main.getLeaderCards()[index]);
-            }
-        }
-    }
-
+    /**
+     * Returns the coordinates of the picked resources
+     * @return the coordinates of the picked resources
+     */
     public int[] getMarketCoordinates() {
         int[] coordinates = new int[2];
 
@@ -508,6 +292,11 @@ public class CLI implements RenderingView {
         return coordinates;
     }
 
+    /**
+     * Returns the destination of the picked resources
+     * @param parameter indicates if the player picked a row or a column
+     * @return the destination of the picked resources
+     */
     public String getResourcesDestination(String parameter) {
 
         String wlChoice;
@@ -520,7 +309,7 @@ public class CLI implements RenderingView {
             }
         }
         if(extraSpace == 0){
-            System.out.println("No extra spaces");
+            //System.out.println("No extra spaces");
             if(parameter.equals("ROW"))
                 return "WWWW";
             else return "WWW";
@@ -559,6 +348,10 @@ public class CLI implements RenderingView {
         return wlChoice;
     }
 
+    /**
+     * Returns if the player wants to activate white marble leader effect
+     * @return if the player wants to activate white marble leader effect
+     */
     public String getWhiteMarbleChoice() {
         String chosenMarble;
 
@@ -600,6 +393,10 @@ public class CLI implements RenderingView {
         return chosenMarble;
     }
 
+    /**
+     * Returns the coordinates of the card that the player wants to buy
+     * @return the coordinates of the card that the player wants to buy
+     */
     public int[] getDevelopmentCardsGridCoordinates() {
         int[] coordinates = new int[2];
 
@@ -643,6 +440,10 @@ public class CLI implements RenderingView {
         return coordinates;
     }
 
+    /**
+     * Returns the resources that the player wants to pay
+     * @return the resources that the player wants to pay
+     */
     public String[][] getPayedResources() {
         String[][] pickedResources = new String[2][4];
         for (int r=0; r<2; r++)
@@ -710,6 +511,10 @@ public class CLI implements RenderingView {
         return pickedResources;
     }
 
+    /**
+     * Returns the position on which the player wants to put the card
+     * @return the position on which the player wants to put the card
+     */
     public int getChosenPosition() {
         String parameter;
         int position = 0;
@@ -733,6 +538,10 @@ public class CLI implements RenderingView {
         return position;
     }
 
+    /**
+     * Prints player's activated cards
+     * @param cards player's cards
+     */
     public void printActivatedLeaderCard(LeaderCard[] cards){
         System.out.println("YOUR ACTIVATED LEADER CARDS:");
         for (LeaderCard card : cards)
@@ -741,22 +550,43 @@ public class CLI implements RenderingView {
         System.out.println();
     }
 
+    /**
+     * Prints a card
+     * @param card card to be printed
+     */
     public void printLeaderCard(LeaderCard card){
         card.printLeaderCard();
     }
 
+    /**
+     * Prints the market
+     * @param market market to be printed
+     */
     public void printMarket(Market market){
         market.printMarket();
     }
 
+    /**
+     * Prints the playerBoard
+     * @param playerboard playerBoard to be printed
+     */
     public void printPlayerboard(Playerboard playerboard){
         playerboard.printAll();
     }
 
+    /**
+     * Prints the development cards grid
+     * @param grid development cards grid to be printed
+     */
     public void printDevCardGrid(DevelopmentCardsDecksGrid grid){
         grid.printGrid();
     }
 
+    /**
+     * Returns true if the player inserted a correct input
+     * @param wlChoice string to be checked
+     * @return true if the player inserted a correct input
+     */
     public boolean checkShelf(String wlChoice){
         for (int k = 0; k < wlChoice.length(); k++){
             if (!String.valueOf(wlChoice.charAt(k)).equals("W") && !String.valueOf(wlChoice.charAt(k)).equals("L"))
@@ -765,6 +595,11 @@ public class CLI implements RenderingView {
         return false;
     }
 
+    /**
+     * Returns true if the command to activate the marble to activate is correct
+     * @param chosenMarble command to activate the marble
+     * @return true if the command to activate the marble to activate is correct
+     */
     public boolean checkMarbleChoice(String chosenMarble){
         if (chosenMarble.length() != 0)
         {
@@ -779,6 +614,11 @@ public class CLI implements RenderingView {
         return true;
     }
 
+    /**
+     * Returns the production power to activate
+     * @param activation production powers activated
+     * @return the production power to activate
+     */
     public int getActivationProd(int[] activation) {
         String prodPower;
 
@@ -810,6 +650,12 @@ public class CLI implements RenderingView {
         return check;
     }
 
+    /**
+     * Returns true if the player inserted a correct input to activate the production power
+     * @param prodPower production power to be activated
+     * @param activation production powers activated
+     * @return true if the player inserted a correct input to activate the production power
+     */
     public int checkProduction(String prodPower, int[] activation){
         switch(prodPower){
             case "P0":
@@ -915,6 +761,10 @@ public class CLI implements RenderingView {
         }
     }
 
+    /**
+     * Returns the chosen output of the production power
+     * @return the chosen output of the production power
+     */
     public String getInputResourceProd() {
         StringBuilder whichInput = new StringBuilder();
         String res;
@@ -988,6 +838,11 @@ public class CLI implements RenderingView {
         return whichInput.toString();
     }
 
+    /**
+     * Returns the chosen output of the production power
+     * @param prod production power
+     * @return the chosen output of the production power
+     */
     public String getOutputResourceProd(int prod) {
 
         String res;
@@ -1056,6 +911,9 @@ public class CLI implements RenderingView {
         System.err.println("Not valid action");
     }
 
+    /**
+     * Prints Lorenzo the Magnificent faith points
+     */
     public void lorenzoFaithPoints() {
         System.out.println("LORENZO FAITH POINTS: " + this.main.getLocalPlayers()[1].getPlayerBoard().getFaithPath().getCrossPosition());
     }
@@ -1147,6 +1005,10 @@ public class CLI implements RenderingView {
         }
     }
 
+    /**
+     * Prints which action counter it is drawn
+     * @param counter counter to be printed
+     */
     public void actionCounter (ActionCounter counter){
         System.out.println("Drawn " + counter.getCounter());
     }

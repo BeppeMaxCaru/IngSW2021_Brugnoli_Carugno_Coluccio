@@ -18,7 +18,7 @@ public class GameController{
     /**
      * Model of the game
      */
-    private final GameModel gameModel;
+    private GameModel gameModel;
 
     /**
      * Player of who is the turn
