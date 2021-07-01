@@ -98,10 +98,10 @@ public class PlayerThread implements Runnable {
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName + " #" + this.playerThreadNumber);
             //System.out.println("Nickname received " + this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getNickname());
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Error while starting setup");
             this.gameController.nextCurrentPlayerNumber();
             this.removePlayer();
-            System.out.println("No nickname");
+            //System.out.println("No nickname");
             return;
         }
 
@@ -114,10 +114,10 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(updateClientMarketMessage);
             //System.out.println("Market sent");
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Online error while sending market");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            System.out.println("Non viene broadcastato mercato in PlayerThread");
+            //System.out.println("Non viene broadcastato mercato in PlayerThread");
             return;
         }
 
@@ -134,10 +134,10 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(updateClientDevCardGridMessage);
             //System.out.println("DevCards sent");
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Online error while sending development cards grid");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            System.out.println("Non viene broadcastata grid in PlayerThread");
+            //System.out.println("Non viene broadcastata grid in PlayerThread");
             return;
         }
 
@@ -149,10 +149,10 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(serverStartingMessage);
             //System.out.println("Player number and leaders sent");
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Online error while sending your starting leader cards");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            System.out.println("No starting message");
+            //System.out.println("No starting message");
             return;
         }
 
@@ -177,10 +177,10 @@ public class PlayerThread implements Runnable {
             //this.sender.writeObject( new ActionOutcomeMessage(true));
             //System.out.println("Starting res received");
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Online error during starting resources setup");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            System.out.println("No starting resources message");
+            //System.out.println("No starting resources message");
             return;
         }
 
@@ -191,10 +191,10 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(playerBoardMessage);
             //System.out.println("Playerboard sent");
         } catch (Exception e) {
-            this.sendErrorMessage();
+            this.sendErrorMessage("Online error while preparing your player board");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            System.out.println("Not playerBoard sent");
+            //System.out.println("Not playerBoard sent");
             return;
         }
 
@@ -227,11 +227,11 @@ public class PlayerThread implements Runnable {
                 //System.out.println("Leader received");
 
             } catch (Exception e) {
-                this.sendErrorMessage();
+                this.sendErrorMessage("Online error during starting leader cards setup");
                 this.removePlayer();
                 this.gameController.nextCurrentPlayerNumber();
-                e.printStackTrace();
-                System.out.println("No discard leader card message");
+                //e.printStackTrace();
+                //System.out.println("No discard leader card message");
                 return;
             }
         }
@@ -242,6 +242,7 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(new TurnOverMessage("SETUP"));
         } catch (Exception e) {
             //e.printStackTrace();
+            this.sendErrorMessage("Error during setup");
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
             return;
@@ -300,10 +301,10 @@ public class PlayerThread implements Runnable {
             try {
                 this.sender.reset();
             } catch (Exception e) {
-                this.sendErrorMessage();
+                this.sendErrorMessage("Online game updates not working");
                 this.removePlayer();
                 this.gameController.nextCurrentPlayerNumber();
-                System.out.println("Reset sender not working");
+                //System.out.println("Reset sender not working");
                 return;
             }
 
@@ -312,7 +313,8 @@ public class PlayerThread implements Runnable {
                     this.playerSocket.setSoTimeout(300000);
                 } catch (Exception e) {
                     //e.printStackTrace();
-                    System.out.println("Player inactive [PlayerThread: line 264]");
+                    this.sendErrorMessage("Expelled for inactivity");
+                    //System.out.println("Player inactive");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -334,7 +336,7 @@ public class PlayerThread implements Runnable {
             //Check current player here
             try {
                 object = (Message) this.receiver.readObject();
-                System.out.println("Received message from player " + object.getPlayerNumber());
+                //System.out.println("Received message from player " + object.getPlayerNumber());
                 if (this.gameController.getCurrentPlayerNumber() != object.getPlayerNumber())
                 {
                     object = new NotYourTurnMessage();
@@ -342,10 +344,10 @@ public class PlayerThread implements Runnable {
                     //this.yourTurnMessageCounter = 1;
                 }
             } catch (Exception e) {
-                this.sendErrorMessage();
+                this.sendErrorMessage("Online error during action choice");
                 //this.removePlayer();
                 //e.printStackTrace();
-                System.out.println("Error in receiving in PlayerThread or current player inactive [PlayerThread: line 293]");
+                //System.out.println("Error in receiving in PlayerThread or current player inactive [PlayerThread: line 293]");
                 this.removePlayer();
                 this.gameController.nextCurrentPlayerNumber();
                 return;
@@ -381,9 +383,9 @@ public class PlayerThread implements Runnable {
                     //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
                 } catch (Exception e) {
-                    this.sendErrorMessage();
+                    this.sendErrorMessage("Online error while playing leader card");
                     //this.removePlayer();
-                    System.out.println("Error in receiving in PlayerThread (play leader)");
+                    //System.out.println("Error in receiving in PlayerThread (play leader)");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -394,16 +396,16 @@ public class PlayerThread implements Runnable {
             if (object instanceof DiscardLeaderMessage) {
                 try {
                     DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) object;
-                    System.out.println("Discard leader received");
+                    //System.out.println("Discard leader received");
                     //First and only parameter is always an int that is the position of the leader card
                     int position = discardLeaderMessage.getDiscarded();
 
                     if (this.gameController.checkDiscardCards(currentPlayer, position))
                     {
                         this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                        System.out.println("Playerboard sent");
+                        //System.out.println("Playerboard sent");
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
-                        System.out.println("Leaders sent");
+                        //System.out.println("Leaders sent");
 
                         //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
                         //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setAllPlayerLeaderCards(currentPlayer.getPlayerLeaderCards());
@@ -416,9 +418,9 @@ public class PlayerThread implements Runnable {
                     //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
                 } catch (Exception e) {
-                    this.sendErrorMessage();
+                    this.sendErrorMessage("Online error while discarding leader card");
                     //this.removePlayer();
-                    System.out.println("Error in receiving in PlayerThread (discard leader)");
+                    //System.out.println("Error in receiving in PlayerThread (discard leader)");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -429,7 +431,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof MarketResourcesMessage) {
                 try {
                     MarketResourcesMessage marketResourcesMessage = (MarketResourcesMessage) object;
-                    System.out.println("Market action received");
+                    //System.out.println("Market action received");
                     if(!this.mainAction)
                     {
                         //Row/column choice
@@ -470,10 +472,10 @@ public class PlayerThread implements Runnable {
                     //this.gameController.broadcastPlayerBoards();
 
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    this.sendErrorMessage();
+                    //e.printStackTrace();
+                    this.sendErrorMessage("Online error while drawing from market");
                     //this.removePlayer();
-                    System.out.println("Error in receiving in PlayerThread (market action)");
+                    //System.out.println("Error in receiving in PlayerThread (market action)");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -491,7 +493,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof BuyCardMessage) {
                 try {
                     BuyCardMessage buyCardMessage = (BuyCardMessage) object;
-                    System.out.println("Buy card received");
+                    //System.out.println("Buy card received");
                     if(!this.mainAction)
                     {
                         //DevCard colour
@@ -530,15 +532,15 @@ public class PlayerThread implements Runnable {
 
                                     //System.out.println("DevCards sent");
                                     this.mainAction = true;
-                                } else System.out.println("Not valid model action");
-                            } else System.out.println("Not valid isCardBelowCompatible");
-                        } else System.out.println("Not valid controller check");
+                                } //else System.out.println("Not valid model action");
+                            } //else System.out.println("Not valid isCardBelowCompatible");
+                        } //else System.out.println("Not valid controller check");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    this.sendErrorMessage();
+                    this.sendErrorMessage("Online error while buying a development card");
                     //this.removePlayer();
-                    System.out.println("Error in receiving in PlayerThread (buy card action)");
+                    //System.out.println("Error in receiving in PlayerThread (buy card action)");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -549,7 +551,7 @@ public class PlayerThread implements Runnable {
             if (object instanceof ActivateProdMessage) {
                 try {
                     ActivateProdMessage prodMessage = (ActivateProdMessage) object;
-                    System.out.println("Activate prod received");
+                    //System.out.println("Activate prod received");
 
                     int[] activation;
                     String[] whichInput;
@@ -575,14 +577,14 @@ public class PlayerThread implements Runnable {
                             //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
                             //System.out.println("PlayerBoard sent");
                             this.mainAction = true;
-                        } else System.out.println("Not valid controller check");
+                        } //else System.out.println("Not valid controller check");
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    this.sendErrorMessage();
+                    this.sendErrorMessage("Server error during activate production");
                     //this.removePlayer();
-                    System.out.println("Error in receiving in PlayerThread (activate prod)");
+                    //System.out.println("Error in receiving in PlayerThread (activate prod)");
                     this.removePlayer();
                     this.gameController.nextCurrentPlayerNumber();
                     return;
@@ -597,12 +599,12 @@ public class PlayerThread implements Runnable {
                         this.sender.reset();
                         this.sender.writeObject(new TurnOverMessage("TURN"));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                     }
                     this.mainAction = false;
                     this.gameController.nextCurrentPlayerNumber();
                     //this.yourTurnMessageCounter = 0;
-                } else System.out.println("No main action valid");
+                } //else System.out.println("No main action valid");
                 //Salva come giocatore corrente nel gamecontroller/gamemodel
                 //il giocatore successivo a questo per abilitarlo e bloccare questo
             }
@@ -659,7 +661,7 @@ public class PlayerThread implements Runnable {
         } catch (Exception e) {
             this.removePlayer();
             this.gameController.nextCurrentPlayerNumber();
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
     }
@@ -670,22 +672,22 @@ public class PlayerThread implements Runnable {
             this.sender.close();
             this.receiver.close();
             this.playerSocket.close();
-            System.out.println("Giocatore staccato");
+            //System.out.println("Giocatore staccato");
             //Move to next active player
             //this.gameController.nextCurrentPlayerNumber();
             //System.out.println(this.gameController.getCurrentPlayerNumber());
         } catch (Exception e) {
-            System.out.println("Player removed and moved to the next one");
-            e.printStackTrace();
+            //System.out.println("Player removed and moved to the next one");
+            //e.printStackTrace();
         }
     }
 
-    public void sendErrorMessage() {
+    public void sendErrorMessage(String errorMessage) {
         try {
             this.sender.reset();
-            this.sender.writeObject(new ServerErrorMessage());
+            this.sender.writeObject(new ServerErrorMessage(errorMessage));
         } catch (Exception e) {
-            System.out.println("Sending error message exception");
+            //System.out.println("Sending error message exception");
             //e.printStackTrace();
         }
     }
@@ -696,7 +698,8 @@ public class PlayerThread implements Runnable {
             this.sender.writeObject(new PingMessage());
         } catch (Exception e) {
             this.removePlayer();
-            System.out.println("Player lost");
+            this.gameController.nextCurrentPlayerNumber();
+            //System.out.println("Player lost");
         }
     }
 
