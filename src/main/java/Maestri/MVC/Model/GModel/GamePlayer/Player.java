@@ -32,7 +32,7 @@ public class Player
     /**
      * Player board that the player is using to play the game
      */
-    private final Playerboard playerBoard;
+    private Playerboard playerBoard;
 
     /**
      * Leader cards that the player has available
@@ -98,6 +98,10 @@ public class Player
         return this.playerBoard;
     }
 
+    public void setPlayerBoard(Playerboard playerBoard) {
+        this.playerBoard = playerBoard;
+    }
+
     /**
      * Returns the player's leader cards
      * @return the player's leader cards
@@ -113,6 +117,12 @@ public class Player
      */
     public void setPlayerLeaderCard(int index, LeaderCard leaderCard) {
         this.playerLeaderCards[index] = leaderCard;
+    }
+
+    public void setAllPlayerLeaderCards(LeaderCard[] playerLeaderCards) {
+        for (int i = 0; i < this.playerLeaderCards.length; i++) {
+            this.playerLeaderCards[i] = playerLeaderCards[i];
+        }
     }
 
     /**
@@ -156,6 +166,9 @@ public class Player
      * @return true if the player buys a card successfully
      */
     public boolean buyDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, int column, int level, int position, String[] wclChoice) {
+
+        //Deny buying 8th card always
+        if (this.playerBoard.getDevelopmentCardsBought() == 7) return false;
 
         //Removes the resources from the player who bought the development card according to the development card cost
         developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0].payDevelopmentCard(this.playerBoard, wclChoice);
@@ -354,6 +367,24 @@ public class Player
         return true;
     }
 
+    public boolean checkWinCondition() {
+
+        System.out.println("Qui");
+        System.out.println(this.playerBoard.getFaithPath().getCrossPosition());
+
+        if (this.playerBoard.getFaithPath().getCrossPosition() >= 24 ||
+                this.playerBoard.getDevelopmentCardsBought() >= 7) {
+            System.out.println("Hola");
+            return true;
+        }
+        else {
+            //System.out.println(this.playerBoard.getFaithPath().getCrossPosition());
+            return false;
+        }
+
+
+    }
+
     /**
      * This method sums all the player's victory points at the end of the game
      * @return the total victory points
@@ -396,24 +427,6 @@ public class Player
             numResources = numResources + getPlayerBoard().getChest().getChestResources().get(key);
 
         return numResources;
-    }
-
-    //Closing stream and socket
-    public void disconnectClient() {
-        try {
-            this.clientSocket.close();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    //Closing stream and socket
-    public void disconnectPlayer() {
-        try {
-            this.clientSocket.close();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
     }
 
 }

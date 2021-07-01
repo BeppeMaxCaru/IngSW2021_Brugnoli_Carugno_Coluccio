@@ -97,9 +97,13 @@ public class Market implements Serializable {
     }
 
     public void setMarketArrangement(Marble[][] marketArrangement) {
-        this.marketArrangement = marketArrangement;
+        for (int i = 0; i < this.marketArrangement.length; i++) {
+            for (int j = 0; j < this.marketArrangement[i].length; j++) {
+                this.marketArrangement[i][j] = marketArrangement[i][j];
+            }
+        }
+        //this.excessMarble = excessMarble;
     }
-
     /**
      * Updates the market after a player draws marbles from a row
      * @param row          - row from where the player draws the marbles

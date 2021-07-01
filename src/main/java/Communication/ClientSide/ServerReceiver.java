@@ -146,9 +146,9 @@ public class ServerReceiver extends Thread {
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();
                     //Using a simple return?
-                    //return
+                    return;
 
-                    this.interrupt();
+                    //this.interrupt();
 
                 } catch (Exception e) {
                     this.view.receiverError(e);

@@ -23,8 +23,7 @@ public class GameModel{
     private final LeaderCardDeck leaderCardDeck;
     private final Market market;
 
-    private ArrayList<Player> clientsPlayingTheGame = new ArrayList<>();
-    ExecutorService executor = Executors.newFixedThreadPool(4);
+    private Player currentWinner = null;
 
     public GameModel(Player[] players, int numberOfPlayers) {
 
@@ -69,31 +68,6 @@ public class GameModel{
         return this.players[index].buyDevelopmentCard(this.getDevelopmentCardsDecksGrid(), column, l, p, wclChoice);
     }
 
-    /**
-     * This method sets each player number, randomly.
-     */
-    /*public void setPlayersNumber() {
-        List<Integer> numbers = new ArrayList<>(getPlayers().length);
-        int j = 0;
-
-        int p;
-        for(p=0; p<this.players.length; p++)
-            if(this.players[p]==null)
-                break;
-
-        for (int i = 0; i < p; i++)
-            numbers.add(i);
-        Collections.shuffle(numbers);
-
-        for(int i: numbers) {
-            if(this.players[j] != null)
-            {
-                this.players[j].setPlayerNumber(i);
-            }
-            j++;
-        }
-    }*/
-
     public void relationWithVatican(int crossPosition) {
         for(int i = 0; i < players.length; i++) {
             if(getPlayers()[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace())
@@ -130,7 +104,6 @@ public class GameModel{
         int maxVictoryPoints = 0;
         int playerWithMaxVictoryPoints = -1;
 
-        //Caso in cui resta solo un player
         for(int i = 0; i < this.players.length; i++) {
             if (this.players[i]!=null) {
                 if (maxVictoryPoints < this.players[i].sumAllVictoryPoints()) {
@@ -150,19 +123,4 @@ public class GameModel{
         return playerWithMaxVictoryPoints;
     }
 
-    public int checkStatusPlayer(float endTime, int i, PrintWriter out) {
-        int maximumTime = 180;
-
-        if (endTime != 0 && endTime < maximumTime * 1000 && i == 0) {
-            out.println("Are you there?!");
-            out.println();
-            return 0;
-        }
-        else if (endTime != 0 && endTime < maximumTime * 1000 && i == 1) {
-            out.println("You are expelled by the game!");
-            // Gestione espulsione giocatore / Gestione connessione
-            return 1;
-        }
-        else return 2;
-    }
 }

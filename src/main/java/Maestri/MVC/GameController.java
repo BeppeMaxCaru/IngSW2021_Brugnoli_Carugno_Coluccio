@@ -5,10 +5,7 @@ import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
-import Message.MessageReceived.UpdateClientDevCardGridMessage;
-import Message.MessageReceived.UpdateClientMarketMessage;
-import Message.MessageReceived.UpdateClientPlayerBoardMessage;
-import Message.MessageReceived.YourTurnMessage;
+import Message.MessageReceived.*;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -20,6 +17,9 @@ public class GameController{
     private int currentPlayerNumber;
 
     private Set<PlayerThread> playerThreads = new HashSet<>();
+
+    //private Set<PlayerThread> winnersShowdown = new HashSet<>();
+    private int lastPlayerPosition;
 
     public GameController(List<PlayerThread> queueFIFO) {
 
@@ -95,12 +95,6 @@ public class GameController{
             }
         }
     }
-
-    public Set<PlayerThread> getPlayerThreads() {
-        return this.playerThreads;
-    }
-
-
 
     public boolean checkPlayCards (Player currentPlayer, int c) {
         System.out.println("Check if you can play the card");
@@ -559,6 +553,33 @@ public class GameController{
 
         }
 
+    }
+
+    public int findLastPlayer() {
+
+        int lastPlayer = -1;
+
+        for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
+            if (this.gameModel.getPlayers()[i] != null) {
+                lastPlayer = i;
+            }
+        }
+
+        return lastPlayer;
+
+    }
+
+    public void broadcastGameOver(GameOverMessage gameOverMessage) {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+            try {
+                playerThread.getSender().reset();
+                playerThread.getSender().writeObject(gameOverMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Errore in endgame");
+            }
+        }
     }
 
 }
