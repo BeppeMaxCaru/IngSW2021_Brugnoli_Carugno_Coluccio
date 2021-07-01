@@ -334,18 +334,8 @@ public class Player
      */
     public boolean checkWinCondition() {
 
-        System.out.println("Qui");
-        System.out.println(this.playerBoard.getFaithPath().getCrossPosition());
-
-        if (this.playerBoard.getFaithPath().getCrossPosition() >= 24 ||
-                this.playerBoard.getDevelopmentCardsBought() >= 7) {
-            System.out.println("Hola");
-            return true;
-        }
-        else {
-            //System.out.println(this.playerBoard.getFaithPath().getCrossPosition());
-            return false;
-        }
+        return this.playerBoard.getFaithPath().getCrossPosition() >= 24 ||
+                this.playerBoard.getDevelopmentCardsBought() >= 7;
     }
 
     /**
@@ -360,8 +350,6 @@ public class Player
         victoryPoints = victoryPoints + getPlayerBoard().getVictoryPoints();
 
         //Points of faith cross
-        //Non serve se modifichi move cross in modo tale che aggiunga i victory points di una cella ai punti
-        //della player board quando il giocatore ci capita sopra così li tieni aggiornati
         victoryPoints = victoryPoints + getPlayerBoard().getFaithPath().getFaithPathTrack()[getPlayerBoard().getFaithPath().getCrossPosition()].getVictoryPoints();
 
         //Points of Resources stored in warehouse, chest and extra warehouse space

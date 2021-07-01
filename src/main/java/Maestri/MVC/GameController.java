@@ -10,25 +10,41 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Represents the controller of the game
+ */
 public class GameController{
 
-    private GameModel gameModel;
+    /**
+     * Model of the game
+     */
+    private final GameModel gameModel;
+
+    /**
+     * Player of who is the turn
+     */
     private int currentPlayerNumber;
 
-    private Set<PlayerThread> playerThreads = new HashSet<>();
+    /**
+     * Threads of the players
+     */
+    private final Set<PlayerThread> playerThreads = new HashSet<>();
 
-    //private Set<PlayerThread> winnersShowdown = new HashSet<>();
+    private Set<PlayerThread> winnersShowdown = new HashSet<>();
     private int lastPlayerPosition;
 
+    /**
+     * Initializes the controller
+     * @param queueFIFO queue of players that are waiting for the match
+     */
     public GameController(List<PlayerThread> queueFIFO) {
 
         Player[] players = new Player[4];
-
         PlayerThread[] playersPlaying = new PlayerThread[4];
 
         ExecutorService playerThreadExecutor = Executors.newFixedThreadPool(4);
-        Set<PlayerThread> playerThreads = new HashSet<>();
 
+        Set<PlayerThread> playerThreads = new HashSet<>();
         List<Player> playersToPlay = new ArrayList<>();
 
         int numOfPlayers = 0;
@@ -38,15 +54,11 @@ public class GameController{
                 if (!queueFIFO.isEmpty()) {
                     playersPlaying[i] = queueFIFO.remove(0);
                     playersPlaying[i].setPlayerThreadNumber(i);
-                    //playersPlaying[i].setNickName(playersPlaying[i].getNickName());
-                    //Starts the thread
-                    //playerThreadExecutor.execute(playersPlaying[i]);
 
                     playersPlaying[i].setGameController(this);
 
                     //Creates only the data of the player in the game model
                     players[i] = new Player(playersPlaying[i].getNickName(), i);
-                    //System.out.println(playersPlaying[i].getNickName());
                     numOfPlayers++;
 
                 }
@@ -64,20 +76,23 @@ public class GameController{
                     playerThreadExecutor.execute(playersPlaying[j]);
                     this.playerThreads.add(playersPlaying[j]);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Non c'è player");
+            } catch (Exception ignored) {
             }
         }
-
     }
 
+    /**
+     * Returns the number of the current player
+     * @return the number of the current player
+     */
     public int getCurrentPlayerNumber() {
         return this.currentPlayerNumber;
     }
 
+    /**
+     * Set the next player
+     */
     public void nextCurrentPlayerNumber() {
-        //Mettere controllo che ci sia più di un giocatore
         do{
             this.currentPlayerNumber++;
             if (this.currentPlayerNumber == 4) this.currentPlayerNumber = 0;
@@ -88,38 +103,48 @@ public class GameController{
             {
                 try{
                     thread.getSender().writeObject(new YourTurnMessage());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception ignored) {
                 }
             }
         }
     }
 
+    /**
+     * Returns true if the player can play the card
+     * @param currentPlayer player that plays the card
+     * @param c card to play
+     * @return true if the player can play the card
+     */
     public boolean checkPlayCards (Player currentPlayer, int c) {
-        System.out.println("Check if you can play the card");
         //If not working add this in if:  && currentPlayer.getPlayerLeaderCards()[c].checkRequisites(currentPlayer.getPlayerBoard())
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
-
-            //Before
             return currentPlayer.playLeaderCard(c);
-
-            //After
-            //return currentPlayer.playLeaderCard2(c);
         } else {
-            System.out.println("Already played or discarded");
             return false;
         }
-
     }
 
+    /**
+     * Returns true if the player can discard the card
+     * @param currentPlayer player that discards the card
+     * @param c card to discard
+     * @return true if the player can discard the card
+     */
     public boolean checkDiscardCards (Player currentPlayer, int c){
-
         if (currentPlayer.getPlayerLeaderCards()[c] != null && !currentPlayer.getPlayerLeaderCards()[c].isPlayed()) {
             return currentPlayer.discardLeaderCard(c);
         } else return false;
-
     }
 
+    /**
+     * Returns true if the player can pick resources from market
+     * @param currentPlayer player that does the action
+     * @param choice row or column choice
+     * @param i index of row/column
+     * @param wlChoice indicates if the player wants to store resources in warehouse or leader card
+     * @param c indicates if the player wants to activate any white marble leader
+     * @return true if the player can pick resources from market
+     */
     public boolean checkMarketAction (Player currentPlayer, String choice, int i, String wlChoice, String c) {
 
         if(choice.equalsIgnoreCase("ROW"))
@@ -168,6 +193,15 @@ public class GameController{
         }
     }
 
+    /**
+     * Returns true if the player can buy a development card
+     * @param currentPlayer player that does the action
+     * @param column column of development card grid
+     * @param l level of the development card
+     * @param quantity quantity of resources to pay
+     * @param wclChoice indicates from which store player wants to pick resources
+     * @return true if the player can buy a development card
+     */
     public boolean checkBuyDevCard(Player currentPlayer, int column, int l, int[] quantity, String[] wclChoice) {
 
         Map<String, Integer> paidResources = new HashMap<>();
@@ -208,7 +242,6 @@ public class GameController{
                 }
             }
         } else {
-            System.out.println("Card null");
             return false;
         }
 
@@ -258,14 +291,19 @@ public class GameController{
         return true;
     }
 
+    /**
+     * Returns true if the player can activate production powers
+     * @param currentPlayer player that does the action
+     * @param activation powers activated
+     * @param whichInput input of production powers
+     * @param whichOutput choice of output of production powers
+     * @return true if the player can activate production powers
+     */
     public boolean checkActivateProduction(Player currentPlayer, int[] activation, String[] whichInput, int[] whichOutput) {
-
         int act = 0;
         for (int i : activation) act = act + i;
-        System.out.println("Powers activated: "+act);
         if(act==0)
             return false;
-
 
         for(int k=0; k<activation.length; k++)
         {
@@ -299,7 +337,6 @@ public class GameController{
                             break;
 
                     if (currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] == null) {
-                        System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
@@ -307,8 +344,6 @@ public class GameController{
                     int totalResources = 0;
                     for(String keys : currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        System.out.println(keys);
-                        System.out.println(currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
                         totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
                     }
 
@@ -317,8 +352,6 @@ public class GameController{
                         paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                     }
 
-                    System.out.println("Resources to pay: " + totalResources);
-                    System.out.println("Resources paid: " + paidRes);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
                     if(paidRes!=totalResources) return false;
@@ -329,16 +362,12 @@ public class GameController{
                         for(int r=0; r<in.length(); r=r+3) {
                             paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                         }
-
-                        System.out.println("Resources to pay: 2");
-                        System.out.println("Resources paid: " + paidRes);
                         //Confront them with whichInput string: resourceCode - quantity - storage
                         //If player indicated less resources than that he had to pay, error
                         if(paidRes!=2) return false;
                     } else {
                         //Check if player has any cards into the indicated position and it is activated
                         if (currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null) {
-                            System.out.println("Card not existing or not activated");
                             return false;
                         }
 
@@ -346,9 +375,6 @@ public class GameController{
                         for(int r=0; r<in.length(); r=r+3) {
                             paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                         }
-
-                        System.out.println("Resources to pay: 1");
-                        System.out.println("Resources paid: " + paidRes);
                         //Confront them with whichInput string: resourceCode - quantity - storage
                         //If player indicated less resources than that he had to pay, error
                         if(paidRes!=1) return false;
@@ -372,7 +398,6 @@ public class GameController{
                         }
                         case "L": {
                             if(currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(value))==null) {
-                                System.out.println("Extra warehouse error");
                                 return false;
                             }
                             else
@@ -412,18 +437,12 @@ public class GameController{
                     for(String res : currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
                         if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
-                            System.out.println(res);
-                            System.out.println(paidChestResources.get(res));
-                            System.out.println(currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
-                            System.out.println("Not enough resources");
                             return false;
                         }
                     }
                 } else {
                     if(k!=3){
                         if (paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]) < 1) {
-                            System.out.println(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]);
-                            System.out.println("Paid: " + paidChestResources.get(currentPlayer.getPlayerBoard().getExtraProductionPowerInput()[k-4]));
                             return false;
                         }
                     }
@@ -433,138 +452,92 @@ public class GameController{
         return currentPlayer.activateProduction(activation, whichInput, whichOutput);
     }
 
-
-
+    /**
+     * Returns the model of the game
+     * @return the model of the game
+     */
     public GameModel getGameModel() {
         return this.gameModel;
     }
 
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
-    }
-
+    /**
+     * Returns true if all the players completed the setup
+     * @return true if all the players completed the setup
+     */
     public boolean checkSetupEnd() {
-
         int allPlayerLeaderCards = 0;
         for (PlayerThread playerThread : this.playerThreads) {
             for (LeaderCard leaderCard : playerThread.getGameController().getGameModel().getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerLeaderCards()) {
                 if (leaderCard != null) allPlayerLeaderCards = allPlayerLeaderCards + 1;
             }
         }
-        //System.out.println(allPlayerLeaderCards);
-        if (allPlayerLeaderCards == this.playerThreads.size() * 2) {
-            return true;
-        } else return false;
-
+        return allPlayerLeaderCards == this.playerThreads.size() * 2;
     }
 
-    /*public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
-
-        for (PlayerThread playerThread : this.playerThreads) {
-
-            try {
-                playerThread.getSender().reset();
-                //Reset avviene a inizio while in playerThread
-                //playerThread.getSender().reset();
-                playerThread.getSender().writeObject(updateClientMarketMessage);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Market broadcast not working for " + playerThread.getNickName());
-            }
-        }
-
-    }*/
-
+    /**
+     * Sends to all the player the updated market
+     */
     public void broadCastMarketUpdated () {
-
         for (PlayerThread playerThread : this.playerThreads) {
             try {
                 playerThread.getSender().reset();
                 playerThread.getSender().writeObject(new UpdateClientMarketMessage(this.gameModel.getMarket()));
-                //System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
-                //System.out.println(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Market boards broadcast not working");
+            } catch (Exception ignored) {
             }
-
         }
-
-
     }
 
-    /*public void broadcastDevCardsGrid (UpdateClientDevCardGridMessage updateClientDevCardGridMessage) {
-
-        for (PlayerThread playerThread : this.playerThreads) {
-
-            try {
-                playerThread.getSender().reset();
-                playerThread.getSender().writeObject(updateClientDevCardGridMessage);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Grid broadcast not working for " + playerThread.getNickName());
-            }
-        }
-
-    }*/
-
+    /**
+     * Sends to all the players the updated development cards grid
+     */
     public void broadcastDevCardGridUpdated() {
         for (PlayerThread playerThread : this.playerThreads) {
-
             try {
                 playerThread.getSender().reset();
                 playerThread.getSender().writeObject(new UpdateClientDevCardGridMessage(this.gameModel.getDevelopmentCardsDecksGrid()));
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Grid broadcast not working for " + playerThread.getNickName());
+            } catch (Exception ignored) {
             }
         }
     }
 
+    /**
+     * Sends to each player his updated playerBoard
+     */
     public void broadcastPlayerBoards() {
-
-        //this.gameModel = gameModel;
-
         for (PlayerThread playerThread : this.playerThreads) {
             try {
                 playerThread.getSender().reset();
                 playerThread.getSender().writeObject(new UpdateClientPlayerBoardMessage(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard()));
-                //System.out.println("playerboard sent to " + playerThread.getPlayerThreadNumber());
-                //System.out.println(this.gameModel.getPlayers()[playerThread.getPlayerThreadNumber()].getPlayerBoard().getWareHouse().getWarehouseResources().toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.err.println("Player boards broadcast not working");
+            } catch (Exception ignored) {
             }
-
         }
-
     }
 
+    /**
+     * Returns the last player of the game
+     * @return the last player of the game
+     */
     public int findLastPlayer() {
-
         int lastPlayer = -1;
-
         for (int i = 0; i < this.gameModel.getPlayers().length; i++) {
             if (this.gameModel.getPlayers()[i] != null) {
                 lastPlayer = i;
             }
         }
-
         return lastPlayer;
-
     }
 
+    /**
+     * Sends to all the players that the game is over
+     * @param gameOverMessage message that contains winner and player's victory points
+     */
     public void broadcastGameOver(GameOverMessage gameOverMessage) {
-
         for (PlayerThread playerThread : this.playerThreads) {
             try {
                 playerThread.getSender().reset();
                 playerThread.getSender().writeObject(gameOverMessage);
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Errore in endgame");
+            } catch (Exception ignored) {
             }
         }
     }
-
 }

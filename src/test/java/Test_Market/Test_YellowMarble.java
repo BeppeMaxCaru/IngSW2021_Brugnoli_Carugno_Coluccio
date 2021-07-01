@@ -14,7 +14,7 @@ public class Test_YellowMarble {
     //Try the superclass Marble
     @Test
     public void generalMarble(){
-        Marble marble = new Marble();
+        Marble marble = new Marble(null);
         assertEquals(Marble.class, marble.getClass());
     }
 
