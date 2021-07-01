@@ -18,18 +18,18 @@ public class Test_PlayerBoard {
 
         assertTrue(players[0].getPlayerBoard().isCardBelowCompatible(1,card1));
         for(int i=0; i<3; i++)
-            System.out.println(players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[i][1]);
+            System.out.println(players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[i][1]);
         System.out.println();
 
         assertTrue(players[0].getPlayerBoard().isCardBelowCompatible(1,card2));
         for(int i=0; i<3; i++)
-            System.out.println(players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[i][1]);
+            System.out.println(players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[i][1]);
         System.out.println();
 
 
         assertTrue(players[0].getPlayerBoard().isCardBelowCompatible(1,card3));
         for(int i=0; i<3; i++)
-            System.out.println(players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[i][1]);
+            System.out.println(players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[i][1]);
         System.out.println();
 
         //I can't insert a card on a full pile

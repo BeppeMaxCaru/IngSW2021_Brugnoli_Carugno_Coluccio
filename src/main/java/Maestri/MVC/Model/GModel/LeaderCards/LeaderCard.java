@@ -1,7 +1,6 @@
 package Maestri.MVC.Model.GModel.LeaderCards;
 
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 
 import java.io.Serializable;
 
@@ -22,7 +21,7 @@ public class LeaderCard implements Serializable {
 
     /**
      * Initializes the leader card as not played and its victory points
-     * @param victoryPoints - victory points of the leader card
+     * @param victoryPoints victory points of the leader card
      */
     public LeaderCard(int victoryPoints) {
         this.played=false;
@@ -54,7 +53,7 @@ public class LeaderCard implements Serializable {
 
     /**
      * Checks if the player has on his player board the requisites needed to play the leader card
-     * @param playerboard - player's player board
+     * @param playerboard player's playerBoard
      * @return true if the player can play the leader card
      */
     public boolean checkRequisites(Playerboard playerboard) {
@@ -63,15 +62,21 @@ public class LeaderCard implements Serializable {
 
     /**
      * Gives the permanent perk of the leader card to the player
-     * @param playerboard - player's playerboard
+     * @param playerboard player's playerBoard
      */
     public void activateAbility(Playerboard playerboard) {
     }
 
+    /**
+     * Prints the leader card
+     */
     public void printLeaderCard(){
-
     }
 
+    /**
+     * Returns the image of the card
+     * @return the image of the card
+     */
     public String getImage() { return ""; }
 
 }

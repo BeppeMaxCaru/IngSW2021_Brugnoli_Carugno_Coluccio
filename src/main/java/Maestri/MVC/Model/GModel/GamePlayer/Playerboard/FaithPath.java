@@ -83,7 +83,7 @@ public class FaithPath implements Serializable {
 
     /**
      * Advances the red cross of the player
-     * @param i - number of positions that the player's red cross advances
+     * @param i number of positions that the player's red cross advances
      */
     public void moveCross(int i) {
         if (i < 24) this.crossPosition = this.crossPosition + i;
@@ -91,8 +91,8 @@ public class FaithPath implements Serializable {
 
     /**
      * Assigns or not the vatican section victory points depending on the red cross position
-     * @param crossPositionPlayerX - red cross position of the player
-     * @param playerboard - the player's player board that receives the vatican section victory points
+     * @param crossPositionPlayerX red cross position of the player
+     * @param playerboard the player's player board that receives the vatican section victory points
      */
     public void checkRelationWithVatican(int crossPositionPlayerX, Playerboard playerboard) {
         if(this.discardVaticanCard.get(this.faithPathTrack[crossPositionPlayerX].getVaticanSectionVictoryPoints()) != 0) {

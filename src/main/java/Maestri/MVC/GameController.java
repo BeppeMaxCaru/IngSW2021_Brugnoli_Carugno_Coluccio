@@ -3,7 +3,6 @@ package Maestri.MVC;
 import Communication.ServerSide.PlayerThread;
 import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
-import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Message.MessageReceived.*;
 
@@ -201,7 +200,6 @@ public class GameController{
                                 paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
                                 if (!paidResources.equals(this.gameModel.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                     //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
-                                    //System.out.println("1");
                                     return false;
                                 }
                             }
@@ -223,11 +221,9 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
-                        //System.out.println("2");
                         return false;
                     }
                 } else {
-                    //System.out.println("3");
                     return false;
                 }
 
@@ -239,11 +235,9 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
-                        //System.out.println("4");
                         return false;
                     }
                 } else {
-                    //System.out.println("5");
                     return false;
                 }
 
@@ -255,11 +249,9 @@ public class GameController{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) < count) {
-                        //System.out.println("6");
                         return false;
                     }
                 } else {
-                    //System.out.println("7");
                     return false;
                 }
         }
@@ -303,21 +295,21 @@ public class GameController{
 
                     //Check if player has any cards into the indicated position
                     for (j = 2; j > 0; j--)
-                        if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                        if (currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] != null)
                             break;
 
-                    if (currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                    if (currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] == null) {
                         System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
                     //Check how many resources player has to spend
                     int totalResources = 0;
-                    for(String keys : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String keys : currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
                         System.out.println(keys);
-                        System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
-                        totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
+                        System.out.println(currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
+                        totalResources = totalResources + currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
                     }
 
                     int paidRes = 0;
@@ -395,41 +387,34 @@ public class GameController{
                 }
 
                 //Check if player has each correct resource in each correct storage
-
                 for(String keys : paidWarehouseResources.keySet()) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys) < paidWarehouseResources.get(keys)) {
-                        System.out.println("Incorrect warehouse resources");
                         return false;
                     }
                 }
 
                 for(String keys : paidChestResources.keySet()) {
                     if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
-                        System.out.println("Incorrect chest resources");
                         return false;
                     }
                 }
 
                 //Check if player inserted all necessary resources to activate the production
-                System.out.println("Paid:");
                 for (String res : paidChestResources.keySet())
                 {
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
                     if(paidWarehouseResources.get("extra"+res)!=null)
                        paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
-                    if(paidChestResources.get(res)!=0){
-                        System.out.println(paidChestResources.get(res)+" "+res);
-                    }
                 }
 
                 if(k<3)
                 {
-                    for(String res : currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String res : currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
+                        if (paidChestResources.get(res) < currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
                             System.out.println(res);
                             System.out.println(paidChestResources.get(res));
-                            System.out.println(currentPlayer.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
+                            System.out.println(currentPlayer.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
                             System.out.println("Not enough resources");
                             return false;
                         }

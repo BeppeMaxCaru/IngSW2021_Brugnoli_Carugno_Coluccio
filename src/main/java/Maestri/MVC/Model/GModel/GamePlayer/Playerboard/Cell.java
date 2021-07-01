@@ -22,9 +22,9 @@ public class Cell implements Serializable {
 
     /**
      * Initializes the cell
-     * @param victoryPoints - victory points of the cell
-     * @param popeSpace - true if the cell is a pope space
-     * @param vaticanSectionVictoryPoints - victory points of the vatican section's card
+     * @param victoryPoints victory points of the cell
+     * @param popeSpace true if the cell is a pope space
+     * @param vaticanSectionVictoryPoints victory points of the vatican section's card
      */
     public Cell(int victoryPoints, boolean popeSpace, int vaticanSectionVictoryPoints) {
         this.victoryPoints = victoryPoints;

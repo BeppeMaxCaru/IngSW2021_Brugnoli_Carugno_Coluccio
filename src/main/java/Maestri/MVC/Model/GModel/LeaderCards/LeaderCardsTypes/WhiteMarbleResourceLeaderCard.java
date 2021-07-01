@@ -21,13 +21,17 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
      */
     private final Marble whiteMarbleResource;
 
+    /**
+     * Image of the card
+     */
     private final String image;
 
     /**
      * Initializes this leader card type
-     * @param firstRequiredDevelopmentCard - first development card's colour required
-     * @param secondRequiredDevelopmentCard - second development card's colour required
-     * @param resourceFromWhiteMarble - resource to receive from white marble
+     * @param firstRequiredDevelopmentCard first development card's colour required
+     * @param secondRequiredDevelopmentCard second development card's colour required
+     * @param resourceFromWhiteMarble resource to receive from white marble
+     * @param image image of the card
      */
     public WhiteMarbleResourceLeaderCard(String firstRequiredDevelopmentCard,
                                          String secondRequiredDevelopmentCard,
@@ -41,11 +45,6 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         this.image = image;
     }
 
-    /**
-     * Checks if the player can play the leader card
-     * @param playerboard - player's player board
-     * @return true if the player can play the leader card
-     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;
@@ -56,7 +55,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         {
             for(int k=0; k<3; k++)
             {
-                if ((playerboard.getPlayerboardDevelopmentCards()[k][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index])))
+                if ((playerboard.getPlayerBoardDevelopmentCards()[k][i]!=null)&&(playerboard.getPlayerBoardDevelopmentCards()[k][i].getDevelopmentCardColour().equals(this.requisite[index])))
                 {
                     check=true;
                     cardsRequired++;
@@ -72,7 +71,7 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
             {
                 for(int k=0; k<3; k++)
                 {
-                    if ((playerboard.getPlayerboardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(this.requisite[index])))
+                    if ((playerboard.getPlayerBoardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerBoardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(this.requisite[index])))
                         check=true;
                 }
             }
@@ -84,10 +83,6 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         return check;
     }
 
-    /**
-     * Gives to the player the perk to receive one resource from the white marble instead of nothing
-     * @param playerboard - player playing the leader card's playerboard
-     */
     @Override
     public void activateAbility(Playerboard playerboard) {
         int i = 0;
@@ -111,6 +106,10 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
         return this.image;
     }
 
+    /**
+     * Returns the marble that the player can pick instead of white marbles
+     * @return the marble that the player can pick instead of white marbles
+     */
     public Marble getWhiteMarbleResource() {
         return this.whiteMarbleResource;
     }

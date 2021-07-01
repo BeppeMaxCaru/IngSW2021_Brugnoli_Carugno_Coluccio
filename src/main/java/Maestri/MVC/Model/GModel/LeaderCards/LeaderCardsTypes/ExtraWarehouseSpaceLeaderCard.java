@@ -25,12 +25,16 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
      */
     private final String resourceSpace;
 
+    /**
+     * Image of the card
+     */
     private final String image;
 
     /**
      * Initializes this leader card type
-     * @param resourceCost - type of resource to pay to activate the leader card
-     * @param resourceSpace - type of the extra resource space
+     * @param resourceCost type of resource to pay to activate the leader card
+     * @param resourceSpace type of the extra resource space
+     * @param image image of the card
      */
     public ExtraWarehouseSpaceLeaderCard(String resourceCost, String resourceSpace, String image) {
         super(3);
@@ -39,15 +43,9 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
         this.requisite=resourceCost;
         //Association of the extra space to the attribute
         this.resourceSpace=resourceSpace;
-
         this.image = image;
     }
 
-    /**
-     * Checks if the player has enough resources to play the leader card
-     * @param playerboard - player's player board
-     * @return true if the player can play the leader card
-     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         int totalResources=0;
@@ -65,10 +63,6 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
         return totalResources >= this.quantity;
     }
 
-    /**
-     * Adds the extra spaces to the warehouse
-     * @param playerboard - player playing the leader card's playerboard
-     */
     @Override
     public void activateAbility(Playerboard playerboard) {
         playerboard.getWareHouse().getWarehouseResources().put("extra"+this.resourceSpace,0);
@@ -90,5 +84,9 @@ public class ExtraWarehouseSpaceLeaderCard extends LeaderCard implements Seriali
         return this.image;
     }
 
+    /**
+     * Returns the resource stored in the leader card
+     * @return the resource stored in the leader card
+     */
     public String getResourceSpace() {return this.resourceSpace; }
 }

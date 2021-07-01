@@ -6,21 +6,17 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 import java.io.Serializable;
 
 /**
- * White marbles has no effects until the related LeaderCard is activated
- */
-
-/**
- * Unlucky white marble that doesn't produce any resource
+ * This white marble doesn't produce any resource until the related LeaderCard is activated
  */
 public class WhiteMarble extends Marble implements Serializable {
 
     /**
-     * Checks if the player can still receive a resource instead of nothing thanks to a leader card activated before
-     * @param players - players playing the game
-     * @param playerNumber - number of the current player
-     * @param chosenMarble
-     * @return
+     * Initializes the white marble
      */
+    public WhiteMarble() {
+        super(" WHITE ");
+    }
+
     @Override
     public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble) {
         if(!chosenMarble.equals("X"))
@@ -29,10 +25,5 @@ public class WhiteMarble extends Marble implements Serializable {
             players[playerNumber].getPlayerBoard().getResourceMarbles()[choice].drawMarble(players, playerNumber, wlChoice, chosenMarble);
         }
         return true;
-    }
-
-    @Override
-    public String getColour(){
-        return " WHITE ";
     }
 }

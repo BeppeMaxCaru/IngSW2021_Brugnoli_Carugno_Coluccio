@@ -2,7 +2,6 @@ package Communication.ClientSide.RenderingView.GUI;
 
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes.ExtraWarehouseSpaceLeaderCard;
-import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -84,7 +83,7 @@ public class PlayerBoardScenario implements Runnable {
         for(int col = 0; col < 3; col++) {
             int row;
             for(row = 2; row > 0; row--) {
-                if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[row][col] != null)
+                if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[row][col] != null)
                     break;
             }
             if(row == -1) row = 0;
@@ -93,8 +92,8 @@ public class PlayerBoardScenario implements Runnable {
 
         for (int i = 0; i < 3; i++) {
             //Creating a graphic (image)
-            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i] != null) {
-                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerboardDevelopmentCards()[dimPile[i]][i].getImage());
+            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[i]][i] != null) {
+                Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[i]][i].getImage());
                 ImageView imageView = new ImageView();
                 imageView.setImage(img);
                 imageView.setLayoutX(x);

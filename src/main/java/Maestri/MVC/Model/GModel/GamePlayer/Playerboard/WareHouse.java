@@ -35,7 +35,7 @@ public class WareHouse implements Serializable {
 
     /**
      * Sets the warehouse's resources
-     * @param warehouseResources - the resources to set
+     * @param warehouseResources the resources to set
      */
     public void setWarehouseResources(Map <String, Integer> warehouseResources) {
         this.warehouseResources = warehouseResources;
@@ -43,8 +43,8 @@ public class WareHouse implements Serializable {
 
     /**
      * Checks that adding a new resource doesn't violate warehouse limit
-     * @param newResource - resource to add
-     * @param wlChoice
+     * @param newResource resource to add
+     * @param wlChoice indicates if player wants to store the resource in warehouse or in extra space
      * @return true the resource is discarded instead of collected
      */
     public boolean checkConstraints(String newResource, String wlChoice) {
@@ -67,7 +67,6 @@ public class WareHouse implements Serializable {
         boolean discard=false;
 
         Integer numOfResources = this.warehouseResources.get(newResource);
-        Integer extraSpace = this.warehouseResources.get(extraRes);
 
         //if LeaderCard extra space is available
         if(wlChoice.equals("L")) {
@@ -75,13 +74,7 @@ public class WareHouse implements Serializable {
                 return true;
             else if (this.warehouseResources.get((extraRes)) >= 2)
                 return true;
-            /*
-            else {
-                this.warehouseResources.put(extraRes, extraSpace + 1);
-                discard=true;
-            }
 
-             */
         } else {
             switch (numOfResources) {
                 case 0:

@@ -8,9 +8,6 @@ import Message.MessageSent.*;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.channels.MulticastChannel;
-import java.util.*;
 
 public class PlayerThread implements Runnable {
 
@@ -173,7 +170,7 @@ public class PlayerThread implements Runnable {
             //QUI FINE
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
             while (!startingResourcesMessage.getStartingRes().isEmpty())
-                currentPlayer.setStartingPlayerboard(startingResourcesMessage.getStartingRes().remove(0));
+                currentPlayer.setStartingPlayerBoard(startingResourcesMessage.getStartingRes().remove(0));
             //this.sender.writeObject( new ActionOutcomeMessage(true));
             //System.out.println("Starting res received");
         } catch (Exception e) {

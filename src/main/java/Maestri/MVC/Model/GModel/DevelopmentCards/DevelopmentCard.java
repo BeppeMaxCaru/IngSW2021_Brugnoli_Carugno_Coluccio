@@ -39,13 +39,15 @@ public class DevelopmentCard implements Serializable {
      * Victory points of the card
      */
     private int victoryPoints;
-
+    /**
+     * Image of the card
+     */
     private String image;
 
     /**
      * Initializes a partial development card
-     * @param colour - colour of the development card
-     * @param level - level of the development card
+     * @param colour colour of the development card
+     * @param level level of the development card
      */
     public DevelopmentCard(String colour, int level) {
         this.colour = colour;
@@ -54,23 +56,23 @@ public class DevelopmentCard implements Serializable {
 
     /**
      * Initializes a full development card
-     * @param colour - colour of the development card
-     * @param level - level of the development card
-     * @param coinsCost - coins cost of the development card
-     * @param stonesCost - stones cost of the development card
-     * @param servantsCost - servants cost of the development card
-     * @param shieldsCost - shields cost of the development card
-     * @param coinsInput - coins input for the production of the development card
-     * @param stonesInput - stones input for the production of the development card
-     * @param servantsInput - servants input for the production of the development card
-     * @param shieldsInput - shield input for the production of the development card
-     * @param coinsOutput - coins output from the production of the development card
-     * @param stonesOutput - stones output from the production of the development card
-     * @param servantsOutput - servants output from the production of the development card
-     * @param shieldsOutput - shields output from the production of the development card
-     * @param faithPoints - faith points output from the production of the development card
-     * @param victoryPoints - victory points of the development card
-     * @param image - image of the card
+     * @param colour colour of the development card
+     * @param level level of the development card
+     * @param coinsCost coins cost of the development card
+     * @param stonesCost stones cost of the development card
+     * @param servantsCost servants cost of the development card
+     * @param shieldsCost shields cost of the development card
+     * @param coinsInput coins input for the production of the development card
+     * @param stonesInput stones input for the production of the development card
+     * @param servantsInput servants input for the production of the development card
+     * @param shieldsInput shield input for the production of the development card
+     * @param coinsOutput coins output from the production of the development card
+     * @param stonesOutput stones output from the production of the development card
+     * @param servantsOutput servants output from the production of the development card
+     * @param shieldsOutput shields output from the production of the development card
+     * @param faithPoints faith points output from the production of the development card
+     * @param victoryPoints victory points of the development card
+     * @param image image of the card
      */
     public DevelopmentCard(String colour, int level,
                            int coinsCost, int stonesCost, int servantsCost, int shieldsCost,
@@ -162,12 +164,12 @@ public class DevelopmentCard implements Serializable {
 
     /**
      * Checks if the player can place the development card on his player board
-     * @param playerboard - player's player board
+     * @param playerboard player's playerBoard
      * @return true if the player can place the development card on his player board
      */
     public boolean checkPlayerboardDevelopmentCardsCompatibility(Playerboard playerboard, PrintWriter out) {
         //Gets the player board's spaces where development cards are places
-        DevelopmentCard[][] playerDevelopmentCards = playerboard.getPlayerboardDevelopmentCards();
+        DevelopmentCard[][] playerDevelopmentCards = playerboard.getPlayerBoardDevelopmentCards();
         //Checks if there are empty spaces or cards that are of the same colour of the
         //development card but whose level is one level lower
         if(this.getDevelopmentCardLevel()==1)
@@ -195,7 +197,7 @@ public class DevelopmentCard implements Serializable {
 
     /**
      * Removes resources from the player's player board equals to the development card cost
-     * @param playerboard - player's player board
+     * @param playerboard player's playerBoard
      */
     public void payDevelopmentCard(Playerboard playerboard, String[] wclChoice) {
 
@@ -219,6 +221,10 @@ public class DevelopmentCard implements Serializable {
         }
     }
 
+    /**
+     * Returns the string of card requisites
+     * @return the string of card requisites
+     */
     public String printCardReq(){
         StringBuilder req= new StringBuilder();
         for(String str:this.cost.keySet())
@@ -233,6 +239,10 @@ public class DevelopmentCard implements Serializable {
         return req.substring(0,16);
     }
 
+    /**
+     * Returns the production power given by the card
+     * @return the production power given by the card
+     */
     public String printCardProductionPower(){
         StringBuilder req= new StringBuilder();
         for(String str:this.input.keySet())
@@ -260,6 +270,10 @@ public class DevelopmentCard implements Serializable {
         return req.substring(0,21);
     }
 
+    /**
+     * Returns the card image
+     * @return the card image
+     */
     public String getImage() {
         return this.image;
     }

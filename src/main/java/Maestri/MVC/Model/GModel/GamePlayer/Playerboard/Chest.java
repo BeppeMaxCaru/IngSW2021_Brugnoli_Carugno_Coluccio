@@ -35,7 +35,7 @@ public class Chest implements Serializable {
 
     /**
      * Sets the chest's resources
-     * @param chestResources - resources to set
+     * @param chestResources resources to set
      */
     public void setChestResources(Map<String, Integer> chestResources) {
         this.chestResources = chestResources;

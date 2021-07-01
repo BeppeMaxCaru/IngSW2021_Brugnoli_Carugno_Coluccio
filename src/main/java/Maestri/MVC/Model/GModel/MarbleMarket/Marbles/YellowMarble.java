@@ -12,12 +12,12 @@ import java.util.Map;
 public class YellowMarble extends Marble implements Serializable {
 
     /**
-     * If the drawing player has enough space in its warehouse it receives one coin otherwise other players receive one faith point
-     * @param players - players playing the game
-     * @param playerNumber - number of the current player
-     * @param chosenMarble
-     * @return
+     * Initializes the yellow marble
      */
+    public YellowMarble() {
+        super(" YELLOW ");
+    }
+
     @Override
     public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble) {
 
@@ -37,12 +37,11 @@ public class YellowMarble extends Marble implements Serializable {
             {
                 numOfResources++;
                 whResources.put("COINS", numOfResources);
-                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
             } else {
                 numOfExtraRes++;
                 whResources.put("extraCOINS", numOfExtraRes);
-                players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
             }
+            players[playerNumber].getPlayerBoard().getWareHouse().setWarehouseResources(whResources);
 
         }
         else
@@ -61,9 +60,5 @@ public class YellowMarble extends Marble implements Serializable {
             }
         }
         return false;
-    }
-    @Override
-    public String getColour(){
-        return " YELLOW ";
     }
 }

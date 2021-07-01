@@ -26,17 +26,17 @@ public class Test_WhiteMarbleLeaderCard {
     public void try_constraints1(){
         players[0] = new Player("Beppe", 0);
 
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
                 1,1, null);
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("PURPLE",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][1]=new DevelopmentCard("PURPLE",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
                 2,5, null);
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,
@@ -51,17 +51,17 @@ public class Test_WhiteMarbleLeaderCard {
     public void try_constraints2(){
         players[0] = new Player("Beppe", 0);
 
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][0]=new DevelopmentCard("YELLOW",1,
                 0,2,0,0,
                 0,0,1,0,
                 0,0,0,0,
                 1,1, null);
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][1]=new DevelopmentCard("YELLOW",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][1]=new DevelopmentCard("YELLOW",1,
                 0,4,0,0,
                 0,0,0,1,
                 0,0,0,0,
                 2,5, null);
-        players[0].getPlayerBoard().getPlayerboardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
+        players[0].getPlayerBoard().getPlayerBoardDevelopmentCards()[0][2]=new DevelopmentCard("BLUE",1,
                 2,0,0,0,
                 0,0,0,1,
                 0,0,0,0,

@@ -20,8 +20,6 @@ public class DevelopmentCardsDecksGrid implements Serializable {
      */
     private final Collection<Integer> developmentCardsLevels;
 
-    //private final Scanner consoleInput = new Scanner(System.in);
-
     /**
      * Initializes the development cards in a 3(levels)x4(colours) ordered matrix and groups them in decks of 4
      */
@@ -337,7 +335,7 @@ public class DevelopmentCardsDecksGrid implements Serializable {
 
     /**
      * Checks if there are still development cards in a grid's deck
-     * @param developmentCards - development cards deck
+     * @param developmentCards development cards deck
      * @return if there are still development cards in a grid's deck
      */
     public boolean stillCardsInTheDeck(DevelopmentCard[] developmentCards) {
@@ -347,7 +345,7 @@ public class DevelopmentCardsDecksGrid implements Serializable {
 
     /**
      * Removes 2 development card from the available ones
-     * @param column - column to remove the development cards from
+     * @param column column to remove the development cards from
      */
     public void removeDevelopmentCards(int column) {
         int removedCards = 0;
@@ -370,6 +368,9 @@ public class DevelopmentCardsDecksGrid implements Serializable {
         }
     }
 
+    /**
+     * Prints the development cards grid
+     */
     public void printGrid(){
 
         for(int row=0; row<3; row++)

@@ -353,21 +353,21 @@ public class ClientMain{
 
                     //Check if player has any cards into the indicated position
                     for (j = 2; j > 0; j--)
-                        if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] != null)
+                        if (player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] != null)
                             break;
 
-                    if (player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k] == null) {
+                    if (player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] == null) {
                         System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
                     //Check how many resources player has to spend
                     int totalResources = 0;
-                    for(String keys : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String keys : player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
                         System.out.println(keys);
-                        System.out.println(player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
-                        totalResources = totalResources + player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
+                        System.out.println(player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
+                        totalResources = totalResources + player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
                     }
 
                     int paidRes = 0;
@@ -474,12 +474,12 @@ public class ClientMain{
 
                 if(k<3)
                 {
-                    for(String res : player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
+                    for(String res : player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
+                        if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
                             System.out.println(res);
                             System.out.println(paidChestResources.get(res));
-                            System.out.println(player.getPlayerBoard().getPlayerboardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
+                            System.out.println(player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
                             System.out.println("Not enough resources");
                             return false;
                         }

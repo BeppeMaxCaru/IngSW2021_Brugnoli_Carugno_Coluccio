@@ -50,7 +50,7 @@ public class ActionCounter {
 
     /**
      * Returns the name of the counter
-     * @return counter
+     * @return the name of the counter
      */
     public String getCounter() {
         return this.counter;

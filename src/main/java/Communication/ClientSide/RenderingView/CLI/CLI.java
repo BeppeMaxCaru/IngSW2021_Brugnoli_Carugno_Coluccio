@@ -814,57 +814,57 @@ public class CLI implements RenderingView {
         switch(prodPower){
             case "P0":
             {
-                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0]==null)
+                if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][0]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][0]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][0]==null)
                     return -1;
 
                 if(activation[0]==0)
                 {
-                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][0].printCardProductionPower());
-                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][0].printCardProductionPower());
-                        else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0]!=null)
-                            System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][0].printCardProductionPower());
+                    if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][0]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][0].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][0]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][0].printCardProductionPower());
+                        else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][0]!=null)
+                            System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][0].printCardProductionPower());
                     return 0;
                 }
                 else return -1;
             }
             case "P1":
             {
-                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1]==null)
+                if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][1]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][1]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][1]==null)
                     return -1;
 
                 if(activation[1]==0)
                 {
-                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][1].printCardProductionPower());
-                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][1].printCardProductionPower());
-                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][1].printCardProductionPower());
+                    if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][1].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][1].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][1]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][1].printCardProductionPower());
                     return 1;
                 }
                 else return -1;
             }
             case "P2":
             {
-                if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2]==null &&
-                        this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2]==null)
+                if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][2]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][2]==null &&
+                        this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][2]==null)
                     return -1;
 
                 if(activation[2]==0)
                 {
-                    if(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[2][2].printCardProductionPower());
-                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[1][2].printCardProductionPower());
-                    else if (this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2]!=null)
-                        System.out.println(this.main.getPlayerboard().getPlayerboardDevelopmentCards()[0][2].printCardProductionPower());
+                    if(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[2][2].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[1][2].printCardProductionPower());
+                    else if (this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][2]!=null)
+                        System.out.println(this.main.getPlayerboard().getPlayerBoardDevelopmentCards()[0][2].printCardProductionPower());
                     return 2;
                 }
                 else return -1;

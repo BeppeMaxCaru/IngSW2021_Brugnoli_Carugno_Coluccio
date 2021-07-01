@@ -6,26 +6,21 @@ import Maestri.MVC.Model.GModel.MarbleMarket.Marble;
 import java.io.Serializable;
 
 /**
- * This red marble produces faithPoints
+ * This red marble produces FAITH POINTS
  */
 public class RedMarble extends Marble implements Serializable {
 
     /**
-     * Moves the current player's red cross one cell forward in the faith path
-     * @param players - players playing the game
-     * @param playerNumber - number of the current player
-     * @param chosenMarble
-     * @return
+     * Initializes the red marble
      */
+    public RedMarble() {
+        super(" RED ");
+    }
+
     @Override
     public Boolean drawMarble(Player[] players, int playerNumber, String wlChoice, String chosenMarble)
     {
         players[playerNumber].getPlayerBoard().getFaithPath().moveCross(1);
         return false;
-    }
-
-    @Override
-    public String getColour(){
-        return " RED ";
     }
 }

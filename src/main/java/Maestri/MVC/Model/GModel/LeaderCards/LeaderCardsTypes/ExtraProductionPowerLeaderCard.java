@@ -22,12 +22,16 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
      */
     private final String input;
 
+    /**
+     * Image of the card
+     */
     private final String image;
 
     /**
      * Initializes this leader card type
-     * @param requisite - development card required
-     * @param resourceInput - input resource
+     * @param requisite development card required
+     * @param resourceInput input resource
+     * @param image image of the card
      */
     public ExtraProductionPowerLeaderCard(DevelopmentCard requisite, String resourceInput, String image) {
         super(4);
@@ -38,10 +42,6 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
 
     public String getInput() { return this.input;}
 
-    /**
-     * Gifts an extra production power to the player
-     * @param playerboard - player playing the leader card
-     */
     @Override
     public void activateAbility(Playerboard playerboard) {
 
@@ -53,25 +53,17 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
         this.setPlayed(true);
     }
 
-    /**
-     * Checks if the player can play the leader card
-     * @param playerboard - player's player board
-     * @return true if the player can play the leader card
-     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check = false;
         for(int i = 0; i < 3; i++)
         {
-            /*if ((playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour()))) {
-                check = true;
-            } */
 
-            if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null) {
-                System.out.println(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardLevel());
-                if (playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour())) {
+            if (playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null) {
+                System.out.println(playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardLevel());
+                if (playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour())) {
                     System.out.println(this.requisite.getDevelopmentCardColour());
-                    System.out.println(playerboard.getPlayerboardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour());
+                    System.out.println(playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour());
                     check = true;
                 }
             }

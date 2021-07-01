@@ -2,7 +2,6 @@ package Maestri.MVC.Model.GModel.LeaderCards.LeaderCardsTypes;
 
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
-import javafx.scene.image.Image;
 
 import java.io.Serializable;
 
@@ -21,13 +20,17 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
      */
     private final String discount;
 
+    /**
+     * Image of the card
+     */
     private final String image;
 
     /**
      * Initializes this leader card type
-     * @param firstRequiredDevelopmentCard - first development card's colour required
-     * @param secondRequiredDevelopmentCard - second development card's colour required
-     * @param resource - resource to discount
+     * @param firstRequiredDevelopmentCard first development card's colour required
+     * @param secondRequiredDevelopmentCard second development card's colour required
+     * @param resource resource to discount
+     * @param image image of the card
      */
     public DiscountDevelopmentCardsLeaderCard(String firstRequiredDevelopmentCard,
                                               String secondRequiredDevelopmentCard,
@@ -45,11 +48,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
         this.image = image;
     }
 
-    /**
-     * Checks if the player can play the leader card
-     * @param playerboard - player's player board
-     * @return true if the player can play the leader card
-     */
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
         boolean check=false;
@@ -62,7 +60,7 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
             {
                 for(int k=0; k<3; k++)
                 {
-                    if((playerboard.getPlayerboardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerboardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(card)))
+                    if((playerboard.getPlayerBoardDevelopmentCards()[i][k]!=null)&&(playerboard.getPlayerBoardDevelopmentCards()[i][k].getDevelopmentCardColour().equals(card)))
                         check=true;
                 }
             }
@@ -72,10 +70,6 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
         return check;
     }
 
-    /**
-     * Gives to the player the perk to discount one resource from the cost of the development card to buy
-     * @param playerboard - player playing the leader card's playerboard
-     */
     @Override
     public void activateAbility(Playerboard playerboard) {
         int i = 0;
@@ -101,6 +95,10 @@ public class DiscountDevelopmentCardsLeaderCard extends LeaderCard implements Se
         return this.image;
     }
 
+    /**
+     * Returns the resource that can be discounted
+     * @return the resource that can be discounted
+     */
     public String getDiscount() {
         return this.discount;
     }
