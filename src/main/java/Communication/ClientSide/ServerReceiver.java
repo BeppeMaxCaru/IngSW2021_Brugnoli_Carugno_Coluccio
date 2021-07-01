@@ -44,6 +44,7 @@ public class ServerReceiver extends Thread {
                 try {
                     //System.out.println("ping ok -> connection stable");
                 } catch (Exception e) {
+                    this.view.receiverError(e);
                     break;
                 }
             }
@@ -165,7 +166,8 @@ public class ServerReceiver extends Thread {
 
                     //SHUT BOTH THREAD AND STREAM
                     this.receiver.close();
-                    this.interrupt();
+                    //this.interrupt();
+                    return;
 
                 } catch (Exception e) {
                     this.view.receiverError(e);
@@ -174,10 +176,29 @@ public class ServerReceiver extends Thread {
 
             }
 
+            /*if (object instanceof ServerErrorMessage) {
+
+                try {
+                    ServerErrorMessage serverErrorMessage = (ServerErrorMessage) object;
+
+                    //Metodo che cambia schermata se si riceve messaggio di errore
+                    //facendolo vedere
+
+                    this.receiver.close();
+                    return;
+
+                } catch (Exception e) {
+                    this.view.receiverError(e);
+                    break;
+                }
+
+            }*/
+
             if (object instanceof ServerErrorMessage) {
                 try {
                     ServerErrorMessage serverErrorMessage = (ServerErrorMessage) object;
                     this.view.serverError(serverErrorMessage.getErrorMessage());
+                    return;
                 } catch (Exception e) {
                     this.view.receiverError(e);
                     break;

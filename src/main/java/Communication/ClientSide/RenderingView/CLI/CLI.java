@@ -1124,15 +1124,16 @@ public class CLI implements RenderingView {
 
     @Override
     public void receiverError(Exception e){
-        e.printStackTrace();
-        System.err.println("Message corrupted");
-        System.exit(-7);
+        //e.printStackTrace();
+        System.err.println("Error occurred while receiving data");
+        System.exit(-1);
     }
 
     @Override
     public void senderError(Exception e){
-        e.printStackTrace();
-        System.err.println("Not valid parameter");
+        //e.printStackTrace();
+        System.err.println("Error occurred while sending data");
+        System.exit(-1);
     }
 
     @Override
