@@ -9,14 +9,26 @@ import java.io.ObjectInputStream;
  */
 public interface RenderingView {
 
+    /**
+     *
+     * @param e
+     */
     default void error(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param e
+     */
     default void receiverError(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param e
+     */
     default void senderError(Exception e){
         e.printStackTrace();
     }
@@ -59,27 +71,55 @@ public interface RenderingView {
 
     default void update(){}
 
+    /**
+     * Check
+     * @param e Exception received
+     */
     default void connectionError(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param e
+     */
     default void setupError(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param e
+     */
     default void gameError(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param errorMessage
+     */
     default void serverError(String errorMessage){
     }
 
+    /**
+     *
+     * @param e
+     */
     default void invalidInputError(Exception e){
         e.printStackTrace();
     }
 
+    /**
+     *
+     * @param objectInputStream
+     */
     default void receivePing(ObjectInputStream objectInputStream) {}
 
+    /**
+     *
+     * @param clientError
+     */
     default void clientError(String clientError) {}
 
 }

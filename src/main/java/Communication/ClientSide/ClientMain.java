@@ -384,6 +384,13 @@ public class ClientMain{
         return true;
     }
 
+    /**
+     *
+     * @param player
+     * @param activation
+     * @param whichInput
+     * @return
+     */
     public boolean checkLocalActivateProd(Player player, int[] activation, String[] whichInput) {
         int act = 0;
         for (int i : activation) act = act + i;

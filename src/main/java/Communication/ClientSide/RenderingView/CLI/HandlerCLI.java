@@ -168,22 +168,14 @@ public class HandlerCLI {
 
                     //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
-                    //Before
-                    //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
-
-                    //After
                     this.msg.sendDiscardedLeader(this.cli.discarder());
 
                     UpdateClientLeaderCardsMessage updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
                     this.clientMain.setLeaderCards(updateClientLeaderCardsMessage.getLeaderCards());
 
                     //Check
-                    System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
+                    //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
-                    //Before
-                    //this.msg.sendDiscardedLeader(this.cli.discardStartingCard());
-
-                    //After
                     this.msg.sendDiscardedLeader(this.cli.discarder());
 
                     updateClientLeaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
@@ -193,28 +185,13 @@ public class HandlerCLI {
                     System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                     this.cli.setupError(e);
                 }
-
-                //Receive from input 2 leader cards to be discarded
-                /*int[] cards = this.cli.getDiscardedStartingLeaders();
-
-                //Sends starting excess leader card to discard
-                this.msg.sendDiscardedLeader(cards[0]);
-                this.msg.sendDiscardedLeader(cards[1]);*/
 
             } catch (Exception e) {
                 this.cli.setupError(e);
             }
-
-            /*try {
-                UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
-                this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
-            } catch (Exception e) {
-                this.cli.setupError(e);
-                return;
-            }*/
 
             //Starts async phase
             new ServerSender(this.clientMain, gameMode, this.msg).start();
@@ -222,5 +199,4 @@ public class HandlerCLI {
 
         }
     }
-
 }

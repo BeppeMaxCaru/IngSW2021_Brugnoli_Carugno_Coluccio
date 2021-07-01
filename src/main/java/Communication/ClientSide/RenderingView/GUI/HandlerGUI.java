@@ -18,7 +18,12 @@ public class HandlerGUI extends Application implements RenderingView {
 
     int[] activate;
     boolean turn = false;
+
+    /**
+     * The game mode chosen
+     */
     int gameMode;
+
 
     int correctAction;
 

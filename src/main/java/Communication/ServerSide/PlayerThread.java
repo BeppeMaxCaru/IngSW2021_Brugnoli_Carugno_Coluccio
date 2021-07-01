@@ -11,22 +11,50 @@ import java.net.Socket;
 
 public class PlayerThread implements Runnable {
 
+    /**
+     * The nickname of the player thread
+     */
     private String nickName;
+
+    /**
+     * The number assigned
+     */
     private int playerThreadNumber;
 
+    /**
+     * The socket that keeps the connection
+     */
     private Socket playerSocket;
 
+    /**
+     * Receives the messages
+     */
     private ObjectInputStream receiver;
+
+    /**
+     * Sends the messages
+     */
     private ObjectOutputStream sender;
 
     //The controller for this player
+    /**
+     * Interacts with the game model
+     */
     private GameController gameController;
 
+    /**
+     * Checks if a main action has been performed
+     */
     private boolean mainAction = false;
 
     //private int yourTurnMessageCounter = 0;
 
     //Il game controller va assegnato con setter siccome creato prima
+
+    /**
+     * Builds the player thread
+     * @param clientSocket The socket used for the connection
+     */
     public PlayerThread(Socket clientSocket) {
         try {
             this.playerSocket = clientSocket;
@@ -60,22 +88,42 @@ public class PlayerThread implements Runnable {
         this.nickName = nickName;
     }
 
+    /**
+     * Returns the thread number
+     * @return the thread number
+     */
     public int getPlayerThreadNumber() {
         return this.playerThreadNumber;
     }
 
+    /**
+     * Sets the thread number
+     * @param playerThreadNumber Thread number to be set
+     */
     public void setPlayerThreadNumber(int playerThreadNumber) {
         this.playerThreadNumber = playerThreadNumber;
     }
 
+    /**
+     * Returns the game controller assigned to this player thread
+     * @return the game controller assigned to this player thread
+     */
     public GameController getGameController() {
         return this.gameController;
     }
 
+    /**
+     * Assigns the game controller to the thread
+     * @param gameController Game controller to be assigned
+     */
     public void setGameController(GameController gameController) {
         this.gameController = gameController;
     }
 
+    /**
+     * Returns the messages sender
+     * @return the messages sender
+     */
     public ObjectOutputStream getSender() {
         return this.sender;
     }
@@ -570,6 +618,9 @@ public class PlayerThread implements Runnable {
 
     }
 
+    /**
+     * Removes a player from the game
+     */
     public void removePlayer () {
         try {
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber] = null;
@@ -584,6 +635,10 @@ public class PlayerThread implements Runnable {
         }
     }
 
+    /**
+     * Sends an error message
+     * @param errorMessage Error message to show
+     */
     public void sendErrorMessage(String errorMessage) {
         try {
             this.sender.reset();
@@ -604,7 +659,5 @@ public class PlayerThread implements Runnable {
             //System.out.println("Player lost");
         }
     }
-
-
 
 }

@@ -17,7 +17,7 @@ public class ServerSender extends Thread {
     private final CLI cli;
 
     /**
-     * Gamemode selected
+     * Game mode selected
      */
     private final int gameMode;
 
@@ -252,7 +252,7 @@ public class ServerSender extends Thread {
     }
 
     /**
-     *
+     * Checks if the local game is over
      * @param localPlayers local player and Lorenzo Il Magnifico
      * @return true if the game is over
      */

@@ -20,11 +20,31 @@ import java.util.Map;
 
 public class PlotScenarioGUI implements Runnable{
 
+    /**
+     * The GUI's handler
+     */
     private final HandlerGUI handlerGUI;
+
+    /**
+     * The stage
+     */
     private final Stage stage;
+
+    /**
+     * The action to select
+     */
     private String action;
+
+    /**
+     * Checks if a main acion has been done
+     */
     private boolean mainAction;
 
+    /**
+     * Prepares the scenario
+     * @param handlerGUI The GUI's handler
+     * @param stage The stage to be set
+     */
     public PlotScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
         this.handlerGUI = handlerGUI;
         this.stage = stage;

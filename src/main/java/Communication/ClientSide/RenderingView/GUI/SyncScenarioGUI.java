@@ -22,10 +22,15 @@ public class SyncScenarioGUI {
     private HandlerGUI handlerGUI;
 
     /**
-     *
+     * The stage to be set
      */
     private Stage stage;
 
+    /**
+     * Prepares the scenario
+     * @param handlerGUI The GUI's handler
+     * @param stage The stage to be set
+     */
     public SyncScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
         this.handlerGUI = handlerGUI;
         this.stage = stage;
