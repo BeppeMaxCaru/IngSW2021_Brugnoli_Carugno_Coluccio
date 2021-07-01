@@ -1,6 +1,5 @@
 package Communication.ClientSide.RenderingView.GUI;
 
-import Communication.ClientSide.ClientMain;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,12 +17,16 @@ import java.util.TimerTask;
 public class GenericClassGUI {
 
     private final HandlerGUI handlerGUI;
-    //private final ClientMain clientMain;
 
     public GenericClassGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
-        //this.clientMain = clientMain;
     }
+
+    /**
+     * Method that shows on the stage a string
+     * @param string the string
+     * @param stage the stage
+     */
 
     public void addLabelByCode(String string, Stage stage) {
         var label = new Label(string);
@@ -32,6 +35,11 @@ public class GenericClassGUI {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Method that waits 4 seconds on a method
+     * @param method the method that will be called after 4 seconds
+     */
 
     public void LoadWTFOnTimer(String method) {
         ArrayList<String> resStart = new ArrayList<>();
@@ -64,7 +72,7 @@ public class GenericClassGUI {
                         }
 
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Platform.runLater(new ErrorScenario(handlerGUI,handlerGUI.getStage(),"Error in loading..\nBye bye!"));
                     }
                 });
             }
@@ -74,6 +82,16 @@ public class GenericClassGUI {
         long delay = 4000L;
         timer.schedule(task, delay);
     }
+
+    /**
+     * Method that create an icon button
+     * @param x x coordinate on the stage
+     * @param y y coordinate on the stage
+     * @param img the image that will be the icon
+     * @param button the button
+     * @param height the button's height
+     * @param width the button's width
+     */
 
     public void createIconButton(int x, int y, Image img, Button button, int height, int width) {
         ImageView view = new ImageView(img);

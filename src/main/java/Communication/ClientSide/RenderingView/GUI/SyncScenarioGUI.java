@@ -24,6 +24,10 @@ public class SyncScenarioGUI {
         this.stage = stage;
     }
 
+    /**
+     * Method that marks the start of the game and communicates the player number
+     */
+
     public void matchHasStarted() {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), this.stage);
 
@@ -34,6 +38,11 @@ public class SyncScenarioGUI {
             this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("discardStartingLeaders");
         }
     }
+
+    /**
+     * Method for choosing starting resource/s
+     * @param resStart a list of choosing resource/s
+     */
 
     public void startingResource(ArrayList<String> resStart) {
         int num;
@@ -90,6 +99,12 @@ public class SyncScenarioGUI {
             });
         }
     }
+
+    /**
+     * Method for discarding the two starting leader cards
+     * @param times method iterator
+     * @param cardDiscarded (at times = 2) first card discarded
+     */
 
     public void discardStartingLeaders(int times, int cardDiscarded) {
         Group root = new Group();

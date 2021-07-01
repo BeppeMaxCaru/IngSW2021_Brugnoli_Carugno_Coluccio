@@ -45,6 +45,11 @@ public class PlayerBoardScenario implements Runnable {
 
     }
 
+    /**
+     * Method that puts the red cross in the faith path
+     * @param root the root
+     */
+
     public void putRedCross(Group root) {
         int x = 25, y;
         int redCross = this.handlerGUI.getClientMain().getPlayerboard().getFaithPath().getCrossPosition();
@@ -77,6 +82,11 @@ public class PlayerBoardScenario implements Runnable {
         }
     }
 
+    /**
+     * Method that puts the development cards on the playerboard
+     * @param root the root
+     */
+
     public void putDevCards(Group root) {
         int x = 270;
         int[] dimPile = new int[3];
@@ -105,6 +115,11 @@ public class PlayerBoardScenario implements Runnable {
             x += 140;
         }
     }
+
+    /**
+     * Method that puts the resources in the chest
+     * @param root the root
+     */
 
     public void putResourcesInChest(Group root) {
         int x = 25;
@@ -142,6 +157,11 @@ public class PlayerBoardScenario implements Runnable {
             }
         }
     }
+
+    /**
+     * Method that puts the resources in the warehouse
+     * @param root the root
+     */
 
     public void putResourcesInWarehouse(Group root) {
         Image image = null;
@@ -197,6 +217,11 @@ public class PlayerBoardScenario implements Runnable {
         }
     }
 
+    /**
+     * Method that puts the extra warehouse
+     * @param root the root
+     */
+
     public void putExtraWarehouse(Group root) {
         Image image = null;
         int x = 25;
@@ -239,6 +264,11 @@ public class PlayerBoardScenario implements Runnable {
         }
     }
 
+    /**
+     * Method that puts the resources in the extra warehouse
+     * @param root the root
+     */
+
     public void putResourceInExtraWarehouse(Group root) {
         Image image = null;
         int num = 0;
@@ -269,6 +299,14 @@ public class PlayerBoardScenario implements Runnable {
             }
         }
     }
+
+    /**
+     * Method that create an image view for the resources
+     * @param image the resource's image
+     * @param x x coordinate on the stage
+     * @param y y coordinate on the stage
+     * @param root the root
+     */
 
     public void imageView(Image image, int x, int y, Group root) {
         ImageView imageView = new ImageView();

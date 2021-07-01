@@ -18,6 +18,10 @@ public class EndGameScenario implements Runnable{
         winner();
     }
 
+    /**
+     * Method that shows how is the winner and the victory points of the current player
+     */
+
     public void winner() {
         String s;
         if(this.handlerGUI.getClientMain().getWinner().equals(this.handlerGUI.getClientMain().getNickname())) s = "you";

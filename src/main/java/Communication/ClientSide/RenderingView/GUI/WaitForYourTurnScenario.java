@@ -18,6 +18,10 @@ public class WaitForYourTurnScenario implements Runnable{
         waitForYourTurnAction();
     }
 
+    /**
+     * Method that put the player on wait for its turn
+     */
+
     public void waitForYourTurnAction() {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Your turn is ended, wait some minutes!", this.anotherStage);
     }

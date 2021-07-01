@@ -36,6 +36,10 @@ public class PlotScenarioGUI implements Runnable{
         choiceAction( );
     }
 
+    /**
+     * Method for choosing the actions, finish the turn and quit the game
+     */
+
     public void choiceAction() {
        if(this.handlerGUI.getGameMode() == 0) {
            if(this.handlerGUI.endLocalGame(this.handlerGUI.getClientMain().getLocalPlayers())) {
@@ -86,13 +90,9 @@ public class PlotScenarioGUI implements Runnable{
             playDiscardLeaderCard();
         });
 
-        pickResourceFromMarketButton.setOnAction(e -> {
-            market();
-        });
+        pickResourceFromMarketButton.setOnAction(e -> market());
 
-        buyDevelopmentCardButton.setOnAction(e -> {
-            buyDevelopmentCard();
-        });
+        buyDevelopmentCardButton.setOnAction(e -> buyDevelopmentCard());
 
         activateProdButton.setOnAction(e -> activateProductionDevCards(activate, whichOutput));
 
@@ -117,6 +117,10 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setScene(scene);
         this.stage.show();
     }
+
+    /**
+     * Method for play or discard a leader card
+     */
 
     public void playDiscardLeaderCard( ) {
         Group root = new Group();
@@ -152,9 +156,7 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setScene(scene);
         this.stage.show();
 
-        decline.setOnAction(e -> {
-            choiceAction();
-        });
+        decline.setOnAction(e -> choiceAction());
 
         firstLeader.setOnAction(e -> {
             // Multiplayer
@@ -208,6 +210,10 @@ public class PlotScenarioGUI implements Runnable{
             choiceAction();
         });
     }
+
+    /**
+     * Method to choose a line from the market
+     */
 
     public void market() {
         int x = 0, y;
@@ -333,6 +339,15 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
+    /**
+     * Method to choose which white marble power to activate
+     * @param coordinates array with the chosen row/column and the number of the line
+     * @param resource array of resources of the chosen line
+     * @param numIndex method iterator
+     * @param whichWl string that tells from which store the player wants to pick the resource at the corresponding position
+     * @param whiteMarble string built at each iteration that tells which resource the player wants to replace with the white marbles in the line
+     */
+
     public void whiteMarble(int[] coordinates, String[] resource, int numIndex, StringBuilder whichWl, StringBuilder whiteMarble) {
 
         Group root = new Group();
@@ -416,6 +431,15 @@ public class PlotScenarioGUI implements Runnable{
         });
     }
 
+    /**
+     * Method to choose where to store the resources picked from the market
+     * @param coordinates array with the chosen row/column and the number of the line
+     * @param resource array of resources of the chosen line
+     * @param index method iterator
+     * @param whichWl string built at each iteration that tells from which store the player wants to pick the resource at the corresponding position
+     * @param whiteMarble string that tells which resource the player wants to replace with the white marbles in the line
+     */
+
     public void putResources(int[] coordinates, String[] resource, int index, StringBuilder whichWl, StringBuilder whiteMarble) {
         String parameter;
         if(coordinates[0] == 0) parameter = "ROW";
@@ -482,6 +506,14 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
+    /**
+     * Method that send the market message or sets the market action parameters in local GUI
+     * @param parameter Row/column choice
+     * @param coordinates array with the chosen row/column and the number of the line
+     * @param choice string that tells from which store the player wants to pick the resource at the corresponding position
+     * @param whiteMarble string that tells which resource the player wants to replace with the white marbles in the line
+     */
+
     public void sendMessageMarket(String parameter, int[] coordinates, String choice, String whiteMarble) {
         if(this.handlerGUI.getGameMode() == 1)
             this.handlerGUI.getMsg().sendMarketAction(parameter, coordinates[1], choice, whiteMarble);
@@ -494,6 +526,13 @@ public class PlotScenarioGUI implements Runnable{
         choiceAction();
     }
 
+    /**
+     * Method that combines the attribute colour of a marble with the creation of a shape with the correspondent colour
+     * @param x x coordinates in the market
+     * @param y y coordinates in the market
+     * @param gc graphic context
+     * @param colour colour of the marble
+     */
 
     public void drawnMarbles(int x, int y, GraphicsContext gc, String colour) {
         switch (colour) {
@@ -519,6 +558,12 @@ public class PlotScenarioGUI implements Runnable{
         gc.fillOval(x, y, 40, 40);
     }
 
+    /**
+     * Method that combines the marble's colour with the correspondent resource's image
+     * @param colour colour of the marble
+     * @return image
+     */
+
     public String resourceMarbles(String colour) {
         String resource;
         switch (colour) {
@@ -543,6 +588,10 @@ public class PlotScenarioGUI implements Runnable{
         }
         return resource;
     }
+
+    /**
+     * Method to buy a development card
+     */
 
     public void buyDevelopmentCard() {
         Group root = new Group();
@@ -586,9 +635,7 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setScene(scene);
         this.stage.show();
 
-        decline.setOnAction(e -> {
-            choiceAction();
-        });
+        decline.setOnAction(e -> choiceAction());
 
         int row = 0, column = 0;
         int[] coordinates = new int[2];
@@ -618,6 +665,15 @@ public class PlotScenarioGUI implements Runnable{
             column++;
         }
     }
+
+    /**
+     * Method to choose from which store to get the resources for purchasing a development card
+     * @param coordinates coordinates of the card on the grid
+     * @param numResource identification number of the resource
+     * @param pickedResources a matrix where you put the quantity and from store you want to get the resource
+     * @param developmentCard the purchased card
+     * @param sameResources method iterator for a single resource
+     */
 
     public void putPayedResource(int[] coordinates, int numResource, String[][] pickedResources, DevelopmentCard developmentCard, int sameResources) {
         String nameImage;
@@ -730,6 +786,12 @@ public class PlotScenarioGUI implements Runnable{
         });
     }
 
+    /**
+     * Method to choose the place where to put the purchased development card
+     * @param coordinates coordinates of the card on the grid
+     * @param pickedResources a matrix where you put the quantity and from store you want to get the resource
+     */
+
     public void putCardOnPlayerBoard(int[] coordinates, String[][] pickedResources) {
         int i, x = 90;
 
@@ -799,6 +861,12 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
+    /**
+     * Method to activate the production power of the development cards on the playerboard
+     * @param activate array of chosen activate powers
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     */
+
     public void activateProductionDevCards(int[] activate, String[] whichInput) {
         int i, index = 0;
         int numBottons = 0;
@@ -861,9 +929,7 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setScene(scene);
         this.stage.show();
 
-        okBtn.setOnAction(e -> {
-            activateBasicProductionPower(activate, whichInput, 0);
-        });
+        okBtn.setOnAction(e -> activateBasicProductionPower(activate, whichInput, 0));
 
         noBtn.setOnAction(e -> {
             for(int j = 0; j < 3; j++) activate[j] = 0;
@@ -903,6 +969,16 @@ public class PlotScenarioGUI implements Runnable{
             });
         }
     }
+
+    /**
+     *  Method to choose from which store to get the resources for activating a production power
+     * @param activate array of chosen activate powers
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     * @param index method iterator
+     * @param num how many resources of the same type
+     * @param charResource iterator on whichInput
+     * @param whichOutput array of string that tells which resource the player wants to have
+     */
 
     public void putResourcePayedDevCard(int[] activate, String[] whichInput, int index, String num, int charResource, String[] whichOutput) {
         String nameImage;
@@ -950,18 +1026,22 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setScene(scene);
         this.stage.show();
 
-        warehouse.setOnAction(e -> {
-            actionOnWhichInput(activate, whichInput, index, num, "W", whichOutput);
-        });
+        warehouse.setOnAction(e -> actionOnWhichInput(activate, whichInput, index, num, "W", whichOutput));
 
-        chest.setOnAction(e -> {
-            actionOnWhichInput(activate, whichInput, index, num, "C", whichOutput);
-        });
+        chest.setOnAction(e -> actionOnWhichInput(activate, whichInput, index, num, "C", whichOutput));
 
-        extra.setOnAction(e -> {
-            actionOnWhichInput(activate, whichInput, index, num, "L", whichOutput);
-        });
+        extra.setOnAction(e -> actionOnWhichInput(activate, whichInput, index, num, "L", whichOutput));
     }
+
+    /**
+     * Method that build the whichInput string
+     * @param activate array of chosen activate powers
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     * @param index method iterator
+     * @param num how many resources of the same type
+     * @param reserve from which reserve the player want to pick the resource
+     * @param whichOutput array of string that tells which resource the player wants to have
+     */
 
     public void actionOnWhichInput(int[] activate, String[] whichInput, int index, String num, String reserve, String[] whichOutput) {
         if(whichInput[index].length() == 1 && num.equals("1")) {
@@ -993,6 +1073,14 @@ public class PlotScenarioGUI implements Runnable{
         }
     }
 
+    /**
+     * Method that redirects to others method depending on which activation powers are activated
+     * @param index method iterator
+     * @param activate array of chosen activate powers
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     * @param whichOutput array of string that tells which resource the player wants to have
+     */
+
     public void redirect(int index, int[] activate, String[] whichInput, String[] whichOutput) {
         if(index < 3 && (activate[0] != 1 || activate[1] != 1 || activate[2] != 1)) activateProductionDevCards(activate, whichInput);
         else if(index < 3) activateBasicProductionPower(activate, whichInput, 0);
@@ -1000,6 +1088,13 @@ public class PlotScenarioGUI implements Runnable{
         else if(activate[4] != 1 || activate[5] != 1) activateExtraProdPower(activate, whichOutput, whichInput);
         else pickResourceExtraProdPower(activate, whichOutput, whichInput,2);
     }
+
+    /**
+     * Method to activate the basic production power
+     * @param activate array of chosen activate powers
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     * @param index method iterator
+     */
 
     public void activateBasicProductionPower(int[] activate, String[] whichInput, int index) {
         String[] whichOutput = new String[3];
@@ -1071,6 +1166,13 @@ public class PlotScenarioGUI implements Runnable{
             });
         }
     }
+
+    /**
+     * Method to activate the extra production power
+     * @param activate array of chosen activate powers
+     * @param whichOutput array of string that tells which resource the player wants to have
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     */
 
     public void activateExtraProdPower(int[] activate, String[] whichOutput, String[] whichInput) {
         int numBottons = 0;
@@ -1203,6 +1305,14 @@ public class PlotScenarioGUI implements Runnable{
             choiceAction();
         }
     }
+
+    /**
+     * method to choose the output resources of the extra production power
+     * @param activate array of chosen activate powers
+     * @param whichOutput array of string that tells which resource the player wants to have
+     * @param whichInput array of string that tells which resource, what quantity and where to get it
+     * @param num how many extra powers are activated (method iterator)
+     */
 
     public void pickResourceExtraProdPower(int[] activate, String[] whichOutput, String[] whichInput, int num) {
         int numPar = num - 1;

@@ -32,6 +32,7 @@ public class HandlerGUI extends Application implements RenderingView {
     private PlayerBoardScenario playerBoardScenario;
     private WaitForYourTurnScenario waitForYourTurnScenario;
     private EndGameScenario endGameScenario;
+    private ErrorScenario errorScenario;
 
     private ClientMain clientMain;
 
@@ -47,14 +48,13 @@ public class HandlerGUI extends Application implements RenderingView {
         this.clientMain = new ClientMain(args.getUnnamed().get(0), Integer.parseInt(args.getUnnamed().get(1)));
 
         this.genericClassGUI = new GenericClassGUI(this);
-        //this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
         this.syncScenarioGUI = new SyncScenarioGUI(this, this.stage);
         this.plotScenarioGUI = new PlotScenarioGUI(this, this.stage);
         this.playerBoardScenario = new PlayerBoardScenario(this, new Stage());
         this.waitForYourTurnScenario = new WaitForYourTurnScenario(this, this.stage);
         this.endGameScenario = new EndGameScenario(this, this.stage);
-
         this.initialScenarioGUI = new InitialScenarioGUI(this, this.stage);
+
         this.initialScenarioGUI.nickname();
     }
 
@@ -72,17 +72,13 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public EndGameScenario getEndGameScenario() { return this.endGameScenario; }
 
+    public Stage getStage( ) { return this.stage; }
+
     public void setStage(Stage stage) { this.stage = stage; }
 
     public ClientMain getClientMain() { return this.clientMain; }
 
-    public void setClientMain(ClientMain clientMain) {
-        this.clientMain = clientMain;
-        System.out.println(this.clientMain.getClass());
-    }
-
     public SendingMessages getMsg() { return this.msg; }
-
 
     public int getGameMode() { return this.gameMode; }
 
@@ -153,7 +149,6 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
             this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
-            //System.out.println(playerBoardMessage.getPlayerboard().getClass());
         } catch (Exception e) {
             //System.out.println("Non arriva playerboard");
             this.setupError(e);
@@ -164,7 +159,6 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
             this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
-            //System.out.println(this.clientMain.getPlayerboard().getVictoryPoints());
         } catch (Exception e) {
             this.setupError(e);
         }
@@ -199,23 +193,13 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     @Override
-    public void itsYourTurn() {
-        Platform.runLater(this.plotScenarioGUI);
-    }
+    public void itsYourTurn() { Platform.runLater(this.plotScenarioGUI); }
 
     @Override
-    public void update() {
-        Platform.runLater(this.playerBoardScenario);
-    }
+    public void update() { Platform.runLater(this.playerBoardScenario); }
 
     @Override
-    public void notYourTurn() {
-    }
-
-    @Override
-    public void endTurn(String turn) {
-        Platform.runLater(this.waitForYourTurnScenario);
-    }
+    public void endTurn(String turn) { Platform.runLater(this.waitForYourTurnScenario); }
 
     @Override
     public void endMultiplayerGame(GameOverMessage msg) {
@@ -225,51 +209,26 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     @Override
-    public void connectionError(Exception e) {
-        //e.printStackTrace();
-        System.err.println("Connection error");
-        System.exit(-1);
-    }
+    public void connectionError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Connection error")); }
 
     @Override
-    public void setupError(Exception e) {
-        //e.printStackTrace();
-        System.err.println("Error during setup");
-        System.exit(-2);
-    }
+    public void setupError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Error during setup")); }
 
     @Override
-    public void gameError(Exception e) {
-        //e.printStackTrace();
-        System.err.println("The application encountered a problem");
-        System.out.println(-3);
-    }
+    public void gameError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "The application encountered a problem")); }
 
     @Override
-    public void serverError(String error) {
-    }
+    public void serverError(String error) { Platform.runLater(new ErrorScenario(this, this.stage, error)); }
 
     @Override
-    public void invalidInputError(Exception e) {
-        System.err.println("Not valid input");
-    }
+    public void invalidInputError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Not valid input")); }
 
     @Override
-    public void error(Exception e){
-        e.printStackTrace();
-        System.err.println("Error");
-    }
+    public void error(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Error")); }
 
     @Override
-    public void receiverError(Exception e){
-        e.printStackTrace();
-        System.err.println("Message corrupted");
-        System.exit(-7);
-    }
+    public void receiverError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Message corrupted")); }
 
     @Override
-    public void senderError(Exception e){
-        e.printStackTrace();
-        System.err.println("Not valid parameter");
-    }
+    public void senderError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Not valid parameter")); }
 }
