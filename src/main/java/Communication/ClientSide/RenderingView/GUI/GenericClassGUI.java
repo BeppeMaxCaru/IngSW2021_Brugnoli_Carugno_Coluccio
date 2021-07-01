@@ -16,8 +16,15 @@ import java.util.TimerTask;
 
 public class GenericClassGUI {
 
+    /**
+     * The GUI's handler
+     */
     private final HandlerGUI handlerGUI;
 
+    /**
+     * Builds a generic stage
+     * @param handlerGUI The GUI's handler
+     */
     public GenericClassGUI(HandlerGUI handlerGUI) {
         this.handlerGUI = handlerGUI;
     }
@@ -27,7 +34,6 @@ public class GenericClassGUI {
      * @param string the string
      * @param stage the stage
      */
-
     public void addLabelByCode(String string, Stage stage) {
         var label = new Label(string);
         label.setFont(Font.font(32));
@@ -40,7 +46,6 @@ public class GenericClassGUI {
      * Method that waits 4 seconds on a method
      * @param method the method that will be called after 4 seconds
      */
-
     public void LoadWTFOnTimer(String method) {
         ArrayList<String> resStart = new ArrayList<>();
         TimerTask task = new TimerTask() {
@@ -91,7 +96,6 @@ public class GenericClassGUI {
      * @param height the button's height
      * @param width the button's width
      */
-
     public void createIconButton(int x, int y, Image img, Button button, int height, int width) {
         ImageView view = new ImageView(img);
         view.setFitHeight(height);

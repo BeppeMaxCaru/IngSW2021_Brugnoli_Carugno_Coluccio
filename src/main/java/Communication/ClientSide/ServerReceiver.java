@@ -14,11 +14,33 @@ import java.util.TimerTask;
 
 public class ServerReceiver extends Thread {
 
+    /**
+     * Client main running the game
+     */
     private final ClientMain clientMain;
+
+    /**
+     * Messages receiver
+     */
     private final ObjectInputStream receiver;
+
+    /**
+     * Interface with methods adapted to the GUI
+     */
     private final RenderingView view;
+
+    /**
+     * Socket to connect to the server
+     */
     private Socket clientSocket;
 
+    /**
+     * Receiver used to read messages from the server
+     * @param clientMain The client running the game
+     * @param view The class with the methods overridden
+     * @param clientSocket The socket with the connection
+     * @param receiver The messages receiver
+     */
     public ServerReceiver(ClientMain clientMain, RenderingView view, Socket clientSocket,  ObjectInputStream receiver) {
         this.clientMain = clientMain;
         this.view = view;
@@ -183,24 +205,6 @@ public class ServerReceiver extends Thread {
 
             }
 
-            /*if (object instanceof ServerErrorMessage) {
-
-                try {
-                    ServerErrorMessage serverErrorMessage = (ServerErrorMessage) object;
-
-                    //Metodo che cambia schermata se si riceve messaggio di errore
-                    //facendolo vedere
-
-                    this.receiver.close();
-                    return;
-
-                } catch (Exception e) {
-                    this.view.receiverError(e);
-                    break;
-                }
-
-            }*/
-
             if (object instanceof ServerErrorMessage) {
                 try {
                     ServerErrorMessage serverErrorMessage = (ServerErrorMessage) object;
@@ -211,9 +215,6 @@ public class ServerReceiver extends Thread {
                     break;
                 }
             }
-
-            //this.view.update();
-
         }
     }
 }

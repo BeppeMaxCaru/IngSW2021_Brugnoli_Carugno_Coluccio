@@ -27,9 +27,21 @@ import java.net.Socket;
 
 public class InitialScenarioGUI {
 
+    /**
+     * The GUI's handler
+     */
     private final HandlerGUI handlerGUI;
+
+    /**
+     * The stage to be set
+     */
     private final Stage stage;
 
+    /**
+     * Prepares the initial scenario
+     * @param handlerGUI The GUI's handler
+     * @param stage The stage to be set
+     */
     public InitialScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
         this.handlerGUI = handlerGUI;
         this.stage = stage;
@@ -38,7 +50,6 @@ public class InitialScenarioGUI {
     /**
      * Method that asks for the nickname
      */
-
     public void nickname() {
         GridPane root = new GridPane();
         root.setHgap(8);
@@ -87,7 +98,6 @@ public class InitialScenarioGUI {
     /**
      * Method that asks the player if he wants to play in single player or online
      */
-
     public void multiOrSinglePlayers( ) {
         GridPane root = new GridPane();
         Button button1 = new Button("Single player");
@@ -133,7 +143,6 @@ public class InitialScenarioGUI {
     /**
      * Method that waits for the message of start game from the server
      */
-
     public void welcome() {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Loading...\nHi " + this.handlerGUI.getClientMain().getNickname() +
                 "!\nWelcome to Master of Renaissance online!", this.stage);

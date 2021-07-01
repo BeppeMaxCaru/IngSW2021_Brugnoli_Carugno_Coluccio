@@ -17,31 +17,88 @@ import java.util.Map;
 public class ClientMain{
 
     //Connection attributes
+    /**
+     * Host name
+     */
     private final String hostName;
+
+    /**
+     * Port used for connection
+     */
     private final int port;
 
     //All game mods attributes
+    /**
+     * The nickname chosen
+     */
     private String nickname;
+
+    /**
+     * The player number assigned
+     */
     private int playerNumber;
+
+    /**
+     * The market
+     */
     private Market market;
+
+    /**
+     * The development cards grid
+     */
     private DevelopmentCardsDecksGrid developmentCardsDecksGrid;
 
     //Multi player attributes
+    /**
+     * The client's player board
+     */
     private Playerboard playerboard;
+
+    /**
+     * The client's leader cards
+     */
     private LeaderCard[] leaderCards = new LeaderCard[4];
+
+    /**
+     * The game winner
+     */
     private String winner;
+
+    /**
+     * The victory points to be collected
+     */
     private int victoryPoints;
 
     //Single player attributes
+    /**
+     * Action counters for single player
+     */
     private ActionCountersDeck actionCountersDeck;
+
+    /**
+     * Local player and Lorenzo il Magnifico
+     */
     private Player[] localPlayers;
+
+    /**
+     * Leader cards available
+     */
     private LeaderCardDeck leaderCardDeck;
 
+    /**
+     * Builds the client main
+     * @param hostname The host name
+     * @param port The port used
+     */
     public ClientMain(String hostname, int port) {
         this.hostName = hostname;
         this.port = port;
     }
 
+    /**
+     * The client's main
+     * @param args The arguments passed to the client
+     */
     public static void main(String[] args) {
         if (args.length < 2) return;
         if (args.length > 3) return;
@@ -68,18 +125,34 @@ public class ClientMain{
         }
     }
 
+    /**
+     * Returns the player's number
+     * @return the player's number
+     */
     public int getPlayerNumber() {
         return playerNumber;
     }
 
+    /**
+     * Returns the nickname
+     * @return the nickname
+     */
     public String getNickname () {
         return this.nickname;
     }
 
+    /**
+     * Returns the market
+     * @return the market
+     */
     public Market getMarket() {
         return this.market;
     }
 
+    /**
+     * Sets the market
+     * @param market The market to be set
+     */
     public void setMarket(Market market) {
         this.market = market;
     }
@@ -115,6 +188,7 @@ public class ClientMain{
     public String getHostName() {
         return hostName;
     }
+
 
     public int getPort() {
         return port;

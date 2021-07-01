@@ -5,9 +5,21 @@ import javafx.stage.Stage;
 
 public class EndGameScenario implements Runnable{
 
+    /**
+     * The handler for the GUI
+     */
     private final HandlerGUI handlerGUI;
+
+    /**
+     * Stage used for the final game visual
+     */
     private final Stage anotherStage;
 
+    /**
+     * Builds the final scenario
+     * @param handlerGUI the handler handling the GUI
+     * @param anotherStage a second stage
+     */
     public EndGameScenario(HandlerGUI handlerGUI, Stage anotherStage) {
         this.handlerGUI = handlerGUI;
         this.anotherStage = anotherStage;
@@ -21,7 +33,6 @@ public class EndGameScenario implements Runnable{
     /**
      * Method that shows how is the winner and the victory points of the current player
      */
-
     public void winner() {
         String s;
         if(this.handlerGUI.getClientMain().getWinner().equals(this.handlerGUI.getClientMain().getNickname())) s = "you";

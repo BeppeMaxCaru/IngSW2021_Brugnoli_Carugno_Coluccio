@@ -16,7 +16,14 @@ import java.util.Arrays;
 
 public class SyncScenarioGUI {
 
+    /**
+     * The GUI's handler
+     */
     private HandlerGUI handlerGUI;
+
+    /**
+     *
+     */
     private Stage stage;
 
     public SyncScenarioGUI(HandlerGUI handlerGUI, Stage stage) {
@@ -27,7 +34,6 @@ public class SyncScenarioGUI {
     /**
      * Method that marks the start of the game and communicates the player number
      */
-
     public void matchHasStarted() {
         this.handlerGUI.getGenericClassGUI().addLabelByCode("Match has started, your player number is " + this.handlerGUI.getClientMain().getPlayerNumber(), this.stage);
 
@@ -43,7 +49,6 @@ public class SyncScenarioGUI {
      * Method for choosing starting resource/s
      * @param resStart a list of choosing resource/s
      */
-
     public void startingResource(ArrayList<String> resStart) {
         int num;
 
@@ -105,7 +110,6 @@ public class SyncScenarioGUI {
      * @param times method iterator
      * @param cardDiscarded (at times = 2) first card discarded
      */
-
     public void discardStartingLeaders(int times, int cardDiscarded) {
         Group root = new Group();
         //Creating buttons

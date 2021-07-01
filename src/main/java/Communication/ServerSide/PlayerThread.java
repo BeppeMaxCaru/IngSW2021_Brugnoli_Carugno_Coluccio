@@ -44,10 +44,18 @@ public class PlayerThread implements Runnable {
         }
     }
 
+    /**
+     * Returns the nickname
+     * @return the nickname
+     */
     public String getNickName() {
         return this.nickName;
     }
 
+    /**
+     * Sets the nickname
+     * @param nickName The nickname to set
+     */
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
@@ -77,13 +85,7 @@ public class PlayerThread implements Runnable {
 
         //SWITCH THAT READS MESSAGES AND SENDS RESPONSES/DOES ACTIONS
 
-        //System.out.println("PlayerThread started");
-
         Player currentPlayer = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber];
-
-        //Pinger
-        //Timer timer = new Timer();
-        //timer.schedule();
 
         //this.ping();
 

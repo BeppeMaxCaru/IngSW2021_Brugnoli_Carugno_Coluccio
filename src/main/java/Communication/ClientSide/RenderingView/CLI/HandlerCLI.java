@@ -23,18 +23,48 @@ import java.util.Arrays;
 
 public class HandlerCLI {
 
+    /**
+     * The client main where the game is running
+     */
     private final ClientMain clientMain;
+
+    /**
+     * The socket to connect to the server
+     */
     private Socket clientSocket;
+
+    /**
+     * Allows to read messages
+     */
     private ObjectInputStream receiver;
+
+    /**
+     * Allows to send messages
+     */
     private ObjectOutputStream sender;
+
+    /**
+     * The cli used for the game
+     */
     private final CLI cli;
+
+    /**
+     * Utility class helpful to send messages
+     */
     private SendingMessages msg;
 
+    /**
+     * Builds the handler for the cli
+     * @param main client running the game
+     */
     public HandlerCLI(ClientMain main){
         this.clientMain = main;
         this.cli = new CLI(this.clientMain);
     }
 
+    /**
+     * Starts Masters of Renaissance using the cli
+     */
     public void execute(){
 
         this.clientMain.setNickname(this.cli.getNickName());

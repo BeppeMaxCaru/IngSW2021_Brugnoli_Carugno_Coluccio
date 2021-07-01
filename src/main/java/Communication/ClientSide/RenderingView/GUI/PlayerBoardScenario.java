@@ -10,9 +10,21 @@ import javafx.stage.Stage;
 
 public class PlayerBoardScenario implements Runnable {
 
+    /**
+     * The GUI's handler
+     */
     private final HandlerGUI handlerGUI;
+
+    /**
+     * The stage to be built and saved
+     */
     private final Stage anotherStage;
 
+    /**
+     * Prepares the player board's scenario
+     * @param handlerGUI The GUI's handler
+     * @param anotherStage The other stage to be set
+     */
     public PlayerBoardScenario(HandlerGUI handlerGUI, Stage anotherStage) {
 
         this.handlerGUI = handlerGUI;
@@ -49,7 +61,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the red cross in the faith path
      * @param root the root
      */
-
     public void putRedCross(Group root) {
         int x = 25, y;
         int redCross = this.handlerGUI.getClientMain().getPlayerboard().getFaithPath().getCrossPosition();
@@ -86,7 +97,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the development cards on the playerboard
      * @param root the root
      */
-
     public void putDevCards(Group root) {
         int x = 270;
         int[] dimPile = new int[3];
@@ -120,7 +130,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the resources in the chest
      * @param root the root
      */
-
     public void putResourcesInChest(Group root) {
         int x = 25;
         int y = 370;
@@ -162,7 +171,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the resources in the warehouse
      * @param root the root
      */
-
     public void putResourcesInWarehouse(Group root) {
         Image image = null;
         int num;
@@ -221,7 +229,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the extra warehouse
      * @param root the root
      */
-
     public void putExtraWarehouse(Group root) {
         Image image = null;
         int x = 25;
@@ -268,7 +275,6 @@ public class PlayerBoardScenario implements Runnable {
      * Method that puts the resources in the extra warehouse
      * @param root the root
      */
-
     public void putResourceInExtraWarehouse(Group root) {
         Image image = null;
         int num = 0;
@@ -307,7 +313,6 @@ public class PlayerBoardScenario implements Runnable {
      * @param y y coordinate on the stage
      * @param root the root
      */
-
     public void imageView(Image image, int x, int y, Group root) {
         ImageView imageView = new ImageView();
         imageView.setImage(image);

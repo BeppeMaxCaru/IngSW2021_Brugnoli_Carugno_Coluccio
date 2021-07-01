@@ -16,7 +16,15 @@ import java.util.concurrent.Executors;
 
 public class MultiEchoServer {
     //Connection
+    /**
+     * Port used by the server
+     */
     private final int port;
+
+    /**
+     * Builds the server
+     * @param port Port used by the server
+     */
     public MultiEchoServer(int port) {
         this.port = port;
     }
@@ -26,8 +34,6 @@ public class MultiEchoServer {
     private ArrayList<Socket> lobby = new ArrayList<>();
     //GamesQueue
     private ArrayList<GameModel> gamesInProgress = new ArrayList<>();
-    //GameModel
-    private GameModel game;
 
     //basta che abbiano nome diverso nella stessa partita
     //Meglio nome diverso ovunque
@@ -36,6 +42,9 @@ public class MultiEchoServer {
     //Chat
     private ArrayList<PlayerThread> queueFIFO = new ArrayList<>();
 
+    /**
+     * Starts the server
+     */
     public void startServer() {
         //4 threads for 4 players
         //ExecutorService clientExecutor = Executors.newFixedThreadPool(4);
@@ -95,6 +104,10 @@ public class MultiEchoServer {
         gameExecutor.shutdown();
     }
 
+    /**
+     * The main of the server
+     * @param args Arguments passed to the server
+     */
     public static void main(String[] args) {
         MultiEchoServer echoServer = new MultiEchoServer(1234);
         echoServer.startServer();

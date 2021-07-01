@@ -5,7 +5,11 @@ import javafx.stage.Stage;
 
 public class WaitForYourTurnScenario implements Runnable{
 
+    /**
+     * The GUI's handler
+     */
     private final HandlerGUI handlerGUI;
+
     private final Stage anotherStage;
 
     public WaitForYourTurnScenario(HandlerGUI handlerGUI, Stage anotherStage) {

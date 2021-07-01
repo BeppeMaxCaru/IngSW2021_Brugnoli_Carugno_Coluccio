@@ -6,11 +6,29 @@ import Message.*;
 
 public class ServerSender extends Thread {
 
+    /**
+     * Client where the game is running
+     */
     private final ClientMain clientMain;
+
+    /**
+     * The cli used for the game
+     */
     private final CLI cli;
+
+    /**
+     * Gamemode selected
+     */
     private final int gameMode;
+
+    /**
+     * Utility class helpful to send messages
+     */
     private SendingMessages msg;
 
+    /**
+     * Builds the messages sender
+     */
     public ServerSender (ClientMain clientMain, int gameMode, SendingMessages msg) {
         this.clientMain = clientMain;
         this.cli = new CLI(this.clientMain);
@@ -233,6 +251,11 @@ public class ServerSender extends Thread {
             } while (!this.endLocalGame(this.clientMain.getLocalPlayers()));
     }
 
+    /**
+     *
+     * @param localPlayers local player and Lorenzo Il Magnifico
+     * @return true if the game is over
+     */
     public boolean endLocalGame(Player[] localPlayers){
         for(int k=0; k < 4; k++)
             if(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0]==null)
