@@ -70,10 +70,18 @@ public class GameModel{
         }
     }
 
+    /**
+     * Returns the development cards grid
+     * @return the development cards grid
+     */
     public DevelopmentCardsDecksGrid getDevelopmentCardsDecksGrid() {
         return this.developmentCardsDecksGrid;
     }
 
+    /**
+     * Returns the market
+     * @return the market
+     */
     public Market getMarket() {
         return this.market;
     }

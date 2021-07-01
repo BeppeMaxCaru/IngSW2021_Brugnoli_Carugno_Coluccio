@@ -232,8 +232,8 @@ public class HandlerGUI extends Application implements RenderingView {
     public void error(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Error")); }
 
     @Override
-    public void receiverError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Message corrupted")); }
+    public void receiverError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Error occurred while receiving data")); }
 
     @Override
-    public void senderError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Not valid parameter")); }
+    public void senderError(Exception e) { Platform.runLater(new ErrorScenario(this, this.stage, "Error occurred while sending data")); }
 }
