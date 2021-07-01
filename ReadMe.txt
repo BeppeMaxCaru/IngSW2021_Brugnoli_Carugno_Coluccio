@@ -1,7 +1,11 @@
-Cli
-
-Gui
-
-Partite multiple
-
-Partita locale
+Regole complete
++
+Comunicazione
++
+CLI
++
+GUI
++
+Partite multiple (FA)
++
+Partita locale (FA)
