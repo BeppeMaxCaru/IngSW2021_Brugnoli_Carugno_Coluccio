@@ -101,7 +101,8 @@ public class HandlerGUI extends Application implements RenderingView {
             //Check passing this
             this.msg = new SendingMessages(this.clientMain, this, this.sender);
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            this.connectionError(e);
         }
     }
 
@@ -109,7 +110,8 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             this.msg.sendNickname();
         } catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            this.setupError(e);
         }
     }
 
@@ -119,7 +121,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.clientMain.setMarket(updateClientMarketMessage.getMarket());
             updateGridDevCard();
         } catch (Exception e) {
-            this.error(e);
+            this.setupError(e);
         }
     }
 
@@ -129,7 +131,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.clientMain.setDevelopmentCardsDecksGrid(updateClientDevCardGridMessage.getDevelopmentCardsDecksGrid());
             startingMessage();
         } catch (Exception e) {
-            this.error(e);
+            this.setupError(e);
         }
     }
 
@@ -143,7 +145,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted");
             //updatePlayerBoard();
         } catch (Exception e) {
-            this.error(e);
+            this.setupError(e);
         }
     }
 
@@ -154,7 +156,7 @@ public class HandlerGUI extends Application implements RenderingView {
             //System.out.println(playerBoardMessage.getPlayerboard().getClass());
         } catch (Exception e) {
             //System.out.println("Non arriva playerboard");
-            this.error(e);
+            this.setupError(e);
         }
     }
 
@@ -164,7 +166,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.clientMain.setLeaderCards(leaderCardsMessage.getLeaderCards());
             //System.out.println(this.clientMain.getPlayerboard().getVictoryPoints());
         } catch (Exception e) {
-            this.error(e);
+            this.setupError(e);
         }
     }
 
