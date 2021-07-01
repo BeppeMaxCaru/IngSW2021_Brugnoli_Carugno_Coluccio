@@ -4,8 +4,6 @@ import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 
-import java.util.Arrays;
-
 public class ServerSender extends Thread {
 
     private final ClientMain clientMain;
@@ -68,11 +66,10 @@ public class ServerSender extends Thread {
                                 //int leader = this.cli.discarder();
 
                                 //After after
-                                int leader;
+                                int leader = this.cli.discarder();
 
                                 if(this.gameMode==0){
                                     //leader = this.cli.getDiscardedLeader();
-                                    leader = this.cli.discarder();
                                     this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader);
                                     this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
                                     //this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards();
@@ -92,7 +89,6 @@ public class ServerSender extends Thread {
                                     }*/
                                     //System.out.println(Arrays.toString(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards()));
                                 } else {
-                                    leader = this.cli.discarder();
                                     this.msg.sendDiscardedLeader(leader);
                                 }
                                 break;
@@ -210,6 +206,7 @@ public class ServerSender extends Thread {
                                 {
                                     mainAction=0;
                                     action="";
+                                    this.cli.actionCounter(this.clientMain.getActionCountersDeck().getActionCountersDeck()[this.clientMain.getActionCountersDeck().getTop()]);
                                     this.clientMain.getActionCountersDeck().drawCounter().activate(this.clientMain.getActionCountersDeck(), this.clientMain.getLocalPlayers()[1].getPlayerBoard(), this.clientMain.getDevelopmentCardsDecksGrid());
                                 }
                                 if(this.gameMode==1)

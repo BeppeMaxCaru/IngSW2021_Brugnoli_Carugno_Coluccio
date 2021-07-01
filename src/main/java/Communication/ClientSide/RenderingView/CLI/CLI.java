@@ -2,6 +2,7 @@ package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
 import Communication.ClientSide.RenderingView.RenderingView;
+import Maestri.MVC.Model.GModel.ActionCounters.ActionCounter;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
@@ -1144,5 +1145,9 @@ public class CLI implements RenderingView {
             e.printStackTrace();
             System.out.println("ping failed");
         }
+    }
+
+    public void actionCounter (ActionCounter counter){
+        System.out.println("Drawn " + counter.getCounter());
     }
 }

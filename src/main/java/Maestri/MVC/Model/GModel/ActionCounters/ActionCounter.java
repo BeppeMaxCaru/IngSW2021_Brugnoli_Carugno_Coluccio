@@ -3,19 +3,30 @@ package Maestri.MVC.Model.GModel.ActionCounters;
 import Maestri.MVC.Model.GModel.GamePlayer.Playerboard.Playerboard;
 import Maestri.MVC.Model.GModel.DevelopmentCards.DevelopmentCardsDecksGrid;
 
+/**
+ * Represent the action counter
+ */
 public class ActionCounter {
 
     /**
-     *
+     * In case of black cross, it indicates how many cells Lorenzo the Magnificent gains
+     * In case of colour banner, it indicates how many development cards Lorenzo the Magnificent discards
      */
     private final int value;
 
-    public ActionCounter(int value) {
-        this.value = value;
-    }
+    /**
+     * Indicates the name of the counter
+     */
+    private final String counter;
 
-    public int getValue() {
-        return this.value;
+    /**
+     * Initializes the action counter
+     * @param value value
+     * @param counter counter
+     */
+    public ActionCounter(int value, String counter) {
+        this.value = value;
+        this.counter = counter;
     }
 
     /**
@@ -27,12 +38,21 @@ public class ActionCounter {
      */
     public void activate(ActionCountersDeck actionCountersDeck, Playerboard playerboard,
                          DevelopmentCardsDecksGrid developmentCardsDecksGrid) {
-
     }
 
-    public void discardDevelopmentCard(DevelopmentCardsDecksGrid developmentCardsDecksGrid, String colour) {
-
-        //developmentCardsDecksGrid.getDevelopmentCardsDecks()[2][developmentCardsDecksGrid.getDevelopmentCardsColours().get(colour)][0];
+    /**
+     * Returns value
+     * @return value
+     */
+    public int getValue() {
+        return this.value;
     }
 
+    /**
+     * Returns the name of the counter
+     * @return counter
+     */
+    public String getCounter() {
+        return this.counter;
+    }
 }
