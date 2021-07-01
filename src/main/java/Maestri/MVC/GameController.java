@@ -28,7 +28,7 @@ public class GameController{
     /**
      * Threads of the players
      */
-    private final Set<PlayerThread> playerThreads = new HashSet<>();
+    private Set<PlayerThread> playerThreads = new HashSet<>();
 
     private Set<PlayerThread> winnersShowdown = new HashSet<>();
     private int lastPlayerPosition;

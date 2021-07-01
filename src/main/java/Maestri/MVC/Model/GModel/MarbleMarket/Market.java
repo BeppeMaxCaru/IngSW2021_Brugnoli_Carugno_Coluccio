@@ -16,7 +16,7 @@ public class Market implements Serializable {
     /**
      * Grid containing 12 marbles
      */
-    private final Marble[][] marketArrangement;
+    private Marble[][] marketArrangement;
     /**
      * 13th excess marble used to shuffle the market after someone draws
      */

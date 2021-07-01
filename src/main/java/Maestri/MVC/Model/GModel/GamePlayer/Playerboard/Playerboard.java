@@ -18,7 +18,7 @@ public class Playerboard implements Serializable {
     /**
      * Development cards spaces where to place development cards bought
      */
-    private final DevelopmentCard[][] playerBoardDevelopmentCards;
+    private DevelopmentCard[][] playerBoardDevelopmentCards;
 
     /**
      * Unlimited resources reserve

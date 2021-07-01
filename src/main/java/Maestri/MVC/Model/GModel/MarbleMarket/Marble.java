@@ -12,7 +12,7 @@ public class Marble implements Serializable {
     /**
      * Colour of the marble
      */
-    private final String colour;
+    private String colour;
 
     /**
      * Initializes the marble

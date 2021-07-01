@@ -18,7 +18,7 @@ public class GameModel{
     /**
      * Players of the game
      */
-    private final Player[] players;
+    private Player[] players;
 
     /**
      * Development cards grid
