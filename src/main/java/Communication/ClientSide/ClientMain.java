@@ -307,25 +307,24 @@ public class ClientMain{
         resources.put(2, "SHIELDS");
         resources.put(3, "STONES");
 
-        if (this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0] != null) {
+        if (this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-l][column][0] != null) {
 
             //Control on quantity and possibly discounts
             //If paidResources hashMap isn't equals to cardCost hashMap
-            if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
+            if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                 //Check for discounts
                 if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0] != null && currentPlayer.getPlayerLeaderCards()[0].isPlayed()) {
                     paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) + 1);
                     //Check if player has activated only first discount
-                    if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
+                    if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                         if (currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1] != null && currentPlayer.getPlayerLeaderCards()[1].isPlayed()) {
                             paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[1]) + 1);
                             //Check if player has activated both first and second discounts
-                            if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
+                            if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                 //Check if player has activated only second discount
                                 paidResources.put(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0], paidResources.get(currentPlayer.getPlayerBoard().getDevelopmentCardDiscount()[0]) - 1);
-                                if (!paidResources.equals(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
+                                if (!paidResources.equals(this.developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-l][column][0].getDevelopmentCardCost())) {
                                     //If resourcePaid isn't equal to cardCost, player hasn't inserted correct resource for buy the card
-                                    //System.out.println("1");
                                     return false;
                                 }
                             }
@@ -334,7 +333,6 @@ public class ClientMain{
                 }
             }
         } else {
-            System.out.println("Card null");
             return false;
         }
 
