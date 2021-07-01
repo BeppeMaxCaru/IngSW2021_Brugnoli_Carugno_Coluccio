@@ -1106,8 +1106,8 @@ public class CLI implements RenderingView {
     }
 
     @Override
-    public void serverError(Exception e) {
-        System.err.println("Server not responding");
+    public void serverError(String error) {
+        System.err.println(error);
         System.exit(-5);
     }
 

@@ -36,7 +36,7 @@ public class ServerReceiver extends Thread {
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 //e.printStackTrace();
-                this.view.serverError(e);
+                this.view.receiverError(e);
                 break;
             }
 
@@ -172,6 +172,16 @@ public class ServerReceiver extends Thread {
                     break;
                 }
 
+            }
+
+            if (object instanceof ServerErrorMessage) {
+                try {
+                    ServerErrorMessage serverErrorMessage = (ServerErrorMessage) object;
+                    this.view.serverError(serverErrorMessage.getErrorMessage());
+                } catch (Exception e) {
+                    this.view.receiverError(e);
+                    break;
+                }
             }
 
             //this.view.update();

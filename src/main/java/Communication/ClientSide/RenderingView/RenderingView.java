@@ -52,8 +52,7 @@ public interface RenderingView {
         e.printStackTrace();
     }
 
-    default void serverError(Exception e){
-        e.printStackTrace();
+    default void serverError(String errorMessage){
     }
 
     default void invalidInputError(Exception e){

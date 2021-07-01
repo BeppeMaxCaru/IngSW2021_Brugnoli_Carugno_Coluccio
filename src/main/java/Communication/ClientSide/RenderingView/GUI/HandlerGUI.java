@@ -244,9 +244,7 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     @Override
-    public void serverError(Exception e) {
-        System.err.println("Server not responding");
-        //System.exit(-5);
+    public void serverError(String error) {
     }
 
     @Override
