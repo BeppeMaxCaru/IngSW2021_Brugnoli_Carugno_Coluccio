@@ -1,22 +1,28 @@
 package Communication.ClientSide;
 
 import Communication.ClientSide.RenderingView.RenderingView;
+import Maestri.MVC.GameController;
 import Message.Message;
 import Message.MessageReceived.*;
 import Message.MessageSent.PingMessage;
 import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectInputStream;
+import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ServerReceiver extends Thread {
 
     private final ClientMain clientMain;
     private final ObjectInputStream receiver;
     private final RenderingView view;
+    private Socket clientSocket;
 
-    public ServerReceiver(ClientMain clientMain, RenderingView view, ObjectInputStream receiver) {
+    public ServerReceiver(ClientMain clientMain, RenderingView view, Socket clientSocket,  ObjectInputStream receiver) {
         this.clientMain = clientMain;
         this.view = view;
+        this.clientSocket = clientSocket;
         this.receiver = receiver;
     }
 
@@ -28,14 +34,15 @@ public class ServerReceiver extends Thread {
         while (true) {
 
             //Switch with different messages to receive and prints results
-
             Message object;
 
             try {
                 //this.receiver.reset();
+                this.clientSocket.setSoTimeout(360000);
                 object = (Message) this.receiver.readObject();
             } catch (Exception e) {
                 //e.printStackTrace();
+                System.out.println("Server down");
                 this.view.receiverError(e);
                 break;
             }

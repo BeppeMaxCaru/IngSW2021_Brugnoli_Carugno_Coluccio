@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class HandlerCLI {
 
     private final ClientMain clientMain;
+    private Socket clientSocket;
     private ObjectInputStream receiver;
     private ObjectOutputStream sender;
     private final CLI cli;
@@ -58,14 +59,6 @@ public class HandlerCLI {
                 this.clientMain.getLocalPlayers()[0].setPlayerLeaderCard(index, this.clientMain.getLeaderCardDeck().drawOneLeaderCard());
             this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
 
-            //Before
-            //int[] discard = this.cli.getDiscardedStartingLeaders();
-            //this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[0]);
-            //this.clientMain.getLocalPlayers()[0].discardLeaderCard(discard[1]);
-            //System.out.println("QUi");
-            //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
-
-
             //After
             this.clientMain.getLocalPlayers()[0].discardLeaderCard(this.cli.discarder());
             this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
@@ -79,9 +72,9 @@ public class HandlerCLI {
         } else {//MultiPlayer
 
             try {
-                Socket clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-                this.receiver = new ObjectInputStream(clientSocket.getInputStream());
-                this.sender = new ObjectOutputStream(clientSocket.getOutputStream());
+                this.clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+                this.receiver = new ObjectInputStream(this.clientSocket.getInputStream());
+                this.sender = new ObjectOutputStream(this.clientSocket.getOutputStream());
                 this.msg = new SendingMessages(this.clientMain, this.cli, this.sender);
             } catch (Exception e) {
                 //Error connect
@@ -195,7 +188,7 @@ public class HandlerCLI {
 
             //Starts async phase
             new ServerSender(this.clientMain, gameMode, this.msg).start();
-            new ServerReceiver(this.clientMain, this.cli, this.receiver).start();
+            new ServerReceiver(this.clientMain, this.cli, this.clientSocket,this.receiver).start();
 
         }
     }

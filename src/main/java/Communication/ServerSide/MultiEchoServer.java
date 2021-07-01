@@ -69,7 +69,7 @@ public class MultiEchoServer {
                     //System.out.println("Not enough players");
                 }
             }
-        }, 0, 5000);
+        }, 0, 30000);
 
         while (true) {
 

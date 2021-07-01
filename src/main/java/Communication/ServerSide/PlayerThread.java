@@ -89,7 +89,7 @@ public class PlayerThread implements Runnable {
 
         //SYNC PHASE
         try {
-            this.playerSocket.setSoTimeout(300000);
+            this.playerSocket.setSoTimeout(90000);
             NicknameMessage nicknameMessage = (NicknameMessage) this.receiver.readObject();
             this.nickName = nicknameMessage.getNickname();
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].setNickname(this.nickName + " #" + this.playerThreadNumber);
@@ -117,13 +117,6 @@ public class PlayerThread implements Runnable {
             //System.out.println("Non viene broadcastato mercato in PlayerThread");
             return;
         }
-
-        //this.ping();
-        /*try {
-            this.playerSocket.setSoTimeout(10000);
-        } catch (Exception e) {
-            System.out.println("Timeout scaduto");
-        }*/
 
         //SECOND MESSAGE TO SETUP CLIENT MARKET
         try {
@@ -156,18 +149,7 @@ public class PlayerThread implements Runnable {
         //this.ping();
 
         try {
-            this.playerSocket.setSoTimeout(300000);
-            //StartingResourcesMessage startingResourcesMessage;
-            //QUI INIZIO
-            /*while (true) {
-                try {
-                    startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
-                    break;
-                } catch (ClassCastException c) {
-
-                }
-            }*/
-            //QUI FINE
+            this.playerSocket.setSoTimeout(90000);
             StartingResourcesMessage startingResourcesMessage = (StartingResourcesMessage) this.receiver.readObject();
             while (!startingResourcesMessage.getStartingRes().isEmpty())
                 currentPlayer.setStartingPlayerBoard(startingResourcesMessage.getStartingRes().remove(0));
@@ -200,17 +182,7 @@ public class PlayerThread implements Runnable {
         for(int cards=0; cards<2; cards++)
         {
             try {
-                this.playerSocket.setSoTimeout(300000);
-                //DiscardLeaderMessage discardLeaderMessage;
-
-                /*while (true) {
-                    try {
-                       discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
-                       break;
-                    } catch (ClassCastException c) {
-
-                    }
-                }*/
+                this.playerSocket.setSoTimeout(90000);
 
                 DiscardLeaderMessage discardLeaderMessage = (DiscardLeaderMessage) this.receiver.readObject();
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
@@ -265,35 +237,12 @@ public class PlayerThread implements Runnable {
             return;
         }
 
-
-        /*try {
-            this.playerSocket.setSoTimeout(0);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }*/
-
-        //this.playerSocket.setSoTimeout(10000);
-
-        //BISOGNA ANCORA GESTIRE IL BREAK
-        //ASYNC PHASE
-        //I BROADCAST AVVENGONO SOLO IN QUESTA PHASE
-        //Aggiornare aggiungendo i broadcast
-
         //Checks if there is either only one player left or someone has won
         while (!this.gameController.getGameModel().checkEndPlay()) {
 
-        //NEW
-        //while (!this.gameController.checkEndPlay() && !this.gameController.getGameModel().simplifiedWinCondition(this.playerThreadNumber)) {
-
-        //NEW #2
-        //while (!this.gameController.getGameModel().simplifiedWinCondition(this.playerThreadNumber)) {
-
-        //NEW #3
-        //while(!this.gameController.checkEnoughPlayers() && this.gameController.checkEndGame(this)) {
-
-            //System.out.println("sicjosv");
-
-            this.ping();
+            //this.ping();
+            //Notifies to clients server actvity after every message
+            this.gameController.broadcastPing();
 
             try {
                 this.sender.reset();
@@ -307,7 +256,7 @@ public class PlayerThread implements Runnable {
 
             if (this.gameController.getCurrentPlayerNumber() == this.playerThreadNumber) {
                 try {
-                    this.playerSocket.setSoTimeout(300000);
+                    this.playerSocket.setSoTimeout(120000);
                 } catch (Exception e) {
                     //e.printStackTrace();
                     this.sendErrorMessage("Expelled for inactivity");
@@ -350,11 +299,6 @@ public class PlayerThread implements Runnable {
                 return;
             }
 
-            //Controllare var ausiliaria
-            //Controlla main action
-            //int mainAction = 0;
-            //boolean mainAction = false;
-
             //PlayLeaderMessage
             if (object instanceof PlayLeaderMessage) {
                 try {
@@ -370,14 +314,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         //System.out.println("Leaders sent");
 
-                        //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                        //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setAllPlayerLeaderCards(currentPlayer.getPlayerLeaderCards());
-
                     }
-                    //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                    //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setAllPlayerLeaderCards(currentPlayer.getPlayerLeaderCards());
-
-                    //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
                 } catch (Exception e) {
                     this.sendErrorMessage("Online error while playing leader card");
@@ -559,15 +496,6 @@ public class PlayerThread implements Runnable {
                         whichInput=prodMessage.getInputs();
                         whichOutput=prodMessage.getOutputs();
 
-                        /*
-                        for (int k = 0; k < 6; k++) {
-                            System.out.println("Activation power n."+k+": "+activation[k]);
-                            System.out.println(whichInput[k]);
-                            if (k >= 3) {
-                                System.out.println(whichOutput[k - 3]);
-                            }
-                        }
-                         */
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.reset();
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
@@ -614,30 +542,6 @@ public class PlayerThread implements Runnable {
 
         }
 
-        //Inviare messaggio dove si comunica vincitore + punti fatti
-        /*try {
-            this.sender.reset();
-            //Ritorna numero player vincitore
-            int winner = this.gameController.getGameModel().checkWinner();
-
-            System.out.println(winner);
-            String nickNameWinner = this.gameController.getGameModel().getPlayers()[winner].getNickname();
-            //Punti vittoria di questo giocatore
-            int victoryPoints = this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].sumAllVictoryPoints();
-            GameOverMessage gameOverMessage = new GameOverMessage(nickNameWinner, victoryPoints);
-            this.sender.writeObject(gameOverMessage);
-            //this.removePlayer();
-        } catch (Exception e) {
-            this.sendErrorMessage();
-            e.printStackTrace();
-            //this.removePlayer();
-            //System.err.println("Errore in mex game over");
-        }
-
-
-        //Il thread termina
-        this.removePlayer();*/
-
         try {
             this.playerSocket.setSoTimeout(0);
             this.sender.writeObject(new TurnOverMessage("TURN"));
@@ -666,13 +570,11 @@ public class PlayerThread implements Runnable {
     public void removePlayer () {
         try {
             this.gameController.getGameModel().getPlayers()[this.playerThreadNumber] = null;
+            this.gameController.getPlayerThreads().remove(this);
             this.sender.close();
             this.receiver.close();
             this.playerSocket.close();
-            //System.out.println("Giocatore staccato");
-            //Move to next active player
-            //this.gameController.nextCurrentPlayerNumber();
-            //System.out.println(this.gameController.getCurrentPlayerNumber());
+
         } catch (Exception e) {
             //System.out.println("Player removed and moved to the next one");
             //e.printStackTrace();

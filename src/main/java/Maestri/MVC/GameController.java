@@ -5,6 +5,7 @@ import Maestri.MVC.Model.GModel.GameModel;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Maestri.MVC.Model.GModel.LeaderCards.LeaderCard;
 import Message.MessageReceived.*;
+import Message.MessageSent.PingMessage;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -30,7 +31,7 @@ public class GameController{
      */
     private Set<PlayerThread> playerThreads = new HashSet<>();
 
-    private Set<PlayerThread> winnersShowdown = new HashSet<>();
+    //private Set<PlayerThread> winnersShowdown = new HashSet<>();
     private int lastPlayerPosition;
 
     /**
@@ -87,6 +88,10 @@ public class GameController{
      */
     public int getCurrentPlayerNumber() {
         return this.currentPlayerNumber;
+    }
+
+    public Set<PlayerThread> getPlayerThreads() {
+        return this.playerThreads;
     }
 
     /**
@@ -460,6 +465,10 @@ public class GameController{
         return this.gameModel;
     }
 
+    public void setGameModel(GameModel gameModel) {
+        this.gameModel = gameModel;
+    }
+
     /**
      * Returns true if all the players completed the setup
      * @return true if all the players completed the setup
@@ -473,6 +482,35 @@ public class GameController{
         }
         return allPlayerLeaderCards == this.playerThreads.size() * 2;
     }
+
+    public void broadcastPing() {
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().reset();
+                playerThread.getSender().writeObject(new PingMessage());
+            } catch (Exception e) {
+                //e.printStackTrace();
+            }
+        }
+    }
+
+    /*public void broadcastMarket (UpdateClientMarketMessage updateClientMarketMessage) {
+
+        for (PlayerThread playerThread : this.playerThreads) {
+
+            try {
+                playerThread.getSender().reset();
+                //Reset avviene a inizio while in playerThread
+                //playerThread.getSender().reset();
+                playerThread.getSender().writeObject(updateClientMarketMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Market broadcast not working for " + playerThread.getNickName());
+            }
+        }
+
+    }*/
 
     /**
      * Sends to all the player the updated market

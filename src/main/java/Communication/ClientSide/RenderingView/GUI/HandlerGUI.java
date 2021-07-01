@@ -36,6 +36,7 @@ public class HandlerGUI extends Application implements RenderingView {
 
     private ClientMain clientMain;
 
+    private Socket clientSocket;
     private ObjectInputStream receiver;
     private ObjectOutputStream sender;
     private SendingMessages msg;
@@ -91,9 +92,9 @@ public class HandlerGUI extends Application implements RenderingView {
 
     public void connectionSocket() {
         try {
-            Socket socket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
-            this.receiver = new ObjectInputStream(socket.getInputStream());
-            this.sender = new ObjectOutputStream(socket.getOutputStream());
+            this.clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
+            this.receiver = new ObjectInputStream(this.clientSocket.getInputStream());
+            this.sender = new ObjectOutputStream(this.clientSocket.getOutputStream());
             //Check passing this
             this.msg = new SendingMessages(this.clientMain, this, this.sender);
         } catch (Exception e) {
@@ -137,7 +138,7 @@ public class HandlerGUI extends Application implements RenderingView {
             this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
             //System.out.println(startingMessage.getLeaderCards().length);
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
-            System.out.println(startingMessage.getLeaderCards()[0].getClass());
+            //System.out.println(startingMessage.getLeaderCards()[0].getClass());
             this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted");
             //updatePlayerBoard();
         } catch (Exception e) {
@@ -165,7 +166,7 @@ public class HandlerGUI extends Application implements RenderingView {
     }
 
     public void AsyncReceiver() {
-        new ServerReceiver(this.clientMain, this, this.receiver).start();
+        new ServerReceiver(this.clientMain, this, this.clientSocket,this.receiver).start();
     }
 
     public boolean endLocalGame(Player[] localPlayers){
