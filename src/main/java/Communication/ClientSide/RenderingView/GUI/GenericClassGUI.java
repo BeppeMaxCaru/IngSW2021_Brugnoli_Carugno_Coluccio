@@ -49,7 +49,6 @@ public class GenericClassGUI {
 
                 Platform.runLater(() -> {
                     try {
-                        System.out.println("loading..");
                         switch(method) {
                             case "startingResources":
                                 handlerGUI.getSyncScenarioGUI().startingResource(resStart);

@@ -172,22 +172,26 @@ public class HandlerGUI extends Application implements RenderingView {
     public boolean endLocalGame(Player[] localPlayers){
         for(int k = 0; k < 4; k++)
             if(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0] == null) {
-                this.clientMain.setWinner(localPlayers[0].getNickname());
+                this.clientMain.setWinner(localPlayers[1].getNickname());
+                this.clientMain.setVictoryPoints(localPlayers[0].sumAllVictoryPoints());
                 return true;
             }
 
         if(localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition() == 24) {
             this.clientMain.setWinner(localPlayers[0].getNickname());
+            this.clientMain.setVictoryPoints(localPlayers[0].sumAllVictoryPoints());
             return true;
         }
 
         if(localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition() == 24) {
             this.clientMain.setWinner(localPlayers[1].getNickname());
+            this.clientMain.setVictoryPoints(localPlayers[0].sumAllVictoryPoints());
             return true;
         }
 
         if(localPlayers[0].getPlayerBoard().getDevelopmentCardsBought() == 7) {
             this.clientMain.setWinner(localPlayers[0].getNickname());
+            this.clientMain.setVictoryPoints(localPlayers[0].sumAllVictoryPoints());
             return true;
         }
         return false;

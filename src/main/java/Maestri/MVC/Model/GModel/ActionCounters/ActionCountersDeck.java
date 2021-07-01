@@ -28,9 +28,9 @@ public class ActionCountersDeck {
         this.actionCountersDeck = new ActionCounter[6];
         this.actionCountersDeck[0] = new BlackCross1(1);
         this.actionCountersDeck[1] = new BlackCross2(2);
-        this.actionCountersDeck[2] = new BlueBannerCounter(2);
-        this.actionCountersDeck[3] = new GreenBannerCounter(2);
-        this.actionCountersDeck[4] = new PurpleBannerCounter(2);
+        this.actionCountersDeck[2] = new BlueBannerCounter(1);
+        this.actionCountersDeck[3] = new GreenBannerCounter(0);
+        this.actionCountersDeck[4] = new PurpleBannerCounter(3);
         this.actionCountersDeck[5] = new YellowBannerCounter(2);
         shuffle();
     }

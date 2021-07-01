@@ -86,7 +86,8 @@ public class FaithPath implements Serializable {
      * @param i number of positions that the player's red cross advances
      */
     public void moveCross(int i) {
-        if (i < 24) this.crossPosition = this.crossPosition + i;
+        if (this.crossPosition < 24 && this.crossPosition + i < 25) this.crossPosition = this.crossPosition + i;
+        else if(this.crossPosition < 24 && this.crossPosition + i > 24) this.crossPosition = 24;
     }
 
     /**

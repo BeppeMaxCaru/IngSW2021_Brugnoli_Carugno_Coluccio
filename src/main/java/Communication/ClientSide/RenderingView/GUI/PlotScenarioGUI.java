@@ -101,6 +101,7 @@ public class PlotScenarioGUI implements Runnable{
             else if(this.mainAction) {
                 choiceAction();
                 this.mainAction = false;
+                this.handlerGUI.getClientMain().checkRelationWithVatican();
                 this.handlerGUI.getClientMain().getActionCountersDeck().drawCounter().activate(this.handlerGUI.getClientMain().getActionCountersDeck(),
                         this.handlerGUI.getClientMain().getLocalPlayers()[1].getPlayerBoard(), this.handlerGUI.getClientMain().getDevelopmentCardsDecksGrid());
             }
@@ -868,7 +869,7 @@ public class PlotScenarioGUI implements Runnable{
      */
 
     public void activateProductionDevCards(int[] activate, String[] whichInput) {
-        int i, index = 0;
+        int i;
         int numBottons = 0;
         int x = 10;
         StringBuilder string = new StringBuilder();
@@ -898,15 +899,14 @@ public class PlotScenarioGUI implements Runnable{
         Pane root = new Pane(imageView1);
 
         //Creating buttons
-        Button[] arrayButtons = new Button[numBottons];
+        Button[] arrayButtons = new Button[3];
         for (i = 0; i < 3; i++) {
             //Creating a graphic (image)
             if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[i]][i] != null) {
                 Image img = new Image(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[i]][i].getImage());
-                arrayButtons[index] = new Button();
-                this.handlerGUI.getGenericClassGUI().createIconButton(x, 100, img, arrayButtons[index], 250, 200);
-                root.getChildren().add(arrayButtons[index]);
-                index++;
+                arrayButtons[i] = new Button();
+                this.handlerGUI.getGenericClassGUI().createIconButton(x, 100, img, arrayButtons[i], 250, 200);
+                root.getChildren().add(arrayButtons[i]);
             }
             x = x + 190;
         }
@@ -936,37 +936,39 @@ public class PlotScenarioGUI implements Runnable{
             activateBasicProductionPower(activate, whichInput, 0);
         });
 
-        for (int j = 0; j < numBottons; j++) {
-            int finalJ = j;
-            arrayButtons[j].setOnAction(e -> {
-                String num = "1";
-                if(activate[finalJ] != 1) {
-                    activate[finalJ] = 1;
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("COINS") != 0) {
-                        string.append("0");
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("COINS") > 1)
-                            num = "2";
-                    }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") != 0) {
-                        string.append("1");
-                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") > 1)
-                            num = "2";
-                    }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") != 0) {
-                        string.append("2");
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") > 1)
-                            num = "2";
-                    }
-                    if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("STONES") != 0) {
-                        string.append("3");
-                        if(this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("STONES") > 1)
-                            num = "2";
-                    }
-                    whichInput[finalJ] = string.toString();
-                    putResourcePayedDevCard(activate, whichInput, finalJ, num,0, null);
-                }
-                else activateProductionDevCards(activate, whichInput);
-            });
+
+        for (int j = 0; j < 3; j++) {
+            if (arrayButtons[j] != null) {
+                int finalJ = j;
+                arrayButtons[j].setOnAction(e -> {
+                    String num = "1";
+                    if (activate[finalJ] != 1) {
+                        activate[finalJ] = 1;
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("COINS") != 0) {
+                            string.append("0");
+                            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("COINS") > 1)
+                                num = "2";
+                        }
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") != 0) {
+                            string.append("1");
+                            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SERVANTS") > 1)
+                                num = "2";
+                        }
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") != 0) {
+                            string.append("2");
+                            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("SHIELDS") > 1)
+                                num = "2";
+                        }
+                        if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("STONES") != 0) {
+                            string.append("3");
+                            if (this.handlerGUI.getClientMain().getPlayerboard().getPlayerBoardDevelopmentCards()[dimPile[finalJ]][finalJ].getDevelopmentCardInput().get("STONES") > 1)
+                                num = "2";
+                        }
+                        whichInput[finalJ] = string.toString();
+                        putResourcePayedDevCard(activate, whichInput, finalJ, num, 0, null);
+                    } else activateProductionDevCards(activate, whichInput);
+                });
+            }
         }
     }
 

@@ -169,7 +169,6 @@ public class ClientMain{
     }
 
     public boolean checkLocalLeaders(Player player, int card) {
-        //
         return player.getPlayerLeaderCards()[card] != null && !player.getPlayerLeaderCards()[card].isPlayed();
     }
 
@@ -274,11 +273,9 @@ public class ClientMain{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get(resources.get(k)) < count) {
-                        //System.out.println("2");
                         return false;
                     }
                 } else {
-                    //System.out.println("3");
                     return false;
                 }
 
@@ -290,11 +287,9 @@ public class ClientMain{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getChest().getChestResources().get(resources.get(k)) < count) {
-                        //System.out.println("4");
                         return false;
                     }
                 } else {
-                    //System.out.println("5");
                     return false;
                 }
 
@@ -306,11 +301,9 @@ public class ClientMain{
             if(count>0)
                 if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) != null) {
                     if (currentPlayer.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra" + resources.get(k)) < count) {
-                        //System.out.println("6");
                         return false;
                     }
                 } else {
-                    //System.out.println("7");
                     return false;
                 }
         }
@@ -365,8 +358,6 @@ public class ClientMain{
                     int totalResources = 0;
                     for(String keys : player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
-                        System.out.println(keys);
-                        System.out.println(player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys));
                         totalResources = totalResources + player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(keys);
                     }
 
@@ -375,8 +366,6 @@ public class ClientMain{
                         paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                     }
 
-                    System.out.println("Resources to pay: " + totalResources);
-                    System.out.println("Resources paid: " + paidRes);
                     //Confront them with whichInput string: resourceCode - quantity - storage
                     //If player indicated less resources than that he had to pay, error
                     if(paidRes!=totalResources) return false;
@@ -387,9 +376,6 @@ public class ClientMain{
                         for(int r=0; r<in.length(); r=r+3) {
                             paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                         }
-
-                        System.out.println("Resources to pay: 2");
-                        System.out.println("Resources paid: " + paidRes);
                         //Confront them with whichInput string: resourceCode - quantity - storage
                         //If player indicated less resources than that he had to pay, error
                         if(paidRes!=2) return false;
@@ -404,9 +390,6 @@ public class ClientMain{
                         for(int r=0; r<in.length(); r=r+3) {
                             paidRes = paidRes + Integer.parseInt(String.valueOf(in.charAt(r+1)));
                         }
-
-                        System.out.println("Resources to pay: 1");
-                        System.out.println("Resources paid: " + paidRes);
                         //Confront them with whichInput string: resourceCode - quantity - storage
                         //If player indicated less resources than that he had to pay, error
                         if(paidRes!=1) return false;
@@ -461,15 +444,11 @@ public class ClientMain{
                 }
 
                 //Check if player inserted all necessary resources to activate the production
-                System.out.println("Paid:");
                 for (String res : paidChestResources.keySet())
                 {
                     paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get(res));
                     if(paidWarehouseResources.get("extra"+res)!=null)
                         paidChestResources.put(res, paidChestResources.get(res) + paidWarehouseResources.get("extra"+res));
-                    if(paidChestResources.get(res)!=0){
-                        System.out.println(paidChestResources.get(res)+" "+res);
-                    }
                 }
 
                 if(k<3)
@@ -477,18 +456,12 @@ public class ClientMain{
                     for(String res : player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().keySet())
                     {
                         if (paidChestResources.get(res) < player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res)) {
-                            System.out.println(res);
-                            System.out.println(paidChestResources.get(res));
-                            System.out.println(player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k].getDevelopmentCardInput().get(res));
-                            System.out.println("Not enough resources");
                             return false;
                         }
                     }
                 } else {
                     if(k!=3){
                         if (paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]) < 1) {
-                            System.out.println(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]);
-                            System.out.println("Paid: " + paidChestResources.get(player.getPlayerBoard().getExtraProductionPowerInput()[k-4]));
                             return false;
                         }
                     }
@@ -496,6 +469,24 @@ public class ClientMain{
             }
         }
         return true;
+    }
+
+    /**
+     * Method that check if a player has a relation with vatican
+     */
+    public void checkRelationWithVatican() {
+        for(int i = 0; i < 2; i++) {
+            int crossPosition = getLocalPlayers()[i].getPlayerBoard().getFaithPath().getCrossPosition();
+            if(getLocalPlayers()[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace()) {
+                for (int k = 0; k < 2; k++) {
+                    getLocalPlayers()[i].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, getLocalPlayers()[i].getPlayerBoard());
+                    //
+                    System.out.println(i + " " + getLocalPlayers()[i].getPlayerBoard().getVictoryPoints());
+                    //
+                }
+                break;
+            }
+        }
     }
 }
 

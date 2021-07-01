@@ -527,6 +527,7 @@ public class PlayerThread implements Runnable {
                         //e.printStackTrace();
                     }
                     this.mainAction = false;
+                    this.gameController.getGameModel().relationWithVatican();
                     this.gameController.nextCurrentPlayerNumber();
                     //this.yourTurnMessageCounter = 0;
                 } //else System.out.println("No main action valid");
