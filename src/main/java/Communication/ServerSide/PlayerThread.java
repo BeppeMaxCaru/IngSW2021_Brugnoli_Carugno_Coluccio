@@ -276,7 +276,6 @@ public class PlayerThread implements Runnable {
             this.sender.reset();
             if(this.playerThreadNumber==0)
             {
-                System.out.println("Turn of player " + this.playerThreadNumber);
                 this.sender.writeObject(new YourTurnMessage());
                 //this.playerSocket.setSoTimeout(10000);
             } else {

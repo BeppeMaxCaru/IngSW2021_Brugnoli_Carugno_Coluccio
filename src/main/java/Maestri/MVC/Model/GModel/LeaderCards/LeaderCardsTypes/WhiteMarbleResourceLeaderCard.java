@@ -110,7 +110,5 @@ public class WhiteMarbleResourceLeaderCard extends LeaderCard implements Seriali
      * Returns the marble that the player can pick instead of white marbles
      * @return the marble that the player can pick instead of white marbles
      */
-    public Marble getWhiteMarbleResource() {
-        return this.whiteMarbleResource;
-    }
+    public Marble getWhiteMarbleResource() { return this.whiteMarbleResource; }
 }

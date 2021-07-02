@@ -301,7 +301,7 @@ public class PlayerBoardScenario implements Runnable {
                             break;
                     }
                     imageView(image, x, 525, root);
-                    if(num == 2) x += 260;
+                    if(num == 1) x += 120;
                     else x += 60;
                     num++;
                 }

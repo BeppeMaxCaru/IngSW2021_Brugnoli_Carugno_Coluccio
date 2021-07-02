@@ -649,12 +649,13 @@ public class ClientMain{
         if(gameMode==1)
             return false;
 
-        for(int k = 0; k < 4; k++)
-            if(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0] == null) {
+        for(int k = 0; k < 4; k++) {
+            if (this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0] == null) {
                 this.setWinner(this.localPlayers[1].getNickname());
                 this.setVictoryPoints(this.localPlayers[0].sumAllVictoryPoints());
                 return true;
             }
+        }
 
         if(this.localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition() == 24) {
             this.setWinner(this.localPlayers[0].getNickname());
