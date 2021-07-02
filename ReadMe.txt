@@ -22,7 +22,8 @@ Commands:
 
 1. CLI: java -jar [absolute path to: IngSW2021_Brugnoli_Carugno_Coluccio_Client.jar] 127.0.0.1 1234 --cli
 2. GUI: java -jar [absolute path to IngSW2021_Brugnoli_Carugno_Coluccio_Client.jar] 127.0.0.1 1234
-3. Server: java -jar [absolute path to: IngSW2021_Brugnoli_Carugno_Coluccio_Server.jar] 1234 (You may have to close the process manually to free the port!)
+3. Server: java -jar [absolute path to: IngSW2021_Brugnoli_Carugno_Coluccio_Server.jar] 1234
+4. You may have to shut down the server manually to free the port
 
 Warnings!
 
