@@ -155,9 +155,6 @@ public class PlayerThread implements Runnable {
             return;
         }
 
-        //this.ping();
-
-        //in fase sync messaggio singolo in fase async broadcast
         //FIRST MESSAGE TO SETUP CLIENT MARKET
         try {
             UpdateClientMarketMessage updateClientMarketMessage = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
@@ -184,8 +181,6 @@ public class PlayerThread implements Runnable {
             return;
         }
 
-        //this.ping();
-
         try {
             ServerStartingMessage serverStartingMessage = new ServerStartingMessage(
                     this.playerThreadNumber, this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards());
@@ -198,8 +193,6 @@ public class PlayerThread implements Runnable {
             //System.out.println("No starting message");
             return;
         }
-
-        //this.ping();
 
         try {
             this.playerSocket.setSoTimeout(90000);
@@ -216,8 +209,6 @@ public class PlayerThread implements Runnable {
             return;
         }
 
-        //this.ping();
-
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard());
             this.sender.writeObject(playerBoardMessage);
@@ -230,8 +221,6 @@ public class PlayerThread implements Runnable {
             return;
         }
 
-        //this.ping();
-
         for(int cards=0; cards<2; cards++)
         {
             try {
@@ -241,12 +230,8 @@ public class PlayerThread implements Runnable {
                 currentPlayer.discardLeaderCard(discardLeaderMessage.getDiscarded());
                 //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
-
                 this.sender.reset();
                 this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
-                //this.playerSocket.setSoTimeout(0);
-                //this.sender.writeObject(new ActionOutcomeMessage(true));
-                //System.out.println("Leader received");
 
             } catch (Exception e) {
                 this.sendErrorMessage("Online error during starting leader cards setup");
@@ -428,22 +413,17 @@ public class PlayerThread implements Runnable {
                         String chosenMarble = marketResourcesMessage.getWhichWhiteMarbleChoice();
                         //System.out.println(chosenMarble);
 
-                        //Qui invece che outcome vanno messi i broadcast
-                        //IN MARKET, GRID E ACTIVATE PRODUCTION
+                        //IN MARKET, GRID & ACTIVATE PRODUCTION
 
                         if (this.gameController.checkMarketAction(currentPlayer, rowOrColumnChoice, index, wlChoice, chosenMarble)) {
 
                             //System.out.println("Playerboard sent");
-                            //UpdateClientMarketMessage updateMarket = new UpdateClientMarketMessage(this.gameController.getGameModel().getMarket());
-                            //this.gameController.broadcastMarket(updateMarket);
                             this.gameController.broadCastMarketUpdated();
                             this.gameController.broadcastPlayerBoards();
 
                             this.mainAction = true;
                         }
                     }
-
-                    //this.gameController.broadcastPlayerBoards();
 
                 } catch (Exception e) {
                     //e.printStackTrace();
@@ -486,13 +466,10 @@ public class PlayerThread implements Runnable {
                                 this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
                                 this.gameController.broadcastDevCardGridUpdated();
 
-                                //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                                //this.gameController.getGameModel().getDevelopmentCardsDecksGrid() = this.gameController.getGameModel().getDevelopmentCardsDecksGrid();
-
                                 //System.out.println("DevCards sent");
                                 this.mainAction = true;
-                            } //else System.out.println("Not valid model action");
-                        } //else System.out.println("Not valid controller check");
+                            }
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -523,7 +500,6 @@ public class PlayerThread implements Runnable {
                         if (this.gameController.checkActivateProduction(currentPlayer, activation, whichInput, whichOutput)) {
                             this.sender.reset();
                             this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                            //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
                             //System.out.println("PlayerBoard sent");
                             this.mainAction = true;
                         } //else System.out.println("Not valid controller check");
@@ -555,8 +531,7 @@ public class PlayerThread implements Runnable {
                     this.gameController.nextCurrentPlayerNumber();
                     //this.yourTurnMessageCounter = 0;
                 } //else System.out.println("No main action valid");
-                //Salva come giocatore corrente nel gamecontroller/gamemodel
-                //il giocatore successivo a questo per abilitarlo e bloccare questo
+
             }
 
             if (object instanceof QuitMessage) {
