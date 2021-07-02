@@ -103,13 +103,15 @@ public class GameModel{
      * Method that check if a player has a relation with vatican
      */
     public void relationWithVatican() {
-        for(int i = 0; i < players.length; i++) {
-            int crossPosition = getPlayers()[i].getPlayerBoard().getFaithPath().getCrossPosition();
-            if(getPlayers()[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace()) {
-                for (int k = 0; k < players.length; k++) {
-                    getPlayers()[k].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, getPlayers()[k].getPlayerBoard());
+        for(int i = 0; i < this.players.length; i++) {
+            if (this.players[i] != null) {
+                int crossPosition = this.players[i].getPlayerBoard().getFaithPath().getCrossPosition();
+                if (this.players[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace()) {
+                    for (int k = 0; k < this.players.length; k++) {
+                        this.players[k].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, this.players[i].getPlayerBoard());
+                    }
+                    break;
                 }
-                break;
             }
         }
     }
