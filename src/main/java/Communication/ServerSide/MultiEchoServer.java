@@ -59,7 +59,7 @@ public class MultiEchoServer {
             serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.err.println(e.getMessage());// Porta non disponibile
-            System.out.println("Errore sulla porta");
+            System.err.println("Port error");
             return;
         }
         System.out.println("Server ready for Masters of Renaissance");
@@ -76,7 +76,7 @@ public class MultiEchoServer {
                     GameController gameController = new GameController(queueFIFO);
                     //gameExecutor.execute(gameController);
 
-                    System.out.println("New game started");
+                    //System.out.println("New game started");
                 } catch (Exception e) {
                     //System.out.println("Not enough players");
                 }
@@ -95,7 +95,7 @@ public class MultiEchoServer {
                 //if
                 //Viene aggiunto alla lista di attesa
                 queueFIFO.add(newPlayer);
-                System.out.println(queueFIFO.size());
+                System.out.println("Queue: " + queueFIFO.size());
                 //this.playersNicknames.add(newPlayer.getNickName());
 
             } catch(IOException e) {

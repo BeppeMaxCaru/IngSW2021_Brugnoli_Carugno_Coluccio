@@ -57,57 +57,25 @@ public class ServerSender extends Thread {
                             case "P":
                             case "PLAY LEADER CARD": {
 
-                                //Before
-                                //int leader = this.cli.getPlayedLeader();
-
-                                //After
-                                //Test
                                 int leader = this.cli.cardPlayer();
 
                                 if(gameMode==0) {
                                     this.clientMain.getLocalPlayers()[0].playLeaderCardUpdated(leader);
                                     this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
-                                    /*if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader))
-                                    {
-                                        if(!this.clientMain.getLocalPlayers()[0].playLeaderCard(leader))
-                                            this.cli.notValidAction();
-                                    }*/
+
                                 } else this.msg.sendPlayedLeader(leader);
                                 break;
                             }
                             case "D":
                             case "DISCARD LEADER CARD": {
 
-                                //Before
-                                //int leader = this.cli.getDiscardedLeader();
-
-                                //After
-                                //Test
-                                //int leader = this.cli.discarder();
-
-                                //After after
                                 int leader = this.cli.discarder();
 
                                 if(this.gameMode==0){
                                     //leader = this.cli.getDiscardedLeader();
                                     this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader);
                                     this.clientMain.setLeaderCards(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards());
-                                    //this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards();
-                                    //System.out.println(leader);
 
-
-                                    //For testing
-                                    //System.out.println(Arrays.toString(this.clientMain.getLeaderCards()));
-
-
-
-                                    //leader = this.cli.getDiscardedLeader();
-                                    //this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader);
-                                    /*if(this.clientMain.checkLocalLeaders(this.clientMain.getLocalPlayers()[0], leader)){
-                                        if(!this.clientMain.getLocalPlayers()[0].discardLeaderCard(leader))
-                                            this.cli.notValidAction();
-                                    }*/
-                                    //System.out.println(Arrays.toString(this.clientMain.getLocalPlayers()[0].getPlayerLeaderCards()));
                                 } else {
                                     this.msg.sendDiscardedLeader(leader);
                                 }
