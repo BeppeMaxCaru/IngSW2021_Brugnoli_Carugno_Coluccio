@@ -14,6 +14,9 @@ import javafx.application.Application;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Client
+ */
 public class ClientMain{
 
     //Connection attributes

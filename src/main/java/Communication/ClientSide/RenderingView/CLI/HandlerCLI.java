@@ -21,6 +21,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * CLI handler
+ */
 public class HandlerCLI {
 
     /**

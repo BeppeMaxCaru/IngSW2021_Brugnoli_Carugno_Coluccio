@@ -3,6 +3,9 @@ package Communication.ClientSide.RenderingView.GUI;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+/**
+ * Wait scenario
+ */
 public class WaitForYourTurnScenario implements Runnable{
 
     /**

@@ -4,6 +4,9 @@ import Communication.ClientSide.ClientMain;
 import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 
+/**
+ * Server sender
+ */
 public class ServerSender extends Thread {
 
     /**

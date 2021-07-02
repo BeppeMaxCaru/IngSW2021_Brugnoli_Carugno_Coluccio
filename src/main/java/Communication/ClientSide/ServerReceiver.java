@@ -10,6 +10,9 @@ import Message.MessageSent.QuitMessage;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+/**
+ * Server receiver
+ */
 public class ServerReceiver extends Thread {
 
     /**

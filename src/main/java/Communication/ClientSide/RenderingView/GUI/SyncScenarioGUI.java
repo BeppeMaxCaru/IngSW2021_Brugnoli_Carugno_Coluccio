@@ -14,6 +14,9 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Sync phase scenario
+ */
 public class SyncScenarioGUI {
 
     /**

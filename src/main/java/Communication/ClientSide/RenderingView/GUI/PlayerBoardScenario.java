@@ -8,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+/**
+ * Player board scenario
+ */
 public class PlayerBoardScenario implements Runnable {
 
     /**

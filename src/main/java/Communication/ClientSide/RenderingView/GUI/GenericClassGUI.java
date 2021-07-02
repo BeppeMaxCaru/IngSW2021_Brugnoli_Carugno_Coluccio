@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Generic scenario
+ */
 public class GenericClassGUI {
 
     /**

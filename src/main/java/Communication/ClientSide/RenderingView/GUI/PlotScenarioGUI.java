@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Actions scenario
+ */
 public class PlotScenarioGUI implements Runnable{
 
     /**

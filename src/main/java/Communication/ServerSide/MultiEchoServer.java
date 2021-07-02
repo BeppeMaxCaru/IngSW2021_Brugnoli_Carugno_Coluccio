@@ -14,6 +14,9 @@ import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Server
+ */
 public class MultiEchoServer {
     //Connection
     /**

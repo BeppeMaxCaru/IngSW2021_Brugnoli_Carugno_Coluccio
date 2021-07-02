@@ -2,6 +2,9 @@ package Communication.ClientSide.RenderingView.GUI;
 
 import javafx.stage.Stage;
 
+/**
+ * Error scenario
+ */
 public class ErrorScenario implements Runnable {
 
     /**

@@ -25,6 +25,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+/**
+ * Initial scenario
+ */
 public class InitialScenarioGUI {
 
     /**

@@ -9,6 +9,9 @@ import Message.MessageSent.*;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Client equivalent on server
+ */
 public class PlayerThread implements Runnable {
 
     /**
