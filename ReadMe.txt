@@ -34,3 +34,4 @@ Warnings!
 5. If no pings/messages are received from the server after 6 minutes the server is considered down
 6. Timers are adjustable
 7. The game is extremely fun and addictive so beware!
+
