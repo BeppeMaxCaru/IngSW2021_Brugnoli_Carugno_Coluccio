@@ -34,3 +34,6 @@ Warnings!
 6. Timers are adjustable
 7. The game is extremely fun and addictive so beware!
 
+Good luck!
+
+Alice, Simone e Giuseppe
