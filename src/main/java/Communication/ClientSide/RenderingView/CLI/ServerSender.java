@@ -187,7 +187,6 @@ public class ServerSender extends Thread {
                             }
                             case "END TURN":
                             {
-
                                 if(this.gameMode==0 && mainAction==0)
                                 {
                                     this.cli.notValidAction();
@@ -197,7 +196,6 @@ public class ServerSender extends Thread {
                                 else if (this.gameMode==0 && mainAction==1)
                                 {
                                     mainAction=0;
-                                    action="";
                                     this.clientMain.checkRelationWithVatican();
                                     this.cli.actionCounter(this.clientMain.getActionCountersDeck().getActionCountersDeck()[this.clientMain.getActionCountersDeck().getTop()]);
                                     this.clientMain.getActionCountersDeck().drawCounter().activate(this.clientMain.getActionCountersDeck(), this.clientMain.getLocalPlayers()[1].getPlayerBoard(), this.clientMain.getDevelopmentCardsDecksGrid());
@@ -224,6 +222,7 @@ public class ServerSender extends Thread {
                     this.cli.senderError(e);
                     //System.exit(1);
                 }
+                action="";
             } while (!this.clientMain.endLocalGame(this.gameMode));
 
             if(this.gameMode==0) {
