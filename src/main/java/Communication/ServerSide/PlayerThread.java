@@ -507,20 +507,18 @@ public class PlayerThread implements Runnable {
                             int pos = buyCardMessage.getPlayerboardPosition();
                             //System.out.println("Put in position "+pos);
 
-                            if (currentPlayer.getPlayerBoard().isCardBelowCompatible(pos, this.gameController.getGameModel().getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[row][column][0])) {
-                                if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
+                            if (this.gameController.getGameModel().buyDevelopmentCardAction(currentPlayer.getPlayerNumber(), column, level, pos, deposit)) {
 
-                                    this.sender.reset();
-                                    this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
-                                    this.gameController.broadcastDevCardGridUpdated();
+                                this.sender.reset();
+                                this.sender.writeObject(new UpdateClientPlayerBoardMessage(currentPlayer.getPlayerBoard()));
+                                this.gameController.broadcastDevCardGridUpdated();
 
-                                    //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                                    //this.gameController.getGameModel().getDevelopmentCardsDecksGrid() = this.gameController.getGameModel().getDevelopmentCardsDecksGrid();
+                                //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
+                                //this.gameController.getGameModel().getDevelopmentCardsDecksGrid() = this.gameController.getGameModel().getDevelopmentCardsDecksGrid();
 
-                                    //System.out.println("DevCards sent");
-                                    this.mainAction = true;
-                                } //else System.out.println("Not valid model action");
-                            } //else System.out.println("Not valid isCardBelowCompatible");
+                                //System.out.println("DevCards sent");
+                                this.mainAction = true;
+                            } //else System.out.println("Not valid model action");
                         } //else System.out.println("Not valid controller check");
                     }
                 } catch (Exception e) {

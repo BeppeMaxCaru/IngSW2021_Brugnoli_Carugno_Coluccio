@@ -133,6 +133,9 @@ public class Player
         //Deny buying 8th card always
         if (this.playerBoard.getDevelopmentCardsBought() == 7) return false;
 
+        if (!this.playerBoard.isCardBelowCompatible(position, developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0]))
+            return false;
+
         //Removes the resources from the player who bought the development card according to the development card cost
         developmentCardsDecksGrid.getDevelopmentCardsDecks()[3-level][column][0].payDevelopmentCard(this.playerBoard, wclChoice);
 

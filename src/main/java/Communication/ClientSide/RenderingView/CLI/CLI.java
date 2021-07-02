@@ -919,11 +919,14 @@ public class CLI implements RenderingView {
     }
 
     @Override
-    public void endLocalGame(int localWinner) {
+    public void endLocalGame(String localWinner) {
         System.out.println("Match has ended.");
-        if(localWinner==0)
-            System.out.println("You win the Game, with "+this.main.getLocalPlayers()[0].getPlayerBoard().getVictoryPoints()+" Victory points.");
-        else System.out.println("Lorenzo the Magnificent wins the Game.");
+        if(localWinner.equals(this.main.getLocalPlayers()[0].getNickname()))
+            System.out.println("You win the Game, with "+this.main.getVictoryPoints()+" Victory points.");
+        else {
+            System.out.println("Lorenzo the Magnificent wins the Game.");
+            System.out.println("You made " + this.main.getVictoryPoints());
+        }
     }
 
     @Override

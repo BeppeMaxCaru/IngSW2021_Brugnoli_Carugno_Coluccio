@@ -1,7 +1,6 @@
 package Communication.ClientSide.RenderingView.CLI;
 
 import Communication.ClientSide.ClientMain;
-import Maestri.MVC.Model.GModel.GamePlayer.Player;
 import Message.*;
 
 /**
@@ -171,7 +170,7 @@ public class ServerSender extends Thread {
                                         if(this.clientMain.getLocalPlayers()[0].buyDevelopmentCard(this.clientMain.getDevelopmentCardsDecksGrid(), column, level, pos, shelf))
                                             mainAction++;
                                         else this.cli.notValidAction();
-                                    }
+                                    } else this.cli.notValidAction();
                                 } else this.msg.sendBuyCardAction(column, level, quantity, shelf, pos);
                                 break;
                             }
@@ -222,13 +221,19 @@ public class ServerSender extends Thread {
                             {
 
                                 if(this.gameMode==0 && mainAction==0)
+                                {
                                     this.cli.notValidAction();
+                                    action = "";
+                                    break;
+                                }
                                 else if (this.gameMode==0 && mainAction==1)
                                 {
                                     mainAction=0;
                                     action="";
+                                    this.clientMain.checkRelationWithVatican();
                                     this.cli.actionCounter(this.clientMain.getActionCountersDeck().getActionCountersDeck()[this.clientMain.getActionCountersDeck().getTop()]);
                                     this.clientMain.getActionCountersDeck().drawCounter().activate(this.clientMain.getActionCountersDeck(), this.clientMain.getLocalPlayers()[1].getPlayerBoard(), this.clientMain.getDevelopmentCardsDecksGrid());
+                                    this.clientMain.checkRelationWithVatican();
                                 }
                                 if(this.gameMode==1)
                                 {
@@ -251,26 +256,12 @@ public class ServerSender extends Thread {
                     this.cli.senderError(e);
                     //System.exit(1);
                 }
-            } while (!this.endLocalGame(this.clientMain.getLocalPlayers()));
-    }
+            } while (!this.clientMain.endLocalGame(this.gameMode));
 
-    /**
-     * Checks if the local game is over
-     * @param localPlayers local player and Lorenzo Il Magnifico
-     * @return true if the game is over
-     */
-    public boolean endLocalGame(Player[] localPlayers){
-        for(int k=0; k < 4; k++)
-            if(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0]==null)
-                return true;
+            if(this.gameMode==0) {
+                this.cli.endLocalGame(this.clientMain.getWinner());
+            }
 
-        if(localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition()==24)
-            return true;
-
-        if(localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition()==24)
-            return true;
-
-        return localPlayers[0].getPlayerBoard().getDevelopmentCardsBought() == 7;
     }
 
 }
