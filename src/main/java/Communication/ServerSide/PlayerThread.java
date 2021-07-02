@@ -70,7 +70,7 @@ public class PlayerThread implements Runnable {
         } catch (Exception e) {
             //this.removePlayer();
             //Thread not working
-            System.out.println("Thread not working");
+            //System.out.println("Thread not working");
             //Null this player
         }
     }
@@ -394,13 +394,7 @@ public class PlayerThread implements Runnable {
                         this.sender.writeObject(new UpdateClientLeaderCardsMessage(currentPlayer.getPlayerLeaderCards()));
                         //System.out.println("Leaders sent");
 
-                        //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                        //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setAllPlayerLeaderCards(currentPlayer.getPlayerLeaderCards());
-
                     }
-
-                    //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setPlayerBoard(currentPlayer.getPlayerBoard());
-                    //this.gameController.getGameModel().getPlayers()[currentPlayer.getPlayerNumber()].setAllPlayerLeaderCards(currentPlayer.getPlayerLeaderCards());
 
                     //System.out.println(Arrays.toString(this.gameController.getGameModel().getPlayers()[this.playerThreadNumber].getPlayerLeaderCards()));
 
@@ -445,13 +439,6 @@ public class PlayerThread implements Runnable {
                             this.gameController.broadCastMarketUpdated();
                             this.gameController.broadcastPlayerBoards();
 
-                            //this.gameController.getGameModel().getMarket().setMarketArrangement(this.gameController.getGameModel().getMarket().getMarketArrangement());
-                            //this.gameController.getGameModel().getMarket().setExcessMarble(this.gameController.getGameModel().getMarket().getExcessMarble());
-                            //Settare anche le playerboard
-                            /*for (int i = 0; i < this.gameController.getGameModel().getPlayers().length; i++) {
-                                this.gameController.getGameModel().getPlayers()[i].setPlayerBoard(this.gameController.getGameModel().getPlayers()[i].getPlayerBoard());
-                            }*/
-
                             this.mainAction = true;
                         }
                     }
@@ -469,13 +456,6 @@ public class PlayerThread implements Runnable {
                 }
             }
 
-            /*
-            Map<Integer, String> resources = new HashMap<>();
-            resources.put(0, "COINS");
-            resources.put(1, "SERVANTS");
-            resources.put(2, "SHIELDS");
-            resources.put(3, "STONES");
-             */
             //BUY DEVELOPMENT CARD
             if (object instanceof BuyCardMessage) {
                 try {
@@ -494,13 +474,6 @@ public class PlayerThread implements Runnable {
                         int[] quantity = buyCardMessage.getQuantity();
                         //From which shelf does the player pick resources
                         String[] deposit = buyCardMessage.getShelf();
-                        /*
-                        for(int i =0; i<4; i++){
-                            System.out.println(resources.get(i));
-                            System.out.println(quantity[i]);
-                            System.out.println(deposit[i]);
-                            }
-                         */
 
                         if (this.gameController.checkBuyDevCard(currentPlayer, column, level, quantity, deposit)) {
 
