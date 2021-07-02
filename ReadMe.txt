@@ -24,6 +24,7 @@ Warnings!
 1. Each match starts after 30 seconds if there are enough players available
 2. Online you have a time limit for each action otherwise you're removed for inactivity
 3. For each setup action you have 90 seconds
-4. For each game action you have 120 seconds
+4. For each game action you have 2 minutes
 5. If no pings/messages are received from the server after 6 minutes the server is considered down
-6. The game is extremely fun and addictive so beware!
+6. Timers are adjustable
+7. The game is extremely fun and addictive so beware!
