@@ -108,7 +108,9 @@ public class GameModel{
                 int crossPosition = this.players[i].getPlayerBoard().getFaithPath().getCrossPosition();
                 if (this.players[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace()) {
                     for (int k = 0; k < this.players.length; k++) {
-                        this.players[k].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, this.players[i].getPlayerBoard());
+                        if(this.players[k] != null) {
+                            this.players[k].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, this.players[i].getPlayerBoard());
+                        }
                     }
                     break;
                 }
