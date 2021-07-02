@@ -60,15 +60,11 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
         {
 
             if (playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i]!=null) {
-                System.out.println(playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardLevel());
                 if (playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour().equals(this.requisite.getDevelopmentCardColour())) {
-                    System.out.println(this.requisite.getDevelopmentCardColour());
-                    System.out.println(playerboard.getPlayerBoardDevelopmentCards()[this.requisite.getDevelopmentCardLevel()-1][i].getDevelopmentCardColour());
                     check = true;
                 }
             }
         }
-        System.out.println(check);
         return check;
     }
 
