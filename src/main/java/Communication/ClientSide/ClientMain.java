@@ -638,5 +638,42 @@ public class ClientMain{
             }
         }
     }
+
+    /**
+     * Returns true if local game ends
+     * @param gameMode game mode chosen by the player
+     * @return true if local game ends
+     */
+    public boolean endLocalGame(int gameMode){
+
+        if(gameMode==1)
+            return false;
+
+        for(int k = 0; k < 4; k++)
+            if(this.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0] == null) {
+                this.setWinner(this.localPlayers[1].getNickname());
+                this.setVictoryPoints(this.localPlayers[0].sumAllVictoryPoints());
+                return true;
+            }
+
+        if(this.localPlayers[0].getPlayerBoard().getFaithPath().getCrossPosition() == 24) {
+            this.setWinner(this.localPlayers[0].getNickname());
+            this.setVictoryPoints(this.localPlayers[0].sumAllVictoryPoints());
+            return true;
+        }
+
+        if(this.localPlayers[1].getPlayerBoard().getFaithPath().getCrossPosition() == 24) {
+            this.setWinner(this.localPlayers[1].getNickname());
+            this.setVictoryPoints(this.localPlayers[0].sumAllVictoryPoints());
+            return true;
+        }
+
+        if(this.localPlayers[0].getPlayerBoard().getDevelopmentCardsBought() == 7) {
+            this.setWinner(this.localPlayers[0].getNickname());
+            this.setVictoryPoints(this.localPlayers[0].sumAllVictoryPoints());
+            return true;
+        }
+        return false;
+    }
 }
 

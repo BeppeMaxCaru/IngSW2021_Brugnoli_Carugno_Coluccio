@@ -55,7 +55,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
 
     @Override
     public boolean checkRequisites(Playerboard playerboard) {
-        /*boolean check = false;
+        boolean check = false;
         for(int i = 0; i < 3; i++)
         {
 
@@ -69,8 +69,7 @@ public class ExtraProductionPowerLeaderCard extends LeaderCard implements Serial
             }
         }
         System.out.println(check);
-        return check; */
-        return true;
+        return check;
     }
 
     @Override

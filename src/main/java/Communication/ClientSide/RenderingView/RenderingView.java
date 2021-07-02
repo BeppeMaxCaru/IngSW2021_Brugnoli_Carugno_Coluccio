@@ -52,7 +52,7 @@ public interface RenderingView {
      * Handles end game
      * @param localWinner The local winner number
      */
-    default void endLocalGame(int localWinner){
+    default void endLocalGame(String localWinner){
     }
 
     /**
