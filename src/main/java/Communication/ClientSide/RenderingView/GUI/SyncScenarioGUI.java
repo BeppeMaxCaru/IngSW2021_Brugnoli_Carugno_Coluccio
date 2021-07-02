@@ -129,7 +129,7 @@ public class SyncScenarioGUI {
         int x = 0;
         int index = 0;
         LeaderCard[] leaderCards = this.handlerGUI.getClientMain().getLeaderCards();
-        System.out.println(Arrays.toString(this.handlerGUI.getClientMain().getLeaderCards()));
+        //System.out.println(Arrays.toString(this.handlerGUI.getClientMain().getLeaderCards()));
         for (int i = 0; i < leaderCards.length; i++) {
             if (leaderCards[i] != null) {
                 LeaderCard startingLeader = leaderCards[i];
