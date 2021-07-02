@@ -37,9 +37,7 @@ public class EndGameScenario implements Runnable{
      * Method that shows how is the winner and the victory points of the current player
      */
     public void winner() {
-        String s;
-        if(this.handlerGUI.getClientMain().getWinner().equals(this.handlerGUI.getClientMain().getNickname())) s = "you";
-        else s = this.handlerGUI.getClientMain().getWinner();
+        String s = this.handlerGUI.getClientMain().getWinner();
         this.handlerGUI.getGenericClassGUI().addLabelByCode("The winner is " + s + "!\nYour victory points: " + this.handlerGUI.getClientMain().getVictoryPoints(), this.anotherStage);
         this.handlerGUI.getGenericClassGUI().LoadWTFOnTimer("quit0");
     }

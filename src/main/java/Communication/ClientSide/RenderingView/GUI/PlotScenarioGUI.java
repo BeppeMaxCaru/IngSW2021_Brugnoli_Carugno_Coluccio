@@ -375,7 +375,6 @@ public class PlotScenarioGUI implements Runnable{
         Button button2 = new Button();
 
         String resource1 = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
-        System.out.println(resource1);
         Image image1 = new Image(resource1);
         this.handlerGUI.getGenericClassGUI().createIconButton(10,50, image1, button1, 80, 80);
 
@@ -396,8 +395,6 @@ public class PlotScenarioGUI implements Runnable{
         this.stage.setTitle("Choose the resource for the white marble.");
         this.stage.setScene(scene);
         this.stage.show();
-
-        System.out.println(resource1);
 
         button1.setOnAction(e -> {
             resource[numIndex] = resourceMarbles(this.handlerGUI.getClientMain().getPlayerboard().getResourceMarbles()[0].getColour());
@@ -1278,7 +1275,6 @@ public class PlotScenarioGUI implements Runnable{
                 arrayButtons[j].setOnAction(e -> {
                     activate[finalJ + 4] = 1;
                     whichInput[finalJ + 4] = this.handlerGUI.getClientMain().getPlayerboard().getExtraProductionPowerInput()[finalJ];
-                    System.out.println(whichInput[finalJ + 4]);
                     switch (whichInput[finalJ + 4]) {
                         case "COINS":
                             whichInput[finalJ + 4] = "0";

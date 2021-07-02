@@ -20,9 +20,6 @@ import java.net.Socket;
  */
 public class HandlerGUI extends Application implements RenderingView {
 
-    int[] activate;
-    boolean turn = false;
-
     /**
      * The game mode chosen
      */
@@ -251,11 +248,8 @@ public class HandlerGUI extends Application implements RenderingView {
         try {
             ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
             this.clientMain.setPlayerNumber(startingMessage.getPlayerNumber());
-            //System.out.println(startingMessage.getLeaderCards().length);
             this.clientMain.setLeaderCards(startingMessage.getLeaderCards());
-            //System.out.println(startingMessage.getLeaderCards()[0].getClass());
             this.getGenericClassGUI().LoadWTFOnTimer("matchHasStarted");
-            //updatePlayerBoard();
         } catch (Exception e) {
             this.setupError(e);
         }
@@ -269,7 +263,6 @@ public class HandlerGUI extends Application implements RenderingView {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
             this.clientMain.setPlayerboard(playerBoardMessage.getPlayerboard());
         } catch (Exception e) {
-            //System.out.println("Non arriva playerboard");
             this.setupError(e);
         }
     }

@@ -116,15 +116,7 @@ public class ClientMain{
             HandlerCLI cli = new HandlerCLI(client);
             cli.execute();
         } else {
-            //Testing gui = new Testing();
-            //gui.setClientMain(client);
             Application.launch(HandlerGUI.class, args);
-            //System.out.println("aki");
-            //Application.launch(gui.getClass());
-            //System.out.println("aki");
-
-            //new ServerReceiver(client, gui).start();
-            //HandlerGUI.launch(gui.getClass());
         }
     }
 
@@ -641,9 +633,6 @@ public class ClientMain{
             if(getLocalPlayers()[i].getPlayerBoard().getFaithPath().getFaithPathTrack()[crossPosition].isPopeSpace()) {
                 for (int k = 0; k < 2; k++) {
                     getLocalPlayers()[i].getPlayerBoard().getFaithPath().checkRelationWithVatican(crossPosition, getLocalPlayers()[i].getPlayerBoard());
-                    //
-                    System.out.println(i + " " + getLocalPlayers()[i].getPlayerBoard().getVictoryPoints());
-                    //
                 }
                 break;
             }
