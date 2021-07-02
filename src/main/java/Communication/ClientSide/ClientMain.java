@@ -466,7 +466,6 @@ public class ClientMain{
     public boolean checkLocalActivateProd(Player player, int[] activation, String[] whichInput) {
         int act = 0;
         for (int i : activation) act = act + i;
-        System.out.println("Powers activated: " + act);
         if(act==0)
             return false;
 
@@ -503,7 +502,6 @@ public class ClientMain{
                             break;
 
                     if (player.getPlayerBoard().getPlayerBoardDevelopmentCards()[j][k] == null) {
-                        System.out.println("Not existing Development card in this position");
                         return false;
                     }
 
@@ -535,7 +533,6 @@ public class ClientMain{
                     } else {
                         //Check if player has any cards into the indicated position and it is activated
                         if (player.getPlayerBoard().getExtraProductionPowerInput()[k-4] == null) {
-                            System.out.println("Card not existing or not activated");
                             return false;
                         }
 
@@ -566,7 +563,6 @@ public class ClientMain{
                         }
                         case "L": {
                             if(player.getPlayerBoard().getWareHouse().getWarehouseResources().get("extra"+resources.get(value))==null) {
-                                System.out.println("Extra warehouse error");
                                 return false;
                             }
                             else
@@ -584,14 +580,12 @@ public class ClientMain{
 
                 for(String keys : paidWarehouseResources.keySet()) {
                     if (player.getPlayerBoard().getWareHouse().getWarehouseResources().get(keys) < paidWarehouseResources.get(keys)) {
-                        System.out.println("Incorrect warehouse resources");
                         return false;
                     }
                 }
 
                 for(String keys : paidChestResources.keySet()) {
                     if (player.getPlayerBoard().getChest().getChestResources().get(keys) < paidChestResources.get(keys)) {
-                        System.out.println("Incorrect chest resources");
                         return false;
                     }
                 }
