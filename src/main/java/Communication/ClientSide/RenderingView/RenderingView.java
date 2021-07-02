@@ -9,25 +9,21 @@ import java.io.ObjectInputStream;
  */
 public interface RenderingView {
 
-    /**
-     *
-     * @param e
-     */
     default void error(Exception e){
         e.printStackTrace();
     }
 
     /**
-     *
-     * @param e
+     * Handles receiver exception
+     * @param e Exception to be handled
      */
     default void receiverError(Exception e){
         e.printStackTrace();
     }
 
     /**
-     *
-     * @param e
+     * Handles server exception
+     * @param e Exception to be handled
      */
     default void senderError(Exception e){
         e.printStackTrace();
@@ -41,84 +37,91 @@ public interface RenderingView {
     }
 
     /**
-     * Prints the quit message
+     * Handles the quit
      */
     default void quit(){
     }
 
     /**
-     * Prints that the action isn't valid
+     * Handles not valid action
      */
     default void notValidAction(){
     }
 
+    /**
+     * Handles end game
+     * @param localWinner The local winner number
+     */
     default void endLocalGame(int localWinner){
     }
 
     /**
-     * Prints that isn't the turn of the player
+     * Signals that it's not the turn of the player
      */
     default void notYourTurn(){
     }
 
+    /**
+     * Handles game over
+     * @param msg Game over message
+     */
     default void endMultiplayerGame(GameOverMessage msg){
     }
 
     /**
-     * Prints that is the turn of the player
+     * Signals the turn of the player
      */
     default void itsYourTurn(){}
 
+    /**
+     * Updates the player status
+     */
     default void update(){}
 
     /**
-     * Check
-     * @param e Exception received
+     * Handles connection exception
+     * @param e Exception to be handled
      */
     default void connectionError(Exception e){
         e.printStackTrace();
     }
 
     /**
-     *
-     * @param e
+     * Handles setup exception
+     * @param e Exception to be handled
      */
     default void setupError(Exception e){
         e.printStackTrace();
     }
 
     /**
-     *
-     * @param e
+     * Handles game exception
+     * @param e Exception to be handled
      */
     default void gameError(Exception e){
         e.printStackTrace();
     }
 
     /**
-     *
-     * @param errorMessage
+     * Handles the error message received from the server
+     * @param errorMessage Error message
      */
     default void serverError(String errorMessage){
     }
 
     /**
-     *
-     * @param e
+     * Handles invalid input exception
+     * @param e Exception to be handled
      */
     default void invalidInputError(Exception e){
         e.printStackTrace();
     }
 
-    /**
-     *
-     * @param objectInputStream
-     */
     default void receivePing(ObjectInputStream objectInputStream) {}
 
     /**
-     *
-     * @param clientError
+     * Handles client's error
+     * @param clientError Error message
      */
     default void clientError(String clientError) {}
 

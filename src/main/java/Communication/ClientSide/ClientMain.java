@@ -185,67 +185,137 @@ public class ClientMain{
         return this.leaderCards;
     }
 
+    /**
+     * Returns the host name
+     * @return the host name
+     */
     public String getHostName() {
         return hostName;
     }
 
-
+    /**
+     * Returns the port
+     * @return the port
+     */
     public int getPort() {
         return port;
     }
 
+    /**
+     * Sets the nickname
+     * @param nickname Nickname to be set
+     */
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
 
+    /**
+     * Sets player number
+     * @param playerNumber player number to be set
+     */
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
 
+    /**
+     * Returns action counters deck
+     * @return action counters deck
+     */
     public ActionCountersDeck getActionCountersDeck() {
         return actionCountersDeck;
     }
 
+    /**
+     * Sets action counters deck
+     * @param actionCountersDeck action counters deck to be set
+     */
     public void setActionCountersDeck(ActionCountersDeck actionCountersDeck) {
         this.actionCountersDeck = actionCountersDeck;
     }
 
+    /**
+     * Returns local players
+     * @return local players
+     */
     public Player[] getLocalPlayers() {
         return localPlayers;
     }
 
+    /**
+     * Sets local players
+     * @param localPlayers local players to be set
+     */
     public void setLocalPlayers(Player[] localPlayers) {
         this.localPlayers = localPlayers;
     }
 
+    /**
+     * Returns leader cards deck
+     * @return leader cards deck
+     */
     public LeaderCardDeck getLeaderCardDeck() {
         return leaderCardDeck;
     }
 
+    /**
+     * Sets leader cards deck
+     * @param leaderCardDeck leader cards deck to be set
+     */
     public void setLeaderCardDeck(LeaderCardDeck leaderCardDeck) {
         this.leaderCardDeck = leaderCardDeck;
     }
 
+    /**
+     * Returns the winner
+     * @return the winner
+     */
     public String getWinner() {
         return winner;
     }
 
+    /**
+     * Sets the winner
+     * @param winner winner to be set
+     */
     public void setWinner(String winner) {
         this.winner = winner;
     }
 
+    /**
+     * Sets the victory points
+     * @param victoryPoints victory points to be set
+     */
     public void setVictoryPoints(int victoryPoints) {
         this.victoryPoints = victoryPoints;
     }
 
+    /**
+     * Returns victory points
+     * @return victory points
+     */
     public int getVictoryPoints() {
         return this.victoryPoints;
     }
 
+    /**
+     * Checks if a leader card is available
+     * @param player player to check
+     * @param card position to check
+     * @return true if the card is available
+     */
     public boolean checkLocalLeaders(Player player, int card) {
         return player.getPlayerLeaderCards()[card] != null && !player.getPlayerLeaderCards()[card].isPlayed();
     }
 
+    /**
+     * Checks if local a market action can be done
+     * @param board player board to update
+     * @param choice row or column
+     * @param i chosen coordinate
+     * @param wlChoice player choices
+     * @param leader leaders to activate
+     * @return true if the action is performed
+     */
     public boolean checkLocalMarketAction(Playerboard board,  String choice, int i, String wlChoice, String leader) {
 
         if(choice.equalsIgnoreCase("ROW"))
@@ -293,6 +363,15 @@ public class ClientMain{
         }
     }
 
+    /**
+     * Checks if a local development card can be bought
+     * @param currentPlayer player performing the action
+     * @param column column chosen
+     * @param l level chosen
+     * @param quantity number of resources chose
+     * @param wclChoice checks for extra abilities
+     * @return true if the action can be performed
+     */
     public boolean checkLocalBuyCard(Player currentPlayer, int column, int l, int[] quantity, String[] wclChoice) {
 
         Map<String, Integer> paidResources = new HashMap<>();
@@ -385,16 +464,16 @@ public class ClientMain{
     }
 
     /**
-     *
-     * @param player
-     * @param activation
-     * @param whichInput
-     * @return
+     * Checks if local production can be activated
+     * @param player player activating production
+     * @param activation powers activated
+     * @param whichInput resources selected
+     * @return true if the action is performed successfully
      */
     public boolean checkLocalActivateProd(Player player, int[] activation, String[] whichInput) {
         int act = 0;
         for (int i : activation) act = act + i;
-        System.out.println("Powers activated: "+act);
+        System.out.println("Powers activated: " + act);
         if(act==0)
             return false;
 

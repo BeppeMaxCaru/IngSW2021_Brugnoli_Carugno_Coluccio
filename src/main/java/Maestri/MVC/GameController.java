@@ -465,10 +465,6 @@ public class GameController{
         return this.gameModel;
     }
 
-    public void setGameModel(GameModel gameModel) {
-        this.gameModel = gameModel;
-    }
-
     /**
      * Returns true if all the players completed the setup
      * @return true if all the players completed the setup
@@ -483,6 +479,9 @@ public class GameController{
         return allPlayerLeaderCards == this.playerThreads.size() * 2;
     }
 
+    /**
+     * Broadcast ping to notify server activity
+     */
     public void broadcastPing() {
         for (PlayerThread playerThread : this.playerThreads) {
 

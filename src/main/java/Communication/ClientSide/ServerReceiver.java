@@ -9,8 +9,6 @@ import Message.MessageSent.QuitMessage;
 
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ServerReceiver extends Thread {
 

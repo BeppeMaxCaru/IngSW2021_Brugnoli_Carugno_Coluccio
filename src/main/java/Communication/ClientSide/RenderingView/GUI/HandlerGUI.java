@@ -27,23 +27,70 @@ public class HandlerGUI extends Application implements RenderingView {
 
     int correctAction;
 
-    // Attribute of GUI da qui ok
+    /**
+     * Application stage
+     */
     private Stage stage;
 
+    /**
+     * Generic scenario
+     */
     private GenericClassGUI genericClassGUI;
+
+    /**
+     * Initial scenario
+     */
     private InitialScenarioGUI initialScenarioGUI;
+
+    /**
+     * Sync phase scenario
+     */
     private SyncScenarioGUI syncScenarioGUI;
+
+    /**
+     * Actions scenario
+     */
     private PlotScenarioGUI plotScenarioGUI;
+
+    /**
+     * Player board scenario
+     */
     private PlayerBoardScenario playerBoardScenario;
+
+    /**
+     * Wait scenario
+     */
     private WaitForYourTurnScenario waitForYourTurnScenario;
+
+    /**
+     * End game scenario
+     */
     private EndGameScenario endGameScenario;
     private ErrorScenario errorScenario;
 
+    /**
+     * Client running the application
+     */
     private ClientMain clientMain;
 
+    /**
+     * Socket used for connection
+     */
     private Socket clientSocket;
+
+    /**
+     * Messages receiver
+     */
     private ObjectInputStream receiver;
+
+    /**
+     * Messages sender
+     */
     private ObjectOutputStream sender;
+
+    /**
+     * Utility to help sending messages
+     */
     private SendingMessages msg;
 
 
@@ -64,30 +111,74 @@ public class HandlerGUI extends Application implements RenderingView {
         this.initialScenarioGUI.nickname();
     }
 
+    /**
+     * Returns the generic class GUI
+     * @return the generic class GUI
+     */
     public GenericClassGUI getGenericClassGUI() {
         return this.genericClassGUI;
     }
 
+    /**
+     * Returns the sync scenario
+     * @return the sync scenario
+     */
     public SyncScenarioGUI getSyncScenarioGUI() {
         return this.syncScenarioGUI;
     }
 
+    /**
+     * Returns plot scenario
+     * @return plot scenario
+     */
     public PlotScenarioGUI getPlotScenarioGUI() { return this.plotScenarioGUI; }
 
+    /**
+     * Returns player board scenario
+     * @return player board scenario
+     */
     public PlayerBoardScenario getPlayerBoardScenario() { return this.playerBoardScenario; }
 
+    /**
+     * Returns end game scenario
+     * @return end game scenario
+     */
     public EndGameScenario getEndGameScenario() { return this.endGameScenario; }
 
+    /**
+     * Returns the stage
+     * @return the stage
+     */
     public Stage getStage( ) { return this.stage; }
 
+    /**
+     * Sets the stage
+     * @param stage Stage to be set
+     */
     public void setStage(Stage stage) { this.stage = stage; }
 
+    /**
+     * Returns client
+     * @return client
+     */
     public ClientMain getClientMain() { return this.clientMain; }
 
+    /**
+     * Returns utility class
+     * @return utility class
+     */
     public SendingMessages getMsg() { return this.msg; }
 
+    /**
+     * Returns game mode
+     * @return game mode
+     */
     public int getGameMode() { return this.gameMode; }
 
+    /**
+     * Sets game mode
+     * @param gameMode game mode to be set
+     */
     public void setGameMode(int gameMode) { this.gameMode = gameMode; }
 
     @Override
@@ -95,6 +186,9 @@ public class HandlerGUI extends Application implements RenderingView {
         this.correctAction=0;
     }
 
+    /**
+     * Establishes connection
+     */
     public void connectionSocket() {
         try {
             this.clientSocket = new Socket(this.clientMain.getHostName(), this.clientMain.getPort());
@@ -108,6 +202,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Sends the nickname
+     */
     public void sendNickname() {
         try {
             this.msg.sendNickname();
@@ -117,6 +214,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Updates the market
+     */
     public void updateMarket() {
         try {
             UpdateClientMarketMessage updateClientMarketMessage = (UpdateClientMarketMessage) this.receiver.readObject();
@@ -127,6 +227,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Updates the development cards grid
+     */
     public void updateGridDevCard() {
         try {
             UpdateClientDevCardGridMessage updateClientDevCardGridMessage = (UpdateClientDevCardGridMessage) this.receiver.readObject();
@@ -137,6 +240,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Handles starting messages
+     */
     public void startingMessage() {
         try {
             ServerStartingMessage startingMessage = (ServerStartingMessage) this.receiver.readObject();
@@ -151,6 +257,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Updates player board
+     */
     public void updatePlayerBoard() {
         try {
             UpdateClientPlayerBoardMessage playerBoardMessage = (UpdateClientPlayerBoardMessage) this.receiver.readObject();
@@ -161,6 +270,9 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Update leader cards
+     */
     public void updateLeaderCard() {
         try {
             UpdateClientLeaderCardsMessage leaderCardsMessage = (UpdateClientLeaderCardsMessage) this.receiver.readObject();
@@ -170,10 +282,16 @@ public class HandlerGUI extends Application implements RenderingView {
         }
     }
 
+    /**
+     * Starts async receiver
+     */
     public void AsyncReceiver() {
         new ServerReceiver(this.clientMain, this, this.clientSocket,this.receiver).start();
     }
 
+    /**
+     * Checks local game end
+     */
     public boolean endLocalGame(Player[] localPlayers){
         for(int k = 0; k < 4; k++)
             if(this.clientMain.getDevelopmentCardsDecksGrid().getDevelopmentCardsDecks()[0][k][0] == null) {
